@@ -1,0 +1,6 @@
+{
+  "name": "Local Surge SEO",
+  "description": "An advanced, search-optimized and conversion-focused platform for local SEO marketing with automated lead strategy generation and management.",
+  "requestFramePermissions": [],
+  "majorCapabilities": ["MAJOR_CAPABILITY_SERVER_SIDE_GEMINI_API"]
+}
