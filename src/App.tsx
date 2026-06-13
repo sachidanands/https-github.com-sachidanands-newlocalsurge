@@ -14,6 +14,7 @@ import LocalDirectoryTool from './components/LocalDirectoryTool';
 import CaliforniaView from './components/CaliforniaView';
 import LosAngelesSeoView from './components/LosAngelesSeoView';
 import DirectoryView from './components/DirectoryView';
+import SchemaMarkup from './components/SchemaMarkup';
 import { 
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight, 
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
@@ -639,6 +640,15 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f7f6f2] text-[#1a1c1a] flex flex-col font-sans select-none antialiased">
+      {/* Search Engine Structured JSON-LD Markup */}
+      <SchemaMarkup
+        currentPage={currentPage}
+        activeArticleSlug={activeArticleSlug}
+        activeStateSlug={activeStateSlug}
+        activeCitySlug={activeCitySlug}
+        plans={PLANS}
+      />
+
       {/* Dynamic Header */}
       <Header 
         currentPage={currentPage} 
