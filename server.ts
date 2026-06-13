@@ -21,16 +21,17 @@ let supabaseClient: any = null;
 function getSupabase() {
   if (!supabaseClient) {
     const supabaseUrl = process.env.SUPABASE_URL;
-    const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    // Prioritize SUPABASE_SERVICE_ROLE_KEY for robust backend queries that bypass RLS policies
+    const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
     if (supabaseUrl && supabaseKey) {
       try {
         supabaseClient = createClient(supabaseUrl, supabaseKey);
-        console.log("🟢 Supabase client successfully initialized.");
+        console.log(`🟢 Supabase client successfully initialized using ${process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Service Role Key (bypasses RLS)' : 'Anon Key'}.`);
       } catch (err) {
         console.error("❌ Failed to initialize Supabase client:", err);
       }
     } else {
-      console.warn("⚠️ SUPABASE_URL or SUPABASE_KEY is missing. Falling back to local JSON file db.");
+      console.warn("⚠️ SUPABASE_URL or SUPABASE_KEY/SUPABASE_SERVICE_ROLE_KEY is missing. Falling back to local JSON file db.");
     }
   }
   return supabaseClient;
@@ -297,7 +298,8 @@ app.get("/api/leads", async (req, res) => {
         }));
         return res.json(mappedLeads);
       }
-      console.error("❌ Supabase fetch error:", error);
+      console.error("❌ Supabase fetch error details:", JSON.stringify(error, null, 2));
+      console.warn("💡 Tip: If you receive a 'relation does not exist' error, you must create the 'leads' table in your Supabase SQL Editor. Run the SQL schema defined in .env.example or our messages!");
     } catch (err) {
       console.error("❌ Fallback to local file due to Supabase exception:", err);
     }
