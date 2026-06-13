@@ -1,5 +1,6 @@
-import React, { useState, useEffect } from 'react';
+import React, { useState, useEffect, useRef } from 'react';
 import { Page, Plan, Lead, SEOAuditResult } from './types';
+import { jsPDF } from 'jspdf';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import OnboardingWizard from './components/OnboardingWizard';
@@ -8,6 +9,11 @@ import BlogView from './components/BlogView';
 import SitemapView from './components/SitemapView';
 import SeoHomeTool from './components/SeoHomeTool';
 import AdminLoginForm from './components/AdminLoginForm';
+import LocalSeoView from './components/LocalSeoView';
+import LocalDirectoryTool from './components/LocalDirectoryTool';
+import CaliforniaView from './components/CaliforniaView';
+import LosAngelesSeoView from './components/LosAngelesSeoView';
+import DirectoryView from './components/DirectoryView';
 import { 
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight, 
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
@@ -69,40 +75,73 @@ const PLANS: Plan[] = [
 export default function App() {
   const [currentPage, setCurrentPage] = useState<Page>('home');
   const [activeArticleSlug, setActiveArticleSlug] = useState<string | null>(null);
+  const [activeStateSlug, setActiveStateSlug] = useState<string | null>(null);
+  const [activeCitySlug, setActiveCitySlug] = useState<string | null>(null);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loadingLeads, setLoadingLeads] = useState(false);
 
   // Address Bar Routing and Synchronizer
   useEffect(() => {
-    const getPageFromPath = (pathname: string): { page: Page; slug: string | null } => {
+    const getPageFromPath = (pathname: string): { 
+      page: Page; 
+      stateSlug: string | null; 
+      citySlug: string | null; 
+      blogSlug: string | null;
+    } => {
       const cleanPath = pathname.replace(/\/+$/, '');
-      if (cleanPath === '' || cleanPath === '/') return { page: 'home', slug: null };
-      if (cleanPath === '/about') return { page: 'about', slug: null };
-      if (cleanPath === '/why-us') return { page: 'why-us', slug: null };
-      if (cleanPath === '/pricing') return { page: 'pricing', slug: null };
-      if (cleanPath === '/seo-tool') return { page: 'seo-tool', slug: null };
-      if (cleanPath === '/contact') return { page: 'contact', slug: null };
-      if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', slug: null };
-      if (cleanPath === '/site-map') return { page: 'site-map', slug: null };
-      if (cleanPath === '/blog') return { page: 'blog', slug: null };
+      if (cleanPath === '' || cleanPath === '/') return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/about') return { page: 'about', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/why-us') return { page: 'why-us', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/site-map') return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/california') return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/los-angeles-seo') return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath.startsWith('/blog/')) {
         const slug = cleanPath.slice(6);
-        return { page: 'blog', slug };
+        return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: slug };
       }
-      return { page: 'home', slug: null };
+
+      // Check dynamic state or city paths
+      const parts = cleanPath.split('/').filter(Boolean);
+      const knownStates = ['california', 'texas', 'arizona', 'florida'];
+      
+      if (parts.length === 1 && knownStates.includes(parts[0])) {
+        if (parts[0] === 'california') {
+          return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null };
+        }
+        return { page: 'state-seo', stateSlug: parts[0], citySlug: null, blogSlug: null };
+      }
+
+      if (parts.length === 2 && knownStates.includes(parts[0])) {
+        if (parts[1] === 'los-angeles-seo') {
+          return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null };
+        }
+        return { page: 'city-seo', stateSlug: parts[0], citySlug: parts[1], blogSlug: null };
+      }
+
+      return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null };
     };
 
     // Load initial URL
-    const { page, slug } = getPageFromPath(window.location.pathname);
+    const { page, stateSlug, citySlug, blogSlug } = getPageFromPath(window.location.pathname);
     setCurrentPage(page);
-    setActiveArticleSlug(slug);
+    setActiveStateSlug(stateSlug);
+    setActiveCitySlug(citySlug);
+    setActiveArticleSlug(blogSlug);
 
     // Track Back/Forward
     const handlePopState = () => {
-      const { page, slug } = getPageFromPath(window.location.pathname);
+      const { page, stateSlug, citySlug, blogSlug } = getPageFromPath(window.location.pathname);
       setCurrentPage(page);
-      setActiveArticleSlug(slug);
+      setActiveStateSlug(stateSlug);
+      setActiveCitySlug(citySlug);
+      setActiveArticleSlug(blogSlug);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -116,19 +155,31 @@ export default function App() {
     let path = '/';
     if (currentPage === 'about') path = '/about';
     else if (currentPage === 'why-us') path = '/why-us';
+    else if (currentPage === 'local-seo') path = '/local-seo';
     else if (currentPage === 'pricing') path = '/pricing';
     else if (currentPage === 'seo-tool') path = '/seo-tool';
     else if (currentPage === 'contact') path = '/contact';
     else if (currentPage === 'admin') path = '/admin/dashboard';
     else if (currentPage === 'site-map') path = '/site-map';
+    else if (currentPage === 'california') path = '/california';
+    else if (currentPage === 'los-angeles-seo') path = '/los-angeles-seo';
     else if (currentPage === 'blog') {
       path = activeArticleSlug ? `/blog/${activeArticleSlug}` : '/blog';
+    } else if (currentPage === 'state-seo') {
+      path = activeStateSlug ? `/${activeStateSlug}` : '/site-map';
+    } else if (currentPage === 'city-seo') {
+      path = (activeStateSlug && activeCitySlug) ? `/${activeStateSlug}/${activeCitySlug}` : '/site-map';
     }
 
     if (window.location.pathname !== path) {
       window.history.pushState(null, '', path);
     }
-  }, [currentPage, activeArticleSlug]);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
+
+  // Scroll to top on page navigation
+  useEffect(() => {
+    window.scrollTo({ top: 0, behavior: 'instant' });
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Private Admin access credentials management
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
@@ -165,13 +216,38 @@ export default function App() {
   const [toolResult, setToolResult] = useState<SEOAuditResult | null>(null);
   const [scannedCityDirectories, setScannedCityDirectories] = useState<{name: string, rating: number, status: string}[]>([]);
 
+  // Homepage redirect & auto-analyze state
+  const [homePrefilledUrl, setHomePrefilledUrl] = useState('');
+  const [homeAutoAnalyze, setHomeAutoAnalyze] = useState(false);
+
+  const handleAnalyzeFromHome = (url: string) => {
+    setHomePrefilledUrl(url);
+    setHomeAutoAnalyze(true);
+    setCurrentPage('seo-tool');
+  };
+
   // Simple Contact form states
   const [cntName, setCntName] = useState('');
   const [cntEmail, setCntEmail] = useState('');
   const [cntMessage, setCntMessage] = useState('');
   const [cntSubject, setCntSubject] = useState('');
-  const [cntPlan, setCntPlan] = useState('starter');
+  const [cntPlan, setCntPlan] = useState('');
   const [contactSuccess, setContactSuccess] = useState(false);
+  const [shouldBlinkNameInput, setShouldBlinkNameInput] = useState(false);
+
+  // Track previous page to manage pre-selecting "Preferred Growth Tier" in contact form
+  const prevPageRef = useRef<Page>('home');
+
+  useEffect(() => {
+    if (currentPage === 'contact') {
+      if (prevPageRef.current === 'pricing' && selectedPricingPlanId) {
+        // If navigating from pricing, pre-select the currently selected pricing tier ID
+        setCntPlan(selectedPricingPlanId);
+      }
+    }
+    // Update the ref after assessing the transition
+    prevPageRef.current = currentPage;
+  }, [currentPage, selectedPricingPlanId]);
 
   // Fetch leads on mount
   useEffect(() => {
@@ -194,8 +270,11 @@ export default function App() {
   };
 
   const handleOpenOnboarding = (plan: Plan | null = null) => {
-    setPreselectedPlan(plan);
-    setIsWizardOpen(true);
+    if (plan) {
+      handleSelectPlanAndNavigate(plan.id);
+    } else {
+      handleSelectPlanAndNavigate('single-page');
+    }
   };
 
   const handleGetFreeStrategy = () => {
@@ -250,11 +329,262 @@ export default function App() {
     }
   };
 
+  const handleGeneratePDF = (planId: string, name: string, email: string) => {
+    const doc = new jsPDF({
+      orientation: 'portrait',
+      unit: 'mm',
+      format: 'a4'
+    });
+
+    // Primary Colors
+    const pTeal = [18, 62, 53];    // #123e35
+    const aOrange = [188, 95, 64]; // #bc5f40
+    const nDark = [26, 28, 26];    // #1a1c1a
+    const nLight = [136, 139, 136]; // #888b88
+
+    // Header Banner
+    doc.setFillColor(pTeal[0], pTeal[1], pTeal[2]);
+    doc.rect(0, 0, 210, 38, 'F');
+
+    // Title
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(22);
+    doc.text('LOCAL SURGE SEO', 15, 15);
+    
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(10);
+    doc.text('High-Performance Web Design & Local SEO Suite', 15, 22);
+    doc.text('https://localsurgeseo.com | contact@localsurgeseo.com', 15, 27);
+
+    // Accent Line
+    doc.setFillColor(aOrange[0], aOrange[1], aOrange[2]);
+    doc.rect(0, 35, 210, 3, 'F');
+
+    // Metadata Row
+    doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+    doc.setFontSize(14);
+    doc.setFont('Helvetica', 'bold');
+    doc.text('OFFICIAL GROWTH STRATEGY BRIEF', 15, 52);
+
+    doc.setFontSize(9);
+    doc.setFont('Helvetica', 'normal');
+    doc.setTextColor(nLight[0], nLight[1], nLight[2]);
+    const refCode = `LSS-${(planId || 'CUSTOM').toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+    doc.text(`Doc Reference: ${refCode}`, 15, 58);
+    doc.text(`Generated On: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 15, 14); // wait let's use 63
+    doc.text(`Generated On: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 15, 63);
+
+    // Client Panel
+    doc.setFillColor(247, 246, 242);
+    doc.rect(15, 68, 180, 22, 'F');
+    doc.setDrawColor(223, 222, 212);
+    doc.rect(15, 68, 180, 22, 'D');
+
+    doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+    doc.setFont('Helvetica', 'bold');
+    doc.text('PREPARED FOR:', 19, 73);
+    doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+    doc.setFont('Helvetica', 'normal');
+    doc.text(`Client Contact Name: ${name}`, 19, 78);
+    doc.text(`Contact Email Address: ${email}`, 19, 83);
+
+    // Plan-specific info lookup
+    let planTitle = '';
+    let planPrice = '';
+    let estTimeline = '';
+    let deliverables: string[] = [];
+    let actions: string[] = [];
+
+    if (planId === 'single-page') {
+      planTitle = 'Single-Page Blast (Free Plan)';
+      planPrice = '$0 / Free Promotion';
+      estTimeline = '2 - 3 Business Days to Live Sandbox';
+      deliverables = [
+        'Premium Single-Page Fast Storefront Website Design',
+        'Fully Responsive & Mobile-Optimized Layout Structure',
+        'On-Page Local SEO Setup (Keywords, Heading hierarchies)',
+        'Ultra-Fast secure Cloud-Hosted Payload hosting',
+        'Secure SSL Certificate configuration & active mapping',
+        'Bespoke Domain Name Pointer Routing (Domain purchase separate)'
+      ];
+      actions = [
+        'Secure standard location info, target keywords, business description & graphics.',
+        'Bootstrap highly optimized sandbox layout draft & share staging address.',
+        'Gather direct customer design reviews and execute final refinements.',
+        'Activate DNS primary domains records and propagate web-wide.'
+      ];
+    } else if (planId === 'starter') {
+      planTitle = 'Starter Boost Plan';
+      planPrice = '$999 / month';
+      estTimeline = '1 - 2 Weeks Core Onboarding & Sync';
+      deliverables = [
+        'Google Business Profile (GBP) deep synchronization & setup verification',
+        'High-converting, action-oriented Lead Form integration & coding',
+        'Comprehensive Localized Keyword Research covering 10 major buyer terms',
+        'Top 20 absolute primary Directory Citation syndications (Apple, MapQuest, Yelp)',
+        'Basic On-Page Geographic Silos tuning and local metadata markup',
+        'Monthly search rankings dashboard and phone-tap tracking reports'
+      ];
+      actions = [
+        'Grant Manager access delegation for existing or new Google Business Profile.',
+        'Define key physical service regions, target zip codes, and hours parameters.',
+        'Scrub and eliminate redundant, mismatched historical NAP directory citations.',
+        'Trigger automated keyword ranking monitors for active regional status assessment.'
+      ];
+    } else if (planId === 'premium') {
+      planTitle = 'Premium Surge Plan';
+      planPrice = '$1,999 / month';
+      estTimeline = 'Weekly Milestones & Priority Direct Account Management';
+      deliverables = [
+        'Everything in Starter Boost (All map rankings services included)',
+        'Interactive, rich LocalBusiness Schema Markup installations (JSON-LD)',
+        'High-authority regional niche backlinking for accelerated ranking growth',
+        '4 custom geo-targeted Local Industry Blog Articles published monthly',
+        'Bespoke multi-page expansion silo content strategy mapping',
+        'Dedicated senior Local SEO Account Representative',
+        'Bi-weekly Strategy Alignment calls and priority workflow status'
+      ];
+      actions = [
+        'Identify main point-of-contact for bi-weekly collaboration briefings.',
+        'Establish direct integration links for Google Search Console (GSC) and analytics.',
+        'Publish optimized initial geo-targeted campaign outline for content approval.',
+        'Produce robust geographic competitor rankings grid review.'
+      ];
+    } else {
+      planTitle = 'Custom Configuration / Enterprise Setup';
+      planPrice = 'Bespoke Quote Pending Custom Formulation';
+      estTimeline = 'Bespoke Schedule Based on Multi-City Scope';
+      deliverables = [
+        'Bespoke multi-location regional strategy structuring & silos setup',
+        'Enterprise-grade multi-page location directories architecture matching 10+ cities',
+        'Custom local schema template configurations & advanced page load speed tuning',
+        'Tailored high-volume citation audits and priority Google Maps troubleshooting',
+        'Omnichannel search marketing reports for headquarters & branch partners'
+      ];
+      actions = [
+        'Conduct priority 1-on-1 strategy meeting with local search director.',
+        'Map out expansion cities, operational zip codes, and priority locations.',
+        'Draft a formal, custom full-stack Scope of Work (SOW).'
+      ];
+    }
+
+    // Growth Plan Header
+    doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('CHOSEN GROWTH BLUEPRINT SUMMARY', 15, 98);
+
+    doc.setFillColor(239, 244, 241); // brand light green tint
+    doc.rect(15, 102, 180, 16, 'F');
+    doc.rect(15, 102, 180, 16, 'D');
+
+    doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(10);
+    doc.text(`Growth Tier: ${planTitle}`, 19, 108);
+    doc.text(`Subscription: ${planPrice}`, 19, 113);
+    doc.text(`Timeline: ${estTimeline}`, 110, 108);
+
+    // Deliverables List
+    doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('DELIVERABLES AND SERVICES INCLUDED WITH PLAN:', 15, 126);
+
+    doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(9.5);
+    let y = 132;
+    deliverables.forEach((item) => {
+      // Small bullet
+      doc.setFillColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.circle(18, y - 1.2, 1, 'F');
+      
+      // Text
+      doc.text(item, 23, y);
+      y += 6.5;
+    });
+
+    // Next actions & Timeline
+    y += 3;
+    doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+    doc.setFont('Helvetica', 'bold');
+    doc.setFontSize(11);
+    doc.text('IMMEDIATE ONBOARDING TIMELINE & NEXT ACTIONS:', 15, y);
+
+    doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(9.5);
+    y += 6;
+    actions.forEach((item, index) => {
+      // Step Number
+      doc.setTextColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.text(`${index + 1}.`, 15, y);
+
+      // Text block wrapped
+      doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+      doc.setFont('Helvetica', 'normal');
+      const lines = doc.splitTextToSize(item, 170);
+      doc.text(lines, 23, y);
+      y += (lines.length * 5) + 1.5;
+    });
+
+    // Footer Block
+    doc.setFillColor(pTeal[0], pTeal[1], pTeal[2]);
+    doc.rect(0, 282, 210, 15, 'F');
+
+    doc.setTextColor(255, 255, 255);
+    doc.setFont('Helvetica', 'normal');
+    doc.setFontSize(8.5);
+    doc.text('Local Surge SEO is powered by verified regional data science. Our engineers have been alerted of your brief.', 15, 289);
+    doc.text('Page 1 of 1', 185, 289);
+
+    // Save filename
+    doc.save(`Local_Surge_SEO_${planTitle.replace(/[^a-zA-Z0-9]/g, '_')}_Strategy.pdf`);
+  };
+
+  const handleSelectPlanAndNavigate = (planId: string) => {
+    setCntPlan(planId);
+    setSelectedPricingPlanId(planId);
+    setCurrentPage('contact');
+    setShouldBlinkNameInput(true);
+
+    if (planId === 'single-page') {
+      setCntSubject('Inquiry: Single-Page Blast (Free)');
+      setCntMessage('Hello Local Surge Team, I would like to lock in my free Single-Page Blast storefront website and start my localized SEO setup.');
+    } else if (planId === 'starter') {
+      setCntSubject('Inquiry: Starter Boost ($999/mo)');
+      setCntMessage('Hello Local Surge Team, I want to subscribe to the Starter Boost plan to synchronize my Google Business Profile and capture neighborhood search intent.');
+    } else if (planId === 'premium') {
+      setCntSubject('Inquiry: Premium Surge ($1999/mo)');
+      setCntMessage('Hello Local Surge Team, I want to secure the Premium Surge local domination package to crush our local competition and build a content authority campaign.');
+    } else if (planId === 'custom') {
+      setCntSubject('Inquiry: Custom Configuration');
+      setCntMessage('Hello Local Surge Team, I am interested in building a tailored enterprise or multi-city local SEO package.');
+    }
+
+    setTimeout(() => {
+      const element = document.getElementById('manual-inquiry-container');
+      if (element) {
+        element.scrollIntoView({ behavior: 'smooth', block: 'center' });
+      }
+      const inputElement = document.getElementById('cnt-full-name-input') as HTMLInputElement | null;
+      if (inputElement) {
+        inputElement.focus();
+      }
+    }, 150);
+
+    // Stop blinking after 3 seconds
+    setTimeout(() => {
+      setShouldBlinkNameInput(false);
+    }, 3000);
+  };
+
   // Manual prefilled navigate from pricing custom links
   const handlePricingPrefillContact = (planName: string) => {
-    setCntSubject(`Inquiry: Custom ${planName} Plan`);
-    setCntMessage(`Hello Local Surge Team, I would like to inquire about a custom configuration or setup for my business regarding your ${planName} tier.`);
-    setCurrentPage('contact');
+    handleSelectPlanAndNavigate('custom');
   };
 
   const handleContactOfficeClick = () => {
@@ -273,11 +603,16 @@ export default function App() {
     e.preventDefault();
     if (!cntEmail.trim() || !cntName.trim()) return;
 
+    // Immediately generate and download the PDF brief
+    const selectedPlanId = cntPlan || 'custom';
+    handleGeneratePDF(selectedPlanId, cntName, cntEmail);
+
     setContactSuccess(true);
+
     // Mimic API lead input as well
     const customLead: any = {
-      planId: cntPlan,
-      planName: PLANS.find(p => p.id === cntPlan)?.name || 'Custom Message',
+      planId: selectedPlanId,
+      planName: PLANS.find(p => p.id === selectedPlanId)?.name || 'Custom Message',
       businessName: `${cntName}'s Enterprise`,
       contactName: cntName,
       email: cntEmail,
@@ -286,7 +621,7 @@ export default function App() {
       hasWebsite: false,
       industry: 'Custom Inquiry',
       location: 'Request Location',
-      keywords: cntMessage,
+      keywords: cntMessage || 'Requested plan selection via Contact',
       hasGBP: false
     };
 
@@ -300,15 +635,6 @@ export default function App() {
     } catch (e) {
       console.error(e);
     }
-
-    setTimeout(() => {
-      setContactSuccess(false);
-      setCntName('');
-      setCntEmail('');
-      setCntMessage('');
-      setCntSubject('');
-      alert('✉️ Contact submitted. A personalized manual strategy review is underway!');
-    }, 1500);
   };
 
   return (
@@ -360,24 +686,26 @@ export default function App() {
                       
                       <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <button
-                          onClick={() => handleOpenOnboarding(null)}
+                          onClick={() => {
+                            setCurrentPage('pricing');
+                            setSelectedPricingPlanId('single-page');
+                          }}
                           className="bg-[#123e35] hover:bg-[#185246] text-[#fbfaf8] text-sm font-bold px-7 py-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 duration-200 shadow-sm"
                         >
-                          Get Free SEO Strategy
+                          Get Free Strategy
                           <ArrowRight className="w-4 h-4 text-white" />
-                        </button>
-                        <button
-                          onClick={() => setCurrentPage('seo-tool')}
-                          className="bg-white hover:bg-[#faf9f6] text-[#1a1c1a] border border-[#dfded4] shadow-xs text-sm font-bold px-7 py-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors"
-                        >
-                          Run Instant Site Scan
                         </button>
                       </div>
                     </div>
 
                     {/* Hero Right Widget Preview */}
                     <div className="lg:col-span-5 relative">
-                      <SeoHomeTool onOpenOnboarding={() => handleOpenOnboarding(null)} hideTitle={true} />
+                      <SeoHomeTool 
+                        onOpenOnboarding={() => setCurrentPage('contact')} 
+                        hideTitle={true} 
+                        isHomePage={true}
+                        onAnalyzeFromHome={handleAnalyzeFromHome}
+                      />
                     </div>
 
                   </div>
@@ -569,18 +897,18 @@ export default function App() {
                 <h3 className="text-lg font-bold font-display text-[#151716] uppercase">Meet Our Leadership</h3>
                 <div className="grid grid-cols-1 sm:grid-cols-3 gap-6">
                   <div className="bg-white border border-[#dfded4] rounded-2xl p-5 hover:border-[#123e35]/30 transition shadow-xs">
-                    <div className="w-16 h-16 rounded-full bg-[#f7f6f2] border border-[#dfded4] mx-auto font-display font-black text-[#123e35] flex items-center justify-center text-sm">MC</div>
-                    <h4 className="font-extrabold text-sm text-[#151716] mt-3">Marcus Chen</h4>
+                    <div className="w-16 h-16 rounded-full bg-[#f7f6f2] border border-[#dfded4] mx-auto font-display font-black text-[#123e35] flex items-center justify-center text-sm">S</div>
+                    <h4 className="font-extrabold text-sm text-[#151716] mt-3">Sachidanand</h4>
                     <p className="text-[10px] uppercase font-bold text-[#bc5f40] font-mono mt-1">SEO Lead Strategist</p>
                   </div>
                   <div className="bg-white border border-[#dfded4] rounded-2xl p-5 hover:border-[#123e35]/30 transition shadow-xs">
                     <div className="w-16 h-16 rounded-full bg-[#f7f6f2] border border-[#dfded4] mx-auto font-display font-black text-[#123e35] flex items-center justify-center text-sm">JS</div>
-                    <h4 className="font-extrabold text-sm text-[#151716] mt-3">Jaden Smith</h4>
+                    <h4 className="font-extrabold text-sm text-[#151716] mt-3">Jitendra Singh</h4>
                     <p className="text-[10px] uppercase font-bold text-[#bc5f40] font-mono mt-1">Lead Systems Developer</p>
                   </div>
                   <div className="bg-white border border-[#dfded4] rounded-2xl p-5 hover:border-[#123e35]/30 transition shadow-xs">
-                    <div className="w-16 h-16 rounded-full bg-[#f7f6f2] border border-[#dfded4] mx-auto font-display font-black text-[#123e35] flex items-center justify-center text-sm">LL</div>
-                    <h4 className="font-extrabold text-sm text-[#151716] mt-3">Lisa Larson</h4>
+                    <div className="w-16 h-16 rounded-full bg-[#f7f6f2] border border-[#dfded4] mx-auto font-display font-black text-[#123e35] flex items-center justify-center text-sm">AN</div>
+                    <h4 className="font-extrabold text-sm text-[#151716] mt-3">Anudeep</h4>
                     <p className="text-[10px] uppercase font-bold text-[#bc5f40] font-mono mt-1">Content Marketing Head</p>
                   </div>
                 </div>
@@ -764,8 +1092,7 @@ export default function App() {
                       <button
                         onClick={(e) => {
                           e.stopPropagation();
-                          setSelectedPricingPlanId(plan.id);
-                          handleOpenOnboarding(plan);
+                          handleSelectPlanAndNavigate(plan.id);
                         }}
                         className={`w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider font-mono mt-8 cursor-pointer transition-all flex items-center justify-center gap-1 ${
                           isSelected
@@ -856,91 +1183,182 @@ export default function App() {
                 </div>
 
                 {/* Form side */}
-                <div id="manual-inquiry-container" className="md:col-span-7 bg-white border border-[#dfded4] rounded-2xl p-6.5 shadow-xs">
-                  <form onSubmit={handleContactSubmit} className="space-y-5">
-                    <h3 className="font-bold text-[#151716] font-display">Manual Inquiry Request</h3>
-                    
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
-                          Your Full Name *
-                        </label>
-                        <input
-                          type="text"
-                          required
-                          placeholder="e.g. Marcus Chen"
-                          value={cntName}
-                          onChange={(e) => setCntName(e.target.value)}
-                          className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
-                        />
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
-                          Email Address *
-                        </label>
-                        <input
-                          type="email"
-                          required
-                          placeholder="e.g. contact@domain.com"
-                          value={cntEmail}
-                          onChange={(e) => setCntEmail(e.target.value)}
-                          className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
-                        />
-                      </div>
-                    </div>
-
-                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
-                      <div>
-                        <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
-                          Preferred Growth Tier
-                        </label>
-                        <select
-                          value={cntPlan}
-                          onChange={(e) => setCntPlan(e.target.value)}
-                          className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] cursor-pointer focus:outline-none focus:border-[#bc5f45]"
-                        >
-                          <option value="single-page" className="bg-white text-[#1a1c1a]">Single-Page Blast ($149)</option>
-                          <option value="starter" className="bg-white text-[#1a1c1a]">Starter Boost ($299)</option>
-                          <option value="premium" className="bg-white text-[#1a1c1a]">Premium Surge ($499)</option>
-                          <option value="custom" className="bg-white text-[#1a1c1a]">Custom Configuration</option>
-                        </select>
-                      </div>
-                      <div>
-                        <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
-                          Inquiry Subject
-                        </label>
-                        <input
-                          type="text"
-                          placeholder="e.g. Local keywords scan"
-                          value={cntSubject}
-                          onChange={(e) => setCntSubject(e.target.value)}
-                          className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
-                        />
-                      </div>
-                    </div>
-
-                    <div>
-                      <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1.5 font-mono">
-                        Additional Business Message / Questions
-                      </label>
-                      <textarea
-                        rows={4}
-                        placeholder="Share details about your business category, current rankings, or what area you want to dominate..."
-                        value={cntMessage}
-                        onChange={(e) => setCntMessage(e.target.value)}
-                        className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
-                      />
-                    </div>
-
-                    <button
-                      type="submit"
-                      className="w-full bg-[#123e35] hover:bg-[#185246] hover:shadow-xs text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider font-mono cursor-pointer transition-all"
+                <div id="manual-inquiry-container" className="md:col-span-7 bg-white border border-[#dfded4] rounded-2xl p-6.5 shadow-xs transition-all duration-300">
+                  {contactSuccess ? (
+                    <motion.div 
+                      initial={{ opacity: 0, scale: 0.95 }}
+                      animate={{ opacity: 1, scale: 1 }}
+                      className="text-center py-6 space-y-6"
                     >
-                      Submit Form
-                    </button>
-                  </form>
+                      <div className="w-16 h-16 rounded-full bg-[#123e35]/10 text-[#123e35] mx-auto flex items-center justify-center animate-bounce">
+                        <Check className="w-8 h-8" />
+                      </div>
+                      <div className="space-y-2">
+                        <h3 className="text-xl font-bold font-display text-[#151716]">Inquiry Submitted!</h3>
+                        <p className="text-xs text-[#bc5f40] font-bold uppercase font-mono tracking-widest">Pending Review Activated</p>
+                        <p className="text-xs text-[#4e524f] max-w-sm mx-auto font-semibold leading-relaxed">
+                          Thank you for choosing <strong>Local Surge SEO</strong>. Your PDF Growth Campaign Plan document is downloading automatically right now.
+                        </p>
+                      </div>
+
+                      <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-4 text-left text-xs space-y-2.5 max-w-md mx-auto">
+                        <div className="flex items-center justify-between text-[10px] font-bold text-[#888b88] uppercase font-mono pb-1.5 border-b border-[#dfded4]">
+                          <span>Reference Details</span>
+                          <span className="text-[#123e35]">LSS-PENDING</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#888b88]">Selected Plan:</span>
+                          <span className="font-bold text-[#151716]">{PLANS.find(p => p.id === cntPlan)?.name || 'Custom Setup'}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#888b88]">Status:</span>
+                          <span className="font-bold text-[#bc5f40] uppercase font-mono text-[10px] tracking-wider">Pending Assignment</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#888b88]">Contact Name:</span>
+                          <span className="font-bold text-[#151716]">{cntName}</span>
+                        </div>
+                        <div className="flex justify-between">
+                          <span className="text-[#888b88]">Email Address:</span>
+                          <span className="font-bold text-[#151716]">{cntEmail}</span>
+                        </div>
+                      </div>
+
+                      <div className="pt-2 text-center space-y-2">
+                        <p className="text-[10px] text-[#888b88] font-semibold">If your download didn't start automatically, click below:</p>
+                        <button
+                          onClick={() => handleGeneratePDF(cntPlan || 'custom', cntName, cntEmail)}
+                          className="inline-flex items-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-bold bg-[#123e35] text-white hover:bg-[#185246] shadow-xs cursor-pointer"
+                        >
+                          Download Actions PDF
+                        </button>
+                      </div>
+
+                      <div className="pt-4 border-t border-[#dfded4]">
+                        <button
+                          onClick={() => {
+                            setContactSuccess(false);
+                            setCntName('');
+                            setCntEmail('');
+                            setCntMessage('');
+                            setCntSubject('');
+                          }}
+                          className="text-xs text-[#888b88] hover:text-[#123e35] font-bold underline cursor-pointer"
+                        >
+                          Submit Another Inquiry
+                        </button>
+                      </div>
+                    </motion.div>
+                  ) : (
+                    <form onSubmit={handleContactSubmit} className="space-y-5">
+                      <h3 className="font-bold text-[#151716] font-display">Manual Inquiry Request</h3>
+                      
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
+                            Your Full Name *
+                          </label>
+                          <input
+                            id="cnt-full-name-input"
+                            type="text"
+                            required
+                            placeholder="e.g. Marcus Chen"
+                            value={cntName}
+                            onChange={(e) => setCntName(e.target.value)}
+                            className={`bg-[#faf9f6]/95 border rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all duration-300 ${
+                              shouldBlinkNameInput 
+                                ? 'border-[#bc5f40] ring-4 ring-[#bc5f40]/25 bg-amber-50 animate-pulse' 
+                                : 'border-[#dfded4]'
+                            }`}
+                          />
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
+                            Email Address *
+                          </label>
+                          <input
+                            type="email"
+                            required
+                            placeholder="e.g. contact@domain.com"
+                            value={cntEmail}
+                            onChange={(e) => setCntEmail(e.target.value)}
+                            className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
+                          />
+                        </div>
+                      </div>
+
+                      <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
+                            Preferred Growth Tier *
+                          </label>
+                          <select
+                            required
+                            value={cntPlan}
+                            onChange={(e) => setCntPlan(e.target.value)}
+                            className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] cursor-pointer focus:outline-none focus:border-[#bc5f45]"
+                          >
+                            <option value="" className="bg-white text-[#888b88]">— Select Your Tier — *</option>
+                            <option value="single-page" className="bg-white text-[#1a1c1a]">Single-Page Blast (Free)</option>
+                            <option value="starter" className="bg-white text-[#1a1c1a]">Starter Boost ($999/mo)</option>
+                            <option value="premium" className="bg-white text-[#1a1c1a]">Premium Surge ($1999/mo)</option>
+                            <option value="custom" className="bg-white text-[#1a1c1a]">Custom Configuration</option>
+                          </select>
+                        </div>
+                        <div>
+                          <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
+                            Inquiry Subject
+                          </label>
+                          <input
+                            type="text"
+                            placeholder="e.g. Local keywords scan"
+                            value={cntSubject}
+                            onChange={(e) => setCntSubject(e.target.value)}
+                            className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
+                          />
+                        </div>
+                      </div>
+
+                      <div>
+                        <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1.5 font-mono">
+                          Additional Business Message / Questions
+                        </label>
+                        <textarea
+                          rows={4}
+                          placeholder="Share details about your business category, current rankings, or what area you want to dominate..."
+                          value={cntMessage}
+                          onChange={(e) => setCntMessage(e.target.value)}
+                          className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
+                        />
+                      </div>
+
+                      <button
+                        type="submit"
+                        className="w-full bg-[#123e35] hover:bg-[#185246] hover:shadow-xs text-white font-bold py-3.5 rounded-xl text-xs uppercase tracking-wider font-mono cursor-pointer transition-all"
+                      >
+                        Submit Form
+                      </button>
+                    </form>
+                  )}
                 </div>
               </div>
+            </motion.div>
+          )}
+
+           {/* LOCAL SEO SCREEN */}
+          {currentPage === 'local-seo' && (
+            <motion.div
+              key="local-seo"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              className="max-w-7xl mx-auto px-4 sm:px-6 py-12"
+            >
+              <LocalSeoView 
+                onOpenOnboarding={() => handleOpenOnboarding(null)} 
+                onGetFreeStrategy={handleGetFreeStrategy}
+                setCurrentPage={setCurrentPage} 
+              />
             </motion.div>
           )}
 
@@ -951,9 +1369,17 @@ export default function App() {
               initial={{ opacity: 0, y: 15 }}
               animate={{ opacity: 1, y: 0 }}
               exit={{ opacity: 0, y: -15 }}
-              className="max-w-5xl mx-auto px-4 sm:px-6 py-12"
+              className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-16"
             >
-              <SeoHomeTool onOpenOnboarding={() => handleOpenOnboarding(null)} />
+              <SeoHomeTool 
+                onOpenOnboarding={() => setCurrentPage('contact')} 
+                initialUrl={homePrefilledUrl}
+                autoAnalyze={homeAutoAnalyze}
+                onClearAutoAnalyze={() => setHomeAutoAnalyze(false)}
+              />
+              <div className="border-t border-[#dfded4] pt-12">
+                <LocalDirectoryTool onOpenOnboarding={() => handleOpenOnboarding(null)} />
+              </div>
             </motion.div>
           )}
 
@@ -1016,6 +1442,65 @@ export default function App() {
                   setActiveArticleSlug(slug);
                   setCurrentPage('blog');
                 }}
+                setActiveStateSlug={setActiveStateSlug}
+                setActiveCitySlug={setActiveCitySlug}
+              />
+            </motion.div>
+          )}
+
+          {/* CALIFORNIA DIRECTORY SECTION */}
+          {currentPage === 'california' && (
+            <motion.div
+              key="california"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <CaliforniaView 
+                setCurrentPage={setCurrentPage}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+                onGetFreeStrategy={handleGetFreeStrategy}
+                setActiveStateSlug={setActiveStateSlug}
+                setActiveCitySlug={setActiveCitySlug}
+              />
+            </motion.div>
+          )}
+
+          {/* LOS ANGELES SEO SECTION */}
+          {currentPage === 'los-angeles-seo' && (
+            <motion.div
+              key="los-angeles-seo"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <LosAngelesSeoView 
+                setCurrentPage={setCurrentPage}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+                onGetFreeStrategy={handleGetFreeStrategy}
+              />
+            </motion.div>
+          )}
+
+          {/* DYNAMIC REGIONAL DIRECTORY STATE/CITY PAGES */}
+          {(currentPage === 'state-seo' || currentPage === 'city-seo') && (
+            <motion.div
+              key={`dir-${activeStateSlug}-${activeCitySlug}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <DirectoryView 
+                setCurrentPage={setCurrentPage}
+                stateSlug={activeStateSlug}
+                citySlug={activeCitySlug}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+                onGetFreeStrategy={handleGetFreeStrategy}
+                setActiveStateSlug={setActiveStateSlug}
+                setActiveCitySlug={setActiveCitySlug}
               />
             </motion.div>
           )}

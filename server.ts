@@ -179,10 +179,13 @@ app.get("/sitemap.xml", (req, res) => {
     "/seo-tool",
     "/contact",
     "/blog",
-    "/blog/avoid-slow-cooker-disasters-with-these-crockpot-safety-tips",
     "/blog/google-business-profile-critical-local-contractors",
     "/blog/single-page-blueprint-dominate-local-search",
     "/blog/top-on-page-seo-mistakes-local-businesses-make",
+    "/blog/unlocking-the-power-of-local-seo-for-small-businesses",
+    "/blog/from-zero-to-hero-scaling-your-local-seo-strategy",
+    "/blog/mastering-google-business-profile-optimization",
+    "/blog/why-your-business-needs-local-seo-now",
     "/site-map",
   ];
 
@@ -234,7 +237,7 @@ app.post("/api/leads/submit", async (req, res) => {
   const newLead: any = {
     id: newLeadId,
     createdAt: new Date().toISOString(),
-    status: "new",
+    status: "pending",
     notes: `Lead submitted for plan: ${leadInput.planName}.`,
     input: leadInput
   };
@@ -308,7 +311,7 @@ app.post("/api/leads/submit", async (req, res) => {
         const audit = JSON.parse(responseText.trim());
         audit.timestamp = new Date().toISOString();
         newLead.aiAudit = audit;
-        newLead.status = "audit_prepared";
+        newLead.status = "pending";
         newLead.notes += " Auto-generated AI SEO Strategy successfully attached.";
       }
     } catch (error) {

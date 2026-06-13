@@ -1,4 +1,4 @@
-export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'admin' | 'blog' | 'site-map';
+export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'admin' | 'blog' | 'site-map' | 'local-seo' | 'california' | 'los-angeles-seo' | 'state-seo' | 'city-seo';
 
 export interface Plan {
   id: string;
@@ -45,7 +45,7 @@ export interface SEOAuditResult {
 export interface Lead {
   id: string;
   createdAt: string;
-  status: 'new' | 'contacted' | 'audit_prepared' | 'onboarded' | 'archived';
+  status: 'new' | 'contacted' | 'audit_prepared' | 'onboarded' | 'archived' | 'pending' | 'completed';
   notes?: string;
   input: LeadInput;
   aiAudit?: SEOAuditResult;

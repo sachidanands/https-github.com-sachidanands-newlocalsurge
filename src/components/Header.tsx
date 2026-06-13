@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from '../types';
-import { Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Sliders, FileText } from 'lucide-react';
+import { Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Sliders, FileText, MapPin } from 'lucide-react';
 
 interface HeaderProps {
   currentPage: Page;
@@ -13,6 +13,7 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
     { id: 'home' as Page, label: 'Home', icon: Rocket },
     { id: 'about' as Page, label: 'About Us', icon: Users },
     { id: 'why-us' as Page, label: 'Why Us', icon: Landmark },
+    { id: 'local-seo' as Page, label: 'Local SEO', icon: MapPin },
     { id: 'pricing' as Page, label: 'Pricing', icon: BarChart3 },
     { id: 'seo-tool' as Page, label: 'SEO Tool', icon: Sparkles },
     { id: 'contact' as Page, label: 'Contact', icon: Contact },

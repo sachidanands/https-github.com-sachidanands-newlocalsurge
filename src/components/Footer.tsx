@@ -26,10 +26,6 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             </p>
             <div className="pt-2 space-y-2">
               <div className="flex items-center gap-2 text-xs text-[#2d2f2d] font-semibold">
-                <MapPin className="w-4 h-4 text-[#123e35] shrink-0" />
-                <span>San Jose & San Francisco Bay Area, CA</span>
-              </div>
-              <div className="flex items-center gap-2 text-xs text-[#2d2f2d] font-semibold">
                 <Mail className="w-4 h-4 text-[#123e35] shrink-0" />
                 <a href="mailto:contact@localsurgeseo.com" className="hover:text-[#bc5f40] transition-colors">
                   contact@localsurgeseo.com
@@ -45,7 +41,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             </h3>
             <ul className="space-y-2.5 text-sm font-semibold">
               <li>
-                <button onClick={() => setCurrentPage('home')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <button onClick={() => setCurrentPage('local-seo')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
                   Local SEO Optimization
                 </button>
               </li>

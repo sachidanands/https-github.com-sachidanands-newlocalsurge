@@ -10,9 +10,16 @@ import { motion } from 'motion/react';
 interface SitemapViewProps {
   setCurrentPage: (page: Page) => void;
   onNavigateToArticle: (slug: string | null) => void;
+  setActiveStateSlug?: (slug: string | null) => void;
+  setActiveCitySlug?: (slug: string | null) => void;
 }
 
-export default function SitemapView({ setCurrentPage, onNavigateToArticle }: SitemapViewProps) {
+export default function SitemapView({ 
+  setCurrentPage, 
+  onNavigateToArticle,
+  setActiveStateSlug,
+  setActiveCitySlug
+}: SitemapViewProps) {
   
   const handleNavPage = (pageName: Page) => {
     onNavigateToArticle(null);
@@ -26,20 +33,35 @@ export default function SitemapView({ setCurrentPage, onNavigateToArticle }: Sit
     window.scrollTo({ top: 0, behavior: 'smooth' });
   };
 
+  const handleNavState = (slug: string) => {
+    if (setActiveStateSlug) setActiveStateSlug(slug);
+    if (setActiveCitySlug) setActiveCitySlug(null);
+    setCurrentPage('state-seo' as any);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
+  const handleNavCity = (stateSlug: string, citySlug: string) => {
+    if (setActiveStateSlug) setActiveStateSlug(stateSlug);
+    if (setActiveCitySlug) setActiveCitySlug(citySlug);
+    setCurrentPage('city-seo' as any);
+    window.scrollTo({ top: 0, behavior: 'smooth' });
+  };
+
   // Group pages by context
   const mainPages = [
     { id: 'home' as Page, path: '/', label: 'Home Page Dashboard', desc: 'Next-Generation Local SEO Suite and core strategy features.' },
     { id: 'about' as Page, path: '/about', label: 'Our Mission & About Us', desc: 'Understanding our background, local verification systems, and team standards.' },
     { id: 'why-us' as Page, path: '/why-us', label: 'Why Choose Local Surge', desc: 'Comparison metrics proving how lightweight structures defeat bloated multi-page payloads.' },
+    { id: 'local-seo' as Page, path: '/local-seo', label: 'Local SEO Optimization', desc: 'Comprehensive blueprint detailing Google Business Profile setup, NAP citation audits, and directories synchronization.' },
     { id: 'pricing' as Page, path: '/pricing', label: 'Transparent Pricing Model', desc: 'Detailed options regarding Single-Page Blast, Starter Boost, and Premium Surge.' },
     { id: 'seo-tool' as Page, path: '/seo-tool', label: 'Free Search Signal Scanner', desc: 'Real-time analysis comparing websites to regional Local 3-Pack leaders.' },
     { id: 'contact' as Page, path: '/contact', label: 'Partner Collaboration Desk', desc: 'Direct outreach for customized regional configurations and local directories.' }
   ];
 
   const packages = [
-    { id: 'single-page', label: 'Single-Page Blast ($149/mo)', desc: 'Professional mobile-first single page optimized instantly for local keywords.' },
-    { id: 'starter', label: 'Starter Boost ($299/mo)', desc: 'GBP syncing, localized keyword mapping (10 terms), and citation listings.' },
-    { id: 'premium', label: 'Premium Surge ($499/mo)', desc: 'Content strategies, high-authority backlinking, and weekly coord calls.' }
+    { id: 'single-page', label: 'Single-Page Blast (Free)', desc: 'Professional mobile-first single page optimized instantly for local keywords.' },
+    { id: 'starter', label: 'Starter Boost ($999/mo)', desc: 'GBP syncing, localized keyword mapping (10 terms), and citation listings.' },
+    { id: 'premium', label: 'Premium Surge ($1999/mo)', desc: 'Content strategies, high-authority backlinking, and weekly coord calls.' }
   ];
 
   const categories = Array.from(new Set(BLOG_POSTS.map(post => post.category)));
@@ -191,6 +213,120 @@ export default function SitemapView({ setCurrentPage, onNavigateToArticle }: Sit
                   <span className="text-[9px] font-mono text-[#123e35] block pt-1 hover:underline truncate">
                     /blog/{post.slug}
                   </span>
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* Regional Directories (City & State Pages) */}
+          <div className="lg:col-span-2 space-y-6 bg-white p-6 sm:p-8 rounded-3xl border border-[#dfded4] shadow-xs">
+            <div className="border-b border-[#dfded4] pb-4 flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2">
+              <h3 className="text-sm font-bold text-[#151716] font-display uppercase tracking-wider flex items-center gap-2">
+                <MapPin className="w-4 h-4 text-[#123e35]" />
+                Local SEO Search Directories (City & State Index)
+              </h3>
+              <span className="text-[9px] font-mono font-bold uppercase tracking-wider text-amber-700 bg-amber-50 border border-amber-200/60 px-2 py-0.5 rounded-md w-fit">
+                Search Engine Crawler Entrypoints
+              </span>
+            </div>
+            
+            <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+              Targeted regional directories and localized semantic nodes designed to map high-intent local query networks on <span className="font-bold text-[#123e35]">localsurgeseo.com</span>.
+            </p>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6 pt-2">
+              {[
+                {
+                  state: 'California',
+                  code: 'CA',
+                  slug: 'california',
+                  cities: [
+                    { name: 'San Jose SEO', slug: 'san-jose-seo' },
+                    { name: 'Oakland SEO', slug: 'oakland-seo' },
+                    { name: 'San Francisco SEO', slug: 'san-francisco-seo' },
+                    { name: 'Sacramento SEO', slug: 'sacramento-seo' },
+                    { name: 'Los Angeles SEO', slug: 'los-angeles-seo' },
+                    { name: 'San Diego SEO', slug: 'san-diego-seo' },
+                  ]
+                },
+                {
+                  state: 'Texas',
+                  code: 'TX',
+                  slug: 'texas',
+                  cities: [
+                    { name: 'Austin SEO', slug: 'austin-seo' },
+                    { name: 'Houston SEO', slug: 'houston-seo' },
+                    { name: 'Dallas SEO', slug: 'dallas-seo' },
+                    { name: 'San Antonio SEO', slug: 'san-antonio-seo' },
+                    { name: 'Fort Worth SEO', slug: 'fort-worth-seo' },
+                    { name: 'El Paso SEO', slug: 'el-paso-seo' },
+                  ]
+                },
+                {
+                  state: 'Arizona',
+                  code: 'AZ',
+                  slug: 'arizona',
+                  cities: [
+                    { name: 'Phoenix SEO', slug: 'phoenix-seo' },
+                    { name: 'Tucson SEO', slug: 'tucson-seo' },
+                    { name: 'Mesa SEO', slug: 'mesa-seo' },
+                    { name: 'Scottsdale SEO', slug: 'scottsdale-seo' },
+                    { name: 'Chandler SEO', slug: 'chandler-seo' },
+                    { name: 'Glendale SEO', slug: 'glendale-seo' },
+                  ]
+                },
+                {
+                  state: 'Florida',
+                  code: 'FL',
+                  slug: 'florida',
+                  cities: [
+                    { name: 'Miami SEO', slug: 'miami-seo' },
+                    { name: 'Tampa SEO', slug: 'tampa-seo' },
+                    { name: 'Orlando SEO', slug: 'orlando-seo' },
+                    { name: 'Jacksonville SEO', slug: 'jacksonville-seo' },
+                    { name: 'Fort Lauderdale SEO', slug: 'fort-lauderdale-seo' },
+                    { name: 'St. Petersburg SEO', slug: 'st-petersburg-seo' },
+                  ]
+                }
+              ].map((item) => (
+                <div key={item.state} className="space-y-3.5 bg-[#faf9f6]/65 border border-[#dfded4]/70 p-4.5 rounded-2xl">
+                  <div className="flex items-center justify-between border-b border-[#dfded4]/40 pb-2">
+                    <button 
+                      onClick={() => {
+                        if (item.slug === 'california') {
+                          setCurrentPage('california');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        } else {
+                          handleNavState(item.slug);
+                        }
+                      }}
+                      className="text-xs font-black text-[#123e35] hover:text-[#bc5f40] hover:underline transition-colors flex items-center gap-1 font-display cursor-pointer"
+                    >
+                      <span>{item.state} ({item.code})</span>
+                      <ArrowRight className="w-2.5 h-2.5 inline text-[#bc5f40]" />
+                    </button>
+                  </div>
+
+                  <ul className="space-y-1.5 font-sans">
+                    {item.cities.map((city) => (
+                      <li key={city.name}>
+                        <button 
+                          onClick={() => {
+                            if (city.slug === 'los-angeles-seo') {
+                              setCurrentPage('los-angeles-seo');
+                              window.scrollTo({ top: 0, behavior: 'smooth' });
+                            } else {
+                              handleNavCity(item.slug, city.slug);
+                            }
+                          }}
+                          className="text-[11px] font-semibold text-[#4e524f] hover:text-[#bc5f40] transition-colors flex items-center justify-between group w-full text-left cursor-pointer"
+                        >
+                          <span className="truncate group-hover:underline">{city.name}</span>
+                          <span className="text-[9px] font-mono text-[#123e35]/65 group-hover:text-[#bc5f40] select-none">➔</span>
+                        </button>
+                      </li>
+                    ))}
+                  </ul>
                 </div>
               ))}
             </div>

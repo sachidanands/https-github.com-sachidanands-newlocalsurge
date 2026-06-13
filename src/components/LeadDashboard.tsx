@@ -85,6 +85,29 @@ export default function LeadDashboard({ leads: initialLeads, onUpdateLeads }: Le
     }
   };
 
+  const handleMarkLeadCompleted = async (leadId: string) => {
+    setIsSaving(true);
+    try {
+      const response = await fetch(`/api/leads/${leadId}`, {
+        method: 'PUT',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({
+          status: 'completed',
+          notes: currentNotes || 'Flagged as completed.'
+        })
+      });
+      if (response.ok) {
+        onUpdateLeads();
+      } else {
+        alert('Failed updating lead status.');
+      }
+    } catch (err) {
+      console.error(err);
+    } finally {
+      setIsSaving(false);
+    }
+  };
+
   const handleSimulatePDF = (leadId: string, e: React.MouseEvent) => {
     e.stopPropagation();
     setPdfGenerating(leadId);
@@ -188,7 +211,7 @@ export default function LeadDashboard({ leads: initialLeads, onUpdateLeads }: Le
             {/* Filter controls */}
             <div className="p-4 border-b border-[#dfded4] space-y-4 bg-[#faf9f6]">
               <div className="flex gap-2 flex-wrap">
-                {['all', 'new', 'audit_prepared', 'onboarded', 'archived'].map((status) => (
+                {['all', 'pending', 'completed', 'new', 'onboarded', 'archived'].map((status) => (
                   <button
                     key={status}
                     onClick={() => setFilterStatus(status)}
@@ -199,8 +222,9 @@ export default function LeadDashboard({ leads: initialLeads, onUpdateLeads }: Le
                     }`}
                   >
                     {status === 'all' && 'All'}
+                    {status === 'pending' && 'Pending'}
+                    {status === 'completed' && 'Completed'}
                     {status === 'new' && 'New'}
-                    {status === 'audit_prepared' && 'Audits'}
                     {status === 'onboarded' && 'Active'}
                     {status === 'archived' && 'Archived'}
                   </button>
@@ -248,11 +272,15 @@ export default function LeadDashboard({ leads: initialLeads, onUpdateLeads }: Le
                     <div className="flex flex-col items-end gap-2 shrink-0">
                       <span className={`px-2 py-0.5 text-[9px] font-black uppercase font-mono tracking-wider rounded border ${
                         lead.status === 'new' ? 'bg-[#bc5f40]/10 text-[#bc5f40] border-[#bc5f40]/25' :
+                        lead.status === 'pending' ? 'bg-amber-100 text-amber-800 border-amber-300' :
+                        lead.status === 'completed' ? 'bg-emerald-100/90 text-emerald-800 border-emerald-300' :
                         lead.status === 'audit_prepared' ? 'bg-[#123e35]/10 text-[#123e35] border-[#123e35]/25' :
                         lead.status === 'onboarded' ? 'bg-[#123e35]/15 text-[#123e35] border-[#123e35]/30' :
                         'bg-[#faf9f6] text-[#4e524f] border-[#dfded4]'
                       }`}>
                         {lead.status === 'new' ? 'New' :
+                         lead.status === 'pending' ? 'Pending' :
+                         lead.status === 'completed' ? 'Completed' :
                          lead.status === 'audit_prepared' ? 'Strategy Built' :
                          lead.status === 'onboarded' ? 'Active' :
                          lead.status}
@@ -291,6 +319,21 @@ export default function LeadDashboard({ leads: initialLeads, onUpdateLeads }: Le
                   </div>
 
                   <div className="flex gap-2">
+                    {selectedLead.status !== 'completed' ? (
+                      <button
+                        onClick={() => handleMarkLeadCompleted(selectedLead.id)}
+                        disabled={isSaving}
+                        className="bg-emerald-600 hover:bg-emerald-700 text-white text-xs font-bold px-3.5 py-2.5 rounded-xl shrink-0 cursor-pointer flex items-center gap-1.5 transition-all shadow-xs"
+                      >
+                        <CheckSquare className="w-3.5 h-3.5" />
+                        Mark Completed
+                      </button>
+                    ) : (
+                      <span className="bg-emerald-100 text-emerald-800 text-xs font-bold px-3.5 py-2.5 rounded-xl border border-emerald-200 flex items-center gap-1.5 font-mono">
+                        ✓ Completed
+                      </span>
+                    )}
+
                     <button
                       onClick={(e) => handleSimulatePDF(selectedLead.id, e)}
                       disabled={pdfGenerating === selectedLead.id}
@@ -409,6 +452,8 @@ export default function LeadDashboard({ leads: initialLeads, onUpdateLeads }: Le
                         onChange={(e) => setCurrentStatus(e.target.value as Lead['status'])}
                         className="bg-white border border-[#dfded4] rounded-xl w-full px-3 py-2 text-xs font-bold text-[#1a1c1a] cursor-pointer focus:outline-none focus:border-[#bc5f40]"
                       >
+                        <option value="pending">Pending Inquiry</option>
+                        <option value="completed">Completed / Solved</option>
                         <option value="new">New Lead</option>
                         <option value="contacted">Lead Contacted</option>
                         <option value="audit_prepared">Strategy Prepared</option>
