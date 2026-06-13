@@ -4,13 +4,55 @@ import fs from "fs";
 import { createServer as createViteServer } from "vite";
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
+import { createClient } from "@supabase/supabase-js";
+import { Resend } from "resend";
 
 dotenv.config();
 
 const app = express();
 const PORT = 3000;
 
-app.use(express.json());
+// Set generous payload size limit to accept base64-encoded PDF documents safely
+app.use(express.json({ limit: "50mb" }));
+app.use(express.urlencoded({ limit: "50mb", extended: true }));
+
+// Lazy initializers for premium integrations to prevent app crashes if keys are not set up yet
+let supabaseClient: any = null;
+function getSupabase() {
+  if (!supabaseClient) {
+    const supabaseUrl = process.env.SUPABASE_URL;
+    const supabaseKey = process.env.SUPABASE_KEY || process.env.SUPABASE_SERVICE_ROLE_KEY;
+    if (supabaseUrl && supabaseKey) {
+      try {
+        supabaseClient = createClient(supabaseUrl, supabaseKey);
+        console.log("🟢 Supabase client successfully initialized.");
+      } catch (err) {
+        console.error("❌ Failed to initialize Supabase client:", err);
+      }
+    } else {
+      console.warn("⚠️ SUPABASE_URL or SUPABASE_KEY is missing. Falling back to local JSON file db.");
+    }
+  }
+  return supabaseClient;
+}
+
+let resendClient: any = null;
+function getResend() {
+  if (!resendClient) {
+    const resendApiKey = process.env.RESEND_API_KEY;
+    if (resendApiKey) {
+      try {
+        resendClient = new Resend(resendApiKey);
+        console.log("🟢 Resend client successfully initialized.");
+      } catch (err) {
+        console.error("❌ Failed to initialize Resend client:", err);
+      }
+    } else {
+      console.warn("⚠️ RESEND_API_KEY is missing. Emails will not be sent via Resend real-time service.");
+    }
+  }
+  return resendClient;
+}
 
 // Initialize Gemini
 const apiKey = process.env.GEMINI_API_KEY;
@@ -221,7 +263,46 @@ app.post("/api/admin/login", (req, res) => {
 });
 
 // API Routes
-app.get("/api/leads", (req, res) => {
+app.get("/api/leads", async (req, res) => {
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("leads")
+        .select("*")
+        .order("created_at", { ascending: false });
+      
+      if (!error && data) {
+        // Map database fields to the frontend expected lead structure
+        const mappedLeads = data.map((d: any) => ({
+          id: d.id,
+          createdAt: d.created_at || d.createdAt,
+          status: d.status,
+          notes: d.notes,
+          aiAudit: d.ai_audit || d.aiAudit,
+          input: {
+            planId: d.plan_id || d.planId || '',
+            planName: d.plan_name || d.planName || '',
+            businessName: d.business_name || d.businessName || '',
+            contactName: d.contact_name || d.contactName || '',
+            email: d.email || '',
+            phone: d.phone || 'Not provided',
+            website: d.website || '',
+            hasWebsite: !!d.website,
+            industry: d.industry || '',
+            location: d.location || '',
+            keywords: d.keywords || '',
+            hasGBP: false
+          }
+        }));
+        return res.json(mappedLeads);
+      }
+      console.error("❌ Supabase fetch error:", error);
+    } catch (err) {
+      console.error("❌ Fallback to local file due to Supabase exception:", err);
+    }
+  }
+  // Standard fallback
   res.json(readLeads());
 });
 
@@ -316,24 +397,155 @@ app.post("/api/leads/submit", async (req, res) => {
       }
     } catch (error) {
       console.error("Error generating Gemini Local SEO Audit:", error);
-      // Fallback preset strategy in case of API failure
       newLead.aiAudit = createFallbackAudit(leadInput);
     }
   } else {
-    // Generate static mockup audit instantly if no key is defined
     newLead.aiAudit = createFallbackAudit(leadInput);
   }
 
+  // 1. Maintain local backups for offline/resilience parameters
   const leads = readLeads();
   leads.unshift(newLead);
   writeLeads(leads);
 
-  console.log(`✉️ Email would be dispatched to contact@localsurgeseo.com informing them of lead ${newLeadId} [${leadInput.businessName}] for plan ${leadInput.planName}`);
+  // 2. Persist directly to Supabase cloud SQL storage if configured
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      const { error } = await supabase
+        .from("leads")
+        .insert([
+          {
+            id: newLead.id,
+            created_at: newLead.createdAt,
+            status: newLead.status,
+            notes: newLead.notes,
+            business_name: leadInput.businessName,
+            contact_name: leadInput.contactName,
+            email: leadInput.email,
+            phone: leadInput.phone || 'Not provided',
+            website: leadInput.website || '',
+            industry: leadInput.industry || '',
+            location: leadInput.location || '',
+            keywords: leadInput.keywords || '',
+            plan_id: leadInput.planId || '',
+            plan_name: leadInput.planName || '',
+            ai_audit: newLead.aiAudit || null
+          }
+        ]);
+      if (error) {
+        console.error("❌ Supabase insertion failed:", error);
+      } else {
+        console.log(`🟢 Successfully saved lead ${newLead.id} to Supabase database!`);
+      }
+    } catch (dbErr) {
+      console.error("❌ Caught error writing to Supabase:", dbErr);
+    }
+  }
+
+  // 3. Dispatch auto-email with the PDF Strategy to the prospective customer using Resend
+  const resend = getResend();
+  if (resend) {
+    try {
+      const safeBusinessName = leadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
+      const emailPayload: any = {
+        from: "Local Surge SEO <onboarding@resend.dev>",
+        to: [leadInput.email],
+        subject: `Your Local Surge SEO Strategy Plan: ${leadInput.planName}`,
+        html: `
+          <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #dfded4; border-radius: 12px; overflow: hidden; background-color: #faf9f6;">
+            <!-- Header section -->
+            <div style="background-color: #123e35; padding: 28px 24px; text-align: left; border-bottom: 3px solid #bc5f40;">
+              <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: bold; font-family: sans-serif;">LOCAL SURGE SEO</h1>
+              <p style="color: #dfded4; margin: 4px 0 0 0; font-size: 12px; font-family: monospace;">Onboarding Strategy & Campaign Activation</p>
+            </div>
+            
+            <!-- Body content -->
+            <div style="padding: 24px; color: #1a1c1a;">
+              <h2 style="color: #123e35; margin-top: 0; font-size: 16px; font-weight: bold;">Initial SEO Framework Registered</h2>
+              <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
+                Hello <strong>${leadInput.contactName}</strong>,
+              </p>
+              <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
+                Our setup engineers have received your inquiry for <strong>${leadInput.businessName}</strong> and have locked in your prefered <strong>${leadInput.planName}</strong> program. Your physical search grids are being analyzed.
+              </p>
+              
+              <div style="background-color: #eff4f1; border: 1px solid #dfded4; border-radius: 8px; padding: 16px; margin: 20px 0;">
+                <h3 style="margin-top: 0; color: #123e35; font-size: 11px; font-weight: bold; text-transform: uppercase; font-family: monospace; letter-spacing: 0.5px;">Strategic Blueprint Overview</h3>
+                <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
+                  <tr>
+                    <td style="padding: 4px 0; color: #888b88;">Business Target:</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${leadInput.businessName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 4px 0; color: #888b88;">Program Tier:</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #bc5f40;">${leadInput.planName}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 4px 0; color: #888b88;">Specialty Sector:</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${leadInput.industry || 'Local SEO Dominance'}</td>
+                  </tr>
+                  <tr>
+                    <td style="padding: 4px 0; color: #888b88;">Target Geolocation:</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${leadInput.location || 'Local Area'}</td>
+                  </tr>
+                </table>
+              </div>
+              
+              ${leadInput.pdfBase64 ? `
+                <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
+                  📂 <strong>Strategy Plan Attached:</strong> We have attached your pixel-perfect customized <strong>Strategy Growth Brief PDF</strong> summarizing your onboarding deliverables, timelines, and immediate sequence. Please open the attachment below!
+                </p>
+              ` : `
+                <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
+                  Our engineers are assembling your localized schema. Your custom local listing benchmarks have been saved successfully for our priority kickoff meeting.
+                </p>
+              `}
+              
+              <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d; margin-top: 16px;">
+                One of our Senior Search Strategists will match your inputs against our database and coordinate a kickoff briefing.
+              </p>
+              
+              <p style="font-size: 12px; margin-top: 24px; color: #888b88; font-family: monospace;">
+                Best regards,<br />
+                The Local Surge SEO Team
+              </p>
+            </div>
+            
+            <!-- Footer section -->
+            <div style="background-color: #123e35; padding: 12px 24px; text-align: center; border-top: 1px solid #dfded4;">
+              <p style="color: #ffffff; margin: 0; font-size: 10px; font-family: sans-serif;">
+                © 2026 Local Surge SEO • All rights reserved. High-Performance Local Search Engineering.
+              </p>
+            </div>
+          </div>
+        `
+      };
+
+      if (leadInput.pdfBase64) {
+        emailPayload.attachments = [
+          {
+            filename: `Local_Surge_${safeBusinessName}_Strategy_Plan.pdf`,
+            content: Buffer.from(leadInput.pdfBase64, "base64")
+          }
+        ];
+      }
+
+      const { data, error } = await resend.emails.send(emailPayload);
+      if (error) {
+        console.error("❌ Resend dispatch failed:", error);
+      } else {
+        console.log("🟢 Resend email successfully sent to customer:", leadInput.email);
+      }
+    } catch (resendError) {
+      console.error("❌ Failure in Resend pipeline execution:", resendError);
+    }
+  }
 
   res.json({ success: true, lead: newLead });
 });
 
-app.put("/api/leads/:id", (req, res) => {
+app.put("/api/leads/:id", async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
   const leads = readLeads();
@@ -344,10 +556,33 @@ app.put("/api/leads/:id", (req, res) => {
 
   leads[idx] = { ...leads[idx], ...updates };
   writeLeads(leads);
+
+  // Update in Supabase if active
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      const { error } = await supabase
+        .from("leads")
+        .update({
+          status: updates.status,
+          notes: updates.notes,
+          ai_audit: updates.aiAudit || null
+        })
+        .eq("id", id);
+      if (error) {
+        console.error("❌ Supabase update error:", error);
+      } else {
+        console.log(`🟢 Successfully updated lead ${id} in Supabase.`);
+      }
+    } catch (err) {
+      console.error("❌ Caught exception updating Supabase records:", err);
+    }
+  }
+
   res.json({ success: true, lead: leads[idx] });
 });
 
-app.delete("/api/leads/:id", (req, res) => {
+app.delete("/api/leads/:id", async (req, res) => {
   const { id } = req.params;
   const leads = readLeads();
   const filtered = leads.filter((l: any) => l.id !== id);
@@ -355,6 +590,25 @@ app.delete("/api/leads/:id", (req, res) => {
     return res.status(404).json({ error: "Lead not found" });
   }
   writeLeads(filtered);
+
+  // Delete in Supabase if active
+  const supabase = getSupabase();
+  if (supabase) {
+    try {
+      const { error } = await supabase
+        .from("leads")
+        .delete()
+        .eq("id", id);
+      if (error) {
+        console.error("❌ Supabase deletion error:", error);
+      } else {
+        console.log(`🟢 Successfully deleted lead ${id} from Supabase.`);
+      }
+    } catch (err) {
+      console.error("❌ Caught exception deleting from Supabase:", err);
+    }
+  }
+
   res.json({ success: true });
 });
 

@@ -330,7 +330,7 @@ export default function App() {
     }
   };
 
-  const handleGeneratePDF = (planId: string, name: string, email: string) => {
+  const handleGeneratePDF = (planId: string, name: string, email: string): string => {
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -544,6 +544,10 @@ export default function App() {
 
     // Save filename
     doc.save(`Local_Surge_SEO_${planTitle.replace(/[^a-zA-Z0-9]/g, '_')}_Strategy.pdf`);
+
+    // Output base64 dataURI string and return the raw base64 segment
+    const dataUri = doc.output('datauristring');
+    return dataUri.split(',')[1] || '';
   };
 
   const handleSelectPlanAndNavigate = (planId: string) => {
@@ -604,9 +608,9 @@ export default function App() {
     e.preventDefault();
     if (!cntEmail.trim() || !cntName.trim()) return;
 
-    // Immediately generate and download the PDF brief
+    // Immediately generate and download the PDF brief, capturing the base64 output
     const selectedPlanId = cntPlan || 'custom';
-    handleGeneratePDF(selectedPlanId, cntName, cntEmail);
+    const pdfBase64 = handleGeneratePDF(selectedPlanId, cntName, cntEmail);
 
     setContactSuccess(true);
 
@@ -623,7 +627,8 @@ export default function App() {
       industry: 'Custom Inquiry',
       location: 'Request Location',
       keywords: cntMessage || 'Requested plan selection via Contact',
-      hasGBP: false
+      hasGBP: false,
+      pdfBase64: pdfBase64
     };
 
     try {
