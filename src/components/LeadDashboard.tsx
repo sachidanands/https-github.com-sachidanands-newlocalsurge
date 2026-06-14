@@ -42,6 +42,38 @@ export default function LeadDashboard({
   const [selectedPlanId, setSelectedPlanId] = useState<string>('single-page');
   const [saveStatus, setSaveStatus] = useState<'idle' | 'saving' | 'success' | 'error'>('idle');
 
+  // Database Connection Status Checker
+  const [dbStatus, setDbStatus] = useState<{
+    configured: boolean;
+    connected: boolean;
+    tableExists: boolean;
+    errorType?: string;
+    message?: string;
+    sqlSchema?: string;
+  } | null>(null);
+  const [showSqlGuide, setShowSqlGuide] = useState<boolean>(false);
+
+  const fetchDbStatus = async () => {
+    try {
+      const res = await fetch('/api/admin/db-status');
+      if (res.ok) {
+        const data = await res.json();
+        setDbStatus(data);
+      }
+    } catch (err) {
+      console.error("Error fetching database status:", err);
+    }
+  };
+
+  useEffect(() => {
+    fetchDbStatus();
+  }, []);
+
+  // Sync leads state when initialLeads prop changes
+  useEffect(() => {
+    setLeads(initialLeads);
+  }, [initialLeads]);
+
   // Input holders for additions
   const [newDelivText, setNewDelivText] = useState('');
   const [newActionText, setNewActionText] = useState('');
@@ -290,7 +322,10 @@ export default function LeadDashboard({
           </div>
           <div className="flex flex-wrap items-center gap-2.5 shrink-0">
             <button 
-              onClick={onUpdateLeads}
+              onClick={async () => {
+                if (onUpdateLeads) onUpdateLeads();
+                await fetchDbStatus();
+              }}
               className="flex items-center gap-1.5 px-4.5 py-2.5 rounded-xl text-xs font-bold bg-white text-[#4e524f] hover:text-[#1a1c1a] shadow-xs border border-[#dfded4] cursor-pointer transition-all"
             >
               <RefreshCw className="w-3.5 h-3.5" />
@@ -308,6 +343,53 @@ export default function LeadDashboard({
             )}
           </div>
         </div>
+
+        {/* Supabase Status & Schema Assistant if configured but table is missing */}
+        {dbStatus && dbStatus.configured && !dbStatus.tableExists && (
+          <div className="bg-[#bc5f40]/5 border-2 border-dashed border-[#bc5f40]/30 rounded-2xl p-6 space-y-4">
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+              <div className="space-y-1">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
+                  <h3 className="font-extrabold text-sm text-[#1a1c1a]">
+                    Supabase Database Connected (Setup Incomplete)
+                  </h3>
+                </div>
+                <p className="text-xs text-[#4e524f] leading-relaxed max-w-3xl">
+                  {dbStatus.message} To enable real-time cloud-synced storage, you just need to create the <code className="bg-white/40 px-1 border border-[#dfded4] font-mono text-[11px] rounded font-bold text-[#bc5f40]">leads</code> table by executing a simple SQL query in your <strong>Supabase SQL Editor</strong>.
+                </p>
+              </div>
+              <button
+                onClick={() => setShowSqlGuide(!showSqlGuide)}
+                className="px-4.5 py-2.5 bg-[#bc5f40] hover:bg-[#a34d31] text-white text-xs font-bold rounded-xl cursor-pointer transition-all flex items-center gap-1.5 shrink-0 shadow-xs"
+              >
+                {showSqlGuide ? "Hide Setup Guide" : "Get SQL Setup Code 🛠️"}
+              </button>
+            </div>
+            
+            {showSqlGuide && dbStatus.sqlSchema && (
+              <div className="bg-zinc-950 rounded-xl p-4.5 space-y-3 font-mono text-xs text-white border border-[#bc5f40]/20 shadow-inner">
+                <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-zinc-800 pb-2">
+                  <span>SQL COMMAND TO RUN</span>
+                  <button
+                    onClick={() => {
+                      navigator.clipboard.writeText(dbStatus.sqlSchema || '');
+                      alert("SQL query successfully copied to clipboard! Paste it into your Supabase SQL Editor and run it.");
+                    }}
+                    className="px-2.5 py-1 bg-zinc-800 text-white font-sans text-[10px] font-bold rounded-lg hover:bg-zinc-700 transition cursor-pointer"
+                  >
+                    Copy Query 📋
+                  </button>
+                </div>
+                <pre className="overflow-x-auto select-all max-h-[150px] p-2 bg-black/30 rounded text-[#dfded4] text-[11px] leading-relaxed font-mono">{dbStatus.sqlSchema}</pre>
+                <div className="text-[11px] text-amber-300 font-sans leading-relaxed pt-1 flex items-start gap-1.5">
+                  <span>💡</span>
+                  <span><strong>Instructions:</strong> Open your Supabase Dashboard, navigate to the <strong>SQL Editor</strong> tab (left side panel), click <strong>New Query</strong>, paste the code shown above, and click the <strong>Run</strong> button at the bottom right. Once run, click <strong>Refresh Leads</strong> above to establish real-time cloud-synced customer tracking!</span>
+                </div>
+              </div>
+            )}
+          </div>
+        )}
 
         {/* Navigation Tabs */}
         <div className="flex border-b border-[#dfded4] pb-px gap-6 block mt-4 select-none">
