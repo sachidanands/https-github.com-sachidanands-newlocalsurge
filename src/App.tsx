@@ -15,6 +15,8 @@ import CaliforniaView from './components/CaliforniaView';
 import LosAngelesSeoView from './components/LosAngelesSeoView';
 import DirectoryView from './components/DirectoryView';
 import SchemaMarkup from './components/SchemaMarkup';
+import PrivacyPolicy from './components/PrivacyPolicy';
+import TermsOfService from './components/TermsOfService';
 import { 
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight, 
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
@@ -100,6 +102,8 @@ export default function App() {
       if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/site-map') return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/california') return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/los-angeles-seo') return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null };
@@ -162,6 +166,8 @@ export default function App() {
     else if (currentPage === 'contact') path = '/contact';
     else if (currentPage === 'admin') path = '/admin/dashboard';
     else if (currentPage === 'site-map') path = '/site-map';
+    else if (currentPage === 'privacy-policy') path = '/privacy-policy';
+    else if (currentPage === 'terms-of-service') path = '/terms-of-service';
     else if (currentPage === 'california') path = '/california';
     else if (currentPage === 'los-angeles-seo') path = '/los-angeles-seo';
     else if (currentPage === 'blog') {
@@ -1541,6 +1547,32 @@ export default function App() {
                 setActiveStateSlug={setActiveStateSlug}
                 setActiveCitySlug={setActiveCitySlug}
               />
+            </motion.div>
+          )}
+
+          {/* PRIVACY POLICY */}
+          {currentPage === 'privacy-policy' && (
+            <motion.div
+              key="privacy-policy"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <PrivacyPolicy setCurrentPage={setCurrentPage} />
+            </motion.div>
+          )}
+
+          {/* TERMS OF SERVICE */}
+          {currentPage === 'terms-of-service' && (
+            <motion.div
+              key="terms-of-service"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <TermsOfService setCurrentPage={setCurrentPage} />
             </motion.div>
           )}
 

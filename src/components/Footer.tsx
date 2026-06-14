@@ -108,9 +108,19 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             © {new Date().getFullYear()} Local Surge SEO. All rights reserved. Billed monthly, cancel anytime.
           </div>
           <div className="flex gap-4 items-center">
-            <span className="hover:text-[#123e35] transition-colors cursor-pointer">Privacy Policy</span>
+            <button onClick={() => {
+              setCurrentPage('privacy-policy');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} className="hover:text-[#123e35] transition-colors cursor-pointer bg-transparent border-none p-0 inline font-semibold">
+              Privacy Policy
+            </button>
             <span>•</span>
-            <span className="hover:text-[#123e35] transition-colors cursor-pointer">Terms of Service</span>
+            <button onClick={() => {
+              setCurrentPage('terms-of-service');
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }} className="hover:text-[#123e35] transition-colors cursor-pointer bg-transparent border-none p-0 inline font-semibold">
+              Terms of Service
+            </button>
             <span>•</span>
             <button onClick={() => {
               setCurrentPage('site-map');
