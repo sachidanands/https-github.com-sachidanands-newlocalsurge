@@ -84,11 +84,6 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   📚 Editorial Blog
                 </button>
               </li>
-              <li>
-                <button onClick={() => setCurrentPage('admin')} className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1">
-                  Lead Board Board 📊
-                </button>
-              </li>
               <li className="text-xs text-[#888b88] pt-1">
                 <div className="flex items-center gap-1">
                   <Clock className="w-3.5 h-3.5 text-slate-400" />
