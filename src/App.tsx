@@ -250,9 +250,24 @@ export default function App() {
     prevPageRef.current = currentPage;
   }, [currentPage, selectedPricingPlanId]);
 
+  const [pdfTemplates, setPdfTemplates] = useState<any>(null);
+
+  const fetchPdfTemplates = async () => {
+    try {
+      const response = await fetch('/api/pdf-templates');
+      if (response.ok) {
+        const data = await response.json();
+        setPdfTemplates(data);
+      }
+    } catch (err) {
+      console.error('Error fetching PDF templates:', err);
+    }
+  };
+
   // Fetch leads on mount
   useEffect(() => {
     fetchLeads();
+    fetchPdfTemplates();
   }, []);
 
   const fetchLeads = async () => {
@@ -397,11 +412,13 @@ export default function App() {
     let deliverables: string[] = [];
     let actions: string[] = [];
 
+    const templateConfig = pdfTemplates ? pdfTemplates[planId] : null;
+
     if (planId === 'single-page') {
       planTitle = 'Single-Page Blast (Free Plan)';
       planPrice = '$0 / Free Promotion';
-      estTimeline = '2 - 3 Business Days to Live Sandbox';
-      deliverables = [
+      estTimeline = templateConfig?.timeline || '2 - 3 Business Days to Live Sandbox';
+      deliverables = templateConfig?.deliverables || [
         'Premium Single-Page Fast Storefront Website Design',
         'Fully Responsive & Mobile-Optimized Layout Structure',
         'On-Page Local SEO Setup (Keywords, Heading hierarchies)',
@@ -409,7 +426,7 @@ export default function App() {
         'Secure SSL Certificate configuration & active mapping',
         'Bespoke Domain Name Pointer Routing (Domain purchase separate)'
       ];
-      actions = [
+      actions = templateConfig?.actions || [
         'Secure standard location info, target keywords, business description & graphics.',
         'Bootstrap highly optimized sandbox layout draft & share staging address.',
         'Gather direct customer design reviews and execute final refinements.',
@@ -418,8 +435,8 @@ export default function App() {
     } else if (planId === 'starter') {
       planTitle = 'Starter Boost Plan';
       planPrice = '$999 / month';
-      estTimeline = '1 - 2 Weeks Core Onboarding & Sync';
-      deliverables = [
+      estTimeline = templateConfig?.timeline || '1 - 2 Weeks Core Onboarding & Sync';
+      deliverables = templateConfig?.deliverables || [
         'Google Business Profile (GBP) deep synchronization & setup verification',
         'High-converting, action-oriented Lead Form integration & coding',
         'Comprehensive Localized Keyword Research covering 10 major buyer terms',
@@ -427,7 +444,7 @@ export default function App() {
         'Basic On-Page Geographic Silos tuning and local metadata markup',
         'Monthly search rankings dashboard and phone-tap tracking reports'
       ];
-      actions = [
+      actions = templateConfig?.actions || [
         'Grant Manager access delegation for existing or new Google Business Profile.',
         'Define key physical service regions, target zip codes, and hours parameters.',
         'Scrub and eliminate redundant, mismatched historical NAP directory citations.',
@@ -436,8 +453,8 @@ export default function App() {
     } else if (planId === 'premium') {
       planTitle = 'Premium Surge Plan';
       planPrice = '$1,999 / month';
-      estTimeline = 'Weekly Milestones & Priority Direct Account Management';
-      deliverables = [
+      estTimeline = templateConfig?.timeline || 'Weekly Milestones & Priority Direct Account Management';
+      deliverables = templateConfig?.deliverables || [
         'Everything in Starter Boost (All map rankings services included)',
         'Interactive, rich LocalBusiness Schema Markup installations (JSON-LD)',
         'High-authority regional niche backlinking for accelerated ranking growth',
@@ -446,7 +463,7 @@ export default function App() {
         'Dedicated senior Local SEO Account Representative',
         'Bi-weekly Strategy Alignment calls and priority workflow status'
       ];
-      actions = [
+      actions = templateConfig?.actions || [
         'Identify main point-of-contact for bi-weekly collaboration briefings.',
         'Establish direct integration links for Google Search Console (GSC) and analytics.',
         'Publish optimized initial geo-targeted campaign outline for content approval.',
@@ -455,15 +472,15 @@ export default function App() {
     } else {
       planTitle = 'Custom Configuration / Enterprise Setup';
       planPrice = 'Bespoke Quote Pending Custom Formulation';
-      estTimeline = 'Bespoke Schedule Based on Multi-City Scope';
-      deliverables = [
+      estTimeline = templateConfig?.timeline || 'Bespoke Schedule Based on Multi-City Scope';
+      deliverables = templateConfig?.deliverables || [
         'Bespoke multi-location regional strategy structuring & silos setup',
         'Enterprise-grade multi-page location directories architecture matching 10+ cities',
         'Custom local schema template configurations & advanced page load speed tuning',
         'Tailored high-volume citation audits and priority Google Maps troubleshooting',
         'Omnichannel search marketing reports for headquarters & branch partners'
       ];
-      actions = [
+      actions = templateConfig?.actions || [
         'Conduct priority 1-on-1 strategy meeting with local search director.',
         'Map out expansion cities, operational zip codes, and priority locations.',
         'Draft a formal, custom full-stack Scope of Work (SOW).'
@@ -1410,6 +1427,13 @@ export default function App() {
                 <LeadDashboard 
                   leads={leads} 
                   onUpdateLeads={fetchLeads} 
+                  pdfTemplates={pdfTemplates}
+                  onUpdateTemplates={fetchPdfTemplates}
+                  onGeneratePDF={handleGeneratePDF}
+                  onLock={() => {
+                    sessionStorage.removeItem('isAdminLoggedIn');
+                    setIsAdminLoggedIn(false);
+                  }}
                 />
               ) : (
                 <AdminLoginForm 

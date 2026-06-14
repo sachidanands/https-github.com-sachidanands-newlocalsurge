@@ -178,6 +178,100 @@ function initDb() {
 
 initDb();
 
+const TEMPLATES_FILE = path.join(DATA_DIR, "pdf_templates.json");
+
+const defaultTemplates = {
+  "single-page": {
+    timeline: "2 - 3 Business Days to Live Sandbox",
+    deliverables: [
+      "Premium Single-Page Fast Storefront Website Design",
+      "Fully Responsive & Mobile-Optimized Layout Structure",
+      "On-Page Local SEO Setup (Keywords, Heading hierarchies)",
+      "Ultra-Fast secure Cloud-Hosted Payload hosting",
+      "Secure SSL Certificate configuration & active mapping",
+      "Bespoke Domain Name Pointer Routing (Domain purchase separate)"
+    ],
+    actions: [
+      "Secure standard location info, target keywords, business description & graphics.",
+      "Bootstrap highly optimized sandbox layout draft & share staging address.",
+      "Gather direct customer design reviews and execute final refinements.",
+      "Activate DNS primary domains records and propagate web-wide."
+    ]
+  },
+  "starter": {
+    timeline: "1 - 2 Weeks Core Onboarding & Sync",
+    deliverables: [
+      "Google Business Profile (GBP) deep synchronization & setup verification",
+      "High-converting, action-oriented Lead Form integration & coding",
+      "Comprehensive Localized Keyword Research covering 10 major buyer terms",
+      "Top 20 absolute primary Directory Citation syndications (Apple, MapQuest, Yelp)",
+      "Basic On-Page Geographic Silos tuning and local metadata markup",
+      "Monthly search rankings dashboard and phone-tap tracking reports"
+    ],
+    actions: [
+      "Grant Manager access delegation for existing or new Google Business Profile.",
+      "Define key physical service regions, target zip codes, and hours parameters.",
+      "Scrub and eliminate redundant, mismatched historical NAP directory citations.",
+      "Trigger automated keyword ranking monitors for active regional status assessment."
+    ]
+  },
+  "premium": {
+    timeline: "Weekly Milestones & Priority Direct Account Management",
+    deliverables: [
+      "Everything in Starter Boost (All map rankings services included)",
+      "Interactive, rich LocalBusiness Schema Markup installations (JSON-LD)",
+      "High-authority regional niche backlinking for accelerated ranking growth",
+      "4 custom geo-targeted Local Industry Blog Articles published monthly",
+      "Bespoke multi-page expansion silo content strategy mapping",
+      "Dedicated senior Local SEO Account Representative",
+      "Bi-weekly Strategy Alignment calls and priority workflow status"
+    ],
+    actions: [
+      "Identify main point-of-contact for bi-weekly collaboration briefings.",
+      "Establish direct integration links for Google Search Console (GSC) and analytics.",
+      "Publish optimized initial geo-targeted campaign outline for content approval.",
+      "Produce robust geographic competitor rankings grid review."
+    ]
+  },
+  "custom": {
+    timeline: "Bespoke Schedule Based on Multi-City Scope",
+    deliverables: [
+      "Bespoke multi-location regional strategy structuring & silos setup",
+      "Enterprise-grade multi-page location directories architecture matching 10+ cities",
+      "Custom local schema template configurations & advanced page load speed tuning",
+      "Tailored high-volume citation audits and priority Google Maps troubleshooting",
+      "Omnichannel search marketing reports for headquarters & branch partners"
+    ],
+    actions: [
+      "Conduct priority 1-on-1 strategy meeting with local search director.",
+      "Map out expansion cities, operational zip codes, and priority locations.",
+      "Draft a formal, custom full-stack Scope of Work (SOW)."
+    ]
+  }
+};
+
+function readTemplates() {
+  try {
+    if (!fs.existsSync(TEMPLATES_FILE)) {
+      fs.writeFileSync(TEMPLATES_FILE, JSON.stringify(defaultTemplates, null, 2));
+      return defaultTemplates;
+    }
+    const raw = fs.readFileSync(TEMPLATES_FILE, "utf-8");
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error("Error reading templates:", err);
+    return defaultTemplates;
+  }
+}
+
+function writeTemplates(templates: any) {
+  try {
+    fs.writeFileSync(TEMPLATES_FILE, JSON.stringify(templates, null, 2));
+  } catch (err) {
+    console.error("Error writing templates:", err);
+  }
+}
+
 function readLeads() {
   try {
     const data = fs.readFileSync(LEADS_FILE, "utf-8");
@@ -261,6 +355,19 @@ app.post("/api/admin/login", (req, res) => {
   } else {
     res.status(401).json({ success: false, error: "Invalid username or password" });
   }
+});
+
+app.get("/api/pdf-templates", (req, res) => {
+  res.json(readTemplates());
+});
+
+app.post("/api/pdf-templates", (req, res) => {
+  const customTemplates = req.body;
+  if (!customTemplates || typeof customTemplates !== "object") {
+    return res.status(400).json({ error: "Invalid templates payload" });
+  }
+  writeTemplates(customTemplates);
+  res.json({ success: true, templates: readTemplates() });
 });
 
 // API Routes
