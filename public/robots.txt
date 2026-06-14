@@ -1,0 +1,25 @@
+# Custom robots.txt for Local Surge SEO
+# Operational in United States & Canada
+
+User-agent: *
+Allow: /
+Allow: /about
+Allow: /why-us
+Allow: /pricing
+Allow: /contact
+Allow: /seo-tool
+Allow: /blog
+Allow: /site-map
+Allow: /california
+Allow: /los-angeles-seo
+Allow: /privacy-policy
+Allow: /terms-of-service
+
+# Secure Admin & Private Leader Boards
+Disallow: /admin
+Disallow: /admin/
+Disallow: /admin/dashboard
+Disallow: /admin/dashboard/
+
+# Human-Readable Sitemap Pointer
+Sitemap: https://localsurgeseo.com/site-map

@@ -1,0 +1,41 @@
+# Local Surge SEO
+
+> High-impact, hyper-targeted Local SEO and Search Signal Diagnostics for businesses in the US and Canada.
+
+Local Surge SEO is a professional marketing intelligence platform providing automated local visibility audits, schema markups, geo-targeted rank analysis, and customizable lead retention workspaces.
+
+## Core Capabilities & Services
+
+- **Free SEO Diagnostic Auditor:** Real-time diagnostics parsing local citation profile signals, Google Business Profile validation status, responsive page load factors, and targeted search signals in specific ZIP codes.
+- **State & City SEO Directories:** Dedicated search signals optimized for specific regions, centering major state corridors (such as California) and city hubs (such as Los Angeles).
+- **Automated Schema Markup Generator:** Builds JSON-LD structured schemas compliant with Google's rich result guidelines to declare LocalBusiness identities, rating aggregates, and business locations.
+- **Local Directory Auditing Tool:** Cross-compares local physical details (NAP: Name, Address, Phone) across major directory providers.
+- **Active Subscription Models:** Custom rolling, contract-free monthly SEO signal booster plans designed to build high-authority backlinks, fix citation consistency gaps, and track organic placement patterns.
+- **Dynamic Leader Boards:** Track the highest-profile local outreach performance and live keyword rankings.
+
+## Primary Route Index
+
+All paths resolve relative to the primary root domain:
+
+### General & Pricing
+- `/` - The primary dashboard entry point. Features the interactive Free SEO Analysis Tool.
+- `/about` - Core values, agency history, and compliance frameworks across the US and Canada.
+- `/why-us` - Unique value propositions, comparison matrices against traditional agencies, and algorithmic approach overview.
+- `/pricing` - Pricing cards detailing the Starter Local, Professional Surge, and Enterprise Dominator monthly blueprints.
+- `/contact` - Instant secure message dispatcher, inquiry channels, and direct service assistance desk.
+
+### Specialized SEO Views
+- `/seo-tool` - Dedicated clean workspace containing our local maps tracking, keyword diagnostic, and directory analysis apps.
+- `/blog` - Professional editorial guides detailing local ranking guidelines, citation structures, and algorithm updates.
+- `/site-map` - Human-readable hierarchical index of all key landing resources, city directories, and state-targeted channels.
+
+### Location-Specific Directories
+- `/california` - Regional hub focusing on search ranking signals, local competition factors, and optimization pipelines for California.
+- `/los-angeles-seo` - High-density city optimization signals and case study tracking for metropolitan Los Angeles.
+
+### Legal Frameworks (US & Canada Compliant)
+- `/privacy-policy` - Statutory privacy declarations, CCPA/CPRA compliance, PIPEDA alignment, of CAN-SPAM / CASL electronic communication protections.
+- `/terms-of-service` - Governing billing guidelines (cancel-anytime, monthly pre-pay, non-refundable), compliance protocols, and bilateral jurisdiction definitions (Delaware/California, US & Ontario, CA).
+
+## Access Controls & System Security
+- `/admin/dashboard` - Secure administrative dashboard and leader board tracking reserved for certified marketing operators and audit managers. Hidden from organic crawlers.

@@ -389,7 +389,7 @@ app.get("/api/admin/db-status", async (req, res) => {
       .limit(1);
 
     if (error) {
-      if (error.code === '42P01') {
+      if (error.code === '42P01' || error.code === 'PGRST125') {
         return res.json({
           configured: true,
           connected: true,

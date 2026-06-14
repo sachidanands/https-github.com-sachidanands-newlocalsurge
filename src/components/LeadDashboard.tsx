@@ -504,7 +504,7 @@ export default function LeadDashboard({
                 </div>
               ) : (
                 filteredLeads.map((lead) => (
-                  <button
+                  <div
                     key={lead.id}
                     onClick={() => handleSelectLead(lead)}
                     className={`w-full text-left p-4.5 hover:bg-[#faf9f6]/95 transition-all flex justify-between items-start cursor-pointer ${
@@ -551,7 +551,7 @@ export default function LeadDashboard({
                         <Trash2 className="w-3.5 h-3.5" />
                       </button>
                     </div>
-                  </button>
+                  </div>
                 ))
               )}
             </div>
