@@ -89,7 +89,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   setCurrentPage('admin');
                   window.scrollTo({ top: 0, behavior: 'smooth' });
                 }} className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1">
-                  🏆 Leader Board
+                  🏆 Admin Board
                 </button>
               </li>
               <li className="text-xs text-[#888b88] pt-1">
