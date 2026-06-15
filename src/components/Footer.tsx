@@ -81,7 +81,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
               </li>
               <li>
                 <button onClick={() => setCurrentPage('blog')} className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1">
-                  📚 Editorial Blog
+                  📚 Blog
                 </button>
               </li>
               <li>
