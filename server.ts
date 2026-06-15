@@ -653,7 +653,7 @@ app.post("/api/leads/submit", async (req, res) => {
     try {
       const safeBusinessName = leadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
       const emailPayload: any = {
-        from: "Local Surge SEO <onboarding@resend.dev>",
+        from: "Local Surge SEO <contact@localsurgeseo.com>",
         to: [leadInput.email],
         subject: `Your Local Surge SEO Strategy Plan: ${leadInput.planName}`,
         html: `
