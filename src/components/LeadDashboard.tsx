@@ -50,6 +50,7 @@ export default function LeadDashboard({
     errorType?: string;
     message?: string;
     sqlSchema?: string;
+    databaseUrl?: string;
   } | null>(null);
   const [showSqlGuide, setShowSqlGuide] = useState<boolean>(false);
 
@@ -344,52 +345,210 @@ export default function LeadDashboard({
           </div>
         </div>
 
-        {/* Supabase Status & Schema Assistant if configured but table is missing */}
-        {dbStatus && dbStatus.configured && !dbStatus.tableExists && (
-          <div className="bg-[#bc5f40]/5 border-2 border-dashed border-[#bc5f40]/30 rounded-2xl p-6 space-y-4">
-            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-4">
+        {/* Supabase Status, Troubleshooting & Start-From-Scratch Setup Assistant */}
+        {dbStatus && (
+          <div className="bg-[#bc5f40]/5 border border-[#bc5f40]/20 rounded-2xl p-6 space-y-6 shadow-sm">
+            {/* Header and status badge */}
+            <div className="flex flex-col md:flex-row md:items-center justify-between gap-4 border-b border-[#bc5f40]/10 pb-4">
               <div className="space-y-1">
-                <div className="flex items-center gap-2">
-                  <span className="w-2.5 h-2.5 rounded-full bg-amber-500 animate-pulse" />
-                  <h3 className="font-extrabold text-sm text-[#1a1c1a]">
-                    Supabase Database Connected (Setup Incomplete)
+                <div className="flex flex-wrap items-center gap-2.5">
+                  <span className={`w-2.5 h-2.5 rounded-full ${dbStatus.tableExists ? 'bg-emerald-500' : 'bg-amber-500'} animate-pulse`} />
+                  <h3 className="font-black text-base text-[#151716] tracking-tight">
+                    {dbStatus.tableExists 
+                      ? "🟢 Supabase Cloud Synchronization Active" 
+                      : dbStatus.errorType === 'cache_stale'
+                        ? "⚠️ Supabase Connected, but API Cache is Lagging (PGRST125)"
+                        : "🔌 Supabase Connection Assistant & Setup Guide"}
                   </h3>
+                  <span className="px-2.5 py-0.5 rounded-full text-[10px] font-black tracking-wider uppercase bg-[#123e35]/10 text-[#123e35] border border-[#123e35]/10">
+                    Real-Time Cloud Storage
+                  </span>
                 </div>
                 <p className="text-xs text-[#4e524f] leading-relaxed max-w-3xl">
-                  {dbStatus.message} To enable real-time cloud-synced storage, you just need to create the <code className="bg-white/40 px-1 border border-[#dfded4] font-mono text-[11px] rounded font-bold text-[#bc5f40]">leads</code> table by executing a simple SQL query in your <strong>Supabase SQL Editor</strong>.
+                  {dbStatus.tableExists 
+                    ? `Successfully synchronized organic leads with your database cluster. All public customer diagnostics are instantly backed up in real-time.`
+                    : `Your Local Surge SEO board has a built-in highly stable JSON database fallback, so all features run perfectly. Ready to connect your cloud client from scratch? Let's fix the schema connection below.`}
                 </p>
               </div>
               <button
                 onClick={() => setShowSqlGuide(!showSqlGuide)}
-                className="px-4.5 py-2.5 bg-[#bc5f40] hover:bg-[#a34d31] text-white text-xs font-bold rounded-xl cursor-pointer transition-all flex items-center gap-1.5 shrink-0 shadow-xs"
+                className="px-4.5 py-2.5 bg-[#bc5f40] hover:bg-[#a34d31] text-white text-xs font-black rounded-xl cursor-pointer transition-all flex items-center gap-2 shrink-0 shadow-xs"
               >
-                {showSqlGuide ? "Hide Setup Guide" : "Get SQL Setup Code 🛠️"}
+                {showSqlGuide ? "Hide Setup Instructions" : "Connect From Scratch Guide 🛠️"}
               </button>
             </div>
-            
-            {showSqlGuide && dbStatus.sqlSchema && (
-              <div className="bg-zinc-950 rounded-xl p-4.5 space-y-3 font-mono text-xs text-white border border-[#bc5f40]/20 shadow-inner">
-                <div className="flex items-center justify-between text-[11px] text-zinc-400 border-b border-zinc-800 pb-2">
-                  <span>SQL COMMAND TO RUN</span>
-                  <button
-                    onClick={() => {
-                      navigator.clipboard.writeText(dbStatus.sqlSchema || '');
-                      alert("SQL query successfully copied to clipboard! Paste it into your Supabase SQL Editor and run it.");
-                    }}
-                    className="px-2.5 py-1 bg-zinc-800 text-white font-sans text-[10px] font-bold rounded-lg hover:bg-zinc-700 transition cursor-pointer"
-                  >
-                    Copy Query 📋
-                  </button>
+
+            {/* Configured details comparison alert */}
+            {!dbStatus.tableExists && (
+              <div className="bg-amber-50 border border-amber-200/60 rounded-xl p-4.5 text-xs text-[#5c3e1e] space-y-2">
+                <div className="flex items-center gap-2 font-black text-amber-900">
+                  <span>💡 IMPORTANT OBSERVATION FROM YOUR SCREENSHOT</span>
                 </div>
-                <pre className="overflow-x-auto select-all max-h-[150px] p-2 bg-black/30 rounded text-[#dfded4] text-[11px] leading-relaxed font-mono">{dbStatus.sqlSchema}</pre>
-                <div className="text-[11px] text-amber-300 font-sans leading-relaxed pt-1 flex items-start gap-1.5">
-                  <span>💡</span>
-                  <span><strong>Instructions:</strong> Open your Supabase Dashboard, navigate to the <strong>SQL Editor</strong> tab (left side panel), click <strong>New Query</strong>, paste the code shown above, and click the <strong>Run</strong> button at the bottom right. Once run, click <strong>Refresh Leads</strong> above to establish real-time cloud-synced customer tracking!</span>
+                <p className="leading-relaxed">
+                  Your Supabase screenshot shows your active project ID is <strong className="font-extrabold text-[#bc5f40] underline decoration-[#bc5f40]/30 select-all">yxpkisbsobhuauniahc</strong>. 
+                  However, please verify if the database URL currently configured in the background matches this ID!
+                </p>
+                <div className="bg-white/70 border border-amber-200/50 rounded-lg p-3 font-mono text-[11px] grid gap-1.5 text-[#42301c]">
+                  <div>
+                    🔹 <strong className="font-bold">Currently Configured URL in App:</strong>{" "}
+                    <span className="text-[#123e35] font-bold select-all bg-[#123e35]/5 px-1.5 py-0.5 rounded border border-[#123e35]/10 break-all">
+                      {dbStatus.databaseUrl || "Not Configured Yet (Empty / Falling back to Local DB)"}
+                    </span>
+                  </div>
+                  <div>
+                    🎯 <strong className="font-bold">Your Target Project URL should be:</strong>{" "}
+                    <code className="bg-[#bc5f40]/5 px-1.5 py-0.5 rounded border border-[#bc5f40]/10 text-[#bc5f40] font-black select-all break-all">
+                      https://yxpkisbsobhuauniahc.supabase.co
+                    </code>
+                  </div>
+                </div>
+                <p className="leading-relaxed text-[11px] text-amber-800">
+                  If these do not match, the application is loading a different project which does not have your new table yet! Follow the 4 simple steps below.
+                </p>
+              </div>
+            )}
+
+            {/* Comprehensive Start-from-scratch instructions step-by-step */}
+            {(showSqlGuide || !dbStatus.tableExists) && (
+              <div className="space-y-6 pt-2">
+                <div className="grid grid-cols-1 md:grid-cols-2 gap-5 text-xs">
+                  
+                  {/* STEP 1: CONFIGURE SECRETS IN GOOGLE AI STUDIO */}
+                  <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-5 space-y-3 shadow-xs">
+                    <div className="flex items-center gap-2">
+                      <span className="w-5 h-5 rounded-full bg-[#123e35] text-white flex items-center justify-center font-bold text-[10px]">1</span>
+                      <h4 className="font-black text-sm text-[#111]">Verify Environment Variables</h4>
+                    </div>
+                    <p className="text-[#4e524f] leading-relaxed">
+                      You must ensure that your application has your target Supabase Project credentials. Open the <strong className="font-bold text-[#123e35]">Google AI Studio app settings menu</strong> (top right ⚙️ icon in your workspace) and confirm you added:
+                    </p>
+                    <div className="bg-white border text-[11px] border-[#dfded4] rounded-lg p-2.5 font-mono space-y-1.5 leading-relaxed text-[#1a1c1a]">
+                      <div>
+                        🔑 <span className="font-bold">SUPABASE_URL</span> <br/>
+                        <span className="text-[#888b88]">=</span> <code className="bg-slate-50 px-1 py-0.5 text-slate-800 break-all text-[10px] rounded">https://yxpkisbsobhuauniahc.supabase.co</code>
+                      </div>
+                      <div>
+                        🔑 <span className="font-bold">SUPABASE_SERVICE_ROLE_KEY</span> <br/>
+                        <span className="text-[#888b88]">=</span> <em className="text-amber-600 font-mono text-[10px]">(Paste service_role secret key from Settings &gt; API)</em>
+                      </div>
+                    </div>
+                    <p className="text-[11px] text-[#4e524f] italic">
+                      💡 <strong>Why service_role?</strong> Standard <code className="text-amber-800">anon</code> keys are locked down by Row-Level Security (RLS) policies. Using the <code className="text-amber-800">service_role</code> key allows our secure Node web server backend to sync leads cleanly.
+                    </p>
+                  </div>
+
+                  {/* STEP 2: RUN DATABASE SCHEMA IN SQL EDITOR */}
+                  <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-5 space-y-3 shadow-xs flex flex-col justify-between">
+                    <div className="space-y-3">
+                      <div className="flex items-center gap-2">
+                        <span className="w-5 h-5 rounded-full bg-[#123e35] text-white flex items-center justify-center font-bold text-[10px]">2</span>
+                        <h4 className="font-black text-sm text-[#111]">Run the SQL Tables Script</h4>
+                      </div>
+                      <p className="text-[#4e524f] leading-relaxed">
+                        Go to your <strong className="font-bold text-[#123e35]">Supabase Dashboard</strong> on the left side menu, click the <strong className="font-semibold text-zinc-800">SQL Editor</strong> tab (represented by a <code className="font-mono">{`>_`}</code> icon), select <strong className="font-semibold text-zinc-800">New Query</strong>, paste the script below, and hit the green <strong className="font-semibold text-green-700">Run</strong> button in the bottom right!
+                      </p>
+                    </div>
+
+                    <div className="bg-zinc-950 rounded-xl p-3.5 space-y-2.5 border border-zinc-800">
+                      <div className="flex items-center justify-between text-[10px] text-zinc-400 font-mono">
+                        <span>CREATE LEADS TABLE SCRIPT</span>
+                        <button
+                          onClick={() => {
+                            const sql = `CREATE TABLE IF NOT EXISTS public.leads (
+  id text primary key,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  status text default 'new'::text not null,
+  notes text,
+  business_name text not null,
+  contact_name text not null,
+  email text not null,
+  phone text,
+  website text,
+  industry text,
+  location text,
+  keywords text,
+  plan_id text,
+  plan_name text,
+  ai_audit jsonb
+);
+
+-- Force PostgREST schema API to reload its path definitions
+NOTIFY pgrst, 'reload schema';`;
+                            navigator.clipboard.writeText(sql);
+                            alert("SQL query copied to clipboard! Paste this into your Supabase SQL Editor and click standard 'Run'.");
+                          }}
+                          className="px-2 py-0.5 bg-zinc-800 text-white font-sans font-bold rounded hover:bg-zinc-700 transition cursor-pointer"
+                        >
+                          Copy SQL 📋
+                        </button>
+                      </div>
+                      <pre className="text-[9.5px] text-[#dfded4] leading-relaxed font-mono max-h-[85px] overflow-y-auto select-all">
+{`CREATE TABLE IF NOT EXISTS public.leads (
+  id text primary key,
+  created_at timestamp with time zone default timezone('utc'::text, now()) not null,
+  status text default 'new'::text not null,
+  notes text,
+  business_name text not null,
+  contact_name text not null,
+  email text not null,
+  phone text,
+  website text,
+  industry text,
+  location text,
+  keywords text,
+  plan_id text,
+  plan_name text,
+  ai_audit jsonb
+);
+
+-- Force schema cache reload
+NOTIFY pgrst, 'reload schema';`}
+                      </pre>
+                    </div>
+                  </div>
+                </div>
+
+                {/* STEPS 3 & 4 IN ONE SIMPLE SUMMARY BAR */}
+                <div className="bg-white border rounded-xl p-4.5 grid col-span-1 md:grid-cols-2 gap-4 text-xs">
+                  <div>
+                    <h5 className="font-extrabold text-[#123e35] flex items-center gap-1">
+                      <span>🔄</span> Step 3: Clear Schema Path Lock (PGRST125)
+                    </h5>
+                    <p className="text-[#4e524f] leading-relaxed mt-1 text-[11px]">
+                      PostgREST caches DB schemas. If you created the table but get the <code className="text-[#bc5f40] font-mono">PGRST125</code> error delay, paste these commands into your SQL Editor to force a reload:
+                    </p>
+                    <pre className="bg-[#bc5f40]/5 border border-[#bc5f40]/10 p-2 text-[#bc5f40] font-mono text-[10px] mt-2 rounded">
+{`GRANT ALL ON TABLE public.leads TO postgres, anon, authenticated, service_role;
+NOTIFY pgrst, 'reload schema';`}
+                    </pre>
+                  </div>
+                  <div className="flex flex-col justify-between">
+                    <div>
+                      <h5 className="font-extrabold text-[#123e35] flex items-center gap-1">
+                        <span>🚀</span> Step 4: Verify the Sync Status
+                      </h5>
+                      <p className="text-[#4e524f] leading-relaxed mt-1 text-[11px]">
+                        After making these updates, click the <strong className="font-semibold text-zinc-900">"Refresh Leads"</strong> button at the top right of this dashboard page. The applet will sync up, establish connection, and the status bar will turn into a beautiful emerald green!
+                      </p>
+                    </div>
+                    <div className="flex justify-end pt-3">
+                      <button
+                        onClick={async () => {
+                          if (onUpdateLeads) onUpdateLeads();
+                          await fetchDbStatus();
+                        }}
+                        className="px-4.5 py-2 bg-[#123e35] hover:bg-[#0c2b25] text-white text-[11px] font-black rounded-lg cursor-pointer transition-all flex items-center gap-1.5 shadow-xs"
+                      >
+                        <RefreshCw className="w-3 h-3" /> Refresh Database Status Now
+                      </button>
+                    </div>
+                  </div>
                 </div>
               </div>
             )}
           </div>
         )}
+
 
         {/* Navigation Tabs */}
         <div className="flex border-b border-[#dfded4] pb-px gap-6 block mt-4 select-none">

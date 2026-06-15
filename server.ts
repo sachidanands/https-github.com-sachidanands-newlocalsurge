@@ -373,11 +373,14 @@ app.post("/api/pdf-templates", (req, res) => {
 // API Routes
 app.get("/api/admin/db-status", async (req, res) => {
   const supabase = getSupabase();
+  const rawUrl = process.env.SUPABASE_URL || "";
+  
   if (!supabase) {
     return res.json({
       configured: false,
       connected: false,
       tableExists: false,
+      databaseUrl: rawUrl,
       message: "Supabase is not configured (SUPABASE_URL and credentials are missing). The application is safely using its highly stable, persistent local JSON database, so all of your features will work completely fine!"
     });
   }
@@ -390,13 +393,24 @@ app.get("/api/admin/db-status", async (req, res) => {
 
     if (error) {
       if (error.code === '42P01' || error.code === 'PGRST125') {
+        const isStaleCache = error.code === 'PGRST125';
         return res.json({
           configured: true,
           connected: true,
           tableExists: false,
-          errorType: 'table_missing',
-          message: "Supabase connected successfully, but the 'leads' table has not been created yet.",
-          sqlSchema: `create table public.leads (
+          databaseUrl: rawUrl,
+          errorType: isStaleCache ? 'cache_stale' : 'table_missing',
+          message: isStaleCache 
+            ? `Supabase is connected to ${rawUrl}, but has a schema cache delay (PGRST125). Even though the table is visible in your Schema Visualizer, the API gateway cannot find it yet.`
+            : `Supabase is connected to ${rawUrl}, but the 'leads' table has not been created yet in the public schema.`,
+          sqlSchema: isStaleCache 
+            ? `-- FOR RESOLVING STALE CACHE delay (run this in your Supabase SQL Editor):
+-- 1. Grant all necessary permissions on the leads table
+GRANT ALL ON TABLE public.leads TO postgres, anon, authenticated, service_role;
+
+-- 2. Explicitly force PostgREST to reload its schema cache
+NOTIFY pgrst, 'reload schema';`
+            : `create table public.leads (
   id text primary key,
   created_at timestamp with time zone default timezone('utc'::text, now()) not null,
   status text default 'new'::text not null,
@@ -419,6 +433,7 @@ app.get("/api/admin/db-status", async (req, res) => {
         configured: true,
         connected: false,
         tableExists: false,
+        databaseUrl: rawUrl,
         errorType: 'query_error',
         message: `Supabase query returned error: ${error.message} (${error.code})`
       });
@@ -428,13 +443,15 @@ app.get("/api/admin/db-status", async (req, res) => {
       configured: true,
       connected: true,
       tableExists: true,
-      message: "Supabase is fully online and synchronized with the 'leads' table."
+      databaseUrl: rawUrl,
+      message: `Supabase is fully online and synchronized with the 'leads' table on ${rawUrl}.`
     });
   } catch (err: any) {
     return res.json({
       configured: true,
       connected: false,
       tableExists: false,
+      databaseUrl: rawUrl,
       errorType: 'server_exception',
       message: `Exception while checking Supabase connection: ${err.message || err}`
     });
