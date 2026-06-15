@@ -652,7 +652,20 @@ app.post("/api/leads/submit", async (req, res) => {
   if (resend) {
     try {
       const safeBusinessName = leadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
-      const emailPayload: any = {
+
+      // Build a strict payload with ONLY the fields Resend's API accepts.
+      // Resend SDK v6 validates `topic_id` as a UUID if present — using `any`
+      // type risks spreading unknown fields and triggering a 422 validation error.
+      type ResendAttachment = { filename: string; content: Buffer };
+      type ResendPayload = {
+        from: string;
+        to: string[];
+        subject: string;
+        html: string;
+        attachments?: ResendAttachment[];
+      };
+
+      const emailPayload: ResendPayload = {
         from: "Local Surge SEO <contact@localsurgeseo.com>",
         to: [leadInput.email],
         subject: `Your Local Surge SEO Strategy Plan: ${leadInput.planName}`,
@@ -661,7 +674,7 @@ app.post("/api/leads/submit", async (req, res) => {
             <!-- Header section -->
             <div style="background-color: #123e35; padding: 28px 24px; text-align: left; border-bottom: 3px solid #bc5f40;">
               <h1 style="color: #ffffff; margin: 0; font-size: 22px; font-weight: bold; font-family: sans-serif;">LOCAL SURGE SEO</h1>
-              <p style="color: #dfded4; margin: 4px 0 0 0; font-size: 12px; font-family: monospace;">Onboarding Strategy & Campaign Activation</p>
+              <p style="color: #dfded4; margin: 4px 0 0 0; font-size: 12px; font-family: monospace;">Onboarding Strategy &amp; Campaign Activation</p>
             </div>
             
             <!-- Body content -->
@@ -671,7 +684,7 @@ app.post("/api/leads/submit", async (req, res) => {
                 Hello <strong>${leadInput.contactName}</strong>,
               </p>
               <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
-                Our setup engineers have received your inquiry for <strong>${leadInput.businessName}</strong> and have locked in your prefered <strong>${leadInput.planName}</strong> program. Your physical search grids are being analyzed.
+                Our setup engineers have received your inquiry for <strong>${leadInput.businessName}</strong> and have locked in your preferred <strong>${leadInput.planName}</strong> program. Your physical search grids are being analyzed.
               </p>
               
               <div style="background-color: #eff4f1; border: 1px solid #dfded4; border-radius: 8px; padding: 16px; margin: 20px 0;">
@@ -698,7 +711,7 @@ app.post("/api/leads/submit", async (req, res) => {
               
               ${leadInput.pdfBase64 ? `
                 <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
-                  📂 <strong>Strategy Plan Attached:</strong> We have attached your pixel-perfect customized <strong>Strategy Growth Brief PDF</strong> summarizing your onboarding deliverables, timelines, and immediate sequence. Please open the attachment below!
+                  &#128194; <strong>Strategy Plan Attached:</strong> We have attached your customized <strong>Strategy Growth Brief PDF</strong> summarizing your onboarding deliverables, timelines, and immediate next steps. Please open the attachment below!
                 </p>
               ` : `
                 <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
@@ -719,7 +732,7 @@ app.post("/api/leads/submit", async (req, res) => {
             <!-- Footer section -->
             <div style="background-color: #123e35; padding: 12px 24px; text-align: center; border-top: 1px solid #dfded4;">
               <p style="color: #ffffff; margin: 0; font-size: 10px; font-family: sans-serif;">
-                © 2026 Local Surge SEO • All rights reserved. High-Performance Local Search Engineering.
+                &copy; 2026 Local Surge SEO &bull; All rights reserved. High-Performance Local Search Engineering.
               </p>
             </div>
           </div>
