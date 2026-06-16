@@ -73,7 +73,8 @@ if (apiKey) {
 }
 
 // Database helper
-const DATA_DIR = path.join(process.cwd(), "data");
+const isVercel = process.env.VERCEL === "1";
+const DATA_DIR = isVercel ? "/tmp" : path.join(process.cwd(), "data");
 const LEADS_FILE = path.join(DATA_DIR, "leads.json");
 
 function initDb() {
