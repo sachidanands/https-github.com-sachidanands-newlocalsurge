@@ -17,8 +17,8 @@ import DirectoryView from './components/DirectoryView';
 import SchemaMarkup from './components/SchemaMarkup';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
-import { 
-  Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight, 
+import {
+  Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight,
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
   TrendingUp, Globe, CheckSquare, Zap, ExternalLink, HelpCircle, RefreshCw
 } from 'lucide-react';
@@ -86,10 +86,10 @@ export default function App() {
 
   // Address Bar Routing and Synchronizer
   useEffect(() => {
-    const getPageFromPath = (pathname: string): { 
-      page: Page; 
-      stateSlug: string | null; 
-      citySlug: string | null; 
+    const getPageFromPath = (pathname: string): {
+      page: Page;
+      stateSlug: string | null;
+      citySlug: string | null;
       blogSlug: string | null;
     } => {
       const cleanPath = pathname.replace(/\/+$/, '');
@@ -115,7 +115,7 @@ export default function App() {
       // Check dynamic state or city paths
       const parts = cleanPath.split('/').filter(Boolean);
       const knownStates = ['california', 'texas', 'arizona', 'florida'];
-      
+
       if (parts.length === 1 && knownStates.includes(parts[0])) {
         if (parts[0] === 'california') {
           return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null };
@@ -221,7 +221,7 @@ export default function App() {
   const [toolLocation, setToolLocation] = useState('San Jose, CA');
   const [toolLoading, setToolLoading] = useState(false);
   const [toolResult, setToolResult] = useState<SEOAuditResult | null>(null);
-  const [scannedCityDirectories, setScannedCityDirectories] = useState<{name: string, rating: number, status: string}[]>([]);
+  const [scannedCityDirectories, setScannedCityDirectories] = useState<{ name: string, rating: number, status: string }[]>([]);
 
   // Homepage redirect & auto-analyze state
   const [homePrefilledUrl, setHomePrefilledUrl] = useState('');
@@ -373,7 +373,7 @@ export default function App() {
     doc.setFont('Helvetica', 'bold');
     doc.setFontSize(22);
     doc.text('LOCAL SURGE SEO', 15, 15);
-    
+
     doc.setFont('Helvetica', 'normal');
     doc.setFontSize(10);
     doc.text('High-Performance Web Design & Local SEO Suite', 15, 22);
@@ -524,7 +524,7 @@ export default function App() {
       // Small bullet
       doc.setFillColor(aOrange[0], aOrange[1], aOrange[2]);
       doc.circle(18, y - 1.2, 1, 'F');
-      
+
       // Text
       doc.text(item, 23, y);
       y += 6.5;
@@ -678,16 +678,16 @@ export default function App() {
       />
 
       {/* Dynamic Header */}
-      <Header 
-        currentPage={currentPage} 
-        setCurrentPage={setCurrentPage} 
-        onOpenOnboarding={handleGetFreeStrategy} 
+      <Header
+        currentPage={currentPage}
+        setCurrentPage={setCurrentPage}
+        onOpenOnboarding={handleGetFreeStrategy}
       />
 
       {/* Main viewport */}
       <main className="flex-grow">
         <AnimatePresence mode="wait">
-          
+
           {/* HOME SCREEN */}
           {currentPage === 'home' && (
             <motion.div
@@ -707,7 +707,7 @@ export default function App() {
 
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 relative z-10">
                   <div className="grid grid-cols-1 lg:grid-cols-12 gap-12 items-center">
-                    
+
                     {/* Hero Left Content */}
                     <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
                       <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded bg-[#123e35]/10 border border-[#123e35]/15 text-[#123e35] text-xs font-bold font-mono tracking-wide uppercase">
@@ -721,7 +721,7 @@ export default function App() {
                       <p className="text-sm sm:text-base text-[#4e524f] font-medium max-w-xl leading-relaxed">
                         Local Surge boosts your website's organic neighborhood traffic, connecting you with high-intent regional buyers. Stop losing valuable local business.
                       </p>
-                      
+
                       <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
                         <button
                           onClick={() => {
@@ -738,9 +738,9 @@ export default function App() {
 
                     {/* Hero Right Widget Preview */}
                     <div className="lg:col-span-5 relative">
-                      <SeoHomeTool 
-                        onOpenOnboarding={() => setCurrentPage('contact')} 
-                        hideTitle={true} 
+                      <SeoHomeTool
+                        onOpenOnboarding={() => setCurrentPage('contact')}
+                        hideTitle={true}
                         isHomePage={true}
                         onAnalyzeFromHome={handleAnalyzeFromHome}
                       />
@@ -828,8 +828,8 @@ export default function App() {
                       <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#f2f0ea]">
                         <div className="w-10 h-10 rounded bg-[#f7f6f2] font-display font-bold text-[#123e35] flex items-center justify-center text-xs border border-[#dfded4]">KR</div>
                         <div>
-                           <span className="block text-xs font-extrabold text-[#151716] leading-none">Kevin Reynolds</span>
-                           <span className="block text-[10px] text-[#888b88] font-bold mt-1">Elite Plumbing Denver, Owner</span>
+                          <span className="block text-xs font-extrabold text-[#151716] leading-none">Kevin Reynolds</span>
+                          <span className="block text-[10px] text-[#888b88] font-bold mt-1">Elite Plumbing Denver, Owner</span>
                         </div>
                       </div>
                     </div>
@@ -866,7 +866,7 @@ export default function App() {
                   <p className="text-slate-200 text-sm sm:text-base max-w-2xl mx-auto leading-relaxed font-semibold">
                     Let's work together to unlock your local business's true organic potential. Get in touch or build your customized strategy audit to instantly discover neighborhood keyword opportunities.
                   </p>
-                  
+
                   <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center">
                     <button
                       onClick={handleContactOfficeClick}
@@ -1037,17 +1037,15 @@ export default function App() {
                 <div className="inline-flex items-center p-1 bg-white rounded-xl mt-4 border border-[#dfded4]">
                   <button
                     onClick={() => setBillingPeriod('monthly')}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold leading-none cursor-pointer transition-all ${
-                      billingPeriod === 'monthly' ? 'bg-[#123e35] text-white shadow-sm' : 'text-[#4e524f] hover:text-[#111111]'
-                    }`}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold leading-none cursor-pointer transition-all ${billingPeriod === 'monthly' ? 'bg-[#123e35] text-white shadow-sm' : 'text-[#4e524f] hover:text-[#111111]'
+                      }`}
                   >
                     Billed Monthly
                   </button>
                   <button
                     onClick={() => setBillingPeriod('yearly')}
-                    className={`px-4 py-2 rounded-lg text-xs font-bold leading-none cursor-pointer transition-all flex items-center gap-1.5 ${
-                      billingPeriod === 'yearly' ? 'bg-[#123e35] text-white shadow-sm' : 'text-[#4e524f] hover:text-[#111111]'
-                    }`}
+                    className={`px-4 py-2 rounded-lg text-xs font-bold leading-none cursor-pointer transition-all flex items-center gap-1.5 ${billingPeriod === 'yearly' ? 'bg-[#123e35] text-white shadow-sm' : 'text-[#4e524f] hover:text-[#111111]'
+                      }`}
                   >
                     Billed Yearly
                     <span className="bg-[#bc5f40]/20 text-[#bc5f40] border border-[#bc5f40]/40 text-[9px] font-black font-mono leading-none px-1.5 py-0.5 rounded-sm">Save 20%</span>
@@ -1067,13 +1065,12 @@ export default function App() {
                         setSelectedPricingPlanId(plan.id);
                         setPreselectedPlan(plan);
                       }}
-                      className={`bg-white border rounded-2xl p-6.5 flex flex-col justify-between transition-all hover:shadow-md relative overflow-hidden cursor-pointer ${
-                        isSelected
+                      className={`bg-white border rounded-2xl p-6.5 flex flex-col justify-between transition-all hover:shadow-md relative overflow-hidden cursor-pointer ${isSelected
                           ? 'border-[#123e35] ring-4 ring-[#123e35]/15 shadow-sm bg-[#faf9f6]/95'
                           : plan.popular
                             ? 'border-[#dfded4] hover:border-[#123e35]/60 shadow-xs'
                             : 'border-[#dfded4] hover:border-[#123e35]/25 shadow-xs'
-                      }`}
+                        }`}
                     >
                       {isSelected && (
                         <div className="absolute left-0 top-0 bg-[#123e35] text-white text-[9px] font-black tracking-widest py-1 px-3 rounded-br-lg font-mono shadow-sm flex items-center gap-1.5 z-10">
@@ -1132,13 +1129,12 @@ export default function App() {
                           e.stopPropagation();
                           handleSelectPlanAndNavigate(plan.id);
                         }}
-                        className={`w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider font-mono mt-8 cursor-pointer transition-all flex items-center justify-center gap-1 ${
-                          isSelected
+                        className={`w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider font-mono mt-8 cursor-pointer transition-all flex items-center justify-center gap-1 ${isSelected
                             ? 'bg-[#123e35] hover:bg-[#185246] text-white shadow-sm hover:scale-102'
                             : plan.popular
                               ? 'bg-[#bc5f40] hover:bg-[#cf6d4e] text-white shadow-sm hover:scale-102'
                               : 'bg-white font-extrabold text-[#4e524f] border border-[#dfded4] hover:bg-[#faf9f6]'
-                        }`}
+                          }`}
                       >
                         {isSelected
                           ? plan.id === 'single-page' ? 'START FREE PLAN' : 'Selected'
@@ -1187,12 +1183,12 @@ export default function App() {
               </div>
 
               <div className="grid grid-cols-1 md:grid-cols-12 gap-8 items-start">
-                
+
                 {/* Details side */}
                 <div className="md:col-span-5 space-y-6">
                   <div className="bg-white border border-[#dfded4] p-5 rounded-2xl shadow-xs space-y-4">
                     <h3 className="font-bold text-sm text-[#151716] font-display">Direct Email Outreach</h3>
-                    
+
                     <div className="space-y-4">
                       <div className="flex gap-3 text-xs leading-relaxed text-[#4e524f] font-semibold">
                         <Mail className="w-5 h-5 text-[#bc5f40] shrink-0 mt-0.5" />
@@ -1223,7 +1219,7 @@ export default function App() {
                 {/* Form side */}
                 <div id="manual-inquiry-container" className="md:col-span-7 bg-white border border-[#dfded4] rounded-2xl p-6.5 shadow-xs transition-all duration-300">
                   {contactSuccess ? (
-                    <motion.div 
+                    <motion.div
                       initial={{ opacity: 0, scale: 0.95 }}
                       animate={{ opacity: 1, scale: 1 }}
                       className="text-center py-6 space-y-6"
@@ -1290,7 +1286,7 @@ export default function App() {
                   ) : (
                     <form onSubmit={handleContactSubmit} className="space-y-5">
                       <h3 className="font-bold text-[#151716] font-display">Manual Inquiry Request</h3>
-                      
+
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                         <div>
                           <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1 font-mono">
@@ -1303,11 +1299,10 @@ export default function App() {
                             placeholder="e.g. Marcus Chen"
                             value={cntName}
                             onChange={(e) => setCntName(e.target.value)}
-                            className={`bg-[#faf9f6]/95 border rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all duration-300 ${
-                              shouldBlinkNameInput 
-                                ? 'border-[#bc5f40] ring-4 ring-[#bc5f40]/25 bg-amber-50 animate-pulse' 
+                            className={`bg-[#faf9f6]/95 border rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all duration-300 ${shouldBlinkNameInput
+                                ? 'border-[#bc5f40] ring-4 ring-[#bc5f40]/25 bg-amber-50 animate-pulse'
                                 : 'border-[#dfded4]'
-                            }`}
+                              }`}
                           />
                         </div>
                         <div>
@@ -1383,7 +1378,7 @@ export default function App() {
             </motion.div>
           )}
 
-           {/* LOCAL SEO SCREEN */}
+          {/* LOCAL SEO SCREEN */}
           {currentPage === 'local-seo' && (
             <motion.div
               key="local-seo"
@@ -1392,10 +1387,10 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               className="max-w-7xl mx-auto px-4 sm:px-6 py-12"
             >
-              <LocalSeoView 
-                onOpenOnboarding={() => handleOpenOnboarding(null)} 
+              <LocalSeoView
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
                 onGetFreeStrategy={handleGetFreeStrategy}
-                setCurrentPage={setCurrentPage} 
+                setCurrentPage={setCurrentPage}
               />
             </motion.div>
           )}
@@ -1409,8 +1404,8 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               className="max-w-5xl mx-auto px-4 sm:px-6 py-12 space-y-16"
             >
-              <SeoHomeTool 
-                onOpenOnboarding={() => setCurrentPage('contact')} 
+              <SeoHomeTool
+                onOpenOnboarding={() => setCurrentPage('contact')}
                 initialUrl={homePrefilledUrl}
                 autoAnalyze={homeAutoAnalyze}
                 onClearAutoAnalyze={() => setHomeAutoAnalyze(false)}
@@ -1430,9 +1425,9 @@ export default function App() {
               exit={{ opacity: 0 }}
             >
               {isAdminLoggedIn ? (
-                <LeadDashboard 
-                  leads={leads} 
-                  onUpdateLeads={fetchLeads} 
+                <LeadDashboard
+                  leads={leads}
+                  onUpdateLeads={fetchLeads}
                   pdfTemplates={pdfTemplates}
                   onUpdateTemplates={fetchPdfTemplates}
                   onGeneratePDF={handleGeneratePDF}
@@ -1442,8 +1437,8 @@ export default function App() {
                   }}
                 />
               ) : (
-                <AdminLoginForm 
-                  onLoginSuccess={() => setIsAdminLoggedIn(true)} 
+                <AdminLoginForm
+                  onLoginSuccess={() => setIsAdminLoggedIn(true)}
                   onBackToHome={() => setCurrentPage('home')}
                 />
               )}
@@ -1459,7 +1454,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <BlogView 
+              <BlogView
                 initialSlug={activeArticleSlug}
                 onNavigateToArticle={(slug) => setActiveArticleSlug(slug)}
                 onOpenOnboarding={() => handleOpenOnboarding(null)}
@@ -1481,7 +1476,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <SitemapView 
+              <SitemapView
                 setCurrentPage={setCurrentPage}
                 onNavigateToArticle={(slug) => {
                   setActiveArticleSlug(slug);
@@ -1502,7 +1497,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <CaliforniaView 
+              <CaliforniaView
                 setCurrentPage={setCurrentPage}
                 onOpenOnboarding={() => handleOpenOnboarding(null)}
                 onGetFreeStrategy={handleGetFreeStrategy}
@@ -1521,7 +1516,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <LosAngelesSeoView 
+              <LosAngelesSeoView
                 setCurrentPage={setCurrentPage}
                 onOpenOnboarding={() => handleOpenOnboarding(null)}
                 onGetFreeStrategy={handleGetFreeStrategy}
@@ -1538,7 +1533,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <DirectoryView 
+              <DirectoryView
                 setCurrentPage={setCurrentPage}
                 stateSlug={activeStateSlug}
                 citySlug={activeCitySlug}
