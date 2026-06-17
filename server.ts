@@ -1,7 +1,7 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-import { createServer as createViteServer } from "vite";
+
 import dotenv from "dotenv";
 import { GoogleGenAI, Type } from "@google/genai";
 import { createClient } from "@supabase/supabase-js";
@@ -60,14 +60,18 @@ const apiKey = process.env.GEMINI_API_KEY;
 let ai: GoogleGenAI | null = null;
 
 if (apiKey) {
-  ai = new GoogleGenAI({
-    apiKey: apiKey,
-    httpOptions: {
-      headers: {
-        'User-Agent': 'aistudio-build',
+  try {
+    ai = new GoogleGenAI({
+      apiKey: apiKey,
+      httpOptions: {
+        headers: {
+          'User-Agent': 'aistudio-build',
+        }
       }
-    }
-  });
+    });
+  } catch (err) {
+    console.error("❌ Failed to initialize Gemini client:", err);
+  }
 } else {
   console.warn("⚠️ GEMINI_API_KEY is not defined. AI features will fallback to high-quality mock data.");
 }
@@ -78,6 +82,7 @@ const DATA_DIR = isVercel ? "/tmp" : path.join(process.cwd(), "data");
 const LEADS_FILE = path.join(DATA_DIR, "leads.json");
 
 function initDb() {
+  try {
   if (!fs.existsSync(DATA_DIR)) {
     fs.mkdirSync(DATA_DIR, { recursive: true });
   }
@@ -174,6 +179,9 @@ function initDb() {
       }
     ];
     fs.writeFileSync(LEADS_FILE, JSON.stringify(initialLeads, null, 2));
+  }
+  } catch (err) {
+    console.error("⚠️ Failed to initialize local database in initDb():", err);
   }
 }
 
@@ -969,6 +977,7 @@ function createFallbackAudit(input: any) {
 
 async function startServer() {
   if (process.env.NODE_ENV !== "production") {
+    const { createServer: createViteServer } = await import("vite");
     const vite = await createViteServer({
       server: { middlewareMode: true },
       appType: "spa",
