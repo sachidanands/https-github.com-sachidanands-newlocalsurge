@@ -1,0 +1,90 @@
+[
+  {
+    "id": "lead_1",
+    "createdAt": "2026-06-17T03:27:26.256Z",
+    "status": "audit_prepared",
+    "notes": "Scheduled call with owner next Tuesday at 10 AM. Interested in citation cleanup.",
+    "input": {
+      "planId": "starter",
+      "planName": "Starter Boost",
+      "businessName": "Elite Plumbing Denver",
+      "contactName": "Kevin Reynolds",
+      "email": "kevin@eliteplumbingdenver.com",
+      "phone": "303-555-0129",
+      "website": "https://eliteplumbingdenver.com",
+      "hasWebsite": true,
+      "industry": "Plumbing Services",
+      "location": "Denver, CO",
+      "keywords": "emergency plumber denver, leak repair denver, water heater setup",
+      "hasGBP": true,
+      "gbpLink": "https://google.com/maps/place/Denver"
+    },
+    "aiAudit": {
+      "overallScore": 72,
+      "domainName": "eliteplumbingdenver.com",
+      "niche": "Plumbing Services",
+      "location": "Denver, CO",
+      "timestamp": "2026-06-17T03:27:26.256Z",
+      "EXECUTIVE_SUMMARY": "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
+      "analysis": [
+        {
+          "title": "Google Business Profile optimization",
+          "score": 80,
+          "description": "GBP exists but is missing target Service Areas and updated photos of recent projects.",
+          "recommendations": [
+            "Add 5-10 geo-tagged project photos per week.",
+            "Explicitly set service regions in Denver metro areas.",
+            "Implement direct Q&A answering common leaks & costs."
+          ]
+        },
+        {
+          "title": "Technical and On-Page Content Audit",
+          "score": 65,
+          "description": "Homepage lacks schema markup and keyword density is below 0.8% for primary local terms.",
+          "recommendations": [
+            "Inject LocalBusiness Schema.org JSON-LD layout.",
+            "Restructure H1-H3 titles to lead with service + location tags.",
+            "Improve page load speed by compressing high-res images."
+          ]
+        },
+        {
+          "title": "Local Citations and Backlink Profile",
+          "score": 70,
+          "description": "NAP (Name, Address, Phone) consistency score is 75% due to an old office address listed in Yellowpages.",
+          "recommendations": [
+            "Execute active directory sync across top 50 citations.",
+            "Build localized high-quality backlinks from Denver civic blogs."
+          ]
+        }
+      ],
+      "executiveSummary": "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
+      "actionPlan": [
+        "Perform local citation NAP cleanup (fix old addresses)",
+        "Deploy plumbing LocalBusiness Schema markup on homepage",
+        "Establish automated review collection funnel for new service calls",
+        "Optimize GBP keywords specifically for emergency leak repairs"
+      ]
+    }
+  },
+  {
+    "id": "lead_2",
+    "createdAt": "2026-06-18T11:27:26.256Z",
+    "status": "new",
+    "notes": "Brand new lead. Needs initial contact email. Wants a completely new single-page website built.",
+    "input": {
+      "planId": "single-page",
+      "planName": "Single-Page Blast",
+      "businessName": "Luminate Dental Care",
+      "contactName": "Dr. Sarah Kim",
+      "email": "contact@luminatedental.com",
+      "phone": "650-555-9831",
+      "website": "",
+      "hasWebsite": false,
+      "industry": "Cosmetic & General Dentistry",
+      "location": "San Mateo, CA",
+      "keywords": "dentist san mateo, teeth whitening, clear aligners nearby",
+      "hasGBP": false,
+      "gbpLink": ""
+    }
+  }
+]
