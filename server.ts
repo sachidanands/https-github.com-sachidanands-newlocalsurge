@@ -3,14 +3,10 @@ import path from "path";
 import fs from "fs";
 
 import dotenv from "dotenv";
-import { GoogleGenAI, Type } from "@google/genai";
-import { createClient } from "@supabase/supabase-js";
-import { Resend } from "resend";
 
 dotenv.config();
 
 const app = express();
-const PORT = 3000;
 
 // Set generous payload size limit to accept base64-encoded PDF documents safely
 app.use(express.json({ limit: "50mb" }));
@@ -18,13 +14,14 @@ app.use(express.urlencoded({ limit: "50mb", extended: true }));
 
 // Lazy initializers for premium integrations to prevent app crashes if keys are not set up yet
 let supabaseClient: any = null;
-function getSupabase() {
+async function getSupabase() {
   if (!supabaseClient) {
     const supabaseUrl = process.env.SUPABASE_URL;
     // Prioritize SUPABASE_SERVICE_ROLE_KEY for robust backend queries that bypass RLS policies
     const supabaseKey = process.env.SUPABASE_SERVICE_ROLE_KEY || process.env.SUPABASE_KEY;
     if (supabaseUrl && supabaseKey) {
       try {
+        const { createClient } = await import("@supabase/supabase-js");
         supabaseClient = createClient(supabaseUrl, supabaseKey);
         console.log(`🟢 Supabase client successfully initialized using ${process.env.SUPABASE_SERVICE_ROLE_KEY ? 'Service Role Key (bypasses RLS)' : 'Anon Key'}.`);
       } catch (err) {
@@ -38,11 +35,12 @@ function getSupabase() {
 }
 
 let resendClient: any = null;
-function getResend() {
+async function getResend() {
   if (!resendClient) {
     const resendApiKey = process.env.RESEND_API_KEY;
     if (resendApiKey) {
       try {
+        const { Resend } = await import("resend");
         resendClient = new Resend(resendApiKey);
         console.log("🟢 Resend client successfully initialized.");
       } catch (err) {
@@ -55,25 +53,33 @@ function getResend() {
   return resendClient;
 }
 
-// Initialize Gemini
-const apiKey = process.env.GEMINI_API_KEY;
-let ai: GoogleGenAI | null = null;
-
-if (apiKey) {
-  try {
-    ai = new GoogleGenAI({
-      apiKey: apiKey,
-      httpOptions: {
-        headers: {
-          'User-Agent': 'aistudio-build',
-        }
+// Lazy initialize Gemini client to avoid crashes/bundling issues on startup
+let aiClient: any = null;
+let GenAiType: any = null;
+async function getGemini() {
+  if (!aiClient) {
+    const apiKey = process.env.GEMINI_API_KEY;
+    if (apiKey) {
+      try {
+        const { GoogleGenAI, Type } = await import("@google/genai");
+        aiClient = new GoogleGenAI({
+          apiKey: apiKey,
+          httpOptions: {
+            headers: {
+              'User-Agent': 'aistudio-build',
+            }
+          }
+        });
+        GenAiType = Type;
+        console.log("🟢 Gemini client successfully initialized.");
+      } catch (err) {
+        console.error("❌ Failed to initialize Gemini client:", err);
       }
-    });
-  } catch (err) {
-    console.error("❌ Failed to initialize Gemini client:", err);
+    } else {
+      console.warn("⚠️ GEMINI_API_KEY is not defined. AI features will fallback to high-quality mock data.");
+    }
   }
-} else {
-  console.warn("⚠️ GEMINI_API_KEY is not defined. AI features will fallback to high-quality mock data.");
+  return { ai: aiClient, Type: GenAiType };
 }
 
 // Database helper
@@ -381,7 +387,7 @@ app.post("/api/pdf-templates", (req, res) => {
 
 // API Routes
 app.get("/api/admin/db-status", async (req, res) => {
-  const supabase = getSupabase();
+  const supabase = await getSupabase();
   const rawUrl = process.env.SUPABASE_URL || "";
   
   if (!supabase) {
@@ -468,7 +474,7 @@ NOTIFY pgrst, 'reload schema';`
 });
 
 app.get("/api/leads", async (req, res) => {
-  const supabase = getSupabase();
+  const supabase = await getSupabase();
   if (supabase) {
     try {
       const { data, error } = await supabase
@@ -533,6 +539,7 @@ app.post("/api/leads/submit", async (req, res) => {
   };
 
   // Generate AI SEO Strategy Audit based on Lead Input if Gemini is configured!
+  const { ai, Type } = await getGemini();
   if (ai) {
     try {
       const prompt = `
@@ -618,7 +625,7 @@ app.post("/api/leads/submit", async (req, res) => {
   writeLeads(leads);
 
   // 2. Persist directly to Supabase cloud SQL storage if configured
-  const supabase = getSupabase();
+  const supabase = await getSupabase();
   if (supabase) {
     try {
       const { error } = await supabase
@@ -657,7 +664,7 @@ app.post("/api/leads/submit", async (req, res) => {
   }
 
   // 3. Dispatch auto-email with the PDF Strategy to the prospective customer using Resend
-  const resend = getResend();
+  const resend = await getResend();
   if (resend) {
     try {
       const safeBusinessName = leadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
@@ -784,7 +791,7 @@ app.put("/api/leads/:id", async (req, res) => {
   writeLeads(leads);
 
   // Update in Supabase if active
-  const supabase = getSupabase();
+  const supabase = await getSupabase();
   if (supabase) {
     try {
       const { error } = await supabase
@@ -822,7 +829,7 @@ app.delete("/api/leads/:id", async (req, res) => {
   writeLeads(filtered);
 
   // Delete in Supabase if active
-  const supabase = getSupabase();
+  const supabase = await getSupabase();
   if (supabase) {
     try {
       const { error } = await supabase
@@ -852,6 +859,7 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
     return res.status(400).json({ error: "Website URL is required for analysis." });
   }
 
+  const { ai, Type } = await getGemini();
   if (ai) {
     try {
       const prompt = `
@@ -973,31 +981,6 @@ function createFallbackAudit(input: any) {
       `Formulate a custom review-generation playbook for your desk/field team.`
     ]
   };
-}
-
-async function startServer() {
-  if (process.env.NODE_ENV !== "production") {
-    const { createServer: createViteServer } = await import("vite");
-    const vite = await createViteServer({
-      server: { middlewareMode: true },
-      appType: "spa",
-    });
-    app.use(vite.middlewares);
-  } else {
-    const distPath = path.join(process.cwd(), "dist");
-    app.use(express.static(distPath));
-    app.get("*", (req, res) => {
-      res.sendFile(path.join(distPath, "index.html"));
-    });
-  }
-
-  app.listen(PORT, "0.0.0.0", () => {
-    console.log(`Server running on http://localhost:${PORT}`);
-  });
-}
-
-if (process.env.VERCEL !== "1") {
-  startServer();
 }
 
 export default app;
