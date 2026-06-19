@@ -1,15 +1,6 @@
-import { VercelRequest, VercelResponse } from "@vercel/node";
+// Vercel Serverless Function entry point.
+// Imports and re-exports the Express app so Vercel can invoke it
+// as a serverless function on every API request.
+import app from "./_server";
 
-export default async function handler(req: VercelRequest, res: VercelResponse) {
-  try {
-    const module = await import("../server");
-    const app = module.default;
-    return app(req, res);
-  } catch (error: any) {
-    res.status(500).json({
-      error: "Failed to load Express application",
-      message: error.message || String(error),
-      stack: error.stack || null,
-    });
-  }
-}
+export default app;

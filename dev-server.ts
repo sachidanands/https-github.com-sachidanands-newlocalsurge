@@ -1,4 +1,4 @@
-import app from "./server";
+import app from "./api/_server";
 import { createServer as createViteServer } from "vite";
 
 const PORT = 3000;
