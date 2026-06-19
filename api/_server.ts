@@ -783,34 +783,32 @@ app.post("/api/leads/submit", async (req, res) => {
 app.put("/api/leads/:id", async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
-  const leads = readLeads();
-  const idx = leads.findIndex((l: any) => l.id === id);
-  if (idx === -1) {
-    return res.status(404).json({ error: "Lead not found" });
-  }
+  let updatedLocally = false;
+  let updatedInSupabase = false;
 
-  leads[idx] = { ...leads[idx], ...updates };
-  writeLeads(leads);
-
-  // Update in Supabase if active
+  // 1. Update in Supabase if active
   const supabase = await getSupabase();
   if (supabase) {
     try {
-      const { error } = await supabase
+      const updatePayload: any = {};
+      if (updates.status !== undefined) updatePayload.status = updates.status;
+      if (updates.notes !== undefined) updatePayload.notes = updates.notes;
+      if (updates.aiAudit !== undefined) updatePayload.ai_audit = updates.aiAudit;
+
+      const { data, error } = await supabase
         .from("leads")
-        .update({
-          status: updates.status,
-          notes: updates.notes,
-          ai_audit: updates.aiAudit || null
-        })
-        .eq("id", id);
+        .update(updatePayload)
+        .eq("id", id)
+        .select();
+
       if (error) {
         if (error.code === '42P01') {
           console.info(`ℹ️ Supabase leads table doesn't exist yet - update saved locally instead!`);
         } else {
           console.warn("⚠️ Supabase update warning:", error.message || error);
         }
-      } else {
+      } else if (data && data.length > 0) {
+        updatedInSupabase = true;
         console.log(`🟢 Successfully updated lead ${id} in Supabase.`);
       }
     } catch (err) {
@@ -818,38 +816,63 @@ app.put("/api/leads/:id", async (req, res) => {
     }
   }
 
-  res.json({ success: true, lead: leads[idx] });
+  // 2. Update locally
+  const leads = readLeads();
+  const idx = leads.findIndex((l: any) => l.id === id);
+  if (idx !== -1) {
+    leads[idx] = { ...leads[idx], ...updates };
+    writeLeads(leads);
+    updatedLocally = true;
+  }
+
+  if (!updatedInSupabase && !updatedLocally) {
+    return res.status(404).json({ error: "Lead not found" });
+  }
+
+  const returnedLead = idx !== -1 ? leads[idx] : { id, ...updates };
+  res.json({ success: true, lead: returnedLead });
 });
 
 app.delete("/api/leads/:id", async (req, res) => {
   const { id } = req.params;
-  const leads = readLeads();
-  const filtered = leads.filter((l: any) => l.id !== id);
-  if (leads.length === filtered.length) {
-    return res.status(404).json({ error: "Lead not found" });
-  }
-  writeLeads(filtered);
+  let deletedLocally = false;
+  let deletedInSupabase = false;
 
-  // Delete in Supabase if active
+  // 1. Delete in Supabase if active
   const supabase = await getSupabase();
   if (supabase) {
     try {
-      const { error } = await supabase
+      const { data, error } = await supabase
         .from("leads")
         .delete()
-        .eq("id", id);
+        .eq("id", id)
+        .select();
+
       if (error) {
         if (error.code === '42P01') {
           console.info(`ℹ️ Supabase leads table doesn't exist yet - delete resolved locally instead!`);
         } else {
           console.warn("⚠️ Supabase deletion warning:", error.message || error);
         }
-      } else {
+      } else if (data && data.length > 0) {
+        deletedInSupabase = true;
         console.log(`🟢 Successfully deleted lead ${id} from Supabase.`);
       }
     } catch (err) {
       console.info("ℹ️ Optional cloud sync delete fallback triggered successfully.");
     }
+  }
+
+  // 2. Delete locally
+  const leads = readLeads();
+  const filtered = leads.filter((l: any) => l.id !== id);
+  if (leads.length !== filtered.length) {
+    writeLeads(filtered);
+    deletedLocally = true;
+  }
+
+  if (!deletedInSupabase && !deletedLocally) {
+    return res.status(404).json({ error: "Lead not found" });
   }
 
   res.json({ success: true });
