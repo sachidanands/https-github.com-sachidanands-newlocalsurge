@@ -1,8 +1,15 @@
-// Vercel Serverless Function entry point.
-// Imports and re-exports the Express app so Vercel can invoke it
-// as a serverless function on every API request.
-// The VERCEL=1 env var is automatically set by Vercel, which
-// prevents server.ts from calling app.listen() (not needed in serverless mode).
-import app from "../server";
+import { VercelRequest, VercelResponse } from "@vercel/node";
 
-export default app;
+export default async function handler(req: VercelRequest, res: VercelResponse) {
+  try {
+    const module = await import("../server.ts");
+    const app = module.default;
+    return app(req, res);
+  } catch (error: any) {
+    res.status(500).json({
+      error: "Failed to load Express application",
+      message: error.message || String(error),
+      stack: error.stack || null,
+    });
+  }
+}
