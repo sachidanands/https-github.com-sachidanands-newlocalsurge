@@ -372,6 +372,10 @@ app.post("/api/admin/login", (req, res) => {
   }
 });
 
+app.get("/api/test", (req, res) => {
+  res.send("Hello from Express test!");
+});
+
 app.get("/api/pdf-templates", (req, res) => {
   res.json(readTemplates());
 });
