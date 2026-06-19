@@ -385,7 +385,7 @@ export default function LeadDashboard({
                   <span>💡 IMPORTANT OBSERVATION FROM YOUR SCREENSHOT</span>
                 </div>
                 <p className="leading-relaxed">
-                  Your Supabase screenshot shows your active project ID is <strong className="font-extrabold text-[#bc5f40] underline decoration-[#bc5f40]/30 select-all">yxpkisbsobhuauniahc</strong>. 
+                  Your Supabase screenshot shows your active project ID is <strong className="font-extrabold text-[#bc5f40] underline decoration-[#bc5f40]/30 select-all">yxpkisbsobhuaanuiahc</strong>. 
                   However, please verify if the database URL currently configured in the background matches this ID!
                 </p>
                 <div className="bg-white/70 border border-amber-200/50 rounded-lg p-3 font-mono text-[11px] grid gap-1.5 text-[#42301c]">
@@ -398,7 +398,7 @@ export default function LeadDashboard({
                   <div>
                     🎯 <strong className="font-bold">Your Target Project URL should be:</strong>{" "}
                     <code className="bg-[#bc5f40]/5 px-1.5 py-0.5 rounded border border-[#bc5f40]/10 text-[#bc5f40] font-black select-all break-all">
-                      https://yxpkisbsobhuauniahc.supabase.co
+                      https://yxpkisbsobhuaanuiahc.supabase.co
                     </code>
                   </div>
                 </div>
@@ -425,7 +425,7 @@ export default function LeadDashboard({
                     <div className="bg-white border text-[11px] border-[#dfded4] rounded-lg p-2.5 font-mono space-y-1.5 leading-relaxed text-[#1a1c1a]">
                       <div>
                         🔑 <span className="font-bold">SUPABASE_URL</span> <br/>
-                        <span className="text-[#888b88]">=</span> <code className="bg-slate-50 px-1 py-0.5 text-slate-800 break-all text-[10px] rounded">https://yxpkisbsobhuauniahc.supabase.co</code>
+                        <span className="text-[#888b88]">=</span> <code className="bg-slate-50 px-1 py-0.5 text-slate-800 break-all text-[10px] rounded">https://yxpkisbsobhuaanuiahc.supabase.co</code>
                       </div>
                       <div>
                         🔑 <span className="font-bold">SUPABASE_SERVICE_ROLE_KEY</span> <br/>
