@@ -24,12 +24,31 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             <p className="text-xs text-[#5c605d] max-w-sm leading-relaxed">
               We empower local businesses to thrive in the digital landscape. Bridging the gap between you and your neighborhood customers through expert, transparent, and results-oriented SEO strategies.
             </p>
-            <div className="pt-2 space-y-2">
+            <div className="pt-2 space-y-3">
               <div className="flex items-center gap-2 text-xs text-[#2d2f2d] font-semibold">
                 <Mail className="w-4 h-4 text-[#123e35] shrink-0" />
                 <a href="mailto:contact@localsurgeseo.com" className="hover:text-[#bc5f40] transition-colors">
                   contact@localsurgeseo.com
                 </a>
+              </div>
+              
+              {/* Service Area Business Address Block */}
+              <div className="pt-3 border-t border-[#dfded4]/65 space-y-1.5 text-[11px] text-[#5c605d] leading-relaxed">
+                <p className="font-extrabold text-[#151716] text-xs">Local Surge SEO HQ (Virtual)</p>
+                <div className="flex items-start gap-1.5 font-semibold">
+                  <MapPin className="w-3.5 h-3.5 text-[#bc5f40] shrink-0 mt-0.5" />
+                  <div>
+                    <p>Administration Base: San Jose, CA 95112</p>
+                    <p className="text-[#123e35] text-[10px] font-bold">Service Area: California & Remote Nationwide</p>
+                  </div>
+                </div>
+                <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#888b88]">
+                  <Clock className="w-3.5 h-3.5 text-[#bc5f40] shrink-0" />
+                  <span>Phone: +1 (800) 555-0199 (VoIP Inbox)</span>
+                </div>
+                <p className="text-[9px] text-[#888b88] italic pt-1 border-t border-dashed border-[#dfded4]">
+                  * Local Surge SEO operates as a Service Area Business (SAB). We consult with our clients virtually and do not maintain a physical walk-in storefront.
+                </p>
               </div>
             </div>
           </div>

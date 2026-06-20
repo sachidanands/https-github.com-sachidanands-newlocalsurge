@@ -47,8 +47,23 @@ export default function SchemaMarkup({
       '@type': 'PostalAddress',
       'addressLocality': 'San Jose',
       'addressRegion': 'CA',
+      'postalCode': '95112',
       'addressCountry': 'US'
     },
+    'areaServed': [
+      {
+        '@type': 'AdministrativeArea',
+        'name': 'San Jose, CA'
+      },
+      {
+        '@type': 'AdministrativeArea',
+        'name': 'Los Angeles, CA'
+      },
+      {
+        '@type': 'AdministrativeArea',
+        'name': 'California'
+      }
+    ],
     'description': 'High-performance web design and local SEO optimization suite for contractors, dentists, plumbers, and local service providers looking to dominate regional query hierarchies.'
   };
 

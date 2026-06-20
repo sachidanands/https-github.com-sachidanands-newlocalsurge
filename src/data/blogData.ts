@@ -24,6 +24,67 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'local-seo-2026-near-me-is-dead',
+    title: 'Local SEO in 2026: Why "Near Me" is Dead and What Replaced It',
+    category: 'Local SEO',
+    author: {
+      name: 'Sarah Chen',
+      role: 'Chief SEO Architect',
+      avatar: 'SC'
+    },
+    date: 'June 20, 2026',
+    readTime: '6 min read',
+    image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800',
+    description: 'As AI Overviews, GEO (Generative Engine Optimization), and conversational voice agents take over search behaviors in June 2026, traditional "near me" keyword strategies are obsolete. Learn what signals the algorithms prioritize now.',
+    sections: [
+      {
+        type: 'paragraph',
+        content: 'For nearly a decade, local search was dominated by a simple consumer behavior: typing "plumber near me" or "best dentist near me" into a smartphone. Businesses competed on raw proximity and keyword stuffing. But as we cross into mid-2026, the search landscape has shifted dramatically. Proximity is no longer a static query match; it is parsed through conversational context, spatial entity mapping, and generative search summaries.'
+      },
+      {
+        type: 'heading',
+        content: 'The Shift to Conversational and Entity-Based Local Search'
+      },
+      {
+        type: 'paragraph',
+        content: 'In 2026, users are rarely typing fragmented search phrases. Instead, they ask voice assistants and AI chat agents complex queries like: "Find a verified, highly-rated plumber who can fix a copper pipe leak before 10 PM tonight and accepts Apple Pay." AI-driven search engines do not look for pages matching the exact words "plumber near me." They evaluate entities, verifying your operating coordinates, customer satisfaction ratings, response times, and payment structures directly.'
+      },
+      {
+        type: 'alert-box',
+        content: '💡 ALGORITHMIC REALITY: Proximity is now dynamic. The search engine checks if your Service Area Business (SAB) coordinates actively encompass the seeker’s real-time mobile ping, combined with your real-time availability.'
+      },
+      {
+        type: 'heading',
+        content: 'Why GEO (Generative Engine Optimization) Rules Local Rankings'
+      },
+      {
+        type: 'paragraph',
+        content: 'Search engines now compile immediate answers (AI Overviews) summarizing business reputations directly at the top of the viewport. To rank in these generative feeds, businesses need to optimize for Generative Engine Optimization (GEO). This is done by:'
+      },
+      {
+        type: 'bullet-list',
+        content: 'GEO Optimization Checkpoints:',
+        items: [
+          'Structuring content around clear Q&A formats that resolve specific client friction points.',
+          'Cultivating high-authority citation profiles across tier-1 directories (Google, Apple Maps, Bing, Yelp) with identical name, address, and phone parameters.',
+          'Authoritative, location-specific schema markups that register your services as clear logical nodes.'
+        ]
+      },
+      {
+        type: 'heading',
+        content: 'How to Optimize Your Service Area Business for 2026'
+      },
+      {
+        type: 'paragraph',
+        content: 'Because you are serving clients without a storefront, your digital reputation must carry zero ambiguity. You must optimize for SAB (Service Area Business) schemas and maintain a high-velocity feedback loop of verified customer reviews.'
+      },
+      {
+        type: 'quote',
+        content: '"In the generative search era, trust is the primary ranking factor. The systems will not recommend a business unless it is backed by verified directory citations, dynamic schema configurations, and authentic third-party reviews."'
+      }
+    ]
+  },
+  {
     slug: 'google-business-profile-critical-local-contractors',
     title: 'The Local Surge Domination Playbook: Why Google Business Profile is Crucial',
     category: 'Local SEO',

@@ -17,6 +17,7 @@ import DirectoryView from './components/DirectoryView';
 import SchemaMarkup from './components/SchemaMarkup';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import { BLOG_POSTS } from './data/blogData';
 import {
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight,
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
@@ -209,6 +210,76 @@ export default function App() {
       }
     }
   }, [currentPage]);
+
+  // Dynamic Page Title & Meta Description Handler
+  useEffect(() => {
+    let title = 'Local Surge SEO - Dynamic Onboarding & Regional Search Dominance';
+    let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses. Get a Free Audit.';
+
+    if (currentPage === 'about') {
+      title = 'About Our Mission - Local Surge SEO';
+      description = 'Learn about Local Surge SEO\'s mission to empower local contractors, dentists, and service providers to dominate regional search results.';
+    } else if (currentPage === 'why-us') {
+      title = 'Why Choose Local Surge SEO - Direct Search Mappings';
+      description = 'Discover the Local Surge SEO advantage: direct in-house communication, lightning-fast schema deployments, and transparent results without bloated developer fees.';
+    } else if (currentPage === 'local-seo') {
+      title = 'Local SEO Optimization Services - Google Maps Mappings';
+      description = 'Elevate your business prominence on Google Maps. We optimize Google Business Profiles, sync directory citations, and install professional local schema markup.';
+    } else if (currentPage === 'pricing') {
+      title = 'Transparent Pricing Plans - Local Surge SEO';
+      description = 'Simple and transparent pricing plans for local businesses. Choose between Single-Page Blast, Starter Boost, and Premium Surge with zero activation lock.';
+    } else if (currentPage === 'seo-tool') {
+      title = 'Free Local SEO Audit & Scan Tool - Local Surge SEO';
+      description = 'Run an instant website scan. Detect LocalBusiness schema, evaluate NAP consistency, and find regional citation errors for your business.';
+    } else if (currentPage === 'contact') {
+      title = 'Contact Team Office - Local Surge SEO';
+      description = 'Get in touch with Local Surge SEO. Schedule a free optimization brief with our field strategist to unlock neighborhood keyword opportunities.';
+    } else if (currentPage === 'admin') {
+      title = 'Admin Lead Dashboard - Local Surge SEO';
+      description = 'Secure lead management and administrative tools for Local Surge campaigns.';
+    } else if (currentPage === 'site-map') {
+      title = 'Directory Sitemap - Local Surge SEO';
+      description = 'Browse our directory of state and city-specific local SEO analysis maps.';
+    } else if (currentPage === 'california') {
+      title = 'California SEO Directory & Market Analysis - Local Surge';
+      description = 'Analyze search traffic opportunities and local SEO trends across major California counties and metropolitan cities.';
+    } else if (currentPage === 'los-angeles-seo') {
+      title = 'Los Angeles SEO Services & Maps Optimization - Local Surge';
+      description = 'Dominating the Los Angeles local search market. Highly-optimized GBP tuning, citation audits, and schema markup for LA service providers.';
+    } else if (currentPage === 'blog') {
+      title = 'Local Marketing Insights Blog - Local Surge SEO';
+      description = 'Read expert guides and actionable strategies on local search, generative engine optimization (GEO), and ranking in the AI search era.';
+    } else if (currentPage === 'state-seo' && activeStateSlug) {
+      const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
+      title = `${stateName} Local SEO Directory - Local Surge SEO`;
+      description = `Analyze local search performance and citation compliance metrics for service area businesses throughout the state of ${stateName}.`;
+    } else if (currentPage === 'city-seo' && activeStateSlug && activeCitySlug) {
+      const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
+      const cityName = activeCitySlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+      title = `${cityName}, ${stateName} Local SEO Rankings - Local Surge`;
+      description = `Local maps optimization, search volumes, and competitor density listings in ${cityName}, ${stateName} for neighborhood contractors and practices.`;
+    }
+
+    if (currentPage === 'blog' && activeArticleSlug) {
+      const post = BLOG_POSTS.find(p => p.slug === activeArticleSlug);
+      if (post) {
+        title = `${post.title} | Local Surge Insights`;
+        description = post.description;
+      }
+    }
+
+    // Set document title
+    document.title = title;
+
+    // Set meta description
+    let metaDesc = document.querySelector('meta[name="description"]');
+    if (!metaDesc) {
+      metaDesc = document.createElement('meta');
+      metaDesc.setAttribute('name', 'description');
+      document.head.appendChild(metaDesc);
+    }
+    metaDesc.setAttribute('content', description);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
   const [isWizardOpen, setIsWizardOpen] = useState(false);
@@ -710,16 +781,22 @@ export default function App() {
 
                     {/* Hero Left Content */}
                     <div className="lg:col-span-7 space-y-6 text-center lg:text-left">
-                      <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded bg-[#123e35]/10 border border-[#123e35]/15 text-[#123e35] text-xs font-bold font-mono tracking-wide uppercase">
-                        <Sparkles className="w-3.5 h-3.5" />
-                        Next-Gen Local SEO Domination
+                      <div className="flex flex-wrap gap-2 justify-center lg:justify-start items-center">
+                        <div className="inline-flex items-center gap-2 px-3.5 py-1.5 rounded bg-[#123e35]/10 border border-[#123e35]/15 text-[#123e35] text-xs font-bold font-mono tracking-wide uppercase">
+                          <Sparkles className="w-3.5 h-3.5" />
+                          Next-Gen Local SEO Domination
+                        </div>
+                        <div className="inline-flex items-center gap-1.5 px-3 py-1 rounded bg-[#bc5f40]/10 border border-[#bc5f40]/20 text-[#bc5f40] text-[10px] font-bold font-mono uppercase">
+                          <span className="w-1.5 h-1.5 rounded-full bg-[#bc5f40] animate-pulse" />
+                          Updated: {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}
+                        </div>
                       </div>
                       <h1 className="text-4xl sm:text-5xl lg:text-6xl font-black font-display text-[#151716] tracking-tight leading-tight">
                         Dominate Your <br className="hidden sm:inline" />
                         <span className="text-[#bc5f40]">Local Market</span>
                       </h1>
                       <p className="text-sm sm:text-base text-[#4e524f] font-medium max-w-xl leading-relaxed">
-                        Local Surge boosts your website's organic neighborhood traffic, connecting you with high-intent regional buyers. Stop losing valuable local business.
+                        Local Surge boosts your website's organic neighborhood traffic, connecting you with high-intent regional buyers. Helping 500+ local businesses scale their rankings in {new Date().getFullYear()}.
                       </p>
 
                       <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -809,6 +886,59 @@ export default function App() {
               {/* Testimonials Slider */}
               <section id="testimonials-block" className="bg-[#faf9f6]/80 border-t border-b border-[#dfded4] py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
+                  
+                  {/* Trust Score Hub Badge Section */}
+                  <div className="flex flex-col lg:flex-row items-center justify-between gap-6 p-6 sm:p-8 bg-white border border-[#dfded4] rounded-3xl mb-12 shadow-xs">
+                    <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
+                      {/* Google Review Score */}
+                      <div className="space-y-1.5 sm:pr-6 sm:border-r border-[#dfded4]/80">
+                        <div className="flex items-center justify-center sm:justify-start gap-2">
+                          <span className="w-5 h-5 bg-red-100 text-red-500 rounded-full flex items-center justify-center text-[10px] font-black">G</span>
+                          <span className="text-xs font-black font-display text-[#151716]">Google Reviews</span>
+                        </div>
+                        <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <span className="text-2xl font-black text-[#151716]">4.9</span>
+                          <div className="flex gap-0.5 text-[#bc5f40]">
+                            {[...Array(5)].map((_, i) => <Star key={i} className="w-3.5 h-3.5 fill-[#bc5f40] text-[#bc5f40]" />)}
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-[#888b88] font-bold font-mono uppercase tracking-wider">Based on 48 Client Reviews</p>
+                      </div>
+
+                      {/* Trustpilot Score */}
+                      <div className="space-y-1.5">
+                        <div className="flex items-center justify-center sm:justify-start gap-1.5">
+                          <span className="text-emerald-500 text-sm">★</span>
+                          <span className="text-xs font-black font-display text-[#151716]">Trustpilot</span>
+                        </div>
+                        <div className="flex items-center gap-2 justify-center sm:justify-start">
+                          <span className="text-2xl font-black text-[#151716]">Excellent</span>
+                          <div className="flex gap-0.5 text-emerald-500">
+                            {[...Array(5)].map((_, i) => <span key={i} className="px-1.5 py-0.5 rounded bg-emerald-500 text-white text-[8px] font-black leading-none">★</span>)}
+                          </div>
+                        </div>
+                        <p className="text-[10px] text-[#888b88] font-bold font-mono uppercase tracking-wider">TrustScore 4.8 out of 5</p>
+                      </div>
+                    </div>
+
+                    {/* Trust status & Action */}
+                    <div className="flex flex-col sm:flex-row items-center gap-4 w-full lg:w-auto justify-end">
+                      <div className="text-right sm:text-right text-xs">
+                        <p className="font-extrabold text-[#1a1c1a]">Active Credibility Audit</p>
+                        <p className="text-[10px] text-[#bc5f40] font-bold font-mono uppercase mt-0.5">As of {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
+                      </div>
+                      <button 
+                        onClick={() => {
+                          setCurrentPage('contact');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="w-full sm:w-auto px-5 py-3 rounded-xl border border-[#dfded4] hover:border-[#123e35] text-xs font-bold text-[#4e524f] hover:text-[#123e35] hover:bg-[#faf9f6] transition-all cursor-pointer shadow-xs text-center"
+                      >
+                        Submit Case Review
+                      </button>
+                    </div>
+                  </div>
+
                   <div className="text-center max-w-3xl mx-auto space-y-3 mb-10">
                     <h4 className="text-xs font-bold tracking-widest text-[#bc5f40] font-mono uppercase">Client Stories</h4>
                     <h3 className="text-2xl sm:text-3xl font-black font-display text-[#151716]">Proven organic surges in local neighborhood business</h3>
@@ -818,8 +948,14 @@ export default function App() {
                     {/* Testimonial 1 */}
                     <div className="bg-white border border-[#dfded4] p-6.5 rounded-2xl relative shadow-xs flex flex-col justify-between hover:border-[#bc5f40]/40 transition-colors">
                       <div className="space-y-4">
-                        <div className="flex gap-1 text-[#bc5f40]">
-                          {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#bc5f40] text-[#bc5f40]" />)}
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-1 text-[#bc5f40]">
+                            {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#bc5f40] text-[#bc5f40]" />)}
+                          </div>
+                          <span className="px-2 py-0.5 text-[8px] font-black uppercase font-mono tracking-wider bg-red-50 text-red-500 rounded border border-red-100 flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-red-500 animate-pulse" />
+                            Google Review
+                          </span>
                         </div>
                         <p className="text-sm text-[#1a1c1a] italic font-medium leading-relaxed">
                           "We were practically invisible on Google Maps in Denver. After setting up our GBP and local citation sync with Local Surge, our intake went from 4 organic inquiries a week to almost 20. It completely transformed our plumbing schedules!"
@@ -827,18 +963,25 @@ export default function App() {
                       </div>
                       <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#f2f0ea]">
                         <div className="w-10 h-10 rounded bg-[#f7f6f2] font-display font-bold text-[#123e35] flex items-center justify-center text-xs border border-[#dfded4]">KR</div>
-                        <div>
+                        <div className="flex-grow">
                           <span className="block text-xs font-extrabold text-[#151716] leading-none">Kevin Reynolds</span>
                           <span className="block text-[10px] text-[#888b88] font-bold mt-1">Elite Plumbing Denver, Owner</span>
                         </div>
+                        <span className="text-[9px] font-black font-mono bg-emerald-50 text-emerald-600 border border-emerald-100 rounded px-1.5 py-0.5">VERIFIED</span>
                       </div>
                     </div>
 
                     {/* Testimonial 2 */}
                     <div className="bg-white border border-[#dfded4] p-6.5 rounded-2xl relative shadow-xs flex flex-col justify-between hover:border-[#bc5f40]/40 transition-colors">
                       <div className="space-y-4">
-                        <div className="flex gap-1 text-[#bc5f40]">
-                          {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#bc5f40] text-[#bc5f40]" />)}
+                        <div className="flex items-center justify-between">
+                          <div className="flex gap-1 text-[#bc5f40]">
+                            {[...Array(5)].map((_, i) => <Star key={i} className="w-4 h-4 fill-[#bc5f40] text-[#bc5f40]" />)}
+                          </div>
+                          <span className="px-2 py-0.5 text-[8px] font-black uppercase font-mono tracking-wider bg-emerald-50 text-emerald-600 rounded border border-emerald-100 flex items-center gap-1">
+                            <span className="w-1 h-1 rounded-full bg-emerald-500" />
+                            Trustpilot
+                          </span>
                         </div>
                         <p className="text-sm text-[#1a1c1a] italic font-medium leading-relaxed">
                           "They didn't push us into a complicated system or lock us into long-term contracts. The manual qualification call made us super comfortable, and they deployed our optimized homepage schema in just 3 days."
@@ -846,10 +989,11 @@ export default function App() {
                       </div>
                       <div className="flex items-center gap-3 mt-6 pt-4 border-t border-[#f2f0ea]">
                         <div className="w-10 h-10 rounded bg-[#f7f6f2] font-display font-bold text-[#123e35] flex items-center justify-center text-xs border border-[#dfded4]">SK</div>
-                        <div>
+                        <div className="flex-grow">
                           <span className="block text-xs font-extrabold text-[#151716] leading-none">Dr. Sarah Kim</span>
                           <span className="block text-[10px] text-[#888b88] font-bold mt-1">Luminate Dental Care, Lead Dentist</span>
                         </div>
+                        <span className="text-[9px] font-black font-mono bg-emerald-50 text-emerald-600 border border-emerald-100 rounded px-1.5 py-0.5">VERIFIED</span>
                       </div>
                     </div>
                   </div>
@@ -1144,6 +1288,121 @@ export default function App() {
                     </div>
                   );
                 })}
+              </div>
+
+              {/* Feature Comparison Table */}
+              <div className="bg-white border border-[#dfded4] rounded-3xl p-6 sm:p-10 shadow-xs space-y-6">
+                <div className="text-center max-w-xl mx-auto space-y-2">
+                  <h3 className="font-extrabold text-lg text-[#151716] font-display">Deep Feature Comparison</h3>
+                  <p className="text-xs text-[#4e524f] font-semibold">
+                    Compare features side-by-side. Make an informed choice to dominate your local geographic niche.
+                  </p>
+                </div>
+
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left border-collapse text-xs font-semibold text-[#4e524f]">
+                    <thead>
+                      <tr className="border-b border-[#dfded4] text-[10px] uppercase font-mono font-black text-[#151716]">
+                        <th className="py-4 pr-4">Capability & Services</th>
+                        <th className="py-4 px-4 text-center">Single-Page Blast</th>
+                        <th className="py-4 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Starter Boost</th>
+                        <th className="py-4 pl-4 text-center">Premium Surge</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#dfded4]/60">
+                      
+                      {/* Section 1: Core Website Setup */}
+                      <tr className="bg-[#faf9f6]/40">
+                        <td colSpan={4} className="py-3 font-extrabold text-xs text-[#bc5f40] uppercase font-mono tracking-wider">Core Website Setup</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Responsive Design</td>
+                        <td className="py-3 px-4 text-center">Single Scroll</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Single Scroll</td>
+                        <td className="py-3 pl-4 text-center">Multi-Page Silos</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Hosting & CDN Mappings</td>
+                        <td className="py-3 px-4 text-center">Cloud Hosted</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Cloud Hosted</td>
+                        <td className="py-3 pl-4 text-center">Premium CDN Mappings</td>
+                      </tr>
+
+                      {/* Section 2: Local Optimization */}
+                      <tr className="bg-[#faf9f6]/40">
+                        <td colSpan={4} className="py-3 font-extrabold text-xs text-[#bc5f40] uppercase font-mono tracking-wider">Local SEO & GBP</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">GBP Setup & Sync</td>
+                        <td className="py-3 px-4 text-center">Support Guides</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Full Setup & Sync</td>
+                        <td className="py-3 pl-4 text-center">Priority Managed Sync</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Citation Directory Listings</td>
+                        <td className="py-3 px-4 text-center">—</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Top 20 Syndications</td>
+                        <td className="py-3 pl-4 text-center">50+ Authority Citations</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Local Schema JSON-LD</td>
+                        <td className="py-3 px-4 text-center">Basic Tags</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Advanced Coordinates</td>
+                        <td className="py-3 pl-4 text-center">Bespoke Service Schema</td>
+                      </tr>
+
+                      {/* Section 3: Doorway Risk Protection */}
+                      <tr className="bg-amber-50/50">
+                        <td colSpan={4} className="py-3 font-extrabold text-xs text-amber-700 uppercase font-mono tracking-wider">
+                          ⚠️ Content Authority & Doorway Risk
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-4 pr-4 font-extrabold text-[#151716]">
+                          Custom Copywriting
+                          <span className="block text-[10px] font-semibold text-[#888b88] font-mono leading-tight mt-0.5">
+                            Google penalizes duplicate template text
+                          </span>
+                        </td>
+                        <td className="py-4 px-4 text-center text-red-600 font-extrabold bg-red-50/10">
+                          Template Based
+                          <span className="block text-[9px] text-red-500 font-mono mt-0.5">High Doorway Risk</span>
+                        </td>
+                        <td className="py-4 px-4 text-center bg-amber-50/30 border-x border-[#dfded4] text-amber-700 font-extrabold">
+                          Curated Local Blocks
+                          <span className="block text-[9px] text-amber-600 font-mono mt-0.5">Low Doorway Risk</span>
+                        </td>
+                        <td className="py-4 pl-4 text-center text-[#123e35] font-extrabold bg-emerald-50/15">
+                          100% Bespoke Text
+                          <span className="block text-[9px] text-emerald-600 font-mono mt-0.5">Guaranteed Doorway Safe</span>
+                        </td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Dynamic Blogging Assets</td>
+                        <td className="py-3 px-4 text-center">—</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">—</td>
+                        <td className="py-3 pl-4 text-center">4 Custom Articles / Month</td>
+                      </tr>
+
+                      {/* Section 4: Support */}
+                      <tr className="bg-[#faf9f6]/40">
+                        <td colSpan={4} className="py-3 font-extrabold text-xs text-[#bc5f40] uppercase font-mono tracking-wider">Support & Strategy</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Consultation Channels</td>
+                        <td className="py-3 px-4 text-center">Self-service Documentation</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">Email Ticket Support</td>
+                        <td className="py-3 pl-4 text-center">Bi-Weekly Strategy Calls</td>
+                      </tr>
+                      <tr>
+                        <td className="py-3 pr-4 font-bold text-[#151716]">Dedicated SEO Architect</td>
+                        <td className="py-3 px-4 text-center">—</td>
+                        <td className="py-3 px-4 text-center bg-[#faf9f6] border-x border-[#dfded4]">—</td>
+                        <td className="py-3 pl-4 text-center">Yes - Senior Account Lead</td>
+                      </tr>
+                    </tbody>
+                  </table>
+                </div>
               </div>
 
               {/* Custom inquiry option */}
