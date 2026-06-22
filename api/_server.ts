@@ -206,7 +206,7 @@ const defaultTemplates = {
       "Secure SSL Configuration: Full SSL certificate setup for data security and trust.",
       "LocalSurge SEO Branding: Your brand logo integrated within the LocalSurge SEO domain.",
       "Single-Page Schema Markup: Technical SEO schema implementation to improve search visibility.",
-      "Note: Domain name registration is not included in this plan."
+      "Bespoke Domain Name Pointer Routing (Domain purchase separate)"
     ],
     actions: [
       'Submit Business Brief: Provide a short description of your business and services.',
@@ -221,18 +221,24 @@ const defaultTemplates = {
   "starter": {
     timeline: "1 - 2 Weeks Core Onboarding & Sync",
     deliverables: [
-      "Google Business Profile (GBP) deep synchronization & setup verification",
-      "High-converting, action-oriented Lead Form integration & coding",
-      "Comprehensive Localized Keyword Research covering 10 major buyer terms",
-      "Top 20 absolute primary Directory Citation syndications (Apple, MapQuest, Yelp)",
-      "Basic On-Page Geographic Silos tuning and local metadata markup",
-      "Monthly search rankings dashboard and phone-tap tracking reports"
+      "Multi-Page Website Design: Up to 10 custom pages (Home, About, Services, Contact, Blog/News).",
+      "Advanced Responsiveness: Pixel-perfect optimization for mobile, tablet, and desktop.",
+      "Expanded Content Structure: Includes Header, Footer, and up to 20 dynamic body components across all pages.",
+      "Priority Cloud Hosting: Ultra-fast secure hosting with prioritized server resources.",
+      "Premium SSL & Security: Advanced SSL configuration with daily security scans.",
+      "Local SEO Optimization: Full LocalSurge SEO integration with Google Business Profile setup assistance.",
+      "Multi-Page Schema Markup: Advanced schema for organization, local business, and article types.",
+      "Basic Content Writing: Up to 500 words of SEO-optimized copy per page.",
     ],
     actions: [
-      "Grant Manager access delegation for existing or new Google Business Profile.",
-      "Define key physical service regions, target zip codes, and hours parameters.",
-      "Scrub and eliminate redundant, mismatched historical NAP directory citations.",
-      "Trigger automated keyword ranking monitors for active regional status assessment."
+      "Detailed Business Brief: Comprehensive overview of services, target audience, and unique value proposition.",
+      "Content Strategy: Provide draft text for all pages or request our copywriting service.",
+      "Visual Identity Package: High-resolution logos, brand guidelines, and preferred color palettes.",
+      "Local Business Data: Official address, phone number, hours of operation, and service areas.",
+      "Social Media Audit: List of active social profiles and preferred cross-linking strategy.",
+      "Media Assets: Curated list of high-quality images or authorization to use stock photography.",
+      "Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.",
+      "Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization."
     ]
   },
   "premium": {
