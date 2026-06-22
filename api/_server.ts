@@ -89,103 +89,103 @@ const LEADS_FILE = path.join(DATA_DIR, "leads.json");
 
 function initDb() {
   try {
-  if (!fs.existsSync(DATA_DIR)) {
-    fs.mkdirSync(DATA_DIR, { recursive: true });
-  }
-  if (!fs.existsSync(LEADS_FILE)) {
-    // Seed default leads for demo/admin onboarding
-    const initialLeads = [
-      {
-        id: "lead_1",
-        createdAt: new Date(Date.now() - 36 * 3600 * 1000).toISOString(),
-        status: "audit_prepared",
-        notes: "Scheduled call with owner next Tuesday at 10 AM. Interested in citation cleanup.",
-        input: {
-          planId: "starter",
-          planName: "Starter Boost",
-          businessName: "Elite Plumbing Denver",
-          contactName: "Kevin Reynolds",
-          email: "kevin@eliteplumbingdenver.com",
-          phone: "303-555-0129",
-          website: "https://eliteplumbingdenver.com",
-          hasWebsite: true,
-          industry: "Plumbing Services",
-          location: "Denver, CO",
-          keywords: "emergency plumber denver, leak repair denver, water heater setup",
-          hasGBP: true,
-          gbpLink: "https://google.com/maps/place/Denver"
+    if (!fs.existsSync(DATA_DIR)) {
+      fs.mkdirSync(DATA_DIR, { recursive: true });
+    }
+    if (!fs.existsSync(LEADS_FILE)) {
+      // Seed default leads for demo/admin onboarding
+      const initialLeads = [
+        {
+          id: "lead_1",
+          createdAt: new Date(Date.now() - 36 * 3600 * 1000).toISOString(),
+          status: "audit_prepared",
+          notes: "Scheduled call with owner next Tuesday at 10 AM. Interested in citation cleanup.",
+          input: {
+            planId: "starter",
+            planName: "Starter Boost",
+            businessName: "Elite Plumbing Denver",
+            contactName: "Kevin Reynolds",
+            email: "kevin@eliteplumbingdenver.com",
+            phone: "303-555-0129",
+            website: "https://eliteplumbingdenver.com",
+            hasWebsite: true,
+            industry: "Plumbing Services",
+            location: "Denver, CO",
+            keywords: "emergency plumber denver, leak repair denver, water heater setup",
+            hasGBP: true,
+            gbpLink: "https://google.com/maps/place/Denver"
+          },
+          aiAudit: {
+            overallScore: 72,
+            domainName: "eliteplumbingdenver.com",
+            niche: "Plumbing Services",
+            location: "Denver, CO",
+            timestamp: new Date(Date.now() - 36 * 3600 * 1000).toISOString(),
+            EXECUTIVE_SUMMARY: "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
+            analysis: [
+              {
+                title: "Google Business Profile optimization",
+                score: 80,
+                description: "GBP exists but is missing target Service Areas and updated photos of recent projects.",
+                recommendations: [
+                  "Add 5-10 geo-tagged project photos per week.",
+                  "Explicitly set service regions in Denver metro areas.",
+                  "Implement direct Q&A answering common leaks & costs."
+                ]
+              },
+              {
+                title: "Technical and On-Page Content Audit",
+                score: 65,
+                description: "Homepage lacks schema markup and keyword density is below 0.8% for primary local terms.",
+                recommendations: [
+                  "Inject LocalBusiness Schema.org JSON-LD layout.",
+                  "Restructure H1-H3 titles to lead with service + location tags.",
+                  "Improve page load speed by compressing high-res images."
+                ]
+              },
+              {
+                title: "Local Citations and Backlink Profile",
+                score: 70,
+                description: "NAP (Name, Address, Phone) consistency score is 75% due to an old office address listed in Yellowpages.",
+                recommendations: [
+                  "Execute active directory sync across top 50 citations.",
+                  "Build localized high-quality backlinks from Denver civic blogs."
+                ]
+              }
+            ],
+            executiveSummary: "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
+            actionPlan: [
+              "Perform local citation NAP cleanup (fix old addresses)",
+              "Deploy plumbing LocalBusiness Schema markup on homepage",
+              "Establish automated review collection funnel for new service calls",
+              "Optimize GBP keywords specifically for emergency leak repairs"
+            ]
+          }
         },
-        aiAudit: {
-          overallScore: 72,
-          domainName: "eliteplumbingdenver.com",
-          niche: "Plumbing Services",
-          location: "Denver, CO",
-          timestamp: new Date(Date.now() - 36 * 3600 * 1000).toISOString(),
-           EXECUTIVE_SUMMARY: "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
-          analysis: [
-            {
-              title: "Google Business Profile optimization",
-              score: 80,
-              description: "GBP exists but is missing target Service Areas and updated photos of recent projects.",
-              recommendations: [
-                "Add 5-10 geo-tagged project photos per week.",
-                "Explicitly set service regions in Denver metro areas.",
-                "Implement direct Q&A answering common leaks & costs."
-              ]
-            },
-            {
-              title: "Technical and On-Page Content Audit",
-              score: 65,
-              description: "Homepage lacks schema markup and keyword density is below 0.8% for primary local terms.",
-              recommendations: [
-                "Inject LocalBusiness Schema.org JSON-LD layout.",
-                "Restructure H1-H3 titles to lead with service + location tags.",
-                "Improve page load speed by compressing high-res images."
-              ]
-            },
-            {
-              title: "Local Citations and Backlink Profile",
-              score: 70,
-              description: "NAP (Name, Address, Phone) consistency score is 75% due to an old office address listed in Yellowpages.",
-              recommendations: [
-                "Execute active directory sync across top 50 citations.",
-                "Build localized high-quality backlinks from Denver civic blogs."
-              ]
-            }
-          ],
-          executiveSummary: "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
-          actionPlan: [
-            "Perform local citation NAP cleanup (fix old addresses)",
-            "Deploy plumbing LocalBusiness Schema markup on homepage",
-            "Establish automated review collection funnel for new service calls",
-            "Optimize GBP keywords specifically for emergency leak repairs"
-          ]
+        {
+          id: "lead_2",
+          createdAt: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
+          status: "new",
+          notes: "Brand new lead. Needs initial contact email. Wants a completely new single-page website built.",
+          input: {
+            planId: "single-page",
+            planName: "Single-Page Blast",
+            businessName: "Luminate Dental Care",
+            contactName: "Dr. Sarah Kim",
+            email: "contact@luminatedental.com",
+            phone: "650-555-9831",
+            website: "",
+            hasWebsite: false,
+            industry: "Cosmetic & General Dentistry",
+            location: "San Mateo, CA",
+            keywords: "dentist san mateo, teeth whitening, clear aligners nearby",
+            hasGBP: false,
+            gbpLink: ""
+          }
         }
-      },
-      {
-        id: "lead_2",
-        createdAt: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-        status: "new",
-        notes: "Brand new lead. Needs initial contact email. Wants a completely new single-page website built.",
-        input: {
-          planId: "single-page",
-          planName: "Single-Page Blast",
-          businessName: "Luminate Dental Care",
-          contactName: "Dr. Sarah Kim",
-          email: "contact@luminatedental.com",
-          phone: "650-555-9831",
-          website: "",
-          hasWebsite: false,
-          industry: "Cosmetic & General Dentistry",
-          location: "San Mateo, CA",
-          keywords: "dentist san mateo, teeth whitening, clear aligners nearby",
-          hasGBP: false,
-          gbpLink: ""
-        }
-      }
-    ];
-    fs.writeFileSync(LEADS_FILE, JSON.stringify(initialLeads, null, 2));
-  }
+      ];
+      fs.writeFileSync(LEADS_FILE, JSON.stringify(initialLeads, null, 2));
+    }
   } catch (err) {
     console.error("⚠️ Failed to initialize local database in initDb():", err);
   }
@@ -199,18 +199,23 @@ const defaultTemplates = {
   "single-page": {
     timeline: "2 - 3 Business Days to Live Sandbox",
     deliverables: [
-      "Premium Single-Page Fast Storefront Website Design",
-      "Fully Responsive & Mobile-Optimized Layout Structure",
-      "On-Page Local SEO Setup (Keywords, Heading hierarchies)",
-      "Ultra-Fast secure Cloud-Hosted Payload hosting",
-      "Secure SSL Certificate configuration & active mapping",
-      "Bespoke Domain Name Pointer Routing (Domain purchase separate)"
+      "Single-Page Website Design: Custom design tailored to your brand identity.",
+      "Full Cross-Device Responsiveness: Optimized layout for both mobile and desktop viewing.",
+      "Comprehensive Structure: Includes a Header, Footer, and 10 distinct body content components.",
+      "Ultra-Fast Secure Cloud Hosting: High-performance hosting included at no extra cost.",
+      "Secure SSL Configuration: Full SSL certificate setup for data security and trust.",
+      "LocalSurge SEO Branding: Your brand logo integrated within the LocalSurge SEO domain.",
+      "Single-Page Schema Markup: Technical SEO schema implementation to improve search visibility.",
+      "Note: Domain name registration is not included in this plan."
     ],
     actions: [
-      "Secure standard location info, target keywords, business description & graphics.",
-      "Bootstrap highly optimized sandbox layout draft & share staging address.",
-      "Gather direct customer design reviews and execute final refinements.",
-      "Activate DNS primary domains records and propagate web-wide."
+      'Submit Business Brief: Provide a short description of your business and services.',
+      'Define Visual Identity: Share preferred website theming and color palettes.',
+      'Provide Contact Details: Submit your official business address and phone number.',
+      'Social Media Links: List URLs for any existing social media profiles.',
+      'Asset Collection: Share a list or folder of images to be included in the design.',
+      'Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.',
+      'Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization.'
     ]
   },
   "starter": {
@@ -310,7 +315,7 @@ app.get("/robots.txt", (req, res) => {
   res.type("text/plain");
   const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
   res.send(
-`User-agent: *
+    `User-agent: *
 Disallow: /admin
 Disallow: /admin/
 Disallow: /admin/dashboard
@@ -391,7 +396,7 @@ app.post("/api/pdf-templates", (req, res) => {
 app.get("/api/admin/db-status", async (req, res) => {
   const supabase = await getSupabase();
   const rawUrl = process.env.SUPABASE_URL || "";
-  
+
   if (!supabase) {
     return res.json({
       configured: false,
@@ -417,10 +422,10 @@ app.get("/api/admin/db-status", async (req, res) => {
           tableExists: false,
           databaseUrl: rawUrl,
           errorType: isStaleCache ? 'cache_stale' : 'table_missing',
-          message: isStaleCache 
+          message: isStaleCache
             ? `Supabase is connected to ${rawUrl}, but has a schema cache delay (PGRST125). Even though the table is visible in your Schema Visualizer, the API gateway cannot find it yet.`
             : `Supabase is connected to ${rawUrl}, but the 'leads' table has not been created yet in the public schema.`,
-          sqlSchema: isStaleCache 
+          sqlSchema: isStaleCache
             ? `-- FOR RESOLVING STALE CACHE delay (run this in your Supabase SQL Editor):
 -- 1. Grant all necessary permissions on the leads table
 GRANT ALL ON TABLE public.leads TO postgres, anon, authenticated, service_role;
@@ -483,7 +488,7 @@ app.get("/api/leads", async (req, res) => {
         .from("leads")
         .select("*")
         .order("created_at", { ascending: false });
-      
+
       if (!error && data) {
         // Map database fields to the frontend expected lead structure
         const mappedLeads = data.map((d: any) => ({
@@ -509,7 +514,7 @@ app.get("/api/leads", async (req, res) => {
         }));
         return res.json(mappedLeads);
       }
-      
+
       if (error && error.code === '42P01') {
         console.info("ℹ️ Supabase 'leads' table is not initialized yet. Gracefully falling back to persistent local file JSON storage (all dashboard works offline/locally).");
       } else {
@@ -525,13 +530,13 @@ app.get("/api/leads", async (req, res) => {
 
 app.post("/api/leads/submit", async (req, res) => {
   const leadInput = req.body;
-  
+
   if (!leadInput.email || !leadInput.businessName || !leadInput.contactName) {
     return res.status(400).json({ error: "Missing required fields (businessName, contactName, email)" });
   }
 
   const newLeadId = "lead_" + Math.random().toString(36).substr(2, 9);
-  
+
   const newLead: any = {
     id: newLeadId,
     createdAt: new Date().toISOString(),
@@ -955,7 +960,7 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
 
 function createFallbackAudit(input: any) {
   const domain = input.website ? input.website.replace(/https?:\/\/(www\.)?/, '') : `${input.businessName.toLowerCase().replace(/\s+/g, '')}.com`;
-  
+
   return {
     overallScore: Math.floor(Math.random() * 25) + 55, // 55 - 80 range
     domainName: domain,
@@ -967,7 +972,7 @@ function createFallbackAudit(input: any) {
       {
         title: "Google Business Profile Sync",
         score: input.hasGBP ? 85 : 30,
-        description: input.hasGBP 
+        description: input.hasGBP
           ? "Profile exists but keyword categorization and direct review pipelines are under-leveraged."
           : "No active Google Business Profile identified. Setting this up is step-zero to capture high-intent 'near me' organic traffic.",
         recommendations: [
@@ -979,8 +984,8 @@ function createFallbackAudit(input: any) {
       {
         title: "On-Page Metadata and Local Semantics",
         score: input.website ? 68 : 20,
-        description: input.website 
-          ? "The domain loads fast but lacks LocalBusiness Schema markup and localized headings." 
+        description: input.website
+          ? "The domain loads fast but lacks LocalBusiness Schema markup and localized headings."
           : "No current website detected. Building a mobile-first, semantic layout containing dedicated keyword targets will instantly establish trust.",
         recommendations: [
           "Embed responsive schema structures with exact geographic geolocation coordinates.",
