@@ -543,33 +543,43 @@ export default function App() {
       planPrice = '$1,999 / month';
       estTimeline = templateConfig?.timeline || 'Weekly Milestones & Priority Direct Account Management';
       deliverables = templateConfig?.deliverables || [
-        'Everything in Starter Boost (All map rankings services included)',
-        'Interactive, rich LocalBusiness Schema Markup installations (JSON-LD)',
-        'High-authority regional niche backlinking for accelerated ranking growth',
-        '4 custom geo-targeted Local Industry Blog Articles published monthly',
-        'Bespoke multi-page expansion silo content strategy mapping',
-        'Dedicated senior Local SEO Account Representative',
-        'Bi-weekly Strategy Alignment calls and priority workflow status'
+        'Conversion-Focused Design: Unlimited pages optimized specifically for lead generation and sales.',
+        'Interactive Elements: Integration of contact forms, live chat, and booking/appointment schedulers.',
+        'Deep Content Architecture: Unlimited body components, including testimonials, case studies, and FAQ sections.',
+        'Enterprise Cloud Hosting: High-availability hosting with CDN (Content Delivery Network) for global speed.',
+        'Advanced Security Suite: SSL, WAF (Web Application Firewall), and malware protection.',
+        'Full LocalSurge SEO Suite: Competitor analysis, keyword research, and monthly ranking reports.',
+        'Advanced Schema & Rich Snippets: Implementation of Product, Review, and Event schema for rich search results.',
+        'Analytics & Tracking: Full setup of Google Analytics 4, Search Console, and conversion tracking pixels.',
+        'Brand Logo & Identity: Custom logo design and brand kit included.',
+        'Monthly Strategy Alignment calls and priority workflow status'
       ];
       actions = templateConfig?.actions || [
-        'Identify main point-of-contact for bi-weekly collaboration briefings.',
+        'Detailed Business Brief: Comprehensive overview of services, target audience, and unique value proposition.',
+        'Content Strategy: Provide draft text for all pages or request our copywriting service.',
+        'Visual Identity Package: High-resolution logos, brand guidelines, and preferred color palettes.',
+        'Local Business Data: Official address, phone number, hours of operation, and service areas.',
+        'Social Media Audit: List of active social profiles and preferred cross-linking strategy.',
+        'Media Assets: Curated list of high-quality images or authorization to use stock photography.',
+        'Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.',
+        'Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization.',
+        'Identify main point-of-contact for monthly collaboration briefings.',
         'Establish direct integration links for Google Search Console (GSC) and analytics.',
-        'Publish optimized initial geo-targeted campaign outline for content approval.',
-        'Produce robust geographic competitor rankings grid review.'
+        'Publish optimized initial geo-targeted campaign outline for content approval.'
       ];
     } else {
       planTitle = 'Custom Configuration / Enterprise Setup';
       planPrice = 'Bespoke Quote Pending Custom Formulation';
-      estTimeline = templateConfig?.timeline || 'Bespoke Schedule Based on Multi-City Scope';
+      estTimeline = templateConfig?.timeline || 'Bespoke Schedule Based on requirements';
       deliverables = templateConfig?.deliverables || [
-        'Bespoke multi-location regional strategy structuring & silos setup',
-        'Enterprise-grade multi-page location directories architecture matching 10+ cities',
-        'Custom local schema template configurations & advanced page load speed tuning',
-        'Tailored high-volume citation audits and priority Google Maps troubleshooting',
-        'Omnichannel search marketing reports for headquarters & branch partners'
+        'Finalize scope and next steps immediately after the initial call.'
       ];
       actions = templateConfig?.actions || [
         'Conduct priority 1-on-1 strategy meeting with local search director.',
+        'Submit Business Brief: Provide a short description of your business and services.',
+        'Define Visual Identity: Share preferred website theming and color palettes.',
+        'Provide Contact Details: Submit your official business address and phone number.',
+        'Social Media Links: List URLs for any existing social media profiles.',
         'Map out expansion cities, operational zip codes, and priority locations.',
         'Draft a formal, custom full-stack Scope of Work (SOW).'
       ];
