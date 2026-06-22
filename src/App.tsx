@@ -496,18 +496,23 @@ export default function App() {
       planPrice = '$0 / Free Promotion';
       estTimeline = templateConfig?.timeline || '2 - 3 Business Days to Live Sandbox';
       deliverables = templateConfig?.deliverables || [
-        'Premium Single-Page Fast Storefront Website Design',
-        'Fully Responsive & Mobile-Optimized Layout Structure',
-        'On-Page Local SEO Setup (Keywords, Heading hierarchies)',
-        'Ultra-Fast secure Cloud-Hosted Payload hosting',
-        'Secure SSL Certificate configuration & active mapping',
-        'Bespoke Domain Name Pointer Routing (Domain purchase separate)'
+        'Single-Page Website Design: Custom design tailored to your brand identity.',
+        'Full Cross-Device Responsiveness: Optimized layout for both mobile and desktop viewing.',
+        'Comprehensive Structure: Includes a Header, Footer, and 10 distinct body content components.',
+        'Ultra-Fast Secure Cloud Hosting: High-performance hosting included at no extra cost.',
+        'Secure SSL Configuration: Full SSL certificate setup for data security and trust.',
+        'LocalSurge SEO Branding: Your brand logo integrated within the LocalSurge SEO domain.',
+        'Single-Page Schema Markup: Technical SEO schema implementation to improve search visibility.',
+        'Note: Domain name registration is not included in this plan.'
       ];
       actions = templateConfig?.actions || [
-        'Secure standard location info, target keywords, business description & graphics.',
-        'Bootstrap highly optimized sandbox layout draft & share staging address.',
-        'Gather direct customer design reviews and execute final refinements.',
-        'Activate DNS primary domains records and propagate web-wide.'
+        'Submit Business Brief: Provide a short description of your business and services.',
+        'Define Visual Identity: Share preferred website theming and color palettes.',
+        'Provide Contact Details: Submit your official business address and phone number.',
+        'Social Media Links: List URLs for any existing social media profiles.',
+        'Asset Collection: Share a list or folder of images to be included in the design.',
+        'Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.',
+        'Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization.'
       ];
     } else if (planId === 'starter') {
       planTitle = 'Starter Boost Plan';
@@ -886,7 +891,7 @@ export default function App() {
               {/* Testimonials Slider */}
               <section id="testimonials-block" className="bg-[#faf9f6]/80 border-t border-b border-[#dfded4] py-16">
                 <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8">
-                  
+
                   {/* Trust Score Hub Badge Section */}
                   <div className="flex flex-col lg:flex-row items-center justify-between gap-6 p-6 sm:p-8 bg-white border border-[#dfded4] rounded-3xl mb-12 shadow-xs">
                     <div className="flex flex-col sm:flex-row items-center gap-6 text-center sm:text-left">
@@ -927,7 +932,7 @@ export default function App() {
                         <p className="font-extrabold text-[#1a1c1a]">Active Credibility Audit</p>
                         <p className="text-[10px] text-[#bc5f40] font-bold font-mono uppercase mt-0.5">As of {new Date().toLocaleDateString('en-US', { month: 'long', year: 'numeric' })}</p>
                       </div>
-                      <button 
+                      <button
                         onClick={() => {
                           setCurrentPage('contact');
                           window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -1210,10 +1215,10 @@ export default function App() {
                         setPreselectedPlan(plan);
                       }}
                       className={`bg-white border rounded-2xl p-6.5 flex flex-col justify-between transition-all hover:shadow-md relative overflow-hidden cursor-pointer ${isSelected
-                          ? 'border-[#123e35] ring-4 ring-[#123e35]/15 shadow-sm bg-[#faf9f6]/95'
-                          : plan.popular
-                            ? 'border-[#dfded4] hover:border-[#123e35]/60 shadow-xs'
-                            : 'border-[#dfded4] hover:border-[#123e35]/25 shadow-xs'
+                        ? 'border-[#123e35] ring-4 ring-[#123e35]/15 shadow-sm bg-[#faf9f6]/95'
+                        : plan.popular
+                          ? 'border-[#dfded4] hover:border-[#123e35]/60 shadow-xs'
+                          : 'border-[#dfded4] hover:border-[#123e35]/25 shadow-xs'
                         }`}
                     >
                       {isSelected && (
@@ -1274,10 +1279,10 @@ export default function App() {
                           handleSelectPlanAndNavigate(plan.id);
                         }}
                         className={`w-full py-3.5 rounded-xl text-xs font-bold uppercase tracking-wider font-mono mt-8 cursor-pointer transition-all flex items-center justify-center gap-1 ${isSelected
-                            ? 'bg-[#123e35] hover:bg-[#185246] text-white shadow-sm hover:scale-102'
-                            : plan.popular
-                              ? 'bg-[#bc5f40] hover:bg-[#cf6d4e] text-white shadow-sm hover:scale-102'
-                              : 'bg-white font-extrabold text-[#4e524f] border border-[#dfded4] hover:bg-[#faf9f6]'
+                          ? 'bg-[#123e35] hover:bg-[#185246] text-white shadow-sm hover:scale-102'
+                          : plan.popular
+                            ? 'bg-[#bc5f40] hover:bg-[#cf6d4e] text-white shadow-sm hover:scale-102'
+                            : 'bg-white font-extrabold text-[#4e524f] border border-[#dfded4] hover:bg-[#faf9f6]'
                           }`}
                       >
                         {isSelected
@@ -1310,7 +1315,7 @@ export default function App() {
                       </tr>
                     </thead>
                     <tbody className="divide-y divide-[#dfded4]/60">
-                      
+
                       {/* Section 1: Core Website Setup */}
                       <tr className="bg-[#faf9f6]/40">
                         <td colSpan={4} className="py-3 font-extrabold text-xs text-[#bc5f40] uppercase font-mono tracking-wider">Core Website Setup</td>
@@ -1559,8 +1564,8 @@ export default function App() {
                             value={cntName}
                             onChange={(e) => setCntName(e.target.value)}
                             className={`bg-[#faf9f6]/95 border rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all duration-300 ${shouldBlinkNameInput
-                                ? 'border-[#bc5f40] ring-4 ring-[#bc5f40]/25 bg-amber-50 animate-pulse'
-                                : 'border-[#dfded4]'
+                              ? 'border-[#bc5f40] ring-4 ring-[#bc5f40]/25 bg-amber-50 animate-pulse'
+                              : 'border-[#dfded4]'
                               }`}
                           />
                         </div>
