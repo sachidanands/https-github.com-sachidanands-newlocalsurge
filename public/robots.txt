@@ -1,6 +1,29 @@
 # Custom robots.txt for Local Surge SEO
 # Operational in United States & Canada
 
+# --- EXPLICIT AI CRAWLER ALLOWANCES ---
+# OpenAI (ChatGPT & SearchGPT)
+User-agent: GPTBot
+Allow: /
+
+User-agent: OAI-SearchBot
+Allow: /
+
+User-agent: ChatGPT-User
+Allow: /
+
+# Perplexity AI
+User-agent: PerplexityBot
+Allow: /
+
+# Anthropic (Claude)
+User-agent: ClaudeBot
+Allow: /
+
+# Google AI (AI Overviews/Gemini)
+User-agent: Google-Extended
+Allow: /
+
 User-agent: *
 Allow: /
 Allow: /about
