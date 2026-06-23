@@ -13,11 +13,13 @@ import LocalDirectoryTool from './components/LocalDirectoryTool';
 import CaliforniaView from './components/CaliforniaView';
 import LosAngelesSeoView from './components/LosAngelesSeoView';
 import DirectoryView from './components/DirectoryView';
+import CaseStudiesView from './components/CaseStudiesView';
 import SchemaMarkup from './components/SchemaMarkup';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import FaqSection from './components/FaqSection';
 import { BLOG_POSTS } from './data/blogData';
+import { STATE_DIRECTORY, CITY_DIRECTORY } from './data/directoryData';
 import {
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight,
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
@@ -103,6 +105,7 @@ export default function App() {
       if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/site-map') return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null };
+      if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null };
       if (cleanPath === '/california') return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null };
@@ -115,7 +118,7 @@ export default function App() {
 
       // Check dynamic state or city paths
       const parts = cleanPath.split('/').filter(Boolean);
-      const knownStates = ['california', 'texas', 'arizona', 'florida'];
+      const knownStates = ['california', ...Object.keys(STATE_DIRECTORY)];
 
       if (parts.length === 1 && knownStates.includes(parts[0])) {
         if (parts[0] === 'california') {
@@ -167,6 +170,7 @@ export default function App() {
     else if (currentPage === 'contact') path = '/contact';
     else if (currentPage === 'admin') path = '/admin/dashboard';
     else if (currentPage === 'site-map') path = '/site-map';
+    else if (currentPage === 'case-studies') path = '/case-studies';
     else if (currentPage === 'privacy-policy') path = '/privacy-policy';
     else if (currentPage === 'terms-of-service') path = '/terms-of-service';
     else if (currentPage === 'california') path = '/california';
@@ -818,7 +822,7 @@ export default function App() {
                         <span className="text-[#bc5f40]">Local Market</span>
                       </h1>
                       <p className="text-sm sm:text-base text-[#4e524f] font-medium max-w-xl leading-relaxed">
-                        Local Surge boosts your website's organic neighborhood traffic, connecting you with high-intent regional buyers. Helping 500+ local businesses scale their rankings in {new Date().getFullYear()}.
+                        As one of the best seo agencies, Local Surge SEO delivers tailored local seo services designed to dominate map packs and drive foot traffic. Helping 500+ local businesses scale their rankings in {new Date().getFullYear()}.
                       </p>
 
                       <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
@@ -1138,7 +1142,7 @@ export default function App() {
                   Why Choose Local Surge?
                 </h1>
                 <p className="text-[#4e524f] max-w-2xl mx-auto text-sm sm:text-base font-semibold">
-                  Tired of middlemen, sales padding, and outsourcing? So are we.
+                  As a premier provider of the best local seo services, Local Surge SEO eliminates client anxiety. We design high-performing local seo services tailored directly to your neighborhood search targets, without any middleman padding.
                 </p>
               </div>
 
@@ -1179,6 +1183,73 @@ export default function App() {
                     <li className="flex items-center gap-1">✔ Semantic Citation Synch</li>
                     <li className="flex items-center gap-1">✔ Mobile Touch Optimized</li>
                   </ul>
+                </div>
+              </div>
+
+              {/* Onboarding Timeline Section */}
+              <div className="mt-16 border-t border-[#dfded4] pt-12 space-y-10">
+                <div className="text-center space-y-3 max-w-2xl mx-auto">
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#bc5f40] font-mono font-bold">Frictionless Framework</span>
+                  <h3 className="text-2xl sm:text-3xl font-black font-display text-[#151716] tracking-tight">
+                    Our 30-Day Local SEO Setup & Onboarding Roadmap
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#4e524f] font-semibold leading-relaxed">
+                    Detailing our systematic local seo onboarding milestones. We configure your localized assets quickly, showing you exactly how we optimize your footprint.
+                  </p>
+                </div>
+
+                <div className="relative max-w-3xl mx-auto mt-12 pl-6 sm:pl-8 border-l-2 border-[#123e35]/30 space-y-12 text-left">
+                  {/* Step 1 */}
+                  <div className="relative">
+                    <div className="absolute -left-[35px] sm:-left-[43px] top-0 w-8 h-8 rounded-full bg-[#123e35] text-[#faf9f6] flex items-center justify-center text-xs font-bold font-mono border-4 border-[#f7f6f2] shadow-xs">
+                      01
+                    </div>
+                    <div className="space-y-2 font-sans bg-white border border-[#dfded4] p-5 rounded-2xl shadow-2xs">
+                      <h4 className="font-extrabold text-[#151716] text-sm sm:text-base">Days 1–7: NAP & Citation Integrity Audit</h4>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        We kickoff your local seo onboarding by auditing Name, Address, and Phone (NAP) consistency across 100+ citation indexes. We clean up duplicate listings and correct historical mismatches to remove downranking flags.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 2 */}
+                  <div className="relative">
+                    <div className="absolute -left-[35px] sm:-left-[43px] top-0 w-8 h-8 rounded-full bg-[#123e35] text-[#faf9f6] flex items-center justify-center text-xs font-bold font-mono border-4 border-[#f7f6f2] shadow-xs">
+                      02
+                    </div>
+                    <div className="space-y-2 font-sans bg-white border border-[#dfded4] p-5 rounded-2xl shadow-2xs">
+                      <h4 className="font-extrabold text-[#151716] text-sm sm:text-base">Days 8–14: GBP Calibration & Coordinate Binding</h4>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        We execute core Google Business Profile updates: prioritizing primary categories, loading geo-tagged media assets, and injecting localized schema coordinates to tell search crawlers exactly where you operate.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 3 */}
+                  <div className="relative">
+                    <div className="absolute -left-[35px] sm:-left-[43px] top-0 w-8 h-8 rounded-full bg-[#123e35] text-[#faf9f6] flex items-center justify-center text-xs font-bold font-mono border-4 border-[#f7f6f2] shadow-xs">
+                      03
+                    </div>
+                    <div className="space-y-2 font-sans bg-white border border-[#dfded4] p-5 rounded-2xl shadow-2xs">
+                      <h4 className="font-extrabold text-[#151716] text-base">Days 15–21: Citation Sync & Submissions</h4>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        We submit your aligned profile to tier-1 business directories and mapping index aggregators (Apple Maps, Bing Places, Yelp). This citation management phase locks in your local prominence anchors nationwide.
+                      </p>
+                    </div>
+                  </div>
+
+                  {/* Step 4 */}
+                  <div className="relative">
+                    <div className="absolute -left-[35px] sm:-left-[43px] top-0 w-8 h-8 rounded-full bg-[#bc5f40] text-[#faf9f6] flex items-center justify-center text-xs font-bold font-mono border-4 border-[#f7f6f2] shadow-xs">
+                      04
+                    </div>
+                    <div className="space-y-2 font-sans bg-white border border-[#dfded4] p-5 rounded-2xl shadow-2xs">
+                      <h4 className="font-extrabold text-[#151716] text-base">Days 22–30: Review Velocity Loops & Active Campaign Setup</h4>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        We set up SMS and post-transaction feedback workflows to consistently boost review velocity. We deliver your finalized local listing audit roadmap and launch your ongoing localized search campaign.
+                      </p>
+                    </div>
+                  </div>
                 </div>
               </div>
             </motion.div>
@@ -1828,6 +1899,22 @@ export default function App() {
                 onGetFreeStrategy={handleGetFreeStrategy}
                 setActiveStateSlug={setActiveStateSlug}
                 setActiveCitySlug={setActiveCitySlug}
+              />
+            </motion.div>
+          )}
+
+          {/* CASE STUDIES HUB */}
+          {currentPage === 'case-studies' && (
+            <motion.div
+              key="case-studies"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <CaseStudiesView 
+                setCurrentPage={setCurrentPage}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
               />
             </motion.div>
           )}

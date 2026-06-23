@@ -52,16 +52,12 @@ export default function SchemaMarkup({
     },
     'areaServed': [
       {
-        '@type': 'AdministrativeArea',
-        'name': 'San Jose, CA'
+        '@type': 'Country',
+        'name': 'United States'
       },
       {
-        '@type': 'AdministrativeArea',
-        'name': 'Los Angeles, CA'
-      },
-      {
-        '@type': 'AdministrativeArea',
-        'name': 'California'
+        '@type': 'Country',
+        'name': 'Canada'
       }
     ],
     'description': 'High-performance web design and local SEO optimization suite for contractors, dentists, plumbers, and local service providers looking to dominate regional query hierarchies.'
@@ -104,6 +100,8 @@ export default function SchemaMarkup({
       addBreadcrumb('Contact Team', '/contact');
     } else if (currentPage === 'site-map') {
       addBreadcrumb('Directory Sitemap', '/site-map');
+    } else if (currentPage === 'case-studies') {
+      addBreadcrumb('Local SEO Case Studies & Success Stories', '/case-studies');
     } else if (currentPage === 'california') {
       addBreadcrumb('California SEO Directory', '/california');
     } else if (currentPage === 'los-angeles-seo') {

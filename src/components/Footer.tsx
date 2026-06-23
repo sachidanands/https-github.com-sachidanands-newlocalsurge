@@ -39,7 +39,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   <MapPin className="w-3.5 h-3.5 text-[#bc5f40] shrink-0 mt-0.5" />
                   <div>
                     <p>Administration Base: San Jose, CA 95112</p>
-                    <p className="text-[#123e35] text-[10px] font-bold">Service Area: California & Remote Nationwide</p>
+                    <p className="text-[#123e35] text-[10px] font-bold">Service Area: United States, Canada & Remote Nationwide</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#888b88]">
@@ -62,6 +62,11 @@ export default function Footer({ setCurrentPage }: FooterProps) {
               <li>
                 <button onClick={() => setCurrentPage('local-seo')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
                   Local SEO Optimization
+                </button>
+              </li>
+              <li>
+                <button onClick={() => { setCurrentPage('case-studies'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                  Case Studies & Results
                 </button>
               </li>
               <li>

@@ -218,6 +218,168 @@ export const STATE_DIRECTORY: Record<string, StateData> = {
       { name: 'Orlando Central', tag: 'Tourism Capital', focus: 'Hospitality / Entertainment / Services', schema: 'Active ✓' },
       { name: 'Jacksonville', tag: 'Southeastern Port', focus: 'Industrial / Trades / Medical', schema: 'Active ✓' }
     ]
+  },
+  'new-york': {
+    name: 'New York',
+    code: 'NY',
+    slug: 'new-york',
+    totalBusinesses: '2.2 million',
+    activeOnline: '1.4 million',
+    missingOnline: '800,000',
+    workforcePercent: '44.5%',
+    totalEmployed: '4.1 million',
+    economicImpact: '$250 billion',
+    emoji: '🗽',
+    intro: 'New York represents one of the most competitive commercial sectors globally. To stand out in the dense metropolitan search landscape of NYC and upstate hubs like Buffalo, local businesses require hyper-localized coordinates, schema tagging, and optimized map indexes.',
+    topIndustries: [
+      { name: 'Professional, Scientific & Technical', count: '395,200' },
+      { name: 'Construction & Mechanical Services', count: '280,150' },
+      { name: 'Retail & Personal Care Services', count: '240,400' },
+      { name: 'Health Care & Social Services', count: '220,100' }
+    ],
+    compareStates: [
+      { state: 'California', count: '4.2M', width: '100%', active: false },
+      { state: 'Texas', count: '3.1M', width: '73.8%', active: false },
+      { state: 'New York', count: '2.2M', width: '52.4%', active: true },
+      { state: 'Florida', count: '2.8M', width: '66.7%', active: false },
+      { state: 'Georgia', count: '1.1M', width: '26.2%', active: false }
+    ],
+    keyStatsList: [
+      '2.2 million small businesses power the state of New York',
+      '99.8% of all New York State businesses are small businesses',
+      '4.1 million New Yorkers employed by small companies',
+      '44.5% of the total state workforce is employed in small business',
+      '$250 billion annual payroll and economic output from small firms',
+      '1.4 million NY businesses successfully selling products or services online',
+      'Professional services lead the state with 395,200 active firms',
+      'Contractors, trades, and repair agencies count 280,150 active listings',
+      '800,000 New York businesses currently lack optimized maps setups'
+    ],
+    realityPoints: [
+      'NYC represents one of the most competitive HVAC/solar/legal SEO markets globally',
+      'Extremely dense spatial coordinates require very narrow, exact search radii targeting',
+      'Aggressive organic competition from national brands and local agencies',
+      'Average 48 direct local competitors per plumbing or contracting query'
+    ],
+    advantagePoints: [
+      '800,050 NY businesses still lack correct search engine configurations',
+      'Dynamic local schema markup outranks expensive national advertising bids',
+      'Multi-city coordinate mapping secures search dominance even without local offices',
+      'Coordinated local business listings build early authority shields'
+    ],
+    hubs: [
+      { name: 'NYC Metro', tag: 'Global Capital', focus: 'Finance / Corporate / Medical', schema: 'Active ✓' },
+      { name: 'Capital District', tag: 'State Center', focus: 'Legal / Real Estate / Services', schema: 'Active ✓' },
+      { name: 'Western New York', tag: 'Industrial Hub', focus: 'Contractors / Residential Trades', schema: 'Active ✓' }
+    ]
+  },
+  'ontario': {
+    name: 'Ontario',
+    code: 'ON',
+    slug: 'ontario',
+    totalBusinesses: '480,000',
+    activeOnline: '310,000',
+    missingOnline: '170,000',
+    workforcePercent: '42.1%',
+    totalEmployed: '2.4 million',
+    economicImpact: '$165 billion',
+    emoji: '🍁',
+    intro: 'Ontario leads the Canadian business ecosystem. From the high-density metropolis of Toronto to the capital region of Ottawa, local search engine optimization is the single highest-ROI channel for Canadian trades, clinics, and professional firms looking to beat national franchises.',
+    topIndustries: [
+      { name: 'Professional & Scientific services', count: '85,400' },
+      { name: 'Construction & Contractor Trades', count: '74,100' },
+      { name: 'Retail Trade & Hospitality', count: '65,200' },
+      { name: 'Healthcare & Wellness Clinics', count: '58,400' }
+    ],
+    compareStates: [
+      { state: 'Ontario', count: '480K', width: '100%', active: true },
+      { state: 'Quebec', count: '290K', width: '60.4%', active: false },
+      { state: 'British Columbia', count: '190K', width: '39.5%', active: false },
+      { state: 'Alberta', count: '175K', width: '36.4%', active: false },
+      { state: 'Manitoba', count: '40K', width: '8.3%', active: false }
+    ],
+    keyStatsList: [
+      '480,000 active small businesses call Ontario home',
+      '99.2% of Ontario employers operate as small enterprises',
+      '2.4 million Ontarians actively employed by local small businesses',
+      '42.1% of the total Ontario workforce supported by small companies',
+      '$165 billion in annual payroll and economic output from small firms',
+      '310,000 ON businesses successfully configured for online leads',
+      'Professional services lead the province with 85,400 listings',
+      'Contractors, HVAC, and plumbers represent 74,100 registered businesses',
+      '170,000 Ontario businesses still operate with unclaimed or empty local listings'
+    ],
+    realityPoints: [
+      'Toronto metro represents one of the most competitive markets in Canada',
+      'High search engine results pages inflation due to dense urban environments',
+      'National booking sites and directories dominate generic key terms',
+      'Average 45 direct local competitors vying for organic visual space in major metros'
+    ],
+    advantagePoints: [
+      '170,000 Ontario businesses lack correct schema scripts or claimed GBP',
+      'Hyper-localized coordinate targeting outranks expensive national optimization bids',
+      'Sub-market indexing (GTA suburbs, Ottawa Region) isolates target audiences',
+      'Perfect citation alignment signals instant validity to crawls'
+    ],
+    hubs: [
+      { name: 'Greater Toronto Area', tag: 'GTA Core', focus: 'Finance / Corporate / Specialized Care', schema: 'Active ✓' },
+      { name: 'Ottawa Region', tag: 'National Capital', focus: 'Legal / Tech / Professional Services', schema: 'Active ✓' },
+      { name: 'Hamilton Central', tag: 'Industrial Node', focus: 'Contractors / Trades / Medical', schema: 'Active ✓' }
+    ]
+  },
+  'british-columbia': {
+    name: 'British Columbia',
+    code: 'BC',
+    slug: 'british-columbia',
+    totalBusinesses: '190,000',
+    activeOnline: '125,000',
+    missingOnline: '65,000',
+    workforcePercent: '43.0%',
+    totalEmployed: '1.1 million',
+    economicImpact: '$78 billion',
+    emoji: '🌲',
+    intro: 'British Columbia’s business landscape is booming, led by rapid growth in Metro Vancouver and Vancouver Island. Local SEO is the single highest-ROI channel for BC trades, clinics, and professional firms looking to beat national directories in local search grids.',
+    topIndustries: [
+      { name: 'Professional services', count: '38,400' },
+      { name: 'Construction & Mechanical Trades', count: '34,120' },
+      { name: 'Real Estate & Leasing', count: '28,100' },
+      { name: 'Healthcare & Wellness', count: '25,230' }
+    ],
+    compareStates: [
+      { state: 'Ontario', count: '480K', width: '100%', active: false },
+      { state: 'Quebec', count: '290K', width: '60.4%', active: false },
+      { state: 'British Columbia', count: '190K', width: '39.5%', active: true },
+      { state: 'Alberta', count: '175K', width: '36.4%', active: false },
+      { state: 'Manitoba', count: '40K', width: '8.3%', active: false }
+    ],
+    keyStatsList: [
+      '190,000 active small businesses call British Columbia home',
+      '99.4% of BC employers operate as small enterprises',
+      '1.1 million British Columbians actively employed by local small businesses',
+      '43.0% of the total BC workforce supported by small companies',
+      '$78 billion in annual payroll and economic output from small firms',
+      '125,000 BC businesses successfully configured for online leads',
+      'Professional services lead the province with 38,400 listings',
+      'Contractors, HVAC, and plumbers represent 34,120 registered businesses',
+      '65,000 BC businesses still operate with unclaimed or empty local listings'
+    ],
+    realityPoints: [
+      'Metro Vancouver represents a highly saturated and competitive local search market',
+      'High cost-per-click averages across key trades (plumbing, roofing, HVAC)',
+      'High mobile search dependency among local urban residents',
+      'Average 38 local competitors vying directly for page 1 visibility per service niche'
+    ],
+    advantagePoints: [
+      '65,000 BC businesses operate with unoptimized or empty local listings',
+      'Strategic citation arrays on localized BC directories build organic authority shields',
+      'Dynamic local schema markup outranks expensive national advertising bids',
+      'Sub-market indexing (Downtown Vancouver, Victoria, Richmond) captures high intent'
+    ],
+    hubs: [
+      { name: 'Metro Vancouver', tag: 'Pacific Core', focus: 'Professional / Medical / Retail', schema: 'Active ✓' },
+      { name: 'Vancouver Island', tag: 'Capital District', focus: 'Hospitality / Professional / Marine', schema: 'Active ✓' },
+      { name: 'Thompson Okanagan', tag: 'Interior Hub', focus: 'Contractors / Trades / Agriculture', schema: 'Active ✓' }
+    ]
   }
 };
 
@@ -1263,6 +1425,275 @@ export const CITY_DIRECTORY: Record<string, CityData> = {
       { name: 'Grand Central District', tag: 'Creative Node', focus: 'Hospitality / Professional / Boutiques', schema: 'Active ✓' },
       { name: 'Snell Isle', tag: 'Affluent Suburb', focus: 'Real Estate / Medical / Wellness', schema: 'Active ✓' },
       { name: 'Old Northeast', tag: 'Historic District', focus: 'Dental / Wealth / Specialized Care', schema: 'Active ✓' }
+    ]
+  },
+  'new-york-city-seo': {
+    name: 'New York City SEO',
+    slug: 'new-york-city-seo',
+    stateSlug: 'new-york',
+    stateName: 'New York',
+    stateCode: 'NY',
+    population: '8.4 million',
+    businessCount: '220,000',
+    revenue: '$390 billion',
+    digitalOpportunity: '62,000',
+    emoji: '🗽',
+    intro: 'New York City is the ultimate local battlefield. With hyper-segmented boroughs from Manhattan to Brooklyn, local map optimization is highly local—a contractor in Queens won\'t rank in Soho unless coordinates and citations are aligned perfectly.',
+    compareMetrics: [
+      { metric: 'Annual Commerce', count: '$390B', width: '100%', active: true, desc: 'Digital commerce of the local NYC market' },
+      { metric: 'Metro Population', count: '8.4M', width: '80%', active: false, desc: 'Active consumers in the city limits' },
+      { metric: 'Small Businesses', count: '220k', width: '60%', active: false, desc: 'Registered small businesses in NYC' },
+      { metric: 'Digital Opportunity', count: '62k', width: '35%', active: false, desc: 'NYC firms lacking map ranking setups' }
+    ],
+    keyStatsList: [
+      '220,000 small businesses power the NYC economy',
+      'NYC metro handles over $390 billion in annual small business transactions',
+      '8.4 million residents use local maps daily to discover home service trades and healthcare',
+      'Professional services and legal practitioners: 48,500 active listings',
+      'HVAC, roofing, plumbing, and general contracting: 32,400 registered enterprises',
+      '62,000 NYC businesses are missing from the Google Local 3-Pack'
+    ],
+    realityPoints: [
+      'Extreme competitive density with narrow search coordinates in the map pack',
+      'Startups and agencies inflating cost-per-click averages on search listings',
+      'High mobile local query velocity from residents navigating on foot',
+      'Frequent directory spam with keyword-stuffed fake locations'
+    ],
+    advantagePoints: [
+      '62,000 NYC companies have outdated or non-optimized Google Map profiles',
+      'Bespoke neighborhood schema markers bypass national search boundaries',
+      'Local coordinate targeting outranks expensive national advertising bids',
+      'Perfect citation alignment signals instant validity to crawls'
+    ],
+    neighborhoods: [
+      { name: 'Manhattan Core', tag: 'Business Center', focus: 'Corporate / Medical / Legal', schema: 'Active ✓' },
+      { name: 'Brooklyn Williamsburg', tag: 'Aesthetic Node', focus: 'Boutiques / Hospitality / Agencies', schema: 'Active ✓' },
+      { name: 'Queens Astoria', tag: 'Residential Suburb', focus: 'Home Services / Contractors / Retail', schema: 'Active ✓' },
+      { name: 'SoHo / Tribeca', tag: 'Luxury Corridor', focus: 'Wellness / Boutiques / Professional', schema: 'Active ✓' }
+    ]
+  },
+  'buffalo-seo': {
+    name: 'Buffalo SEO',
+    slug: 'buffalo-seo',
+    stateSlug: 'new-york',
+    stateName: 'New York',
+    stateCode: 'NY',
+    population: '275,000',
+    businessCount: '19,000',
+    revenue: '$22 billion',
+    digitalOpportunity: '5,800',
+    emoji: '🦬',
+    intro: 'Buffalo is a high-growth industrial and trade hub in Upstate New York. Local contractors, emergency services, and wellness clinics use localized citations to capture surrounding traffic in Amherst, Cheektowaga, and Niagara Falls.',
+    compareMetrics: [
+      { metric: 'Market Commerce', count: '$22B', width: '100%', active: true, desc: 'Total yearly commerce in the Buffalo market' },
+      { metric: 'City Population', count: '275k', width: '70%', active: false, desc: 'Active residents in the municipal Buffalo layout' },
+      { metric: 'Active Businesses', count: '19k', width: '53%', active: false, desc: 'Registered small businesses operating inside Buffalo' },
+      { metric: 'Digital Opportunity', count: '5.8k', width: '31%', active: false, desc: 'Firms currently lacking professional maps indexing' }
+    ],
+    keyStatsList: [
+      '19,000 independent small companies drive the Buffalo marketplace',
+      'Buffalo small business sectors process over $22 billion in commerce',
+      '275,000 residents look to local maps for home services, medical, and legal needs',
+      'Construction, electrical, and plumbing repair represent 4,800 businesses',
+      '5,800 local active listings operate without verified geographic Schema'
+    ],
+    realityPoints: [
+      'Strong local pride makes national brands perform poorly without local SEO',
+      'HVAC and plumbing trades face extreme competition during cold winter spikes',
+      'Suburbs like Amherst pull organic queries away from downtown spots',
+      'Average 32 direct local competitors per trade business listing'
+    ],
+    advantagePoints: [
+      '5,800 local businesses operate with basic, unverified listings',
+      'Dynamic local schema markup outranks expensive national advertising bids',
+      'Neighborhood nodes isolate high-value northern properties',
+      'Coordinated local business listings build early authority shields'
+    ],
+    neighborhoods: [
+      { name: 'Allentown', tag: 'Aesthetic Node', focus: 'Retail / Restaurants / Professional', schema: 'Active ✓' },
+      { name: 'Elmwood Village', tag: 'Luxury Corridor', focus: 'Boutiques / Wellness / Professional', schema: 'Active ✓' },
+      { name: 'North Buffalo', tag: 'Residential Suburb', focus: 'Home Services / Contractors / Retail', schema: 'Active ✓' },
+      { name: 'Downtown Buffalo', tag: 'Corporate Core', focus: 'Legal / Real Estate / Professional', schema: 'Active ✓' }
+    ]
+  },
+  'toronto-seo': {
+    name: 'Toronto SEO',
+    slug: 'toronto-seo',
+    stateSlug: 'ontario',
+    stateName: 'Ontario',
+    stateCode: 'ON',
+    population: '2.9 million',
+    businessCount: '84,000',
+    revenue: '$110 billion',
+    digitalOpportunity: '24,500',
+    emoji: '🍁',
+    intro: 'Toronto is the commercial heart of Canada. To stand out inside the Google Local 3-Pack and outrank national lead directories, professional practices and home service contractors require coordinate networks, citation synchronization, and structured JSON-LD schemas.',
+    compareMetrics: [
+      { metric: 'GTA Commerce', count: '$110B', width: '100%', active: true, desc: 'Direct market transaction flow in Toronto proper' },
+      { metric: 'City Population', count: '2.9M', width: '85%', active: false, desc: 'Active consumers using search engines in the GTA' },
+      { metric: 'Small Businesses', count: '84k', width: '60%', active: false, desc: 'Registered small businesses in Toronto' },
+      { metric: 'Digital Opportunity', count: '24.5k', width: '30%', active: false, desc: 'Toronto companies needing map alignment help' }
+    ],
+    keyStatsList: [
+      '84,000 small companies navigate the Toronto marketplace',
+      'Toronto small business operations contribute $110 billion to the economy',
+      '2.9 million residents looking on search engines for trades and professionals',
+      'Professional, financial, and legal services: 22,500 active listings',
+      'HVAC, plumbing, electrical, and general contracting: 16,800 active firms',
+      '24,500 local firms are currently invisible in Google Maps Local Pack'
+    ],
+    realityPoints: [
+      'Massive city sizing makes GTA-wide organic rankings nearly impossible',
+      'Highly saturated search results pages in home contracting and dentistry',
+      'Elite competitive environment with high technological expectations from users',
+      'Average 42 direct local competitors competing for page 1 visibility'
+    ],
+    advantagePoints: [
+      '24,500 businesses operate with basic, unverified map listings',
+      'Localized neighborhood nodes (The Annex, Liberty Village) isolate target audiences',
+      'Custom latitude/longitude clusters capture close-proximity search queries',
+      'Bespoke schema scripts signal instant clarity to search index bots'
+    ],
+    neighborhoods: [
+      { name: 'Financial District', tag: 'Corporate Core', focus: 'Legal / Finance / Real Estate', schema: 'Active ✓' },
+      { name: 'Liberty Village', tag: 'Tech Hub', focus: 'Agencies / Medical / Professional', schema: 'Active ✓' },
+      { name: 'The Annex', tag: 'Cultural Center', focus: 'Retail / Restaurants / Services', schema: 'Active ✓' },
+      { name: 'North York Suburbs', tag: 'Expanding Suburb', focus: 'Contractors / Home Services', schema: 'Active ✓' }
+    ]
+  },
+  'ottawa-seo': {
+    name: 'Ottawa SEO',
+    slug: 'ottawa-seo',
+    stateSlug: 'ontario',
+    stateName: 'Ontario',
+    stateCode: 'ON',
+    population: '1.0 million',
+    businessCount: '28,000',
+    revenue: '$35 billion',
+    digitalOpportunity: '8,400',
+    emoji: '🏛️',
+    intro: 'Ottawa is Canada’s political capital. Local service providers, technology consultants, and medical practitioners use dynamic local search profiles to capture regional market share across Nepean, Kanata, and Orleans.',
+    compareMetrics: [
+      { metric: 'Market Revenue', count: '$35B', width: '100%', active: true, desc: 'Total yearly commerce in the Ottawa market' },
+      { metric: 'City Population', count: '1.0M', width: '75%', active: false, desc: 'Active residents in the Ottawa municipal layout' },
+      { metric: 'Active Businesses', count: '28k', width: '55%', active: false, desc: 'Registered small businesses operating inside Ottawa' },
+      { metric: 'Digital Opportunity', count: '8.4k', width: '30%', active: false, desc: 'Ottawa businesses lacking professional map profiles' }
+    ],
+    keyStatsList: [
+      '28,000 independent small companies run the Ottawa marketplace',
+      'Ottawa small business sectors generate over $35 billion in commerce',
+      '1.0 million residents search daily for home, retail, and medical care',
+      'Professional services and consulting lead with 7,400 active listings',
+      'General contractors, HVAC, and plumbers represent 5,800 registered businesses',
+      '8,400 local active listings operate without verified geographic Schema'
+    ],
+    realityPoints: [
+      'Bilingual search behaviors (English & French) require segmented keyword planning',
+      'Wide regional sprawl makes single-location SEO hard to scale across Kanata/Orleans',
+      'Crowded directories with national brands using fake local listings',
+      'Average 34 direct local competitors per trade business listing'
+    ],
+    advantagePoints: [
+      '8,400 Ottawa businesses operate with basic, unverified listings',
+      'Multi-suburb targeting structures capture Kanata and Orleans search volumes',
+      'Custom coordinates place reviews ahead of distant competitors',
+      'JSON-LD schemas explain exact service Delivery parameters cleanly'
+    ],
+    neighborhoods: [
+      { name: 'ByWard Market', tag: 'Commercial Core', focus: 'Retail / Professional Services / Restaurants', schema: 'Active ✓' },
+      { name: 'Glebe', tag: 'Luxury Corridor', focus: 'Boutiques / Wellness / Professional', schema: 'Active ✓' },
+      { name: 'Kanata Tech', tag: 'Silicon Valley North', focus: 'Clinics / Dental / Real Estate', schema: 'Active ✓' },
+      { name: 'Orleans East', tag: 'Residential Suburb', focus: 'Home Services / Contractors / Retail', schema: 'Active ✓' }
+    ]
+  },
+  'vancouver-seo': {
+    name: 'Vancouver SEO',
+    slug: 'vancouver-seo',
+    stateSlug: 'british-columbia',
+    stateName: 'British Columbia',
+    stateCode: 'BC',
+    population: '675,000',
+    businessCount: '32,000',
+    revenue: '$45 billion',
+    digitalOpportunity: '9,200',
+    emoji: '🌲',
+    intro: 'Vancouver features a highly competitive, tech-forward business environment. To stand out in Google\'s Local 3-Pack across the downtown peninsula and surrounding municipalities like Burnaby and Richmond, brands require advanced lat/long coordinate clusters and structured schema blocks.',
+    compareMetrics: [
+      { metric: 'Annual Commerce', count: '$45B', width: '100%', active: true, desc: 'Commerce throughput of Vancouver small businesses' },
+      { metric: 'City Population', count: '675k', width: '70%', active: false, desc: 'Estimated consumers in Vancouver proper' },
+      { metric: 'Small Businesses', count: '32k', width: '53%', active: false, desc: 'Registered small businesses in Vancouver' },
+      { metric: 'Digital Opportunity', count: '9.2k', width: '29%', active: false, desc: 'Vancouver businesses missing verified Maps setups' }
+    ],
+    keyStatsList: [
+      '32,000 small companies form Vancouver’s business landscape',
+      'Vancouver small business sectors generate over $45 billion in transactions',
+      '675,000 residents and visitors rely on local maps to discover trades and professionals',
+      'Professional services and consulting lead the city with 9,500 active listings',
+      'Construction, HVAC, and renovation trades: 6,800 registered listings',
+      '9,200 local active listings operate without verified geographic Schema'
+    ],
+    realityPoints: [
+      'Extreme geographic boundaries (waterways, bridges) isolate map pack search results',
+      'Startups and tech agencies inflating cost-per-click averages on search terms',
+      'Highly dense mapping parameters with narrow search radii in the local map pack',
+      'Average 38 local competitors vying directly for page 1 visibility per service niche'
+    ],
+    advantagePoints: [
+      '9,200 Vancouver businesses operate with basic, unverified listings',
+      'Dynamic local schema markup outranks expensive national advertising bids',
+      'Neighborhood nodes isolate high-value properties in Kitsilano & Yaletown',
+      'Perfect citation alignment signals instant validity to crawls'
+    ],
+    neighborhoods: [
+      { name: 'Yaletown', tag: 'Luxury Core', focus: 'Retail / Restaurants / Boutiques', schema: 'Active ✓' },
+      { name: 'Kitsilano', tag: 'Aesthetic Node', focus: 'Wellness / Boutiques / Medical', schema: 'Active ✓' },
+      { name: 'Downtown Vancouver', tag: 'Corporate Core', focus: 'Legal / Real Estate / Professional', schema: 'Active ✓' },
+      { name: 'Richmond / South', tag: 'Expanding Suburb', focus: 'Contractors / Home Services', schema: 'Active ✓' }
+    ]
+  },
+  'victoria-seo': {
+    name: 'Victoria SEO',
+    slug: 'victoria-seo',
+    stateSlug: 'british-columbia',
+    stateName: 'British Columbia',
+    stateCode: 'BC',
+    population: '90,000',
+    businessCount: '12,000',
+    revenue: '$14 billion',
+    digitalOpportunity: '3,800',
+    emoji: '⛵',
+    intro: 'Victoria is the capital of British Columbia, located on Vancouver Island. To capture high-intent searches from the Inner Harbour to Oak Bay, local brands must secure dominant positioning in Google’s Local 3-Pack through clean citations and localized schemas.',
+    compareMetrics: [
+      { metric: 'Market Commerce', count: '$14B', width: '100%', active: true, desc: 'Total business trade within Victoria limits' },
+      { metric: 'City Population', count: '90k', width: '60%', active: false, desc: 'Active residents in the municipal Victoria layout' },
+      { metric: 'Registered Businesses', count: '12k', width: '50%', active: false, desc: 'Active small businesses and independent operators' },
+      { metric: 'Digital Opportunity', count: '3.8k', width: '31%', active: false, desc: 'Entities yet to optimize for mobile search map packs' }
+    ],
+    keyStatsList: [
+      '12,000 small companies call the Victoria capital region home',
+      'Victoria small business operations contribute $14 billion to the economy',
+      '90,000 residents and millions of seasonal visitors rely on maps daily',
+      'Tourism, hospitality, and dining represent 3,200 registered firms',
+      'Contractors, trades, and home repairs: 2,400 active listings',
+      '3,800 local services still lack proper citation setups'
+    ],
+    realityPoints: [
+      'Isolated geographic island borders make regional local authority highly specific',
+      'Strong local pride makes national brands perform poorly without local SEO',
+      'High seasonal tourist shifts require dynamic Google Business Profile updates',
+      'Average 28 direct local competitors competing for page 1 visibility'
+    ],
+    advantagePoints: [
+      '3,800 Victoria businesses operate with basic, unverified listings',
+      'Hyper-localized coordinate targeting outranks expensive national optimization bids',
+      'Neighborhood nodes isolate high-value Oak Bay and Inner Harbour properties',
+      'Perfect citation alignment signals instant validity to crawls'
+    ],
+    neighborhoods: [
+      { name: 'Inner Harbour', tag: 'Tourism Core', focus: 'Hospitality / Professional / Retail', schema: 'Active ✓' },
+      { name: 'Oak Bay', tag: 'Luxury Corridor', focus: 'Boutiques / Wellness / Professional', schema: 'Active ✓' },
+      { name: 'Downtown Victoria', tag: 'Corporate Core', focus: 'Legal / Real Estate / Professional', schema: 'Active ✓' },
+      { name: 'Saanich Suburbs', tag: 'Expanding Suburb', focus: 'Contractors / Home Services', schema: 'Active ✓' }
     ]
   }
 };
