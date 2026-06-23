@@ -10,6 +10,10 @@
   },
   "routes": [
     {
+      "src": "/sitemap.xml",
+      "dest": "/api/index.ts"
+    },
+    {
       "src": "/api/(.*)",
       "dest": "/api/index.ts"
     },
