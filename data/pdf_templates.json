@@ -1,0 +1,90 @@
+{
+  "single-page": {
+    "timeline": "2 - 3 Business Days to Live Sandbox",
+    "deliverables": [
+      "Single-Page Website Design: Custom design tailored to your brand identity.",
+      "Full Cross-Device Responsiveness: Optimized layout for both mobile and desktop viewing.",
+      "Comprehensive Structure: Includes a Header, Footer, and 10 distinct body content components.",
+      "Ultra-Fast Secure Cloud Hosting: High-performance hosting included at no extra cost.",
+      "Secure SSL Configuration: Full SSL certificate setup for data security and trust.",
+      "LocalSurge SEO Branding: Your brand logo integrated within the LocalSurge SEO domain.",
+      "Single-Page Schema Markup: Technical SEO schema implementation to improve search visibility.",
+      "Bespoke Domain Name Pointer Routing (Domain purchase separate)"
+    ],
+    "actions": [
+      "Submit Business Brief: Provide a short description of your business and services.",
+      "Define Visual Identity: Share preferred website theming and color palettes.",
+      "Provide Contact Details: Submit your official business address and phone number.",
+      "Social Media Links: List URLs for any existing social media profiles.",
+      "Asset Collection: Share a list or folder of images to be included in the design.",
+      "Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.",
+      "Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization."
+    ]
+  },
+  "starter": {
+    "timeline": "1 - 2 Weeks Core Onboarding & Sync",
+    "deliverables": [
+      "Multi-Page Website Design: Up to 10 custom pages (Home, About, Services, Contact, Blog/News).",
+      "Advanced Responsiveness: Pixel-perfect optimization for mobile, tablet, and desktop.",
+      "Expanded Content Structure: Includes Header, Footer, and up to 20 dynamic body components across all pages.",
+      "Priority Cloud Hosting: Ultra-fast secure hosting with prioritized server resources.",
+      "Premium SSL & Security: Advanced SSL configuration with daily security scans.",
+      "Local SEO Optimization: Full LocalSurge SEO integration with Google Business Profile setup assistance.",
+      "Multi-Page Schema Markup: Advanced schema for organization, local business, and article types.",
+      "Basic Content Writing: Up to 500 words of SEO-optimized copy per page."
+    ],
+    "actions": [
+      "Detailed Business Brief: Comprehensive overview of services, target audience, and unique value proposition.",
+      "Content Strategy: Provide draft text for all pages or request our copywriting service.",
+      "Visual Identity Package: High-resolution logos, brand guidelines, and preferred color palettes.",
+      "Local Business Data: Official address, phone number, hours of operation, and service areas.",
+      "Social Media Audit: List of active social profiles and preferred cross-linking strategy.",
+      "Media Assets: Curated list of high-quality images or authorization to use stock photography.",
+      "Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.",
+      "Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization."
+    ]
+  },
+  "premium": {
+    "timeline": "Weekly Milestones & Priority Direct Account Management",
+    "deliverables": [
+      "Conversion-Focused Design: Unlimited pages optimized specifically for lead generation and sales.",
+      "Interactive Elements: Integration of contact forms, live chat, and booking/appointment schedulers.",
+      "Deep Content Architecture: Unlimited body components, including testimonials, case studies, and FAQ sections.",
+      "Enterprise Cloud Hosting: High-availability hosting with CDN (Content Delivery Network) for global speed.",
+      "Advanced Security Suite: SSL, WAF (Web Application Firewall), and malware protection.",
+      "Full LocalSurge SEO Suite: Competitor analysis, keyword research, and monthly ranking reports.",
+      "Advanced Schema & Rich Snippets: Implementation of Product, Review, and Event schema for rich search results.",
+      "Analytics & Tracking: Full setup of Google Analytics 4, Search Console, and conversion tracking pixels.",
+      "Brand Logo & Identity: Custom logo design and brand kit included.",
+      "Monthly Strategy Alignment calls and priority workflow status"
+    ],
+    "actions": [
+      "Detailed Business Brief: Comprehensive overview of services, target audience, and unique value proposition.",
+      "Content Strategy: Provide draft text for all pages or request our copywriting service.",
+      "Visual Identity Package: High-resolution logos, brand guidelines, and preferred color palettes.",
+      "Local Business Data: Official address, phone number, hours of operation, and service areas.",
+      "Social Media Audit: List of active social profiles and preferred cross-linking strategy.",
+      "Media Assets: Curated list of high-quality images or authorization to use stock photography.",
+      "Domain Access: Share domain name login credentials (if you already own one) or confirm you need guidance.",
+      "Review Mockup: Once details are received, we will connect within 24 hours with a sample mockup for finalization.",
+      "Identify main point-of-contact for monthly collaboration briefings.",
+      "Establish direct integration links for Google Search Console (GSC) and analytics.",
+      "Publish optimized initial geo-targeted campaign outline for content approval."
+    ]
+  },
+  "custom": {
+    "timeline": "Bespoke Schedule Based on requirements",
+    "deliverables": [
+      "Finalize scope and next steps immediately after the initial call."
+    ],
+    "actions": [
+      "Conduct priority 1-on-1 strategy meeting with local search director.",
+      "Submit Business Brief: Provide a short description of your business and services.",
+      "Define Visual Identity: Share preferred website theming and color palettes.",
+      "Provide Contact Details: Submit your official business address and phone number.",
+      "Social Media Links: List URLs for any existing social media profiles.",
+      "Map out expansion cities, operational zip codes, and priority locations.",
+      "Draft a formal, custom full-stack Scope of Work (SOW)."
+    ]
+  }
+}

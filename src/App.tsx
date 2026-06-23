@@ -1,6 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { Page, Plan, Lead, SEOAuditResult } from './types';
-import { jsPDF } from 'jspdf';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import OnboardingWizard from './components/OnboardingWizard';
@@ -422,7 +421,8 @@ export default function App() {
     }
   };
 
-  const handleGeneratePDF = (planId: string, name: string, email: string): string => {
+  const handleGeneratePDF = async (planId: string, name: string, email: string): Promise<string> => {
+    const { jsPDF } = await import('jspdf');
     const doc = new jsPDF({
       orientation: 'portrait',
       unit: 'mm',
@@ -725,7 +725,7 @@ export default function App() {
 
     // Immediately generate and download the PDF brief, capturing the base64 output
     const selectedPlanId = cntPlan || 'custom';
-    const pdfBase64 = handleGeneratePDF(selectedPlanId, cntName, cntEmail);
+    const pdfBase64 = await handleGeneratePDF(selectedPlanId, cntName, cntEmail);
 
     setContactSuccess(true);
 
