@@ -16,6 +16,7 @@ import DirectoryView from './components/DirectoryView';
 import SchemaMarkup from './components/SchemaMarkup';
 import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
+import FaqSection from './components/FaqSection';
 import { BLOG_POSTS } from './data/blogData';
 import {
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight,
@@ -1021,6 +1022,9 @@ export default function App() {
                 </div>
               </section>
 
+              {/* FAQ Section */}
+              <FaqSection setCurrentPage={setCurrentPage} />
+
               {/* Ready to Surge CTA Section */}
               <section id="cta-block" className="max-w-5xl mx-auto px-4 sm:px-6">
                 <div className="bg-[#123e35] text-white rounded-3xl p-8 sm:p-12 relative overflow-hidden text-center space-y-6 shadow-md border border-[#0f342e]">
@@ -1442,6 +1446,9 @@ export default function App() {
                   </button>
                 </div>
               </div>
+
+              {/* FAQ Section */}
+              <FaqSection setCurrentPage={setCurrentPage} />
             </motion.div>
           )}
 

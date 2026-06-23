@@ -11,7 +11,7 @@ interface LeadDashboardProps {
   onUpdateLeads: () => void;
   pdfTemplates?: any;
   onUpdateTemplates?: () => void;
-  onGeneratePDF?: (planId: string, name: string, email: string) => string;
+  onGeneratePDF?: (planId: string, name: string, email: string) => string | Promise<string>;
   onLock?: () => void;
 }
 

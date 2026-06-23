@@ -178,34 +178,74 @@ export default function SchemaMarkup({
     const list = [
       {
         '@type': 'Question',
-        'name': 'How long does Local SEO take to render visible Google Map results?',
+        'name': 'How can I get a free website for my business?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'Typically local rankings begin shifting within 1 to 2 weeks post Google Business Profile synchronization and initial Tier-1 citation publication. Substantial local lead growth is structured over 30 to 60 days as citation networks and localized schema bindings propagate index-wide.'
+          'text': 'You can launch a free, SEO-optimized single-page website instantly with LocalSurge SEO’s "Single-Page Blast" plan. Simply click "Select Plan," fill out the brief business form, and share your details to get started immediately.'
         }
       },
       {
         '@type': 'Question',
-        'name': 'What is the core value contribution of Local Business schemas?',
+        'name': 'What information do I need to provide to build my site quickly?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'Schemas translate normal web content into structured JSON-LD payloads. This instructs search engine spiders exactly about your name, phone index, regional operating coordinates, matching services catalogs, and core boundaries without guessing.'
+          'text': 'To fast-track your website creation, please prepare the following details: - A brief description of your business. - Your physical business address. - Links to your social media profiles (if available). - Your business contact phone number. - 5 Common Questions local customers ask you. - Your preferred color theme or branding style for website. - Your desired domain name (optional).'
         }
       },
       {
         '@type': 'Question',
-        'name': 'Does the Single-Page Blast require a monthly recurring subscription?',
+        'name': 'Do I need to purchase a custom domain name?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'No, our Single-Page Blast website plan has zero upfront and recurring platform model charges. It provides an immediate premium mobile-optimized single-scroll landing sandbox designed to maximize conversions.'
+          'text': 'No, a custom domain is not required. You can utilize our free subdomain structure, such as localsurgeseo.com/your-business-name, which is perfect for establishing an immediate local presence.'
         }
       },
       {
         '@type': 'Question',
-        'name': 'How are local business citations audited and published?',
+        'name': 'Why is having a custom domain beneficial if I can use a free subdomain?',
         'acceptedAnswer': {
           '@type': 'Answer',
-          'text': 'Our staff matches historical structures looking for typos or invalid NAP profiles. Then we sync identical parameters directly with 20+ primary regional directories (Yelp, Apple Maps, YellowPages,Bing Places) ensuring perfect consistency.'
+          'text': 'In the era of AI and advanced search algorithms, a dedicated domain (e.g., yourbusiness.com) significantly strengthens your digital identity and authority. It signals trust to both customers and search engines, making it easier to rank higher for local keywords compared to a subdomain.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Can I upgrade my plan if my business grows?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Absolutely. You have the flexibility to switch from the free single-page plan to a paid plan at any time as your digital presence and needs expand.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Does the free plan support multiple pages?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'No, the free "Single-Page Blast" plan is designed specifically as a high-converting one-page website. If you require a multi-page structure, you can upgrade to a higher-tier plan.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'How often can I update the content on my free website?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'To ensure content freshness and optimal SEO performance, you are allowed to update your website content once per month under the free plan.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'What post-launch support does LocalSurge SEO provide?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'We don\'t just build the site; we help you succeed. LocalSurge SEO support includes assistance with: - Optimizing your Core Web Vitals (CWV) score for faster loading and better rankings. - Implementing Local Schema markup to help Google understand your business. - Refining your content based on local search intent and business specifics.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'What components are included in my single-page website?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Your single-page website comes with 10 essential components designed to convert visitors into customers: - Header Navigation: Easy access to key sections. - Hero Section: A compelling headline and call-to-action. - About Us: Your business story. - Why Choose Us: Your unique selling propositions. - Our Work/Portfolio: Showcase up to 10 images of your products or projects. - FAQ Section: Answers to common customer inquiries. - Footer: Essential links and copyright info. - Call to Action (CTA): Prominent buttons for customers to call you directly. - Contact Info: Clear display of phone and address. - Local SEO Tags: Hidden metadata optimized for search engines.'
         }
       }
     ];
