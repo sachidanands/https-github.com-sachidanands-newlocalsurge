@@ -254,6 +254,58 @@ export default function SchemaMarkup({
       'mainEntity': list
     };
   };
+ 
+  // Dynamic FAQ Page Schema for the Local SEO page
+  const getLocalSeoFAQSchema = () => {
+    const list = [
+      {
+        '@type': 'Question',
+        'name': 'Is SEO dead or evolving in 2026?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'No, SEO is not dead—it has transitioned into Generative Engine Optimization (GEO). Search platforms (like ChatGPT, Gemini, and Perplexity) rely on the same coordinates, structured schemas, and verified citations to answer local queries. If your structured data is missing, AI will ignore your business.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Will SEO be replaced by AI?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'AI is augmenting search behaviors, but it is not replacing the need for local rankings. Instead of links, AI provides single direct recommendations. Winning that sole recommendation requires an even stronger local authority signal, perfect citation mapping, and high review trust.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'Does local SEO still work and is it worth it?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Local SEO delivers the highest ROI of any digital channel because it targets buyers at the exact moment they require emergency assistance or specialized local services near them. Unlike temporary pay-per-click ads, local SEO builds permanent authority.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'What is the 80/20 rule of SEO?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': '80% of local SEO map pack conversions come from 20% of your optimization actions. Focus on Name-Address-Phone (NAP) alignment, matching category selections, and local structured JSON-LD schema coordination rather than vanity backlinks.'
+        }
+      },
+      {
+        '@type': 'Question',
+        'name': 'How much do local SEO services cost?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Professional local SEO services run between $500 and $2,000 monthly, depending on competitive density. Valid campaigns pay for themselves rapidly as local listings generate organic customer phone calls.'
+        }
+      }
+    ];
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': list
+    };
+  };
 
   // 5. Rich Blog Article BlogPostings Scheme
   const getBlogPostSchema = (post: BlogPost) => {
@@ -295,6 +347,10 @@ export default function SchemaMarkup({
 
     if (currentPage === 'home' || currentPage === 'why-us' || currentPage === 'seo-tool') {
       schemas.push(getFAQSchema());
+    }
+
+    if (currentPage === 'local-seo') {
+      schemas.push(getLocalSeoFAQSchema());
     }
 
     if (currentPage === 'blog' && activeArticleSlug) {
