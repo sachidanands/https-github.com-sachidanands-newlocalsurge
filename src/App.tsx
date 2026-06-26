@@ -283,6 +283,19 @@ export default function App() {
       document.head.appendChild(metaDesc);
     }
     metaDesc.setAttribute('content', description);
+
+    // Set dynamic canonical link for SEO crawler routing validation
+    const baseSiteUrl = 'https://localsurgeseo.com';
+    const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/';
+    const canonicalUrl = `${baseSiteUrl}${cleanPath}`;
+
+    let canonicalLink = document.querySelector('link[rel="canonical"]');
+    if (!canonicalLink) {
+      canonicalLink = document.createElement('link');
+      canonicalLink.setAttribute('rel', 'canonical');
+      document.head.appendChild(canonicalLink);
+    }
+    canonicalLink.setAttribute('href', canonicalUrl);
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
