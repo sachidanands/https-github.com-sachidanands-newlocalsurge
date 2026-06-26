@@ -217,7 +217,7 @@ export default function App() {
 
   // Dynamic Page Title & Meta Description Handler
   useEffect(() => {
-    let title = 'Local Surge SEO - Dynamic Onboarding & Regional Search Dominance';
+    let title = 'Local Surge SEO - Dynamic Onboarding & Search Dominance';
     let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses. Get a Free Audit.';
 
     if (currentPage === 'about') {
@@ -296,6 +296,23 @@ export default function App() {
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute('href', canonicalUrl);
+
+    // Set Open Graph tags dynamically
+    const setOgTag = (property: string, content: string) => {
+      let tag = document.querySelector(`meta[property="${property}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('property', property);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
+    setOgTag('og:title', title);
+    setOgTag('og:description', description);
+    setOgTag('og:url', canonicalUrl);
+    setOgTag('og:type', 'website');
+    setOgTag('og:image', 'https://localsurgeseo.com/assets/og-image.jpg');
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
