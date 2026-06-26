@@ -34,7 +34,7 @@ const PLANS: Plan[] = [
     name: 'Single-Page Blast',
     price: 0,
     period: 'monthly',
-    description: 'Perfect for local contractors or service specialists needing an instant, highly-optimized digital storefront.',
+    description: 'Perfect for local business owners needing a free local website or small business website free setup. A high-performance alternative to a generic free website for small business builders.',
     features: [
       'Professional Single-Page Website',
       'Mobile-Responsive Design',
@@ -1283,7 +1283,7 @@ export default function App() {
                   Transparent Pricing for Every Business
                 </h1>
                 <p className="text-[#4e524f] font-medium text-sm sm:text-base leading-relaxed">
-                  Choose the local package that matches your operational appetite. No long-term contracts. No activation locks. Cancel or shift anytime.
+                  Looking for the best free website builder for local business visibility or a custom franchise design? Choose the local package that matches your operational appetite. No long-term contracts. No activation locks.
                 </p>
 
                 {/* Billing toggle */}

@@ -135,6 +135,14 @@ const FAQS: FaqItemData[] = [
         </ul>
       </div>
     )
+  },
+  {
+    question: "Do you offer franchise website design and what is the development cost?",
+    answer: () => (
+      <p>
+        Yes, we specialize in high-performance <span className="font-bold text-[#151716]">franchise website design</span> and custom localized directories. The typical <span className="font-bold text-[#151716]">franchise website development cost</span> ranges from $5,000 to $25,000 depending on the number of locations, multi-unit search schema setups, zip code routing, and custom CRM integrations. We provide optimized <span className="font-bold text-[#151716]">website design for franchise</span> locations, allowing individual branches to scale regional map pack rankings with zero duplicate content penalties.
+      </p>
+    )
   }
 ];
 

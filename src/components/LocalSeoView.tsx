@@ -127,7 +127,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
           </p>
         </div>
 
-        <div className="grid grid-cols-1 md:grid-cols-3 gap-6 sm:gap-8">
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-4 gap-6 sm:gap-8">
           {/* Pillar 1 */}
           <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs hover:border-[#123e35] transition-colors">
             <div className="w-12 h-12 rounded-xl bg-[#123e35]/10 flex items-center justify-center text-[#123e35]">
@@ -205,6 +205,33 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               <li className="flex items-center gap-2">
                 <Check className="w-4 h-4 text-emerald-600 shrink-0" />
                 <span>Consistent Response Posting</span>
+              </li>
+            </ul>
+          </div>
+
+          {/* Pillar 4 */}
+          <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs hover:border-[#123e35] transition-colors">
+            <div className="w-12 h-12 rounded-xl bg-[#123e35]/10 flex items-center justify-center text-[#123e35]">
+              <Target className="w-6 h-6 text-[#123e35]" />
+            </div>
+            <h3 className="text-base sm:text-lg font-bold text-[#151716]">
+              Google Local Service Ads
+            </h3>
+            <p className="text-xs text-[#5c605d] font-semibold leading-relaxed">
+              Dominate paid results with zero click waste. We help you set up and optimize Google Local Service Ads to generate leads directly via verified calls while disputing invalid clicks.
+            </p>
+            <ul className="space-y-2 text-xs font-bold text-[#2d2f2d] pt-2 border-t border-[#dfded4]/60">
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Google Screened Badge Setup</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Dispute Invalid Leads Process</span>
+              </li>
+              <li className="flex items-center gap-2">
+                <Check className="w-4 h-4 text-emerald-600 shrink-0" />
+                <span>Bidding Job Types Tuning</span>
               </li>
             </ul>
           </div>
