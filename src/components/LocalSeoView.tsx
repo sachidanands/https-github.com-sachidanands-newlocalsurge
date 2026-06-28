@@ -97,7 +97,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
             Local SEO Optimization Services
           </h1>
           <p className="text-sm sm:text-base text-slate-100 font-medium max-w-2xl mx-auto leading-relaxed">
-            The neighborhood map packs capture 68% of commercial search clicks. If your business doesn&rsquo;t show in Yahoo, Google Maps, or local directories, you are losing cash-in-hand contractors leads to under-qualified alternatives.
+            Google Maps and local directories capture 68% of customers. If you are not listed, local buyers will call your competitors instead.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3.5 pt-4">
             <button
@@ -137,7 +137,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               Google Business Profile Sync
             </h3>
             <p className="text-xs text-[#5c605d] font-semibold leading-relaxed">
-              We execute meticulous listing setup: category prioritization, service territory coordinates tuning, review acquisition funnels, and high-resolution geotagged image uploads.
+              We set up your profile properly. We prioritize your categories, lock in your service areas, build review links, and post geo-tagged photos weekly.
             </p>
             <ul className="space-y-2 text-xs font-bold text-[#2d2f2d] pt-2 border-t border-[#dfded4]/60">
               <li className="flex items-center gap-2">
@@ -164,7 +164,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               Citation NAP Orchestration
             </h3>
             <p className="text-xs text-[#5c605d] font-semibold leading-relaxed">
-              Search engines examine consistency. If Yelp, Bing, Apple Maps, or Hotfrog list mismatched phone numbers, your domain is downranked. We align coordinates perfectly across 100+ indexes.
+              Search engines check for matching details. If Yelp or Apple Maps list old phone numbers, Google drops your rank. We clean up and sync your business info across 100+ local sites.
             </p>
             <ul className="space-y-2 text-xs font-bold text-[#2d2f2d] pt-2 border-t border-[#dfded4]/60">
               <li className="flex items-center gap-2">
@@ -191,7 +191,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               Review Velocity Booster
             </h3>
             <p className="text-xs text-[#5c605d] font-semibold leading-relaxed">
-              More reviews equals higher geographic reach. We install automated review-collection flows post-transaction via SMS and email, directly amplifying positive maps rank triggers.
+              More reviews mean a wider reach on maps. We set up quick review invites via SMS and email to naturally raise your prominence and boost ranking.
             </p>
             <ul className="space-y-2 text-xs font-bold text-[#2d2f2d] pt-2 border-t border-[#dfded4]/60">
               <li className="flex items-center gap-2">
@@ -218,7 +218,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               Google Local Service Ads
             </h3>
             <p className="text-xs text-[#5c605d] font-semibold leading-relaxed">
-              Dominate paid results with zero click waste. We help you set up and optimize Google Local Service Ads to generate leads directly via verified calls while disputing invalid clicks.
+              Win the top paid spots without wasting your budget. We help you set up Google Local Service Ads to get direct customer calls and easily dispute spam leads.
             </p>
             <ul className="space-y-2 text-xs font-bold text-[#2d2f2d] pt-2 border-t border-[#dfded4]/60">
               <li className="flex items-center gap-2">

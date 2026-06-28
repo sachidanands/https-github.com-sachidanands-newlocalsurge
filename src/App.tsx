@@ -907,7 +907,7 @@ export default function App() {
                       Google Maps & GBP Dominance
                     </h4>
                     <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed mt-3 font-medium">
-                      Optimize your local presence to capture customers directly. We focus on Google Business Profile configurations, NAP (Name, Address, Phone) consistency, and structured regional citations.
+                      Optimize your local listing to win more customers. We check your Name, Address, and Phone details, build local directories, and keep Google Business Profile active.
                     </p>
                   </div>
 
@@ -920,7 +920,7 @@ export default function App() {
                       Technical & On-Page Keyword Injectors
                     </h4>
                     <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed mt-3 font-medium">
-                      Improve your website content, payload latency, metadata structures, and heading levels. We lay high-context semantic schema tags so crawl bots reward you with primary top-spots.
+                      Boost website speed, clean up title tags, and improve headers. We install simple local schemas so Google's crawl bots reward you with top ranking spots.
                     </p>
                   </div>
 
@@ -933,7 +933,7 @@ export default function App() {
                       Authority Content & Strategy
                     </h4>
                     <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed mt-3 font-medium">
-                      Engage your surrounding neighbors with rich content and reviews workflows. We implement consistent localized blogging assets that establish you as the immediate community authority.
+                      Connect with nearby customers using simple guides and reviews. We help you collect customer reviews and post helpful updates that make you the community expert.
                     </p>
                   </div>
                 </div>
