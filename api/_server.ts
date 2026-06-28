@@ -8,10 +8,12 @@ dotenv.config();
 
 const app = express();
 
-// Security middleware to prevent MIME-type sniffing and clickjacking vulnerabilities
+// Security middleware to prevent MIME-type sniffing, clickjacking, and XSS vulnerabilities
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
+  res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://localsurgeseo.com; connect-src 'self' https://www.clarity.ms https://*.clarity.ms; frame-src 'self';");
+  res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
 
