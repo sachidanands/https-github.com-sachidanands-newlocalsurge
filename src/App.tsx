@@ -218,20 +218,20 @@ export default function App() {
   // Dynamic Page Title & Meta Description Handler
   useEffect(() => {
     let title = 'Local Surge SEO - Dynamic Onboarding & Search Dominance';
-    let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses. Get a Free Audit.';
+    let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses.';
 
     if (currentPage === 'about') {
       title = 'About Our Mission - Local Surge SEO';
       description = 'Learn about Local Surge SEO\'s mission to empower local contractors, dentists, and service providers to dominate regional search results.';
     } else if (currentPage === 'why-us') {
       title = 'Why Choose Local Surge SEO - Direct Search Mappings';
-      description = 'Discover the Local Surge SEO advantage: direct in-house communication, lightning-fast schema deployments, and transparent results without bloated developer fees.';
+      description = 'Discover the Local Surge SEO advantage: direct communication, rapid schema deployments, and transparent results without bloated developer fees.';
     } else if (currentPage === 'local-seo') {
       title = 'Local SEO Optimization Services - Google Maps Mappings';
-      description = 'Elevate your business prominence on Google Maps. We optimize Google Business Profiles, sync directory citations, and install professional local schema markup.';
+      description = 'Elevate your business prominence on Google Maps. We optimize Business Profiles, sync directory citations, and deploy professional local schema.';
     } else if (currentPage === 'pricing') {
       title = 'Transparent Pricing Plans - Local Surge SEO';
-      description = 'Simple and transparent pricing plans for local businesses. Choose between Single-Page Blast, Starter Boost, and Premium Surge with zero activation lock.';
+      description = 'Simple and transparent pricing for local businesses. Choose between Single-Page Blast, Starter Boost, and Premium Surge with no setup fees.';
     } else if (currentPage === 'seo-tool') {
       title = 'Free Local SEO Audit & Scan Tool - Local Surge SEO';
       description = 'Run an instant website scan. Detect LocalBusiness schema, evaluate NAP consistency, and find regional citation errors for your business.';
@@ -2029,7 +2029,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <CaseStudiesView 
+              <CaseStudiesView
                 setCurrentPage={setCurrentPage}
                 onOpenOnboarding={() => handleOpenOnboarding(null)}
               />

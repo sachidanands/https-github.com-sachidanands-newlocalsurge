@@ -35,7 +35,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 20, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800',
-    description: 'As AI Overviews, GEO (Generative Engine Optimization), and conversational voice agents take over search behaviors in June 2026, traditional "near me" keyword strategies are obsolete. Learn what signals the algorithms prioritize now.',
+    description: 'As AI Overviews, GEO (Generative Engine Optimization), and voice agents take over search, traditional "near me" keyword strategies are obsolete.',
     sections: [
       {
         type: 'paragraph',
@@ -96,7 +96,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 5, 2026',
     readTime: '5 min read',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-    description: 'Identify how local service contractors can unlock high-intent neighborhood inbound leads with simple, verified GBP optimization tricks that crush the local Pack rankings.',
+    description: 'Learn how local service contractors can unlock high-intent neighborhood leads with simple, verified GBP optimization to win Google Map Pack rankings.',
     sections: [
       {
         type: 'paragraph',
@@ -479,7 +479,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 23, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800',
-    description: 'A detailed breakdown comparing Google Map Pack visibility against traditional organic SEO ranking positions, and which one delivers the highest ROI for local service operators.',
+    description: 'A breakdown comparing Google Map Pack visibility against organic SEO, and which one delivers the highest ROI for local service area businesses.',
     sections: [
       {
         type: 'paragraph',
@@ -635,7 +635,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 25, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1618005182384-a83a8bd57fbe?auto=format&fit=crop&q=80&w=800',
-    description: 'An in-depth analysis of search behaviors in 2026, comparing traditional search engine indexing to Generative Engine Optimization (GEO) and why local intent is more resilient than ever.',
+    description: 'Analyze how local search is evolving in 2026. Compare traditional indexes to Generative Engine Optimization (GEO) and learn how to adapt your SEO.',
     sections: [
       {
         type: 'paragraph',
@@ -688,7 +688,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 24, 2026',
     readTime: '5 min read',
     image: 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-    description: 'Explore why local search and maps pack visibility continue to convert at 15%+, the impact of the 80/20 rule on localized relevance, and typical service pricing scopes.',
+    description: 'Explore why local search and maps pack visibility convert at 15%+, how the 80/20 rule optimizes relevance, and typical monthly local SEO package costs.',
     sections: [
       {
         type: 'paragraph',
@@ -794,7 +794,7 @@ export const BLOG_POSTS: BlogPost[] = [
     date: 'June 26, 2026',
     readTime: '6 min read',
     image: 'https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&q=80&w=800',
-    description: 'A comparative guide on selecting a local business website builder, reviewing free website options for small businesses, and examining franchise website design and development costs.',
+    description: 'Compare the best local business website builders, evaluate free options for small businesses, and audit franchise website design and setup costs.',
     sections: [
       {
         type: 'paragraph',
