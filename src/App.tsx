@@ -1763,6 +1763,93 @@ export default function App() {
                   )}
                 </div>
               </div>
+
+              {/* Onboarding process & FAQ section */}
+              <div className="border-t border-[#dfded4] pt-12 space-y-12 mt-12 text-left">
+                {/* Onboarding Timeline Checklist */}
+                <div className="space-y-4 max-w-3xl">
+                  <span className="text-[10px] font-bold font-mono tracking-widest text-[#bc5f40] uppercase">
+                    Onboarding & Strategy Delivery
+                  </span>
+                  <h3 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight">
+                    What Happens After You Contact Us?
+                  </h3>
+                  <p className="text-xs sm:text-sm text-[#4e524f] font-semibold leading-relaxed">
+                    We maintain a structured, results-oriented onboarding sequence to ensure that your business directories, map coordinates, and schema code get registered cleanly without data lag:
+                  </p>
+                </div>
+
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-6">
+                  <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2">
+                    <span className="text-xs font-bold text-[#bc5f40] font-mono">01. Dynamic Campaign Briefing</span>
+                    <h4 className="text-sm font-black font-display text-[#151716]">Custom Blueprint Generation</h4>
+                    <p className="text-xs text-[#4e524f] font-medium leading-relaxed">
+                      Our system immediately packages your growth brief parameters and outputs your dynamic strategy brief PDF document (which downloads automatically upon form submission).
+                    </p>
+                  </div>
+
+                  <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2">
+                    <span className="text-xs font-bold text-[#bc5f40] font-mono">02. Spatial Coordinate Audit</span>
+                    <h4 className="text-sm font-black font-display text-[#151716]">Competitive Grid Analysis</h4>
+                    <p className="text-xs text-[#4e524f] font-medium leading-relaxed">
+                      Within 24 to 48 hours, our search engine engineers map competitor keyword concentrations, review densities, and citation compliance thresholds in your operating zone.
+                    </p>
+                  </div>
+
+                  <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2">
+                    <span className="text-xs font-bold text-[#bc5f40] font-mono">03. Profile Sync & Activation</span>
+                    <h4 className="text-sm font-black font-display text-[#151716]">Kickoff & Live Deployment</h4>
+                    <p className="text-xs text-[#4e524f] font-medium leading-relaxed">
+                      We organize a strategy alignment call to confirm account listings, coordinate manager invitations to Google Business Profile, and activate your schema markup.
+                    </p>
+                  </div>
+                </div>
+
+                {/* Consultation FAQs */}
+                <div className="bg-white border border-[#dfded4] rounded-3xl p-6 sm:p-8 space-y-6">
+                  <h4 className="text-base font-black font-display text-[#151716] pb-3 border-b border-[#dfded4]/65 font-display">
+                    Frequently Asked Onboarding Questions
+                  </h4>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-x-8 gap-y-6">
+                    <div className="space-y-1.5 font-sans">
+                      <h5 className="text-xs sm:text-sm font-black text-[#151716] leading-snug">
+                        How long does the initial setup take?
+                      </h5>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        Free single-page layouts go live in a sandbox environment within 2 to 3 business days. Comprehensive Starter or Premium listings directories synchronization campaigns require 1 to 2 weeks to sync fully.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5 font-sans">
+                      <h5 className="text-xs sm:text-sm font-black text-[#151716] leading-snug">
+                        Do I need access to my domain name configuration?
+                      </h5>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        Yes, pointing your custom domain to our secure cloud servers is required to host your sandbox page. We can either execute this for you directly or provide a 1-page DNS coordinates guide.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5 font-sans">
+                      <h5 className="text-xs sm:text-sm font-black text-[#151716] leading-snug">
+                        Will I have to pay any setup or setup activation fees?
+                      </h5>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        No, we do not require any setup fees or long-term contracts. All of our local SEO plans are billed on a month-to-month subscription basis that you can cancel or change at any time.
+                      </p>
+                    </div>
+
+                    <div className="space-y-1.5 font-sans">
+                      <h5 className="text-xs sm:text-sm font-black text-[#151716] leading-snug">
+                        Can you help me set up a Google Business Profile?
+                      </h5>
+                      <p className="text-xs text-[#4e524f] leading-relaxed font-semibold">
+                        Absolutely. If your business doesn't have an active Google Maps profile, we will walk you through Google's physical verification postcard protocols and optimize your business categories.
+                      </p>
+                    </div>
+                  </div>
+                </div>
+              </div>
             </motion.div>
           )}
 

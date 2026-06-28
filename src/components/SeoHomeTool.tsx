@@ -329,6 +329,72 @@ export default function SeoHomeTool({
         </div>
       )}
 
+      {/* Explanatory content for SEO analysis tool */}
+      {!isHomePage && (
+        <div className="border-t border-[#dfded4] pt-10 text-left space-y-8 mt-6">
+          <div className="space-y-2 max-w-3xl">
+            <span className="text-[10px] font-bold font-mono tracking-widest text-[#bc5f40] uppercase">
+              Understanding Local Search Signals
+            </span>
+            <h3 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight">
+              What Our Free SEO Audit Tool Evaluates
+            </h3>
+            <p className="text-xs sm:text-sm text-[#4e524f] font-semibold leading-relaxed">
+              Google's algorithm weights spatial coordinates, review trust, and domain markup compatibility differently for local intent queries compared to standard organic web searches. Our automated crawler scans the following pillars to evaluate your regional standing:
+            </p>
+          </div>
+
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-6 pt-2">
+            <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2.5 shadow-2xs">
+              <div className="w-9 h-9 rounded-lg bg-[#123e35]/5 flex items-center justify-center text-[#123e35]">
+                <Bot className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black font-display text-[#151716]">Structured LocalBusiness Schema</h4>
+              <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                We check for the presence of microdata formats (specifically JSON-LD Organization and ProfessionalService nodes). Structured schema tells crawlers your exact coordinates, operating hours, categories, and service region matrices directly.
+              </p>
+            </div>
+
+            <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2.5 shadow-2xs">
+              <div className="w-9 h-9 rounded-lg bg-[#bc5f40]/5 flex items-center justify-center text-[#bc5f40]">
+                <ShieldCheck className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black font-display text-[#151716]">NAP Citation Integrity & Mappings</h4>
+              <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                Consistency of your Name, Address, and Phone number (NAP) across indices like Yelp, Apple Maps, and Bing is critical. Discrepancies in office suites, zip codes, or names generate duplicate node flags that dilute your authority score.
+              </p>
+            </div>
+
+            <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2.5 shadow-2xs">
+              <div className="w-9 h-9 rounded-lg bg-[#123e35]/5 flex items-center justify-center text-[#123e35]">
+                <Star className="w-5 h-5 text-[#bc5f40]" />
+              </div>
+              <h4 className="text-sm font-black font-display text-[#151716]">Review Proximity & Velocity</h4>
+              <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                Proximity determines whether you render in the Map Pack, but Review Velocity (the frequency of incoming user reviews) determines your prominence. Our tool evaluates how active your feedback streams are compared to competitor benchmarks.
+              </p>
+            </div>
+
+            <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-2.5 shadow-2xs">
+              <div className="w-9 h-9 rounded-lg bg-[#bc5f40]/5 flex items-center justify-center text-[#bc5f40]">
+                <HelpCircle className="w-5 h-5" />
+              </div>
+              <h4 className="text-sm font-black font-display text-[#151716]">Organic Prominence Anchors</h4>
+              <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                Local search queries are heavily influenced by your overall organic search visibility. We scan your website's baseline speed indices, on-page heading tags, and title relevance to ensure they support local keywords.
+              </p>
+            </div>
+          </div>
+
+          <div className="bg-[#eff4f1] border border-[#d2ded7] p-5 rounded-2xl flex items-start gap-3.5 text-xs text-[#123e35] leading-relaxed">
+            <Sparkles className="w-5 h-5 text-[#123e35] shrink-0 mt-0.5" />
+            <div>
+              <strong className="font-bold">Why Search Signals Matter:</strong> A fully optimized local presence doesn't just display your telephone number; it creates a structured trust profile that search engines use to answer conversational AI queries. Resolving technical citation gaps and deploying targeted local schema can double organic maps telephone calls.
+            </div>
+          </div>
+        </div>
+      )}
+
     </div>
   );
 }
