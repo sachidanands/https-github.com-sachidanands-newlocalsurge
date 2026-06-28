@@ -8,9 +8,10 @@ dotenv.config();
 
 const app = express();
 
-// Security middleware to prevent MIME-type sniffing vulnerabilities
+// Security middleware to prevent MIME-type sniffing and clickjacking vulnerabilities
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
+  res.setHeader("X-Frame-Options", "SAMEORIGIN");
   next();
 });
 
