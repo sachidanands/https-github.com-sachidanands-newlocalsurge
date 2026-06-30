@@ -49,6 +49,18 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                 <p className="text-[9px] text-[#888b88] italic pt-1 border-t border-dashed border-[#dfded4]">
                   * Local Surge SEO operates as a Service Area Business (SAB). We consult with our clients virtually and do not maintain a physical walk-in storefront.
                 </p>
+                <div className="pt-3 border-t border-[#dfded4] flex justify-start">
+                  <a 
+                    href="#" 
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.open('https://www.sitelock.com/verify.php?site=localsurgeseo.com','SiteLock','width=600,height=600,left=160,top=170');
+                    }}
+                    className="inline-block hover:opacity-85 transition-opacity"
+                  >
+                    <img className="h-8 w-auto img-fluid" alt="SiteLock" title="SiteLock" src="https://shield.sitelock.com/shield/localsurgeseo.com" />
+                  </a>
+                </div>
               </div>
             </div>
           </div>
