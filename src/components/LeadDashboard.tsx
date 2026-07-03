@@ -3,7 +3,8 @@ import { Lead } from '../types';
 import { 
   Users, Calendar, BarChart3, TrendingUp, Sliders, CheckSquare, Trash2, Save, 
   MessageSquare, FileText, ExternalLink, RefreshCw, Eye, Sparkles, Phone, Mail, Globe, MapPin,
-  Plus, Minus, Settings, ListChecks, Lock
+  Plus, Minus, Settings, ListChecks, Lock, Search, AlertCircle, AlertTriangle, CheckCircle2,
+  Zap, Target, ShieldCheck, TrendingDown, Activity, Link2, Bot, Smartphone, Download
 } from 'lucide-react';
 
 interface LeadDashboardProps {
@@ -29,7 +30,15 @@ export default function LeadDashboard({
   const [search, setSearch] = useState<string>('');
   
   // Tab control
-  const [activeTab, setActiveTab ] = useState<'leads' | 'pdf-customizer'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'pdf-customizer' | 'url-report'>('leads');
+
+  // URL Report Generator state
+  const [reportUrl, setReportUrl] = useState('');
+  const [reportNotes, setReportNotes] = useState('');
+  const [reportLoading, setReportLoading] = useState(false);
+  const [reportData, setReportData] = useState<any>(null);
+  const [reportError, setReportError] = useState<string | null>(null);
+  const [reportPdfGenerating, setReportPdfGenerating] = useState(false);
   
   // Note/Status updates
   const [currentNotes, setCurrentNotes] = useState<string>('');
@@ -287,7 +296,190 @@ export default function LeadDashboard({
     }, 1200);
   };
 
+  // URL Report Generator handlers
+  const handleGenerateReport = async () => {
+    if (!reportUrl.trim()) return;
+    setReportLoading(true);
+    setReportData(null);
+    setReportError(null);
+    try {
+      const res = await fetch('/api/admin/seo-report/generate', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url: reportUrl.trim(), notes: reportNotes.trim() })
+      });
+      if (!res.ok) throw new Error(`Server error: ${res.status}`);
+      const data = await res.json();
+      if (data.success && data.report) {
+        setReportData(data.report);
+      } else {
+        setReportError('Failed to generate report. Please try again.');
+      }
+    } catch (err: any) {
+      setReportError(err.message || 'An unexpected error occurred.');
+    } finally {
+      setReportLoading(false);
+    }
+  };
+
+  const handleDownloadReportPdf = async () => {
+    if (!reportData) return;
+    setReportPdfGenerating(true);
+    try {
+      const { jsPDF } = await import('jspdf');
+      const doc = new jsPDF({ orientation: 'portrait', unit: 'mm', format: 'a4' });
+      const pTeal = [18, 62, 53];
+      const aOrange = [188, 95, 64];
+      const nDark = [26, 28, 26];
+      const nLight = [136, 139, 136];
+      const red = [220, 38, 38];
+      const amber = [180, 120, 0];
+      const green = [16, 100, 70];
+
+      // Header
+      doc.setFillColor(pTeal[0], pTeal[1], pTeal[2]);
+      doc.rect(0, 0, 210, 38, 'F');
+      doc.setTextColor(255, 255, 255);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(18);
+      doc.text('LOCAL SURGE SEO', 15, 14);
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.text('Internal SEO Strategy Blueprint Report', 15, 21);
+      doc.text(`Generated: ${new Date(reportData.generatedAt).toLocaleString()}`, 15, 27);
+      doc.setFillColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.rect(0, 35, 210, 3, 'F');
+
+      // URL & Scores row
+      doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(13);
+      doc.text('SEO BLUEPRINT REPORT', 15, 50);
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(9);
+      doc.setTextColor(nLight[0], nLight[1], nLight[2]);
+      doc.text(`Website: ${reportData.websiteUrl}`, 15, 56);
+
+      // Score boxes
+      doc.setFillColor(239, 244, 241);
+      doc.rect(15, 61, 85, 14, 'F');
+      doc.rect(110, 61, 85, 14, 'F');
+      doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(9);
+      doc.text(`SEO Health Score: ${reportData.overallScore}/100`, 19, 70);
+      doc.text(`Opportunity Score: ${reportData.opportunityScore}/100`, 114, 70);
+
+      // Executive Summary
+      doc.setTextColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text('EXECUTIVE SUMMARY', 15, 83);
+      doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+      doc.setFont('Helvetica', 'normal');
+      doc.setFontSize(8.5);
+      const summaryLines = doc.splitTextToSize(reportData.executiveSummary, 180);
+      doc.text(summaryLines, 15, 89);
+
+      let y = 89 + (summaryLines.length * 5) + 6;
+
+      // Key Findings
+      doc.setTextColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text('KEY FINDINGS', 15, y);
+      y += 6;
+      reportData.keyFindings?.forEach((f: any) => {
+        const col = f.type === 'critical' ? red : f.type === 'warning' ? amber : green;
+        doc.setTextColor(col[0], col[1], col[2]);
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.text(`[${f.type.toUpperCase()}] ${f.title}`, 15, y);
+        y += 5;
+        doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+        doc.setFont('Helvetica', 'normal');
+        const detailLines = doc.splitTextToSize(f.detail, 175);
+        doc.text(detailLines, 20, y);
+        y += (detailLines.length * 4.5) + 3;
+      });
+
+      y += 3;
+
+      // Category Scores
+      doc.setTextColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text('AUDIT CATEGORIES', 15, y);
+      y += 7;
+      reportData.categories?.forEach((cat: any) => {
+        if (y > 260) { doc.addPage(); y = 20; }
+        doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(9);
+        doc.text(`${cat.name}  —  Score: ${cat.score}/100  (${cat.status.replace('-', ' ')})`, 15, y);
+        y += 5;
+        doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(8);
+        const sumLines = doc.splitTextToSize(cat.summary, 175);
+        doc.text(sumLines, 15, y);
+        y += (sumLines.length * 4) + 2;
+        cat.recommendations?.forEach((r: string) => {
+          if (y > 270) { doc.addPage(); y = 20; }
+          const rLines = doc.splitTextToSize(`→ ${r}`, 170);
+          doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+          doc.text(rLines, 20, y);
+          y += (rLines.length * 4) + 1;
+        });
+        y += 3;
+      });
+
+      // Priority Action Plan
+      if (y > 240) { doc.addPage(); y = 20; }
+      doc.setTextColor(aOrange[0], aOrange[1], aOrange[2]);
+      doc.setFont('Helvetica', 'bold');
+      doc.setFontSize(10);
+      doc.text('90-DAY PRIORITY ACTION PLAN', 15, y);
+      y += 7;
+      reportData.priorityActionPlan?.forEach((item: any) => {
+        if (y > 260) { doc.addPage(); y = 20; }
+        doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+        doc.setFont('Helvetica', 'bold');
+        doc.setFontSize(8.5);
+        doc.text(`${item.priority}. ${item.action}  [${item.impact} impact  •  ${item.timeframe}]`, 15, y);
+        y += 5;
+        doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(8);
+        const dLines = doc.splitTextToSize(item.detail, 175);
+        doc.text(dLines, 20, y);
+        y += (dLines.length * 4) + 4;
+      });
+
+      // Footer on last page
+      const pageCount = (doc as any).internal.getNumberOfPages();
+      for (let p = 1; p <= pageCount; p++) {
+        doc.setPage(p);
+        doc.setFillColor(pTeal[0], pTeal[1], pTeal[2]);
+        doc.rect(0, 287, 210, 10, 'F');
+        doc.setTextColor(255, 255, 255);
+        doc.setFont('Helvetica', 'normal');
+        doc.setFontSize(7.5);
+        doc.text('Local Surge SEO — Internal Strategy Blueprint — Confidential', 15, 293);
+        doc.text(`Page ${p} of ${pageCount}`, 190, 293, { align: 'right' });
+      }
+
+      const safeDomain = reportData.websiteUrl.replace(/https?:\/\/(www\.)?/, '').replace(/[^a-zA-Z0-9]/g, '_').slice(0, 40);
+      doc.save(`Local_Surge_Blueprint_${safeDomain}.pdf`);
+    } catch (err) {
+      console.error('PDF generation error:', err);
+    } finally {
+      setReportPdfGenerating(false);
+    }
+  };
+
   // Stats
+
   const totalLeads = leads.length;
   const newLeads = leads.filter(l => l.status === 'new').length;
   const onboardedLeads = leads.filter(l => l.status === 'onboarded').length;
@@ -551,26 +743,36 @@ NOTIFY pgrst, 'reload schema';`}
 
 
         {/* Navigation Tabs */}
-        <div className="flex border-b border-[#dfded4] pb-px gap-6 block mt-4 select-none">
+        <div className="flex border-b border-[#dfded4] pb-px gap-6 block mt-4 select-none overflow-x-auto">
           <button
             onClick={() => setActiveTab('leads')}
-            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all ${
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
               activeTab === 'leads'
                 ? 'border-[#123e35] text-[#123e35]'
                 : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
             }`}
           >
-            📋 Customer Leads List
+            📋 Customer Leads
+          </button>
+          <button
+            onClick={() => setActiveTab('url-report')}
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
+              activeTab === 'url-report'
+                ? 'border-[#bc5f40] text-[#bc5f40]'
+                : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
+            }`}
+          >
+            🔍 SEO Blueprint Generator
           </button>
           <button
             onClick={() => setActiveTab('pdf-customizer')}
-            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all ${
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
               activeTab === 'pdf-customizer'
                 ? 'border-[#123e35] text-[#123e35]'
                 : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
             }`}
           >
-            ⚙️ PDF Strategy Blueprint Customizer
+            ⚙️ PDF Template Editor
           </button>
         </div>
 
@@ -936,6 +1138,312 @@ NOTIFY pgrst, 'reload schema';`}
 
         </div>
           </>
+        ) : activeTab === 'url-report' ? (
+          // ── URL SEO Blueprint Generator Tab ──────────────────────────────────
+          <div className="space-y-6">
+
+            {/* Input Card */}
+            <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs">
+              <div className="flex items-center gap-3 mb-5">
+                <div className="w-10 h-10 rounded-xl bg-[#bc5f40]/10 flex items-center justify-center">
+                  <Search className="w-5 h-5 text-[#bc5f40]" />
+                </div>
+                <div>
+                  <h2 className="text-lg font-black text-[#151716] tracking-tight">SEO Blueprint Report Generator</h2>
+                  <p className="text-xs text-[#4e524f] font-semibold">Enter any client or prospect website URL to generate a full AI-powered SEO strategy blueprint.</p>
+                </div>
+              </div>
+
+              <div className="space-y-4">
+                <div>
+                  <label className="block text-xs font-bold text-[#151716] uppercase tracking-wider mb-1.5">Website URL *</label>
+                  <div className="flex gap-2">
+                    <div className="relative flex-1">
+                      <Globe className="absolute left-3.5 top-1/2 -translate-y-1/2 w-4 h-4 text-[#888b88]" />
+                      <input
+                        id="url-report-input"
+                        type="url"
+                        value={reportUrl}
+                        onChange={(e) => setReportUrl(e.target.value)}
+                        placeholder="https://example.com"
+                        className="w-full pl-10 pr-4 py-3 rounded-xl border border-[#dfded4] text-sm font-semibold text-[#1a1c1a] focus:outline-none focus:ring-2 focus:ring-[#bc5f40]/40 focus:border-[#bc5f40] bg-white transition-all"
+                        onKeyDown={(e) => { if (e.key === 'Enter') handleGenerateReport(); }}
+                      />
+                    </div>
+                    <button
+                      id="url-report-generate-btn"
+                      onClick={handleGenerateReport}
+                      disabled={reportLoading || !reportUrl.trim()}
+                      className="flex items-center gap-2 px-6 py-3 rounded-xl bg-[#bc5f40] hover:bg-[#a34d31] disabled:bg-[#888b88] text-white font-bold text-sm cursor-pointer transition-all shadow-xs shrink-0"
+                    >
+                      {reportLoading ? (
+                        <><RefreshCw className="w-4 h-4 animate-spin" /> Analyzing...</>
+                      ) : (
+                        <><Sparkles className="w-4 h-4" /> Generate Report</>
+                      )}
+                    </button>
+                  </div>
+                </div>
+
+                <div>
+                  <label className="block text-xs font-bold text-[#151716] uppercase tracking-wider mb-1.5">Admin Notes / Context <span className="text-[#888b88] font-normal normal-case">(optional)</span></label>
+                  <input
+                    type="text"
+                    value={reportNotes}
+                    onChange={(e) => setReportNotes(e.target.value)}
+                    placeholder="e.g. Plumbing company in San Jose, CA — looking to rank locally..."
+                    className="w-full px-4 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#bc5f40] bg-white"
+                  />
+                </div>
+              </div>
+
+              {reportError && (
+                <div className="mt-4 flex items-center gap-2 text-xs text-red-700 bg-red-50 border border-red-200 rounded-xl px-4 py-3">
+                  <AlertCircle className="w-4 h-4 shrink-0" />
+                  {reportError}
+                </div>
+              )}
+
+              {reportLoading && (
+                <div className="mt-6 space-y-3">
+                  <div className="flex items-center gap-3 text-xs text-[#4e524f] font-semibold">
+                    <RefreshCw className="w-4 h-4 animate-spin text-[#bc5f40]" />
+                    <span>Gemini AI is analyzing the site... This takes 15–30 seconds.</span>
+                  </div>
+                  <div className="grid grid-cols-4 gap-2">
+                    {['Technical SEO', 'Local Signals', 'Content Quality', 'Schema & Speed', 'Backlinks', 'GEO/AI', 'Mobile', 'Competitors'].map((label, i) => (
+                      <div key={i} className="bg-[#faf9f6] border border-[#dfded4] rounded-lg px-2.5 py-2 text-center">
+                        <div className="w-4 h-4 rounded-full bg-[#bc5f40]/20 mx-auto mb-1 animate-pulse" style={{ animationDelay: `${i * 150}ms` }} />
+                        <p className="text-[9px] font-bold text-[#888b88] font-mono">{label}</p>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+              )}
+            </div>
+
+            {/* Report Output */}
+            {reportData && !reportLoading && (
+              <div id="seo-report-output" className="space-y-5">
+
+                {/* Report Header */}
+                <div className="bg-[#123e35] rounded-2xl p-6 text-white relative overflow-hidden">
+                  <div className="absolute top-0 right-0 w-64 h-64 bg-white/5 rounded-full -translate-y-1/2 translate-x-1/3 pointer-events-none" />
+                  <div className="relative flex flex-col md:flex-row md:items-center justify-between gap-4">
+                    <div className="space-y-1">
+                      <p className="text-[10px] font-mono tracking-widest text-[#dfded4]/70 uppercase">Local Surge SEO — Internal Strategy Blueprint</p>
+                      <h3 className="text-xl font-black tracking-tight leading-tight">{reportData.websiteUrl}</h3>
+                      <p className="text-xs text-[#dfded4]/80 font-mono">
+                        Generated: {new Date(reportData.generatedAt).toLocaleString()}
+                      </p>
+                    </div>
+                    <div className="flex items-center gap-6 shrink-0">
+                      {/* Overall Score Ring */}
+                      <div className="text-center">
+                        <div className="relative w-20 h-20">
+                          <svg viewBox="0 0 80 80" className="w-20 h-20 -rotate-90">
+                            <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                            <circle
+                              cx="40" cy="40" r="34" fill="none"
+                              stroke={reportData.overallScore >= 70 ? '#10b981' : reportData.overallScore >= 50 ? '#f59e0b' : '#ef4444'}
+                              strokeWidth="8"
+                              strokeDasharray={`${(reportData.overallScore / 100) * 213.6} 213.6`}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-xl font-black">{reportData.overallScore}</span>
+                            <span className="text-[9px] font-mono text-white/60">/ 100</span>
+                          </div>
+                        </div>
+                        <p className="text-[10px] font-bold text-white/70 mt-1 font-mono">SEO HEALTH</p>
+                      </div>
+                      {/* Opportunity Score */}
+                      <div className="text-center">
+                        <div className="relative w-20 h-20">
+                          <svg viewBox="0 0 80 80" className="w-20 h-20 -rotate-90">
+                            <circle cx="40" cy="40" r="34" fill="none" stroke="rgba(255,255,255,0.1)" strokeWidth="8" />
+                            <circle
+                              cx="40" cy="40" r="34" fill="none"
+                              stroke="#bc5f40"
+                              strokeWidth="8"
+                              strokeDasharray={`${(reportData.opportunityScore / 100) * 213.6} 213.6`}
+                              strokeLinecap="round"
+                            />
+                          </svg>
+                          <div className="absolute inset-0 flex flex-col items-center justify-center">
+                            <span className="text-xl font-black">{reportData.opportunityScore}</span>
+                            <span className="text-[9px] font-mono text-white/60">/ 100</span>
+                          </div>
+                        </div>
+                        <p className="text-[10px] font-bold text-white/70 mt-1 font-mono">OPPORTUNITY</p>
+                      </div>
+                      {/* Download Button */}
+                      <button
+                        onClick={handleDownloadReportPdf}
+                        disabled={reportPdfGenerating}
+                        className="flex flex-col items-center gap-2 px-4 py-3 bg-[#bc5f40] hover:bg-[#9e4a30] rounded-xl text-white text-xs font-bold cursor-pointer transition-all shrink-0"
+                        title="Download PDF Report"
+                      >
+                        {reportPdfGenerating ? <RefreshCw className="w-5 h-5 animate-spin" /> : <Download className="w-5 h-5" />}
+                        <span className="text-[10px]">Download PDF</span>
+                      </button>
+                    </div>
+                  </div>
+                </div>
+
+                {/* Key Findings */}
+                <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                  {reportData.keyFindings?.map((finding: any, i: number) => (
+                    <div key={i} className={`rounded-xl p-4 border flex gap-3 items-start ${
+                      finding.type === 'critical' ? 'bg-red-50 border-red-200' :
+                      finding.type === 'warning' ? 'bg-amber-50 border-amber-200' :
+                      'bg-emerald-50 border-emerald-200'
+                    }`}>
+                      <div className="shrink-0 mt-0.5">
+                        {finding.type === 'critical' ? <AlertCircle className="w-4 h-4 text-red-600" /> :
+                         finding.type === 'warning' ? <AlertTriangle className="w-4 h-4 text-amber-600" /> :
+                         <CheckCircle2 className="w-4 h-4 text-emerald-600" />}
+                      </div>
+                      <div>
+                        <p className={`text-xs font-black ${
+                          finding.type === 'critical' ? 'text-red-800' :
+                          finding.type === 'warning' ? 'text-amber-800' : 'text-emerald-800'
+                        }`}>{finding.title}</p>
+                        <p className={`text-[11px] mt-0.5 font-semibold leading-relaxed ${
+                          finding.type === 'critical' ? 'text-red-700' :
+                          finding.type === 'warning' ? 'text-amber-700' : 'text-emerald-700'
+                        }`}>{finding.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {/* Executive Summary */}
+                <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs">
+                  <h4 className="text-xs font-bold text-[#bc5f40] uppercase font-mono tracking-wider mb-3 flex items-center gap-1.5">
+                    <FileText className="w-3.5 h-3.5" /> Executive Summary
+                  </h4>
+                  <p className="text-sm text-[#2d2f2d] leading-relaxed font-semibold">{reportData.executiveSummary}</p>
+                </div>
+
+                {/* Category Scores Grid */}
+                <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-4">
+                  <h4 className="text-xs font-bold text-[#151716] uppercase font-mono tracking-wider flex items-center gap-1.5">
+                    <BarChart3 className="w-3.5 h-3.5 text-[#123e35]" /> Audit Category Breakdown
+                  </h4>
+                  <div className="space-y-3">
+                    {reportData.categories?.map((cat: any, i: number) => {
+                      const catIcon: Record<string, any> = {
+                        'Technical SEO': Activity, 'Local SEO': MapPin, 'Content Quality': FileText,
+                        'Schema Markup': ShieldCheck, 'Page Speed': Zap, 'Backlink Profile': Link2,
+                        'GEO / AI Readiness': Bot, 'Mobile Optimization': Smartphone
+                      };
+                      const Icon = catIcon[cat.name] || BarChart3;
+                      const scoreColor = cat.score >= 70 ? '#10b981' : cat.score >= 50 ? '#f59e0b' : '#ef4444';
+                      const statusBadge: Record<string, string> = {
+                        'excellent': 'bg-emerald-100 text-emerald-800 border-emerald-200',
+                        'good': 'bg-blue-100 text-blue-800 border-blue-200',
+                        'needs-work': 'bg-amber-100 text-amber-800 border-amber-200',
+                        'critical': 'bg-red-100 text-red-800 border-red-200'
+                      };
+                      return (
+                        <details key={i} className="group border border-[#dfded4] rounded-xl overflow-hidden">
+                          <summary className="flex items-center gap-3 p-4 cursor-pointer hover:bg-[#faf9f6] transition-all select-none list-none">
+                            <div className="w-8 h-8 rounded-lg bg-[#faf9f6] border border-[#dfded4] flex items-center justify-center shrink-0">
+                              <Icon className="w-4 h-4 text-[#4e524f]" />
+                            </div>
+                            <div className="flex-1 min-w-0">
+                              <div className="flex items-center gap-2">
+                                <span className="text-sm font-bold text-[#151716]">{cat.name}</span>
+                                <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-full border ${
+                                  statusBadge[cat.status] || 'bg-gray-100 text-gray-700 border-gray-200'
+                                }`}>{cat.status.replace('-', ' ')}</span>
+                              </div>
+                              <div className="mt-1.5 flex items-center gap-2">
+                                <div className="flex-1 bg-[#dfded4] rounded-full h-1.5">
+                                  <div
+                                    className="h-1.5 rounded-full transition-all duration-700"
+                                    style={{ width: `${cat.score}%`, backgroundColor: scoreColor }}
+                                  />
+                                </div>
+                                <span className="text-xs font-black tabular-nums" style={{ color: scoreColor }}>{cat.score}/100</span>
+                              </div>
+                            </div>
+                          </summary>
+                          <div className="px-4 pb-4 pt-2 bg-[#faf9f6] border-t border-[#dfded4] space-y-3">
+                            <p className="text-xs text-[#2d2f2d] font-semibold leading-relaxed">{cat.summary}</p>
+                            <div className="grid grid-cols-1 md:grid-cols-2 gap-3">
+                              <div>
+                                <p className="text-[10px] font-black text-red-700 uppercase tracking-wider mb-1.5">⚠ Issues Found</p>
+                                <ul className="space-y-1">
+                                  {cat.issues?.map((issue: string, j: number) => (
+                                    <li key={j} className="text-[11px] text-[#4e524f] font-semibold flex gap-1.5 items-start">
+                                      <span className="text-red-500 mt-0.5 shrink-0">•</span>{issue}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                              <div>
+                                <p className="text-[10px] font-black text-[#123e35] uppercase tracking-wider mb-1.5">✓ Recommendations</p>
+                                <ul className="space-y-1">
+                                  {cat.recommendations?.map((rec: string, j: number) => (
+                                    <li key={j} className="text-[11px] text-[#4e524f] font-semibold flex gap-1.5 items-start">
+                                      <span className="text-[#123e35] mt-0.5 shrink-0">→</span>{rec}
+                                    </li>
+                                  ))}
+                                </ul>
+                              </div>
+                            </div>
+                          </div>
+                        </details>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* 90-Day Priority Action Plan */}
+                <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-4">
+                  <h4 className="text-xs font-bold text-[#151716] uppercase font-mono tracking-wider flex items-center gap-1.5">
+                    <Target className="w-3.5 h-3.5 text-[#bc5f40]" /> 90-Day Priority Action Plan
+                  </h4>
+                  <div className="space-y-3">
+                    {reportData.priorityActionPlan?.map((item: any, i: number) => (
+                      <div key={i} className="flex gap-4 items-start p-4 rounded-xl border border-[#dfded4] hover:bg-[#faf9f6] transition-all">
+                        <div className={`w-9 h-9 rounded-xl flex items-center justify-center font-black text-sm shrink-0 ${
+                          item.impact === 'high' ? 'bg-red-100 text-red-700' :
+                          item.impact === 'medium' ? 'bg-amber-100 text-amber-700' :
+                          'bg-blue-100 text-blue-700'
+                        }`}>{item.priority}</div>
+                        <div className="flex-1 min-w-0">
+                          <div className="flex flex-wrap items-center gap-2 mb-1">
+                            <span className="text-sm font-bold text-[#151716]">{item.action}</span>
+                            <span className={`px-2 py-0.5 text-[9px] font-black uppercase tracking-wider rounded-full border ${
+                              item.impact === 'high' ? 'bg-red-50 text-red-700 border-red-200' :
+                              item.impact === 'medium' ? 'bg-amber-50 text-amber-700 border-amber-200' :
+                              'bg-blue-50 text-blue-700 border-blue-200'
+                            }`}>{item.impact} impact</span>
+                            <span className="text-[10px] font-mono text-[#888b88] bg-[#faf9f6] border border-[#dfded4] px-2 py-0.5 rounded-full">{item.timeframe}</span>
+                          </div>
+                          <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">{item.detail}</p>
+                        </div>
+                      </div>
+                    ))}
+                  </div>
+                </div>
+
+                {/* Competitor Insights */}
+                <div className="bg-[#faf9f6] border border-[#dfded4] rounded-2xl p-6 shadow-xs">
+                  <h4 className="text-xs font-bold text-[#151716] uppercase font-mono tracking-wider mb-3 flex items-center gap-1.5">
+                    <TrendingUp className="w-3.5 h-3.5 text-[#123e35]" /> Competitive Landscape
+                  </h4>
+                  <p className="text-sm text-[#2d2f2d] leading-relaxed font-semibold">{reportData.competitorInsights}</p>
+                </div>
+
+              </div>
+            )}
+          </div>
+
         ) : (
           <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-8 space-y-8 tracking-tight">
             <div className="border-[#dfded4] border-b pb-6">
