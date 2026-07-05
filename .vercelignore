@@ -1,0 +1,2 @@
+# Prevent the .agents directory containing developer guidelines from being uploaded or hosted on Vercel
+.agents/

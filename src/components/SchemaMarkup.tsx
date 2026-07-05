@@ -1,6 +1,7 @@
 import React from 'react';
 import { Page, Plan } from '../types';
 import { BLOG_POSTS, BlogPost } from '../data/blogData';
+import { STATE_DIRECTORY, CITY_DIRECTORY, StateData, CityData } from '../data/directoryData';
 
 interface SchemaMarkupProps {
   currentPage: Page;
@@ -308,7 +309,22 @@ export default function SchemaMarkup({
   };
 
   // 5. Rich Blog Article BlogPostings Scheme
+  const formatIsoDate = (dateStr: string) => {
+    try {
+      const d = new Date(dateStr);
+      if (!isNaN(d.getTime())) {
+        const year = d.getFullYear();
+        const month = String(d.getMonth() + 1).padStart(2, '0');
+        const day = String(d.getDate()).padStart(2, '0');
+        return `${year}-${month}-${day}T12:00:00+00:00`;
+      }
+    } catch (err) {}
+    return '2026-06-20T12:00:00+00:00';
+  };
+
+  // 5. Rich Blog Article BlogPostings Scheme
   const getBlogPostSchema = (post: BlogPost) => {
+    const isoDate = formatIsoDate(post.date);
     return {
       '@context': 'https://schema.org',
       '@type': 'BlogPosting',
@@ -319,8 +335,8 @@ export default function SchemaMarkup({
       'headline': post.title,
       'description': post.description,
       'image': post.image,
-      'datePublished': '2026-04-10T12:00:00+00:00', // standard structured crawl dates format
-      'dateModified': '2026-06-13T09:00:00+00:00',
+      'datePublished': isoDate,
+      'dateModified': isoDate,
       'author': {
         '@type': 'Person',
         'name': post.author.name,
@@ -334,6 +350,67 @@ export default function SchemaMarkup({
           'url': orgLogo
         }
       }
+    };
+  };
+
+  // Localized state schema
+  const getLocalizedStateSchema = (state: StateData) => {
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      '@id': `${siteUrl}/${state.slug}#division`,
+      'name': `${orgName} - ${state.name} Regional Division`,
+      'url': `${siteUrl}/${state.slug}`,
+      'logo': orgLogo,
+      'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+      'telephone': '+18005550199',
+      'priceRange': '$$',
+      'knowsAbout': [
+        'Search Engine Optimization',
+        `Local SEO in ${state.name}`,
+        `Google Maps Marketing in ${state.name}`,
+        'Web Design',
+        'Google Business Profile Optimization',
+        'Citation Building'
+      ],
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': state.name,
+        'addressRegion': state.code,
+        'addressCountry': state.code === 'ON' || state.code === 'BC' ? 'CA' : 'US'
+      },
+      'description': `High-performance web design and local SEO optimization division in ${state.name} for local service providers looking to dominate maps ranking grids.`
+    };
+  };
+
+  // Localized city schema
+  const getLocalizedCitySchema = (city: CityData) => {
+    const cityNameOnly = city.name.replace(" SEO", "");
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'ProfessionalService',
+      '@id': `${siteUrl}/${city.stateSlug}/${city.slug}#office`,
+      'name': `${orgName} - ${cityNameOnly} Office`,
+      'url': `${siteUrl}/${city.stateSlug}/${city.slug}`,
+      'logo': orgLogo,
+      'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+      'telephone': '+18005550199',
+      'priceRange': '$$',
+      'knowsAbout': [
+        'Search Engine Optimization',
+        `Local SEO in ${cityNameOnly}`,
+        `Google Maps Marketing in ${cityNameOnly}`,
+        'Web Design',
+        'Google Business Profile Optimization',
+        'Citation Building'
+      ],
+      'address': {
+        '@type': 'PostalAddress',
+        'addressLocality': cityNameOnly,
+        'addressRegion': city.stateCode,
+        'addressCountry': city.stateCode === 'ON' || city.stateCode === 'BC' ? 'CA' : 'US'
+      },
+      'description': `High-performance web design and local SEO optimization suite in ${cityNameOnly}, ${city.stateCode} for local service providers looking to dominate regional query hierarchies.`
     };
   };
 
@@ -357,6 +434,20 @@ export default function SchemaMarkup({
       const activePost = BLOG_POSTS.find(p => p.slug === activeArticleSlug);
       if (activePost) {
         schemas.push(getBlogPostSchema(activePost));
+      }
+    }
+
+    if (currentPage === 'state-seo' && activeStateSlug) {
+      const state = STATE_DIRECTORY[activeStateSlug];
+      if (state) {
+        schemas.push(getLocalizedStateSchema(state));
+      }
+    }
+
+    if (currentPage === 'city-seo' && activeCitySlug) {
+      const city = CITY_DIRECTORY[activeCitySlug];
+      if (city) {
+        schemas.push(getLocalizedCitySchema(city));
       }
     }
 

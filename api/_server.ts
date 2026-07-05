@@ -380,9 +380,20 @@ function writeLeads(leads: any) {
 
 // SEO Crawl Controls & Route Protection
 app.get("/robots.txt", (req, res) => {
-  res.type("text/plain");
+  const prodPath = path.join(process.cwd(), "dist", "robots.txt");
+  const devPath = path.join(process.cwd(), "public", "robots.txt");
+  const targetPath = fs.existsSync(prodPath) ? prodPath : devPath;
+
+  if (fs.existsSync(targetPath)) {
+    res.type("text/plain");
+    let content = fs.readFileSync(targetPath, "utf-8");
+    const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
+    content = content.replace(/https:\/\/localsurgeseo\.com/g, baseUrl);
+    return res.send(content);
+  }
+
   const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
-  res.send(
+  res.type("text/plain").send(
     `User-agent: *
 Disallow: /admin
 Disallow: /admin/
@@ -393,10 +404,8 @@ Sitemap: ${baseUrl}/sitemap.xml`
   );
 });
 
-app.get("/sitemap.xml", (req, res) => {
-  res.type("application/xml");
-  const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
-  const publicPages = [
+function getDynamicSitemapPages(): string[] {
+  const pages = [
     "",
     "/about",
     "/why-us",
@@ -409,15 +418,60 @@ app.get("/sitemap.xml", (req, res) => {
     "/privacy-policy",
     "/terms-of-service",
     "/blog",
-    "/blog/google-business-profile-critical-local-contractors",
-    "/blog/single-page-blueprint-dominate-local-search",
-    "/blog/top-on-page-seo-mistakes-local-businesses-make",
-    "/blog/unlocking-the-power-of-local-seo-for-small-businesses",
-    "/blog/from-zero-to-hero-scaling-your-local-seo-strategy",
-    "/blog/mastering-google-business-profile-optimization",
-    "/blog/why-your-business-needs-local-seo-now",
-    "/site-map",
   ];
+
+  try {
+    const blogFilePath = path.join(process.cwd(), "src", "data", "blogData.ts");
+    if (fs.existsSync(blogFilePath)) {
+      const content = fs.readFileSync(blogFilePath, "utf-8");
+      const regex = /slug:\s*['"]([^'"]+)['"]/g;
+      let match;
+      while ((match = regex.exec(content)) !== null) {
+        pages.push(`/blog/${match[1]}`);
+      }
+    }
+  } catch (err) {
+    console.error("Error reading blog slugs for sitemap:", err);
+  }
+
+  try {
+    const directoryFilePath = path.join(process.cwd(), "src", "data", "directoryData.ts");
+    if (fs.existsSync(directoryFilePath)) {
+      const content = fs.readFileSync(directoryFilePath, "utf-8");
+      const stateDirMatch = content.match(/const STATE_DIRECTORY[\s\S]+?const CITY_DIRECTORY/);
+      if (stateDirMatch) {
+        const stateBlock = stateDirMatch[0];
+        const stateSlugRegex = /slug:\s*['"]([^'"]+)['"]/g;
+        let stateMatch;
+        while ((stateMatch = stateSlugRegex.exec(stateBlock)) !== null) {
+          pages.push(`/${stateMatch[1]}`);
+        }
+      }
+
+      const cityDirMatch = content.match(/const CITY_DIRECTORY[\s\S]+$/);
+      if (cityDirMatch) {
+        const cityBlock = cityDirMatch[0];
+        const cityRegex = /slug:\s*['"]([^'"]+)['"],\s*stateSlug:\s*['"]([^'"]+)['"]/g;
+        let cityMatch;
+        while ((cityMatch = cityRegex.exec(cityBlock)) !== null) {
+          const citySlug = cityMatch[1];
+          const stateSlug = cityMatch[2];
+          pages.push(`/${stateSlug}/${citySlug}`);
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error reading directory slugs for sitemap:", err);
+  }
+
+  pages.push("/site-map");
+  return Array.from(new Set(pages));
+}
+
+app.get("/sitemap.xml", (req, res) => {
+  res.type("application/xml");
+  const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
+  const publicPages = getDynamicSitemapPages();
 
   const urlEntries = publicPages
     .map((page) => {
