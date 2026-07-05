@@ -65,7 +65,12 @@ export default function LeadDashboard({
 
   const fetchDbStatus = async () => {
     try {
-      const res = await fetch('/api/admin/db-status');
+      const token = sessionStorage.getItem('adminToken') || '';
+      const res = await fetch('/api/admin/db-status', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (res.ok) {
         const data = await res.json();
         setDbStatus(data);
@@ -100,9 +105,13 @@ export default function LeadDashboard({
     if (!localTemplates) return;
     setSaveStatus('saving');
     try {
+      const token = sessionStorage.getItem('adminToken') || '';
       const response = await fetch('/api/pdf-templates', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify(localTemplates)
       });
       if (response.ok) {
@@ -206,9 +215,13 @@ export default function LeadDashboard({
     if (!selectedLead) return;
     setIsSaving(true);
     try {
+      const token = sessionStorage.getItem('adminToken') || '';
       const response = await fetch(`/api/leads/${selectedLead.id}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           status: currentStatus,
           notes: currentNotes
@@ -233,8 +246,12 @@ export default function LeadDashboard({
     if (!confirm('Are you absolutely sure you want to delete this lead?')) return;
     
     try {
+      const token = sessionStorage.getItem('adminToken') || '';
       const response = await fetch(`/api/leads/${leadId}`, {
-        method: 'DELETE'
+        method: 'DELETE',
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
       });
       if (response.ok) {
         if (selectedLead?.id === leadId) setSelectedLead(null);
@@ -250,9 +267,13 @@ export default function LeadDashboard({
   const handleMarkLeadCompleted = async (leadId: string) => {
     setIsSaving(true);
     try {
+      const token = sessionStorage.getItem('adminToken') || '';
       const response = await fetch(`/api/leads/${leadId}`, {
         method: 'PUT',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({
           status: 'completed',
           notes: currentNotes || 'Flagged as completed.'
@@ -303,9 +324,13 @@ export default function LeadDashboard({
     setReportData(null);
     setReportError(null);
     try {
+      const token = sessionStorage.getItem('adminToken') || '';
       const res = await fetch('/api/admin/seo-report/generate', {
         method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
+        headers: { 
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
         body: JSON.stringify({ url: reportUrl.trim(), notes: reportNotes.trim() })
       });
       if (!res.ok) throw new Error(`Server error: ${res.status}`);

@@ -45,6 +45,7 @@ export default function AdminLoginForm({ onLoginSuccess, onBackToHome }: AdminLo
 
       if (response.ok && data.success) {
         sessionStorage.setItem('isAdminLoggedIn', 'true');
+        sessionStorage.setItem('adminToken', data.token || '');
         onLoginSuccess();
       } else {
         setError(data.error || 'Authentication failed. Please verify credentials.');

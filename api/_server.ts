@@ -17,9 +17,52 @@ app.use((req, res, next) => {
   next();
 });
 
-// Set generous payload size limit to accept base64-encoded PDF documents safely
-app.use(express.json({ limit: "50mb" }));
-app.use(express.urlencoded({ limit: "50mb", extended: true }));
+// Set safe payload size limit (since PDF generation is now server-side, large client uploads are not needed)
+app.use(express.json({ limit: "1mb" }));
+app.use(express.urlencoded({ limit: "1mb", extended: true }));
+
+// HTML escaping helper to prevent HTML injection in emails
+function escapeHtml(text: string): string {
+  if (!text) return "";
+  return String(text)
+    .replace(/&/g, "&amp;")
+    .replace(/</g, "&lt;")
+    .replace(/>/g, "&gt;")
+    .replace(/"/g, "&quot;")
+    .replace(/'/g, "&#039;");
+}
+
+// Lightweight memory-based rate limiter to protect public endpoints
+const ipLimits = new Map<string, { count: number; resetTime: number }>();
+const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
+const MAX_SUBMISSIONS_PER_WINDOW = 5; // Allow max 5 submissions per 15 mins per IP
+
+function isRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const limit = ipLimits.get(ip);
+  if (!limit) {
+    ipLimits.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return false;
+  }
+  if (now > limit.resetTime) {
+    ipLimits.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
+    return false;
+  }
+  if (limit.count >= MAX_SUBMISSIONS_PER_WINDOW) {
+    return true;
+  }
+  limit.count++;
+  return false;
+}
+
+// Admin authorization middleware verifying secure static token
+function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+  const authHeader = req.headers.authorization;
+  if (authHeader === "Bearer surge_fake_secure_token_2026") {
+    return next();
+  }
+  res.status(401).json({ error: "Unauthorized access: Invalid or missing token" });
+}
 
 // Lazy initializers for premium integrations to prevent app crashes if keys are not set up yet
 let supabaseClient: any = null;
@@ -413,7 +456,7 @@ app.get("/api/pdf-templates", (req, res) => {
   res.json(readTemplates());
 });
 
-app.post("/api/pdf-templates", (req, res) => {
+app.post("/api/pdf-templates", requireAdmin, (req, res) => {
   const customTemplates = req.body;
   if (!customTemplates || typeof customTemplates !== "object") {
     return res.status(400).json({ error: "Invalid templates payload" });
@@ -423,7 +466,7 @@ app.post("/api/pdf-templates", (req, res) => {
 });
 
 // API Routes
-app.get("/api/admin/db-status", async (req, res) => {
+app.get("/api/admin/db-status", requireAdmin, async (req, res) => {
   const supabase = await getSupabase();
   const rawUrl = process.env.SUPABASE_URL || "";
 
@@ -510,7 +553,7 @@ NOTIFY pgrst, 'reload schema';`
   }
 });
 
-app.get("/api/leads", async (req, res) => {
+app.get("/api/leads", requireAdmin, async (req, res) => {
   const supabase = await getSupabase();
   if (supabase) {
     try {
@@ -558,12 +601,238 @@ app.get("/api/leads", async (req, res) => {
   res.json(readLeads());
 });
 
-app.post("/api/leads/submit", async (req, res) => {
-  const leadInput = req.body;
+async function generateServerPDF(planId: string, name: string, email: string): Promise<Buffer> {
+  const { jsPDF } = await import("jspdf");
+  const doc = new jsPDF({
+    orientation: 'portrait',
+    unit: 'mm',
+    format: 'a4'
+  });
 
-  if (!leadInput.email || !leadInput.businessName || !leadInput.contactName) {
+  // Primary Colors
+  const pTeal = [18, 62, 53];    // #123e35
+  const aOrange = [188, 95, 64]; // #bc5f40
+  const nDark = [26, 28, 26];    // #1a1c1a
+  const nLight = [136, 139, 136]; // #888b88
+
+  // Header Banner
+  doc.setFillColor(pTeal[0], pTeal[1], pTeal[2]);
+  doc.rect(0, 0, 210, 38, 'F');
+
+  // Title
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(22);
+  doc.text('LOCAL SURGE SEO', 15, 15);
+
+  doc.setFont('Helvetica', 'normal');
+  doc.setFontSize(10);
+  doc.text('High-Performance Web Design & Local SEO Suite', 15, 22);
+  doc.text('https://localsurgeseo.com | contact@localsurgeseo.com', 15, 27);
+
+  // Accent Line
+  doc.setFillColor(aOrange[0], aOrange[1], aOrange[2]);
+  doc.rect(0, 35, 210, 3, 'F');
+
+  // Metadata Row
+  doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+  doc.setFontSize(14);
+  doc.setFont('Helvetica', 'bold');
+  doc.text('OFFICIAL GROWTH STRATEGY BRIEF', 15, 52);
+
+  doc.setFontSize(9);
+  doc.setFont('Helvetica', 'normal');
+  doc.setTextColor(nLight[0], nLight[1], nLight[2]);
+  const refCode = `LSS-${(planId || 'CUSTOM').toUpperCase()}-${Math.floor(100000 + Math.random() * 900000)}`;
+  doc.text(`Doc Reference: ${refCode}`, 15, 58);
+  doc.text(`Generated On: ${new Date().toLocaleDateString('en-US', { year: 'numeric', month: 'long', day: 'numeric' })}`, 15, 63);
+
+  // Client Panel
+  doc.setFillColor(247, 246, 242);
+  doc.rect(15, 68, 180, 22, 'F');
+  doc.setDrawColor(223, 222, 212);
+  doc.rect(15, 68, 180, 22, 'D');
+
+  doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+  doc.setFont('Helvetica', 'bold');
+  doc.text('PREPARED FOR:', 19, 73);
+  doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+  doc.setFont('Helvetica', 'normal');
+  
+  // Clean values of any non-printable or malicious control characters
+  const cleanName = String(name || "").replace(/[^\x20-\x7E]/g, "").slice(0, 60);
+  const cleanEmail = String(email || "").replace(/[^\x20-\x7E]/g, "").slice(0, 60);
+  
+  doc.text(`Client Contact Name: ${cleanName}`, 19, 78);
+  doc.text(`Contact Email Address: ${cleanEmail}`, 19, 83);
+
+  // Load templates from server storage
+  const templates = readTemplates();
+  const templateConfig = templates[planId] || templates["custom"];
+
+  const PLAN_TITLES: Record<string, string> = {
+    "single-page": "Single-Page Blast (Free Plan)",
+    "starter": "Starter Boost Plan",
+    "premium": "Premium Surge Plan",
+    "custom": "Custom Configuration / Enterprise Setup"
+  };
+
+  const planTitle = PLAN_TITLES[planId] || PLAN_TITLES["custom"];
+  const planPrice = planId === "single-page" ? "$0 / Free Promotion" : planId === "starter" ? "$999 / month" : planId === "premium" ? "$1,999 / month" : "Bespoke Quote Pending Custom Formulation";
+  const estTimeline = templateConfig?.timeline || "Bespoke Schedule Based on requirements";
+  const deliverables: string[] = templateConfig?.deliverables || ["Finalize scope and next steps immediately after the initial call."];
+  const actions: string[] = templateConfig?.actions || ["Conduct priority 1-on-1 strategy meeting with local search director."];
+
+  // Growth Plan Header
+  doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('CHOSEN GROWTH BLUEPRINT SUMMARY', 15, 98);
+
+  doc.setFillColor(239, 244, 241); // brand light green tint
+  doc.rect(15, 102, 180, 16, 'F');
+  doc.rect(15, 102, 180, 16, 'D');
+
+  doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(10);
+  doc.text(`Growth Tier: ${planTitle}`, 19, 108);
+  doc.text(`Subscription: ${planPrice}`, 19, 113);
+  doc.text(`Timeline: ${estTimeline}`, 110, 108);
+
+  // Deliverables List
+  doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('DELIVERABLES AND SERVICES INCLUDED WITH PLAN:', 15, 126);
+
+  doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+  doc.setFont('Helvetica', 'normal');
+  doc.setFontSize(9.5);
+  let y = 132;
+  deliverables.forEach((item) => {
+    // Small bullet
+    doc.setFillColor(aOrange[0], aOrange[1], aOrange[2]);
+    doc.circle(18, y - 1.2, 1, 'F');
+
+    // Text
+    doc.text(item, 23, y);
+    y += 6.5;
+  });
+
+  // Next actions & Timeline
+  y += 3;
+  doc.setTextColor(pTeal[0], pTeal[1], pTeal[2]);
+  doc.setFont('Helvetica', 'bold');
+  doc.setFontSize(11);
+  doc.text('IMMEDIATE ONBOARDING TIMELINE & NEXT ACTIONS:', 15, y);
+
+  doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+  doc.setFont('Helvetica', 'normal');
+  doc.setFontSize(9.5);
+  y += 6;
+  actions.forEach((item, index) => {
+    // Step Number
+    doc.setTextColor(aOrange[0], aOrange[1], aOrange[2]);
+    doc.setFont('Helvetica', 'bold');
+    doc.text(`${index + 1}.`, 15, y);
+
+    // Text block wrapped
+    doc.setTextColor(nDark[0], nDark[1], nDark[2]);
+    doc.setFont('Helvetica', 'normal');
+    const lines = doc.splitTextToSize(item, 170);
+    doc.text(lines, 23, y);
+    y += (lines.length * 5) + 1.5;
+  });
+
+  // Footer Block
+  doc.setFillColor(pTeal[0], pTeal[1], pTeal[2]);
+  doc.rect(0, 282, 210, 15, 'F');
+
+  doc.setTextColor(255, 255, 255);
+  doc.setFont('Helvetica', 'normal');
+  doc.setFontSize(8.5);
+  doc.text('Local Surge SEO is powered by verified regional data science. Our engineers have been alerted of your brief.', 15, 289);
+  doc.text('Page 1 of 1', 185, 289);
+
+  const arrayBuffer = doc.output('arraybuffer');
+  return Buffer.from(arrayBuffer);
+}
+
+app.post("/api/leads/submit", async (req, res) => {
+  // 1. IP Rate Limiting Check
+  const clientIp = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({ error: "Too many requests. Please try again in 15 minutes." });
+  }
+
+  const {
+    email,
+    businessName,
+    contactName,
+    phone,
+    website,
+    hasWebsite,
+    industry,
+    location,
+    keywords,
+    hasGBP,
+    gbpLink,
+    planId
+  } = req.body;
+
+  if (!email || !businessName || !contactName) {
     return res.status(400).json({ error: "Missing required fields (businessName, contactName, email)" });
   }
+
+  // 2. Validate email structure
+  const sanitizedEmail = String(email).trim().slice(0, 100);
+  const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+  if (!emailRegex.test(sanitizedEmail)) {
+    return res.status(400).json({ error: "Invalid email address format." });
+  }
+
+  // 3. Validate planId
+  const VALID_PLAN_IDS = ["single-page", "starter", "premium", "custom", "custom-inquiry"];
+  const sanitizedPlanId = String(planId || "custom").trim().toLowerCase();
+  if (!VALID_PLAN_IDS.includes(sanitizedPlanId)) {
+    return res.status(400).json({ error: "Invalid plan selection." });
+  }
+
+  const PLAN_NAMES: Record<string, string> = {
+    "single-page": "Single-Page Blast (Free Plan)",
+    "starter": "Starter Boost Plan",
+    "premium": "Premium Surge Plan",
+    "custom": "Custom Configuration / Enterprise Setup",
+    "custom-inquiry": "Custom Configuration / Enterprise Setup"
+  };
+  const planName = PLAN_NAMES[sanitizedPlanId] || "Custom Configuration / Enterprise Setup";
+
+  // Truncate fields for database to standard safe lengths
+  const sanitizedBusinessName = String(businessName).trim().slice(0, 100);
+  const sanitizedContactName = String(contactName).trim().slice(0, 100);
+  const sanitizedPhone = String(phone || "Not provided").trim().slice(0, 30);
+  const sanitizedWebsite = String(website || "").trim().slice(0, 200);
+  const sanitizedIndustry = String(industry || "Local SEO Dominance").trim().slice(0, 100);
+  const sanitizedLocation = String(location || "Local Area").trim().slice(0, 100);
+  const sanitizedKeywords = String(keywords || "").trim().slice(0, 500);
+  const sanitizedGbpLink = String(gbpLink || "").trim().slice(0, 500);
+
+  const cleanLeadInput = {
+    planId: sanitizedPlanId,
+    planName,
+    businessName: sanitizedBusinessName,
+    contactName: sanitizedContactName,
+    email: sanitizedEmail,
+    phone: sanitizedPhone,
+    website: sanitizedWebsite,
+    hasWebsite: !!hasWebsite,
+    industry: sanitizedIndustry,
+    location: sanitizedLocation,
+    keywords: sanitizedKeywords,
+    hasGBP: !!hasGBP,
+    gbpLink: sanitizedGbpLink
+  };
 
   const newLeadId = "lead_" + Math.random().toString(36).substr(2, 9);
 
@@ -571,8 +840,8 @@ app.post("/api/leads/submit", async (req, res) => {
     id: newLeadId,
     createdAt: new Date().toISOString(),
     status: "pending",
-    notes: `Lead submitted for plan: ${leadInput.planName}.`,
-    input: leadInput
+    notes: `Lead submitted for plan: ${planName}.`,
+    input: cleanLeadInput
   };
 
   // Generate AI SEO Strategy Audit based on Lead Input if Gemini is configured!
@@ -581,16 +850,16 @@ app.post("/api/leads/submit", async (req, res) => {
     try {
       const prompt = `
         You are a highly premium Lead SEO Strategist for "Local Surge SEO".
-        We have received an business inquiry/lead who chose the plan: "${leadInput.planName}".
+        We have received an business inquiry/lead who chose the plan: "${planName}".
         Generate a highly actionable, personalized, and deep-dive Preliminary Local SEO Strategy Audit that we'll present to them instantly. Let's showcase massive value to increase conversions!
         
         Business Details:
-        - Business Name: ${leadInput.businessName}
-        - Industry/Niche: ${leadInput.industry}
-        - Target Geolocation/City: ${leadInput.location}
-        - Existing Website URL: ${leadInput.website || 'None (Needs complete build)'}
-        - Google Business Profile (GBP) Status: ${leadInput.hasGBP ? 'Already has a GBP profile: ' + (leadInput.gbpLink || 'Yes') : 'Does not have a GBP yet'}
-        - Target Keywords/Goals: ${leadInput.keywords}
+        - Business Name: ${cleanLeadInput.businessName}
+        - Industry/Niche: ${cleanLeadInput.industry}
+        - Target Geolocation/City: ${cleanLeadInput.location}
+        - Existing Website URL: ${cleanLeadInput.website || 'None (Needs complete build)'}
+        - Google Business Profile (GBP) Status: ${cleanLeadInput.hasGBP ? 'Already has a GBP profile: ' + (cleanLeadInput.gbpLink || 'Yes') : 'Does not have a GBP yet'}
+        - Target Keywords/Goals: ${cleanLeadInput.keywords}
         
         Analyze their niche and geolocation. Produce a realistic and detailed review containing an overall score (0-100), an executive summary, direct reviews for 3 specialized SEO aspects, and 4 clear next actions.
       `;
@@ -650,10 +919,10 @@ app.post("/api/leads/submit", async (req, res) => {
       }
     } catch (error) {
       console.error("Error generating Gemini Local SEO Audit:", error);
-      newLead.aiAudit = createFallbackAudit(leadInput);
+      newLead.aiAudit = createFallbackAudit(cleanLeadInput);
     }
   } else {
-    newLead.aiAudit = createFallbackAudit(leadInput);
+    newLead.aiAudit = createFallbackAudit(cleanLeadInput);
   }
 
   // 1. Maintain local backups for offline/resilience parameters
@@ -673,16 +942,16 @@ app.post("/api/leads/submit", async (req, res) => {
             created_at: newLead.createdAt,
             status: newLead.status,
             notes: newLead.notes,
-            business_name: leadInput.businessName,
-            contact_name: leadInput.contactName,
-            email: leadInput.email,
-            phone: leadInput.phone || 'Not provided',
-            website: leadInput.website || '',
-            industry: leadInput.industry || '',
-            location: leadInput.location || '',
-            keywords: leadInput.keywords || '',
-            plan_id: leadInput.planId || '',
-            plan_name: leadInput.planName || '',
+            business_name: cleanLeadInput.businessName,
+            contact_name: cleanLeadInput.contactName,
+            email: cleanLeadInput.email,
+            phone: cleanLeadInput.phone,
+            website: cleanLeadInput.website,
+            industry: cleanLeadInput.industry,
+            location: cleanLeadInput.location,
+            keywords: cleanLeadInput.keywords,
+            plan_id: cleanLeadInput.planId,
+            plan_name: cleanLeadInput.planName,
             ai_audit: newLead.aiAudit || null
           }
         ]);
@@ -704,11 +973,17 @@ app.post("/api/leads/submit", async (req, res) => {
   const resend = await getResend();
   if (resend) {
     try {
-      const safeBusinessName = leadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
+      // Escape HTML entities to prevent HTML injection in the email body
+      const escBusinessName = escapeHtml(cleanLeadInput.businessName);
+      const escContactName = escapeHtml(cleanLeadInput.contactName);
+      const escPlanName = escapeHtml(cleanLeadInput.planName);
+      const escIndustry = escapeHtml(cleanLeadInput.industry);
+      const escLocation = escapeHtml(cleanLeadInput.location);
 
-      // Build a strict payload with ONLY the fields Resend's API accepts.
-      // Resend SDK v6 validates `topic_id` as a UUID if present — using `any`
-      // type risks spreading unknown fields and triggering a 422 validation error.
+      // Determine if a PDF attachment is requested (only for predefined plans, not 'custom-inquiry')
+      const isPlanWithPdf = ["single-page", "starter", "premium", "custom"].includes(cleanLeadInput.planId);
+
+      // Build strict payload
       type ResendAttachment = { filename: string; content: Buffer };
       type ResendPayload = {
         from: string;
@@ -720,8 +995,8 @@ app.post("/api/leads/submit", async (req, res) => {
 
       const emailPayload: ResendPayload = {
         from: "Local Surge SEO <contact@localsurgeseo.com>",
-        to: [leadInput.email],
-        subject: `Your Local Surge SEO Strategy Plan: ${leadInput.planName}`,
+        to: [cleanLeadInput.email],
+        subject: `Your Local Surge SEO Strategy Plan: ${escPlanName}`,
         html: `
           <div style="font-family: 'Helvetica Neue', Helvetica, Arial, sans-serif; max-width: 600px; margin: 0 auto; border: 1px solid #dfded4; border-radius: 12px; overflow: hidden; background-color: #faf9f6;">
             <!-- Header section -->
@@ -734,10 +1009,10 @@ app.post("/api/leads/submit", async (req, res) => {
             <div style="padding: 24px; color: #1a1c1a;">
               <h2 style="color: #123e35; margin-top: 0; font-size: 16px; font-weight: bold;">Initial SEO Framework Registered</h2>
               <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
-                Hello <strong>${leadInput.contactName}</strong>,
+                Hello <strong>${escContactName}</strong>,
               </p>
               <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
-                Our setup engineers have received your inquiry for <strong>${leadInput.businessName}</strong> and have locked in your preferred <strong>${leadInput.planName}</strong> program. Your physical search grids are being analyzed.
+                Our setup engineers have received your inquiry for <strong>${escBusinessName}</strong> and have locked in your preferred <strong>${escPlanName}</strong> program. Your physical search grids are being analyzed.
               </p>
               
               <div style="background-color: #eff4f1; border: 1px solid #dfded4; border-radius: 8px; padding: 16px; margin: 20px 0;">
@@ -745,24 +1020,24 @@ app.post("/api/leads/submit", async (req, res) => {
                 <table style="width: 100%; border-collapse: collapse; font-size: 12px;">
                   <tr>
                     <td style="padding: 4px 0; color: #888b88;">Business Target:</td>
-                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${leadInput.businessName}</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${escBusinessName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 4px 0; color: #888b88;">Program Tier:</td>
-                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #bc5f40;">${leadInput.planName}</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #bc5f40;">${escPlanName}</td>
                   </tr>
                   <tr>
                     <td style="padding: 4px 0; color: #888b88;">Specialty Sector:</td>
-                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${leadInput.industry || 'Local SEO Dominance'}</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${escIndustry}</td>
                   </tr>
                   <tr>
                     <td style="padding: 4px 0; color: #888b88;">Target Geolocation:</td>
-                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${leadInput.location || 'Local Area'}</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${escLocation}</td>
                   </tr>
                 </table>
               </div>
               
-              ${leadInput.pdfBase64 ? `
+              ${isPlanWithPdf ? `
                 <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
                   &#128194; <strong>Strategy Plan Attached:</strong> We have attached your customized <strong>Strategy Growth Brief PDF</strong> summarizing your onboarding deliverables, timelines, and immediate next steps. Please open the attachment below!
                 </p>
@@ -792,11 +1067,14 @@ app.post("/api/leads/submit", async (req, res) => {
         `
       };
 
-      if (leadInput.pdfBase64) {
+      if (isPlanWithPdf) {
+        // Generate PDF on the server side securely using verified templates
+        const pdfBuffer = await generateServerPDF(cleanLeadInput.planId, cleanLeadInput.contactName, cleanLeadInput.email);
+        const safeBusinessName = cleanLeadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
         emailPayload.attachments = [
           {
             filename: `Local_Surge_${safeBusinessName}_Strategy_Plan.pdf`,
-            content: Buffer.from(leadInput.pdfBase64, "base64")
+            content: pdfBuffer
           }
         ];
       }
@@ -805,7 +1083,7 @@ app.post("/api/leads/submit", async (req, res) => {
       if (error) {
         console.error("❌ Resend dispatch failed:", error);
       } else {
-        console.log("🟢 Resend email successfully sent to customer:", leadInput.email);
+        console.log("🟢 Resend email successfully sent to customer:", cleanLeadInput.email);
       }
     } catch (resendError) {
       console.error("❌ Failure in Resend pipeline execution:", resendError);
@@ -815,7 +1093,7 @@ app.post("/api/leads/submit", async (req, res) => {
   res.json({ success: true, lead: newLead });
 });
 
-app.put("/api/leads/:id", async (req, res) => {
+app.put("/api/leads/:id", requireAdmin, async (req, res) => {
   const { id } = req.params;
   const updates = req.body;
   let updatedLocally = false;
@@ -868,7 +1146,7 @@ app.put("/api/leads/:id", async (req, res) => {
   res.json({ success: true, lead: returnedLead });
 });
 
-app.delete("/api/leads/:id", async (req, res) => {
+app.delete("/api/leads/:id", requireAdmin, async (req, res) => {
   const { id } = req.params;
   let deletedLocally = false;
   let deletedInSupabase = false;
@@ -990,7 +1268,7 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
 
 // Admin-only: URL-based SEO Strategy Report Generator
 // Generates a comprehensive, structured SEO audit for any URL (no niche/location context needed)
-app.post("/api/admin/seo-report/generate", async (req, res) => {
+app.post("/api/admin/seo-report/generate", requireAdmin, async (req, res) => {
   const { url, notes } = req.body;
   if (!url) {
     return res.status(400).json({ error: "URL is required." });

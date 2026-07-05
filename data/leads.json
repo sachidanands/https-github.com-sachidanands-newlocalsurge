@@ -1,5 +1,273 @@
 [
   {
+    "id": "lead_9nvz5dhy2",
+    "createdAt": "2026-07-05T09:55:42.444Z",
+    "status": "pending",
+    "notes": "Lead submitted for plan: Single-Page Blast (Free Plan).",
+    "input": {
+      "planId": "single-page",
+      "planName": "Single-Page Blast (Free Plan)",
+      "businessName": "Test Secure Biz",
+      "contactName": "Secure Contact",
+      "email": "test_recipient_2@localsurgeseo.com",
+      "phone": "Not provided",
+      "website": "",
+      "hasWebsite": false,
+      "industry": "Local SEO Dominance",
+      "location": "Local Area",
+      "keywords": "",
+      "hasGBP": false,
+      "gbpLink": ""
+    },
+    "aiAudit": {
+      "overallScore": 76,
+      "domainName": "testsecurebiz.com",
+      "niche": "Local SEO Dominance",
+      "location": "Local Area",
+      "timestamp": "2026-07-05T09:55:42.613Z",
+      "executiveSummary": "We analyzed local search competition for \"Local SEO Dominance\" in Local Area. Competitors are actively harvesting high-intent buyer keywords. By securing citation alignment and layering search-optimized on-page structural updates, we can trigger a severe surge in your neighborhood rankings.",
+      "analysis": [
+        {
+          "title": "Google Business Profile Sync",
+          "score": 30,
+          "description": "No active Google Business Profile identified. Setting this up is step-zero to capture high-intent 'near me' organic traffic.",
+          "recommendations": [
+            "Complete profile optimization including geo-targeted high-quality media uploads.",
+            "Perform deep review volume acceleration setup with customized QR-code triggers.",
+            "Target highly relevant secondary services keywords in the category options."
+          ]
+        },
+        {
+          "title": "On-Page Metadata and Local Semantics",
+          "score": 20,
+          "description": "No current website detected. Building a mobile-first, semantic layout containing dedicated keyword targets will instantly establish trust.",
+          "recommendations": [
+            "Embed responsive schema structures with exact geographic geolocation coordinates.",
+            "Rewrite title headers (H1/H2) to explicitly balance service intent and target neighborhoods.",
+            "Develop localized niche pages mapping separate localized services."
+          ]
+        },
+        {
+          "title": "Citation Density & Authority Footprint",
+          "score": 60,
+          "description": "Local NAP (Name, Address, Phone) citation profile shows inconsistencies or omissions on key niche directory syndicates.",
+          "recommendations": [
+            "Sync top-tier databases (Yelp, Apple Maps, Bing, YellowPages) to perfect data consistency.",
+            "Audit industry-specific localized registries for targeted service link anchors.",
+            "Implement ongoing listing management tasks."
+          ]
+        }
+      ],
+      "actionPlan": [
+        "Initiate manual NAP citation sweep and map location profile consolidation.",
+        "Design and deploy optimized on-page content structures loaded with target keywords (Local Services).",
+        "Synthesize high-authority community directory signals to increase backlink weight.",
+        "Formulate a custom review-generation playbook for your desk/field team."
+      ]
+    }
+  },
+  {
+    "id": "lead_n7zdmmigo",
+    "createdAt": "2026-07-05T09:55:41.415Z",
+    "status": "pending",
+    "notes": "Lead submitted for plan: Single-Page Blast (Free Plan).",
+    "input": {
+      "planId": "single-page",
+      "planName": "Single-Page Blast (Free Plan)",
+      "businessName": "Test Secure Biz",
+      "contactName": "Secure Contact",
+      "email": "test_recipient_1@localsurgeseo.com",
+      "phone": "Not provided",
+      "website": "",
+      "hasWebsite": false,
+      "industry": "Local SEO Dominance",
+      "location": "Local Area",
+      "keywords": "",
+      "hasGBP": false,
+      "gbpLink": ""
+    },
+    "aiAudit": {
+      "overallScore": 56,
+      "domainName": "testsecurebiz.com",
+      "niche": "Local SEO Dominance",
+      "location": "Local Area",
+      "timestamp": "2026-07-05T09:55:41.515Z",
+      "executiveSummary": "We analyzed local search competition for \"Local SEO Dominance\" in Local Area. Competitors are actively harvesting high-intent buyer keywords. By securing citation alignment and layering search-optimized on-page structural updates, we can trigger a severe surge in your neighborhood rankings.",
+      "analysis": [
+        {
+          "title": "Google Business Profile Sync",
+          "score": 30,
+          "description": "No active Google Business Profile identified. Setting this up is step-zero to capture high-intent 'near me' organic traffic.",
+          "recommendations": [
+            "Complete profile optimization including geo-targeted high-quality media uploads.",
+            "Perform deep review volume acceleration setup with customized QR-code triggers.",
+            "Target highly relevant secondary services keywords in the category options."
+          ]
+        },
+        {
+          "title": "On-Page Metadata and Local Semantics",
+          "score": 20,
+          "description": "No current website detected. Building a mobile-first, semantic layout containing dedicated keyword targets will instantly establish trust.",
+          "recommendations": [
+            "Embed responsive schema structures with exact geographic geolocation coordinates.",
+            "Rewrite title headers (H1/H2) to explicitly balance service intent and target neighborhoods.",
+            "Develop localized niche pages mapping separate localized services."
+          ]
+        },
+        {
+          "title": "Citation Density & Authority Footprint",
+          "score": 60,
+          "description": "Local NAP (Name, Address, Phone) citation profile shows inconsistencies or omissions on key niche directory syndicates.",
+          "recommendations": [
+            "Sync top-tier databases (Yelp, Apple Maps, Bing, YellowPages) to perfect data consistency.",
+            "Audit industry-specific localized registries for targeted service link anchors.",
+            "Implement ongoing listing management tasks."
+          ]
+        }
+      ],
+      "actionPlan": [
+        "Initiate manual NAP citation sweep and map location profile consolidation.",
+        "Design and deploy optimized on-page content structures loaded with target keywords (Local Services).",
+        "Synthesize high-authority community directory signals to increase backlink weight.",
+        "Formulate a custom review-generation playbook for your desk/field team."
+      ]
+    }
+  },
+  {
+    "id": "lead_9meeqmjcy",
+    "createdAt": "2026-07-05T09:55:38.620Z",
+    "status": "pending",
+    "notes": "Lead submitted for plan: Single-Page Blast (Free Plan).",
+    "input": {
+      "planId": "single-page",
+      "planName": "Single-Page Blast (Free Plan)",
+      "businessName": "Test Secure Biz",
+      "contactName": "Secure Contact",
+      "email": "test_recipient_0@localsurgeseo.com",
+      "phone": "Not provided",
+      "website": "",
+      "hasWebsite": false,
+      "industry": "Local SEO Dominance",
+      "location": "Local Area",
+      "keywords": "",
+      "hasGBP": false,
+      "gbpLink": ""
+    },
+    "aiAudit": {
+      "overallScore": 77,
+      "domainName": "testsecurebiz.com",
+      "niche": "Local SEO Dominance",
+      "location": "Local Area",
+      "timestamp": "2026-07-05T09:55:39.486Z",
+      "executiveSummary": "We analyzed local search competition for \"Local SEO Dominance\" in Local Area. Competitors are actively harvesting high-intent buyer keywords. By securing citation alignment and layering search-optimized on-page structural updates, we can trigger a severe surge in your neighborhood rankings.",
+      "analysis": [
+        {
+          "title": "Google Business Profile Sync",
+          "score": 30,
+          "description": "No active Google Business Profile identified. Setting this up is step-zero to capture high-intent 'near me' organic traffic.",
+          "recommendations": [
+            "Complete profile optimization including geo-targeted high-quality media uploads.",
+            "Perform deep review volume acceleration setup with customized QR-code triggers.",
+            "Target highly relevant secondary services keywords in the category options."
+          ]
+        },
+        {
+          "title": "On-Page Metadata and Local Semantics",
+          "score": 20,
+          "description": "No current website detected. Building a mobile-first, semantic layout containing dedicated keyword targets will instantly establish trust.",
+          "recommendations": [
+            "Embed responsive schema structures with exact geographic geolocation coordinates.",
+            "Rewrite title headers (H1/H2) to explicitly balance service intent and target neighborhoods.",
+            "Develop localized niche pages mapping separate localized services."
+          ]
+        },
+        {
+          "title": "Citation Density & Authority Footprint",
+          "score": 60,
+          "description": "Local NAP (Name, Address, Phone) citation profile shows inconsistencies or omissions on key niche directory syndicates.",
+          "recommendations": [
+            "Sync top-tier databases (Yelp, Apple Maps, Bing, YellowPages) to perfect data consistency.",
+            "Audit industry-specific localized registries for targeted service link anchors.",
+            "Implement ongoing listing management tasks."
+          ]
+        }
+      ],
+      "actionPlan": [
+        "Initiate manual NAP citation sweep and map location profile consolidation.",
+        "Design and deploy optimized on-page content structures loaded with target keywords (Local Services).",
+        "Synthesize high-authority community directory signals to increase backlink weight.",
+        "Formulate a custom review-generation playbook for your desk/field team."
+      ]
+    }
+  },
+  {
+    "id": "lead_2nw9p0os0",
+    "createdAt": "2026-07-05T09:55:29.553Z",
+    "status": "pending",
+    "notes": "Lead submitted for plan: Single-Page Blast (Free Plan).",
+    "input": {
+      "planId": "single-page",
+      "planName": "Single-Page Blast (Free Plan)",
+      "businessName": "Test Secure Biz",
+      "contactName": "Secure Contact",
+      "email": "test_recipient@localsurgeseo.com",
+      "phone": "Not provided",
+      "website": "",
+      "hasWebsite": false,
+      "industry": "Local SEO Dominance",
+      "location": "Local Area",
+      "keywords": "",
+      "hasGBP": false,
+      "gbpLink": ""
+    },
+    "aiAudit": {
+      "overallScore": 73,
+      "domainName": "testsecurebiz.com",
+      "niche": "Local SEO Dominance",
+      "location": "Local Area",
+      "timestamp": "2026-07-05T09:55:34.111Z",
+      "executiveSummary": "We analyzed local search competition for \"Local SEO Dominance\" in Local Area. Competitors are actively harvesting high-intent buyer keywords. By securing citation alignment and layering search-optimized on-page structural updates, we can trigger a severe surge in your neighborhood rankings.",
+      "analysis": [
+        {
+          "title": "Google Business Profile Sync",
+          "score": 30,
+          "description": "No active Google Business Profile identified. Setting this up is step-zero to capture high-intent 'near me' organic traffic.",
+          "recommendations": [
+            "Complete profile optimization including geo-targeted high-quality media uploads.",
+            "Perform deep review volume acceleration setup with customized QR-code triggers.",
+            "Target highly relevant secondary services keywords in the category options."
+          ]
+        },
+        {
+          "title": "On-Page Metadata and Local Semantics",
+          "score": 20,
+          "description": "No current website detected. Building a mobile-first, semantic layout containing dedicated keyword targets will instantly establish trust.",
+          "recommendations": [
+            "Embed responsive schema structures with exact geographic geolocation coordinates.",
+            "Rewrite title headers (H1/H2) to explicitly balance service intent and target neighborhoods.",
+            "Develop localized niche pages mapping separate localized services."
+          ]
+        },
+        {
+          "title": "Citation Density & Authority Footprint",
+          "score": 60,
+          "description": "Local NAP (Name, Address, Phone) citation profile shows inconsistencies or omissions on key niche directory syndicates.",
+          "recommendations": [
+            "Sync top-tier databases (Yelp, Apple Maps, Bing, YellowPages) to perfect data consistency.",
+            "Audit industry-specific localized registries for targeted service link anchors.",
+            "Implement ongoing listing management tasks."
+          ]
+        }
+      ],
+      "actionPlan": [
+        "Initiate manual NAP citation sweep and map location profile consolidation.",
+        "Design and deploy optimized on-page content structures loaded with target keywords (Local Services).",
+        "Synthesize high-authority community directory signals to increase backlink weight.",
+        "Formulate a custom review-generation playbook for your desk/field team."
+      ]
+    }
+  },
+  {
     "id": "lead_1",
     "createdAt": "2026-06-17T03:27:26.256Z",
     "status": "audit_prepared",

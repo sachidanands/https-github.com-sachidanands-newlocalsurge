@@ -375,16 +375,27 @@ export default function App() {
     }
   };
 
-  // Fetch leads on mount
+  // Fetch templates on mount
   useEffect(() => {
-    fetchLeads();
     fetchPdfTemplates();
   }, []);
+
+  // Fetch leads conditionally when admin is logged in
+  useEffect(() => {
+    if (isAdminLoggedIn) {
+      fetchLeads();
+    }
+  }, [isAdminLoggedIn]);
 
   const fetchLeads = async () => {
     setLoadingLeads(true);
     try {
-      const response = await fetch('/api/leads');
+      const token = sessionStorage.getItem('adminToken') || '';
+      const response = await fetch('/api/leads', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
       if (response.ok) {
         const data = await response.json();
         setLeads(data);
@@ -412,8 +423,10 @@ export default function App() {
   };
 
   const handleLeadSubmitted = (newLead: Lead) => {
-    // Refresh admin dashboard leads
-    fetchLeads();
+    // Refresh admin dashboard leads if logged in
+    if (isAdminLoggedIn) {
+      fetchLeads();
+    }
     // Auto-navigate to home page to reveal dashboard results if requested,
     // but the OnboardingWizard will handle success rendering internally
   };
@@ -758,9 +771,9 @@ export default function App() {
     e.preventDefault();
     if (!cntEmail.trim() || !cntName.trim()) return;
 
-    // Immediately generate and download the PDF brief, capturing the base64 output
+    // Immediately generate and download the PDF brief
     const selectedPlanId = cntPlan || 'custom';
-    const pdfBase64 = await handleGeneratePDF(selectedPlanId, cntName, cntEmail);
+    await handleGeneratePDF(selectedPlanId, cntName, cntEmail);
 
     setContactSuccess(true);
 
@@ -777,8 +790,7 @@ export default function App() {
       industry: 'Custom Inquiry',
       location: 'Request Location',
       keywords: cntMessage || 'Requested plan selection via Contact',
-      hasGBP: false,
-      pdfBase64: pdfBase64
+      hasGBP: false
     };
 
     try {
@@ -787,7 +799,9 @@ export default function App() {
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify(customLead)
       });
-      fetchLeads();
+      if (isAdminLoggedIn) {
+        fetchLeads();
+      }
     } catch (e) {
       console.error(e);
     }
@@ -1908,6 +1922,7 @@ export default function App() {
                   onGeneratePDF={handleGeneratePDF}
                   onLock={() => {
                     sessionStorage.removeItem('isAdminLoggedIn');
+                    sessionStorage.removeItem('adminToken');
                     setIsAdminLoggedIn(false);
                   }}
                 />
