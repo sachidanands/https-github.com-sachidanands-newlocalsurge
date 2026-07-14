@@ -215,6 +215,17 @@ export default function App() {
     }
   }, [currentPage]);
 
+  // Facebook Meta Pixel Virtual PageView Tracking
+  useEffect(() => {
+    try {
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        (window as any).fbq('track', 'PageView');
+      }
+    } catch (err) {
+      console.error('Failed to track Facebook PageView:', err);
+    }
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
+
   // Dynamic Page Title & Meta Description Handler
   useEffect(() => {
     let title = 'Local Surge SEO - Dynamic Onboarding & Search Dominance';
@@ -429,6 +440,26 @@ export default function App() {
     }
     // Auto-navigate to home page to reveal dashboard results if requested,
     // but the OnboardingWizard will handle success rendering internally
+
+    // Facebook Meta Pixel Lead Tracking
+    try {
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        const planId = newLead.input.planId;
+        const planName = newLead.input.planName;
+        let value = 0;
+        if (planId === 'starter') value = 999;
+        else if (planId === 'premium') value = 1999;
+
+        (window as any).fbq('track', 'Lead', {
+          content_name: planName || 'Onboarding Wizard Lead',
+          content_category: 'Onboarding Wizard',
+          value: value,
+          currency: 'USD'
+        });
+      }
+    } catch (err) {
+      console.error('Failed to track Facebook Lead event:', err);
+    }
   };
 
   // Run SEO Audit Tool
@@ -776,6 +807,25 @@ export default function App() {
     await handleGeneratePDF(selectedPlanId, cntName, cntEmail);
 
     setContactSuccess(true);
+
+    // Facebook Meta Pixel Lead Tracking
+    try {
+      if (typeof window !== 'undefined' && (window as any).fbq) {
+        const plan = PLANS.find(p => p.id === selectedPlanId);
+        let value = 0;
+        if (selectedPlanId === 'starter') value = 999;
+        else if (selectedPlanId === 'premium') value = 1999;
+
+        (window as any).fbq('track', 'Lead', {
+          content_name: plan?.name || 'Contact Form Inquiry',
+          content_category: 'Contact Form',
+          value: value,
+          currency: 'USD'
+        });
+      }
+    } catch (err) {
+      console.error('Failed to track Facebook Lead event:', err);
+    }
 
     // Mimic API lead input as well
     const customLead: any = {
