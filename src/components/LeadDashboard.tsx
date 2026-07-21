@@ -1,10 +1,12 @@
 import React, { useState, useEffect } from 'react';
 import { Lead } from '../types';
+import OutreachDashboard from './OutreachDashboard';
+import BlogStudioDashboard from './BlogStudioDashboard';
 import { 
   Users, Calendar, BarChart3, TrendingUp, Sliders, CheckSquare, Trash2, Save, 
   MessageSquare, FileText, ExternalLink, RefreshCw, Eye, Sparkles, Phone, Mail, Globe, MapPin,
   Plus, Minus, Settings, ListChecks, Lock, Search, AlertCircle, AlertTriangle, CheckCircle2,
-  Zap, Target, ShieldCheck, TrendingDown, Activity, Link2, Bot, Smartphone, Download
+  Zap, Target, ShieldCheck, TrendingDown, Activity, Link2, Bot, Smartphone, Download, BookOpen
 } from 'lucide-react';
 
 interface LeadDashboardProps {
@@ -30,7 +32,9 @@ export default function LeadDashboard({
   const [search, setSearch] = useState<string>('');
   
   // Tab control
-  const [activeTab, setActiveTab] = useState<'leads' | 'pdf-customizer' | 'url-report'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'outreach' | 'blog-studio' | 'pdf-customizer' | 'url-report'>('leads');
+
+
 
   // URL Report Generator state
   const [reportUrl, setReportUrl] = useState('');
@@ -777,7 +781,27 @@ NOTIFY pgrst, 'reload schema';`}
                 : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
             }`}
           >
-            📋 Customer Leads
+            📋 Inbound Leads
+          </button>
+          <button
+            onClick={() => setActiveTab('outreach')}
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
+              activeTab === 'outreach'
+                ? 'border-[#123e35] text-[#123e35]'
+                : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
+            }`}
+          >
+            🎯 Outbound Pitch Queue & Prospecting
+          </button>
+          <button
+            onClick={() => setActiveTab('blog-studio')}
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
+              activeTab === 'blog-studio'
+                ? 'border-[#bc5f40] text-[#bc5f40]'
+                : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
+            }`}
+          >
+            ✍️ Blog & Tool Studio
           </button>
           <button
             onClick={() => setActiveTab('url-report')}
@@ -801,10 +825,16 @@ NOTIFY pgrst, 'reload schema';`}
           </button>
         </div>
 
-        {activeTab === 'leads' ? (
+        {activeTab === 'outreach' ? (
+          <OutreachDashboard />
+        ) : activeTab === 'blog-studio' ? (
+          <BlogStudioDashboard />
+        ) : activeTab === 'leads' ? (
+
           <>
             {/* Stats Grid */}
             <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-6">
+
           <div className="bg-white border border-[#dfded4] p-6 rounded-2xl flex items-center gap-4 hover:shadow-xs transition-all">
             <div className="w-12 h-12 rounded-xl bg-[#123e35]/10 flex items-center justify-center text-[#123e35] shrink-0 font-bold">
               <Users className="w-5 h-5" />

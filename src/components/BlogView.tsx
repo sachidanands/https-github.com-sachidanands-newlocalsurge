@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { BlogPost, BLOG_POSTS } from '../data/blogData';
+import ClientMicroToolWidget from './ClientMicroToolWidget';
 import { 
   ArrowLeft, Search, Sparkles, Clock, Calendar, User, ArrowRight, Check, 
   Share2, BookOpen, ExternalLink, MapPin, CheckSquare, RefreshCw
@@ -19,15 +20,26 @@ export default function BlogView({
   onOpenOnboarding,
   onNavigateToPage
 }: BlogViewProps) {
-  const [activeArticle, setActiveArticle] = useState<BlogPost | null>(null);
+  const [activeArticle, setActiveArticle] = useState<any | null>(null);
+  const [dynamicPosts, setDynamicPosts] = useState<any[]>([]);
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [copiedLink, setCopiedLink] = useState(false);
 
+  // Fetch dynamic approved blog posts from backend API
+  useEffect(() => {
+    fetch('/api/blog/published')
+      .then(res => res.ok ? res.json() : [])
+      .then(data => setDynamicPosts(data))
+      .catch(err => console.error('Error fetching dynamic blogs:', err));
+  }, []);
+
+  const allPosts = [...dynamicPosts, ...BLOG_POSTS];
+
   // Sync state with parent route slug trigger
   useEffect(() => {
     if (initialSlug) {
-      const match = BLOG_POSTS.find(post => post.slug === initialSlug);
+      const match = allPosts.find(post => post.slug === initialSlug);
       if (match) {
         setActiveArticle(match);
         // Scroll to top of article viewport
@@ -38,26 +50,27 @@ export default function BlogView({
     } else {
       setActiveArticle(null);
     }
-  }, [initialSlug]);
+  }, [initialSlug, dynamicPosts]);
 
   // Extract unique categories dynamically based on all posts
-  const categories = ['All', ...Array.from(new Set(BLOG_POSTS.map(post => post.category)))];
+  const categories = ['All', ...Array.from(new Set(allPosts.map(post => post.category)))];
 
   // Filters posts according to active category and search matching
-  const filteredPosts = BLOG_POSTS.filter(post => {
+  const filteredPosts = allPosts.filter(post => {
     const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
     const matchesSearch = 
       post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
       post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.sections.some(sec => sec.content.toLowerCase().includes(searchQuery.toLowerCase()));
+      post.sections.some((sec: any) => sec.content.toLowerCase().includes(searchQuery.toLowerCase()));
     return matchesCategory && matchesSearch;
   });
 
-  // Featured post is the newest one (first array item that matches category if not All, otherwise first item in array)
-  const featuredPost = BLOG_POSTS[0];
+  // Featured post is the newest one
+  const featuredPost = allPosts[0] || BLOG_POSTS[0];
   const listPosts = selectedCategory === 'All' && searchQuery === '' 
     ? filteredPosts.filter(p => p.slug !== featuredPost.slug)
     : filteredPosts;
+
 
   const handleShareArticle = (e: React.MouseEvent, post: BlogPost) => {
     e.stopPropagation();
@@ -248,6 +261,13 @@ export default function BlogView({
                         </div>
                       );
                     }
+                    if (section.type === 'micro-tool' && (section as any).toolConfig) {
+                      return (
+                        <div key={idx} className="my-6">
+                          <ClientMicroToolWidget config={(section as any).toolConfig} />
+                        </div>
+                      );
+                    }
                     if (section.type === 'quote') {
                       return (
                         <div 
@@ -263,6 +283,7 @@ export default function BlogView({
                     }
                     return null;
                   })}
+
                 </div>
 
                 {/* Interaction Footer widget */}
