@@ -36,6 +36,12 @@
       "sourceType": "github",
       "skillPath": "skills/seo-audit/SKILL.md",
       "computedHash": "f2dc52130189068981f21e1c0bdc4471ac7cd9b08d8a1320604411aa0f950385"
+    },
+    "gstack": {
+      "source": "garrytan/gstack",
+      "sourceType": "github",
+      "skillPath": "skills/gstack/SKILL.md",
+      "computedHash": "63ad5c21eb434557b2473821712fff5fafaa1ac439cb637d0c5e16fa215f7665"
     }
   }
 }

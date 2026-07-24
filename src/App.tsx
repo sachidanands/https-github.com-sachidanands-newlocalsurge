@@ -244,6 +244,7 @@ export default function App() {
   useEffect(() => {
     let title = 'Local Surge SEO - Dynamic Onboarding & Search Dominance';
     let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses.';
+    let ogImage = 'https://localsurgeseo.com/assets/og-image.jpg';
 
     if (currentPage === 'about') {
       title = 'About Our Mission - Local Surge SEO';
@@ -255,8 +256,9 @@ export default function App() {
       title = 'Local SEO Optimization Services - Google Maps Mappings';
       description = 'Elevate your business prominence on Google Maps. We optimize Business Profiles, sync directory citations, and deploy professional local schema.';
     } else if (currentPage === 'pricing') {
-      title = 'Transparent Pricing Plans - Local Surge SEO';
-      description = 'Simple and transparent pricing for local businesses. Choose between Single-Page Blast, Starter Boost, and Premium Surge with no setup fees.';
+      title = 'Local SEO Pricing Plans & Packages - Local Surge SEO';
+      description = 'Get a free website created or your site revamped. Affordable monthly local SEO pricing packages for businesses in the United States. Start today for free!';
+      ogImage = 'https://localsurgeseo.com/assets/og-pricing.png';
     } else if (currentPage === 'seo-tool') {
       title = 'Free Local SEO Audit & Scan Tool - Local Surge SEO';
       description = 'Run an instant website scan. Detect LocalBusiness schema, evaluate NAP consistency, and find regional citation errors for your business.';
@@ -337,7 +339,7 @@ export default function App() {
     setOgTag('og:description', description);
     setOgTag('og:url', canonicalUrl);
     setOgTag('og:type', 'website');
-    setOgTag('og:image', 'https://localsurgeseo.com/assets/og-image.jpg');
+    setOgTag('og:image', ogImage);
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
