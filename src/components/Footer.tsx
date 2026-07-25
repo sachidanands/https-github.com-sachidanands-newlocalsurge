@@ -1,6 +1,16 @@
 import React from 'react';
 import { Page } from '../types';
-import { Rocket, Mail, MapPin, Clock, Calendar, Facebook, Youtube, Twitter } from 'lucide-react';
+import { Rocket, Mail, MapPin, Clock, Calendar, Facebook, Youtube } from 'lucide-react';
+
+const XIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
+  <svg 
+    viewBox="0 0 24 24" 
+    fill="currentColor" 
+    className={className}
+  >
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+  </svg>
+);
 
 interface FooterProps {
   setCurrentPage: (page: Page) => void;
@@ -70,9 +80,9 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                     target="_blank" 
                     rel="noopener noreferrer" 
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
-                    aria-label="Twitter (X)"
+                    aria-label="X (formerly Twitter)"
                   >
-                    <Twitter className="w-4 h-4" />
+                    <XIcon className="w-4 h-4" />
                   </a>
                 </div>
                 <p className="text-[9px] text-[#888b88] italic pt-2 border-t border-dashed border-[#dfded4]">
