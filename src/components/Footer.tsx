@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from '../types';
-import { Rocket, Mail, MapPin, Clock, Calendar } from 'lucide-react';
+import { Rocket, Mail, MapPin, Clock, Calendar, Facebook, Youtube, Twitter } from 'lucide-react';
 
 interface FooterProps {
   setCurrentPage: (page: Page) => void;
@@ -46,7 +46,36 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   <Clock className="w-3.5 h-3.5 text-[#bc5f40] shrink-0" />
                   <span>Phone: +1 (800) 555-0199 (VoIP Inbox)</span>
                 </div>
-                <p className="text-[9px] text-[#888b88] italic pt-1 border-t border-dashed border-[#dfded4]">
+                <div className="pt-3 border-t border-[#dfded4]/65 flex gap-3">
+                  <a 
+                    href="https://www.facebook.com/localsurgeseo" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
+                    aria-label="Facebook"
+                  >
+                    <Facebook className="w-4 h-4" />
+                  </a>
+                  <a 
+                    href="https://www.youtube.com/@LocalSurgeSEO" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#bc5f40] hover:border-[#bc5f40] hover:bg-[#bc5f40]/5 hover:scale-105 transition-all duration-200"
+                    aria-label="YouTube"
+                  >
+                    <Youtube className="w-4 h-4" />
+                  </a>
+                  <a 
+                    href="https://x.com/localsurgeseo" 
+                    target="_blank" 
+                    rel="noopener noreferrer" 
+                    className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
+                    aria-label="Twitter (X)"
+                  >
+                    <Twitter className="w-4 h-4" />
+                  </a>
+                </div>
+                <p className="text-[9px] text-[#888b88] italic pt-2 border-t border-dashed border-[#dfded4]">
                   * Local Surge SEO operates as a Service Area Business (SAB). We consult with our clients virtually and do not maintain a physical walk-in storefront.
                 </p>
                 <div className="pt-3 border-t border-[#dfded4] flex justify-start">

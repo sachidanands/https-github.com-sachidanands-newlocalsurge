@@ -61,6 +61,11 @@ export default function SchemaMarkup({
         'name': 'Canada'
       }
     ],
+    'sameAs': [
+      'https://www.facebook.com/localsurgeseo',
+      'https://www.youtube.com/@LocalSurgeSEO',
+      'https://x.com/localsurgeseo'
+    ],
     'description': 'High-performance web design and local SEO optimization suite for contractors, dentists, plumbers, and local service providers looking to dominate regional query hierarchies.'
   };
 
