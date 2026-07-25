@@ -244,17 +244,20 @@ export default function App() {
   useEffect(() => {
     let title = 'Local Surge SEO - Dynamic Onboarding & Search Dominance';
     let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses.';
-    let ogImage = 'https://localsurgeseo.com/assets/og-image.jpg';
+    let ogImage = 'https://localsurgeseo.com/assets/og-home.png';
 
     if (currentPage === 'about') {
       title = 'About Our Mission - Local Surge SEO';
       description = 'Learn about Local Surge SEO\'s mission to empower local contractors, dentists, and service providers to dominate regional search results.';
+      ogImage = 'https://localsurgeseo.com/assets/og-about.png';
     } else if (currentPage === 'why-us') {
       title = 'Why Choose Local Surge SEO - Direct Search Mappings';
       description = 'Discover the Local Surge SEO advantage: direct communication, rapid schema deployments, and transparent results without bloated developer fees.';
+      ogImage = 'https://localsurgeseo.com/assets/og-why-us.png';
     } else if (currentPage === 'local-seo') {
       title = 'Local SEO Optimization Services - Google Maps Mappings';
       description = 'Elevate your business prominence on Google Maps. We optimize Business Profiles, sync directory citations, and deploy professional local schema.';
+      ogImage = 'https://localsurgeseo.com/assets/og-local-seo.png';
     } else if (currentPage === 'pricing') {
       title = 'Local SEO Pricing Plans & Packages - Local Surge SEO';
       description = 'Get a free website created or your site revamped. Affordable monthly local SEO pricing packages for businesses in the United States. Start today for free!';
@@ -262,33 +265,41 @@ export default function App() {
     } else if (currentPage === 'seo-tool') {
       title = 'Free Local SEO Audit & Scan Tool - Local Surge SEO';
       description = 'Run an instant website scan. Detect LocalBusiness schema, evaluate NAP consistency, and find regional citation errors for your business.';
+      ogImage = 'https://localsurgeseo.com/assets/og-seo-tool.png';
     } else if (currentPage === 'contact') {
       title = 'Contact Team Office - Local Surge SEO';
       description = 'Get in touch with Local Surge SEO. Schedule a free optimization brief with our field strategist to unlock neighborhood keyword opportunities.';
+      ogImage = 'https://localsurgeseo.com/assets/og-contact.png';
     } else if (currentPage === 'admin') {
       title = 'Admin Lead Dashboard - Local Surge SEO';
       description = 'Secure lead management and administrative tools for Local Surge campaigns.';
     } else if (currentPage === 'site-map') {
       title = 'Directory Sitemap - Local Surge SEO';
       description = 'Browse our directory of state and city-specific local SEO analysis maps.';
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'california') {
       title = 'California SEO Directory & Market Analysis - Local Surge';
       description = 'Analyze search traffic opportunities and local SEO trends across major California counties and metropolitan cities.';
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'los-angeles-seo') {
       title = 'Los Angeles SEO Services & Maps Optimization - Local Surge';
       description = 'Dominating the Los Angeles local search market. Highly-optimized GBP tuning, citation audits, and schema markup for LA service providers.';
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'blog') {
       title = 'Local Marketing Insights Blog - Local Surge SEO';
       description = 'Read expert guides and actionable strategies on local search, generative engine optimization (GEO), and ranking in the AI search era.';
+      ogImage = 'https://localsurgeseo.com/assets/og-blog.png';
     } else if (currentPage === 'state-seo' && activeStateSlug) {
       const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
       title = `${stateName} Local SEO Directory - Local Surge SEO`;
       description = `Analyze local search performance and citation compliance metrics for service area businesses throughout the state of ${stateName}.`;
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'city-seo' && activeStateSlug && activeCitySlug) {
       const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
       const cityName = activeCitySlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
       title = `${cityName}, ${stateName} Local SEO Rankings - Local Surge`;
       description = `Local maps optimization, search volumes, and competitor density listings in ${cityName}, ${stateName} for neighborhood contractors and practices.`;
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     }
 
     if (currentPage === 'blog' && activeArticleSlug) {
@@ -296,6 +307,7 @@ export default function App() {
       if (post) {
         title = `${post.title} | Local Surge Insights`;
         description = post.description;
+        ogImage = 'https://localsurgeseo.com/assets/og-blog.png';
       }
     }
 
@@ -335,11 +347,29 @@ export default function App() {
       tag.setAttribute('content', content);
     };
 
+    // Set Twitter tags dynamically
+    const setTwitterTag = (name: string, content: string) => {
+      let tag = document.querySelector(`meta[name="${name}"]`);
+      if (!tag) {
+        tag = document.createElement('meta');
+        tag.setAttribute('name', name);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('content', content);
+    };
+
     setOgTag('og:title', title);
     setOgTag('og:description', description);
     setOgTag('og:url', canonicalUrl);
     setOgTag('og:type', 'website');
     setOgTag('og:image', ogImage);
+
+    setTwitterTag('twitter:card', 'summary_large_image');
+    setTwitterTag('twitter:site', '@localsurgeseo');
+    setTwitterTag('twitter:creator', '@localsurgeseo');
+    setTwitterTag('twitter:title', title);
+    setTwitterTag('twitter:description', description);
+    setTwitterTag('twitter:image', ogImage);
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
