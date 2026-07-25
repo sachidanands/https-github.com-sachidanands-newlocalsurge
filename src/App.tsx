@@ -358,11 +358,16 @@ export default function App() {
       tag.setAttribute('content', content);
     };
 
+    const imageAlt = `${title} social preview card detailing service features and call-to-action details.`;
+
     setOgTag('og:title', title);
     setOgTag('og:description', description);
     setOgTag('og:url', canonicalUrl);
     setOgTag('og:type', 'website');
     setOgTag('og:image', ogImage);
+    setOgTag('og:image:width', '1200');
+    setOgTag('og:image:height', '630');
+    setOgTag('og:image:alt', imageAlt);
 
     setTwitterTag('twitter:card', 'summary_large_image');
     setTwitterTag('twitter:site', '@localsurgeseo');
@@ -370,6 +375,7 @@ export default function App() {
     setTwitterTag('twitter:title', title);
     setTwitterTag('twitter:description', description);
     setTwitterTag('twitter:image', ogImage);
+    setTwitterTag('twitter:image:alt', imageAlt);
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
