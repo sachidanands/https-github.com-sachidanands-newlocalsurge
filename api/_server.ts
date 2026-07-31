@@ -2155,6 +2155,358 @@ app.get("/api/blog/published", (req, res) => {
   res.json(readPublishedBlogs());
 });
 
+// 10. Google Ads API Integration Endpoints
+const CAMPAIGNS_FILE = path.join(DATA_DIR, "google_campaigns.json");
+
+function readCampaigns(): any[] {
+  try {
+    if (!fs.existsSync(CAMPAIGNS_FILE)) {
+      const defaultCampaigns = [
+        {
+          id: "camp_1",
+          createdAt: new Date(Date.now() - 10 * 24 * 3600 * 1000).toISOString(),
+          name: "Denver Plumbing Leads Search",
+          status: "active",
+          budget: 50.00,
+          location: "Denver, CO",
+          website: "https://eliteplumbingdenver.com",
+          keywords: "emergency plumber denver, leak repair denver, water heater setup",
+          headlines: [
+            "Emergency Plumber Denver",
+            "Elite Plumbing & Drain",
+            "24/7 Leak Repair Denver",
+            "Water Heater Setup Denver",
+            "Denver Top Rated Plumbing"
+          ],
+          longHeadlines: [
+            "Uncompromising Local SEO Execution & Maps Dominance",
+            "Dynamic Onboarding & Regional Search Dominance",
+            "Stop Losing Customers to Competitors Nearby"
+          ],
+          descriptions: [
+            "Need a reliable plumber in Denver? Elite Plumbing provides 24/7 emergency service, leak repair, and professional installations.",
+            "Fast response times, transparent pricing, and fully licensed technicians. Call Kevin at Elite Plumbing Denver now!"
+          ],
+          sitelinks: [
+            { title: "Pricing Plans", desc1: "Affordable growth tiers", desc2: "Flat rate monthly pricing", path: "/pricing" },
+            { title: "SEO Tool", desc1: "Run free local SEO scan", desc2: "Check maps pack rankings", path: "/seo-tool" }
+          ],
+          metrics: {
+            clicks: 342,
+            impressions: 4890,
+            ctr: 7.00,
+            cost: 684.00
+          }
+        },
+        {
+          id: "camp_2",
+          createdAt: new Date(Date.now() - 5 * 24 * 3600 * 1000).toISOString(),
+          name: "San Mateo Dental Implants",
+          status: "paused",
+          budget: 35.00,
+          location: "San Mateo, CA",
+          website: "https://luminatedental.com",
+          keywords: "dentist san mateo, teeth whitening, clear aligners nearby",
+          headlines: [
+            "Top Dentist San Mateo",
+            "Luminate Dental General Care",
+            "Teeth Whitening San Mateo",
+            "Clear Aligners Nearby",
+            "Best Cosmetic Dentist Clinic"
+          ],
+          longHeadlines: [
+            "Cosmetic & General Dentistry in San Mateo",
+            "Luminate Dental General Care & Teeth Whitening"
+          ],
+          descriptions: [
+            "General and cosmetic dental care in San Mateo. Schedule teeth whitening or aligner consults online.",
+            "Comfortable environment and state of the art equipment. Dr. Sarah Kim is accepting new patients today."
+          ],
+          sitelinks: [
+            { title: "Pricing Plans", desc1: "Affordable growth tiers", desc2: "Flat rate monthly pricing", path: "/pricing" },
+            { title: "SEO Tool", desc1: "Run free local SEO scan", desc2: "Check maps pack rankings", path: "/seo-tool" }
+          ],
+          metrics: {
+            clicks: 118,
+            impressions: 2120,
+            ctr: 5.56,
+            cost: 236.00
+          }
+        }
+      ];
+      fs.writeFileSync(CAMPAIGNS_FILE, JSON.stringify(defaultCampaigns, null, 2));
+      return defaultCampaigns;
+    }
+    return JSON.parse(fs.readFileSync(CAMPAIGNS_FILE, "utf-8"));
+  } catch (err) {
+    console.error("Error reading campaigns file:", err);
+    return [];
+  }
+}
+
+function writeCampaigns(campaigns: any[]) {
+  try {
+    fs.writeFileSync(CAMPAIGNS_FILE, JSON.stringify(campaigns, null, 2));
+  } catch (err) {
+    console.error("Error writing campaigns file:", err);
+  }
+}
+
+app.get("/api/google-ads/campaigns", requireAdmin, (req, res) => {
+  res.json(readCampaigns());
+});
+
+app.post("/api/google-ads/create-campaign", requireAdmin, (req, res) => {
+  const { name, budget, location, website, keywords, headlines, longHeadlines, descriptions, sitelinks, status } = req.body;
+  
+  if (!name || !budget || !website) {
+    return res.status(400).json({ error: "Missing required campaign fields (name, budget, or website)." });
+  }
+
+  const campaigns = readCampaigns();
+  
+  const newCampaign = {
+    id: `camp_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
+    createdAt: new Date().toISOString(),
+    name,
+    status: status || "active",
+    budget: parseFloat(budget),
+    location: location || "All locations",
+    website,
+    keywords: keywords || "",
+    headlines: headlines || [],
+    longHeadlines: longHeadlines || [],
+    descriptions: descriptions || [],
+    sitelinks: sitelinks || [],
+    metrics: {
+      clicks: 0,
+      impressions: 0,
+      ctr: 0.00,
+      cost: 0.00
+    }
+  };
+
+  campaigns.unshift(newCampaign);
+  writeCampaigns(campaigns);
+  
+  res.json({ success: true, campaign: newCampaign });
+});
+
+app.post("/api/google-ads/update-status", requireAdmin, (req, res) => {
+  const { id, status } = req.body;
+  if (!id || !status) {
+    return res.status(400).json({ error: "Missing campaign id or status." });
+  }
+  const campaigns = readCampaigns();
+  const idx = campaigns.findIndex(c => c.id === id);
+  if (idx === -1) {
+    return res.status(404).json({ error: "Campaign not found." });
+  }
+  campaigns[idx].status = status;
+  writeCampaigns(campaigns);
+  res.json({ success: true, campaign: campaigns[idx] });
+});
+
+app.delete("/api/google-ads/campaigns/:id", requireAdmin, (req, res) => {
+  const { id } = req.params;
+  const campaigns = readCampaigns();
+  const filtered = campaigns.filter(c => c.id !== id);
+  writeCampaigns(filtered);
+  res.json({ success: true });
+});
+
+app.post("/api/google-ads/generate-copy", requireAdmin, async (req, res) => {
+  const { url, industry, keywords, location } = req.body;
+  
+  const cleanUrl = String(url || "").trim().slice(0, 100);
+  const cleanIndustry = String(industry || "").trim().slice(0, 100);
+  const cleanKeywords = String(keywords || "").trim().slice(0, 200);
+  const cleanLocation = String(location || "").trim().slice(0, 100);
+
+  const fallbackHeadlines = [
+    `Local ${cleanIndustry || 'Services'} - ${cleanLocation || 'Near Me'}`,
+    `Top Rated ${cleanIndustry || 'SEO Expert'}`,
+    `Call ${cleanLocation || 'Our Team'} Today`,
+    `24/7 Expert Support`,
+    `Get a Free Estimate`,
+    `Affordable Pricing Plans`,
+    `Best ${cleanIndustry || 'Services'} Near You`,
+    `100% Satisfaction Guarantee`,
+    `Professional Service Team`,
+    `Highly Rated Local Experts`,
+    `Request a Call Back`,
+    `Fast & Reliable Service`,
+    `Boost Your Local Ranking`,
+    `Secure Citation Building`,
+    `Schedule Online Instantly`
+  ];
+
+  const fallbackLongHeadlines = [
+    `Uncompromising Local SEO Execution & Maps Dominance for ${cleanLocation || 'Your Business'}`,
+    `Dynamic Onboarding & Regional Search Dominance - Flat Monthly Subscription Tiers`,
+    `Stop Losing Customers to Competitors Nearby - Claim Your Local Presence Now`,
+    `High-Performance Web Design & Local SEO Suite Built for Home Services & Clinics`,
+    `Increase Leads and Storefront Foot Traffic with Guaranteed NAP Citation Alignment`
+  ];
+
+  const fallbackDescriptions = [
+    `Premium ${cleanIndustry || 'local SEO'} solutions for businesses in ${cleanLocation || 'your town'}. Enhance maps packs and citations.`,
+    `Get professional optimization for ${cleanKeywords || 'local searches'}. Flat monthly rates. No contracts.`,
+    `Struggling to get found on search maps? Let us optimize your profiles and listings in ${cleanLocation || 'your region'}.`,
+    `Unlock emergency local search traffic. High converting custom pages built for peak conversion. Call us today.`
+  ];
+
+  const fallbackSitelinks = [
+    { title: "Pricing Plans", desc1: "Affordable growth tiers", desc2: "Flat rate monthly pricing", path: "/pricing" },
+    { title: "SEO Tool", desc1: "Run free local SEO scan", desc2: "Check maps pack rankings", path: "/seo-tool" },
+    { title: "About Our Mission", desc1: "Learn about Local Surge SEO", desc2: "Empowering local contractors", path: "/about" },
+    { title: "Contact Us Today", desc1: "Get a free strategy brief", desc2: "Connect with our strategist", path: "/contact" }
+  ];
+
+  const { ai, Type } = await getGemini();
+  if (ai) {
+    try {
+      const prompt = `
+        You are a Google Ads Copywriting Specialist for Local Surge SEO.
+        Write a complete set of Responsive Search Ad (RSA) assets (exactly 15 headlines, exactly 5 long headlines, exactly 4 descriptions, and exactly 4 sitelinks) targeting local businesses.
+        Target Business Details:
+        - Website final URL: ${cleanUrl}
+        - Niche/Industry: ${cleanIndustry}
+        - Target Keywords: ${cleanKeywords}
+        - Target City/Location: ${cleanLocation}
+
+        CRITICAL CONSTRAINTS:
+        - Headlines MUST NOT exceed 30 characters in length.
+        - Long Headlines MUST NOT exceed 90 characters in length.
+        - Descriptions MUST NOT exceed 90 characters in length.
+        - Sitelink title MUST NOT exceed 25 characters in length.
+        - Sitelink desc1 and desc2 MUST NOT exceed 35 characters in length.
+        - Ensure headlines, long headlines, descriptions, and sitelinks are persuasive, clear, highlight benefits, and utilize the provided keywords and location.
+
+        Return JSON matching this exact schema:
+        {
+          "headlines": [
+             "Headline 1 (max 30 chars)",
+             ... exactly 15 headlines
+          ],
+          "longHeadlines": [
+             "Long Headline 1 (max 90 chars)",
+             ... exactly 5 long headlines
+          ],
+          "descriptions": [
+             "Description 1 (max 90 chars)",
+             ... exactly 4 descriptions
+          ],
+          "sitelinks": [
+             {
+               "title": "Title (max 25 chars)",
+               "desc1": "Description Line 1 (max 35 chars)",
+               "desc2": "Description Line 2 (max 35 chars)",
+               "path": "/url-path"
+             },
+             ... exactly 4 sitelinks
+          ]
+        }
+      `;
+
+      const responseSchema = {
+        type: Type.OBJECT,
+        properties: {
+          headlines: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+          },
+          longHeadlines: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+          },
+          descriptions: {
+            type: Type.ARRAY,
+            items: { type: Type.STRING }
+          },
+          sitelinks: {
+            type: Type.ARRAY,
+            items: {
+              type: Type.OBJECT,
+              properties: {
+                title: { type: Type.STRING },
+                desc1: { type: Type.STRING },
+                desc2: { type: Type.STRING },
+                path: { type: Type.STRING }
+              },
+              required: ["title", "desc1", "desc2", "path"]
+            }
+          }
+        },
+        required: ["headlines", "longHeadlines", "descriptions", "sitelinks"]
+      };
+
+      const result = await ai.models.generateContent({
+        model: "gemini-3.5-flash",
+        contents: prompt,
+        config: {
+          responseMimeType: "application/json",
+          responseSchema
+        }
+      });
+
+      if (result.text) {
+        const parsed = JSON.parse(result.text.trim());
+        
+        const headlines = (parsed.headlines || [])
+          .map((h: string) => h.trim().slice(0, 30))
+          .filter(Boolean)
+          .slice(0, 15);
+
+        const longHeadlines = (parsed.longHeadlines || [])
+          .map((lh: string) => lh.trim().slice(0, 90))
+          .filter(Boolean)
+          .slice(0, 5);
+        
+        const descriptions = (parsed.descriptions || [])
+          .map((d: string) => d.trim().slice(0, 90))
+          .filter(Boolean)
+          .slice(0, 4);
+
+        const sitelinks = (parsed.sitelinks || [])
+          .map((sl: any) => ({
+            title: String(sl.title || "").trim().slice(0, 25),
+            desc1: String(sl.desc1 || "").trim().slice(0, 35),
+            desc2: String(sl.desc2 || "").trim().slice(0, 35),
+            path: String(sl.path || "").trim().slice(0, 50)
+          }))
+          .filter((sl: any) => sl.title)
+          .slice(0, 4);
+
+        while (headlines.length < 15) {
+          headlines.push(fallbackHeadlines[headlines.length] || "Best Local Services");
+        }
+        while (longHeadlines.length < 5) {
+          longHeadlines.push(fallbackLongHeadlines[longHeadlines.length] || "Uncompromising Local SEO Execution");
+        }
+        while (descriptions.length < 4) {
+          descriptions.push(fallbackDescriptions[descriptions.length] || "Get a free consultation today.");
+        }
+        while (sitelinks.length < 4) {
+          sitelinks.push(fallbackSitelinks[sitelinks.length]);
+        }
+
+        return res.json({ success: true, headlines, longHeadlines, descriptions, sitelinks });
+      }
+    } catch (err) {
+      console.error("Gemini Google Ads generation error:", err);
+    }
+  }
+
+  res.json({
+    success: true,
+    headlines: fallbackHeadlines.slice(0, 15),
+    longHeadlines: fallbackLongHeadlines.slice(0, 5),
+    descriptions: fallbackDescriptions.slice(0, 4),
+    sitelinks: fallbackSitelinks.slice(0, 4)
+  });
+});
+
 export default app;
 
 

@@ -6,7 +6,8 @@ import {
   Users, Calendar, BarChart3, TrendingUp, Sliders, CheckSquare, Trash2, Save, 
   MessageSquare, FileText, ExternalLink, RefreshCw, Eye, Sparkles, Phone, Mail, Globe, MapPin,
   Plus, Minus, Settings, ListChecks, Lock, Search, AlertCircle, AlertTriangle, CheckCircle2,
-  Zap, Target, ShieldCheck, TrendingDown, Activity, Link2, Bot, Smartphone, Download, BookOpen
+  Zap, Target, ShieldCheck, TrendingDown, Activity, Link2, Bot, Smartphone, Download, BookOpen,
+  Rocket
 } from 'lucide-react';
 
 interface LeadDashboardProps {
@@ -32,7 +33,69 @@ export default function LeadDashboard({
   const [search, setSearch] = useState<string>('');
   
   // Tab control
-  const [activeTab, setActiveTab] = useState<'leads' | 'outreach' | 'blog-studio' | 'pdf-customizer' | 'url-report'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'outreach' | 'blog-studio' | 'pdf-customizer' | 'url-report' | 'google-ads'>('leads');
+
+  // Google Ads integration states
+  const [campaigns, setCampaigns] = useState<any[]>([]);
+  const [loadingCampaigns, setLoadingCampaigns] = useState(false);
+  const [adsConnected, setAdsConnected] = useState(false);
+  const [adsCustomerId, setAdsCustomerId] = useState('');
+  const [adsClientId, setAdsClientId] = useState('');
+  const [adsClientSecret, setAdsClientSecret] = useState('');
+  const [adsDevToken, setAdsDevToken] = useState('');
+  const [adsUseSandbox, setAdsUseSandbox] = useState(true);
+
+  // Form states
+  const [campName, setCampName] = useState('');
+  const [campBudget, setCampBudget] = useState('50');
+  const [campLocation, setCampLocation] = useState('Denver, CO');
+  const [campWebsite, setCampWebsite] = useState('https://eliteplumbingdenver.com');
+  const [campKeywords, setCampKeywords] = useState('emergency plumber denver, leak repair denver');
+  const [campIndustry, setCampIndustry] = useState('Plumbing & Rooter');
+
+  // Ad Assets state
+  const [headlines, setHeadlines] = useState<string[]>([]);
+  const [longHeadlines, setLongHeadlines] = useState<string[]>([]);
+  const [descriptions, setDescriptions] = useState<string[]>([]);
+  const [sitelinks, setSitelinks] = useState<any[]>([]);
+  const [adCopyLoading, setAdCopyLoading] = useState(false);
+
+  // Deploying stepper
+  const [isDeploying, setIsDeploying] = useState(false);
+  const [deployStep, setDeployStep] = useState(0);
+  const [deployMessage, setDeployMessage] = useState('');
+
+  // Preview Switcher
+  const [previewDevice, setPreviewDevice] = useState<'mobile' | 'desktop'>('mobile');
+
+  // Expanded Campaign Accordion state
+  const [expandedCampaignId, setExpandedCampaignId] = useState<string | null>(null);
+
+  const fetchCampaigns = async () => {
+    setLoadingCampaigns(true);
+    try {
+      const token = sessionStorage.getItem('adminToken') || '';
+      const res = await fetch('/api/google-ads/campaigns', {
+        headers: {
+          'Authorization': `Bearer ${token}`
+        }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setCampaigns(data);
+      }
+    } catch (err) {
+      console.error("Error fetching campaigns:", err);
+    } finally {
+      setLoadingCampaigns(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'google-ads') {
+      fetchCampaigns();
+    }
+  }, [activeTab]);
 
 
 
@@ -814,6 +877,16 @@ NOTIFY pgrst, 'reload schema';`}
             🔍 SEO Blueprint Generator
           </button>
           <button
+            onClick={() => setActiveTab('google-ads')}
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
+              activeTab === 'google-ads'
+                ? 'border-[#bc5f40] text-[#bc5f40]'
+                : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
+            }`}
+          >
+            📢 Google Ads Manager
+          </button>
+          <button
             onClick={() => setActiveTab('pdf-customizer')}
             className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
               activeTab === 'pdf-customizer'
@@ -1493,6 +1566,776 @@ NOTIFY pgrst, 'reload schema';`}
                     <TrendingUp className="w-3.5 h-3.5 text-[#123e35]" /> Competitive Landscape
                   </h4>
                   <p className="text-sm text-[#2d2f2d] leading-relaxed font-semibold">{reportData.competitorInsights}</p>
+                </div>
+
+              </div>
+            )}
+          </div>
+
+        ) : activeTab === 'google-ads' ? (
+          // ── Google Ads Manager Tab ──────────────────────────────────────────
+          <div className="space-y-6">
+            {/* Header Status Card */}
+            <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className="w-12 h-12 rounded-xl bg-blue-50 flex items-center justify-center shrink-0 border border-blue-100">
+                  <svg className="w-6 h-6 text-blue-600" viewBox="0 0 24 24" fill="currentColor">
+                    <path d="M21.3 11.1H12v2.8h5.3c-.5 2.5-2.7 4.3-5.3 4.3-3.1 0-5.6-2.5-5.6-5.6s2.5-5.6 5.6-5.6c1.4 0 2.7.5 3.7 1.4l2.1-2.1C16.1 4.7 14.1 4 12 4 7.6 4 4 7.6 4 12s3.6 8 8 8c4.4 0 8-3.6 8-8 0-.6-.1-1.3-.7-1.9z" />
+                  </svg>
+                </div>
+                <div>
+                  <h2 className="text-xl font-black text-[#151716] tracking-tight flex items-center gap-2">
+                    Google Ads API Manager
+                    <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                      adsConnected ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200'
+                    }`}>
+                      {adsConnected ? 'Connected & Synchronized' : 'Account Linked Pending'}
+                    </span>
+                  </h2>
+                  <p className="text-xs text-[#4e524f] font-semibold mt-1">
+                    Deploy Responsive Search Ads (RSAs) directly to your Google Ads account, auto-generate high-converting copy using Gemini AI, and track territory metrics.
+                  </p>
+                </div>
+              </div>
+              
+              {adsConnected && (
+                <button
+                  onClick={() => {
+                    setAdsConnected(false);
+                    setHeadlines([]);
+                    setLongHeadlines([]);
+                    setDescriptions([]);
+                    setSitelinks([]);
+                  }}
+                  className="px-4.5 py-2.5 bg-red-50 hover:bg-red-100 text-red-700 text-xs font-black rounded-xl border border-red-200 cursor-pointer transition-all"
+                >
+                  Disconnect Ads Account
+                </button>
+              )}
+            </div>
+
+            {!adsConnected ? (
+              /* Connect Ads Account Panel */
+              <div className="bg-white border border-[#dfded4] rounded-2xl p-8 max-w-2xl mx-auto shadow-xs text-center space-y-6">
+                <div className="w-16 h-16 rounded-2xl bg-blue-50 border border-blue-100 flex items-center justify-center mx-auto text-blue-600">
+                  <Activity className="w-8 h-8 animate-pulse" />
+                </div>
+                <div>
+                  <h3 className="text-lg font-black text-[#151716] tracking-tight">Connect Your Google Ads Account</h3>
+                  <p className="text-xs text-[#4e524f] font-semibold max-w-md mx-auto mt-1">
+                    Integrate your Google MCC or individual customer account. You can use Sandbox Mode to simulate actual Google Ads API queries instantly.
+                  </p>
+                </div>
+
+                <div className="border border-[#dfded4] rounded-2xl p-5 bg-[#faf9f6] text-left space-y-4">
+                  <div className="flex items-center justify-between border-b border-[#dfded4] pb-3">
+                    <span className="text-xs font-black text-[#151716] uppercase tracking-wider">Developer Sandbox Mode</span>
+                    <label className="relative inline-flex items-center cursor-pointer">
+                      <input
+                        type="checkbox"
+                        checked={adsUseSandbox}
+                        onChange={(e) => setAdsUseSandbox(e.target.checked)}
+                        className="sr-only peer"
+                      />
+                      <div className="w-9 h-5 bg-[#dfded4] peer-focus:outline-none rounded-full peer peer-checked:after:translate-x-full peer-checked:after:border-white after:content-[''] after:absolute after:top-[2px] after:left-[2px] after:bg-white after:border-gray-300 after:border after:rounded-full after:h-4 after:w-4 after:transition-all peer-checked:bg-[#123e35]"></div>
+                    </label>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div>
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Google Ads Customer ID *</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. 123-456-7890"
+                        value={adsCustomerId}
+                        onChange={(e) => setAdsCustomerId(e.target.value)}
+                        className="w-full px-3.5 py-2 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Developer API Token *</label>
+                      <input
+                        type="password"
+                        placeholder={adsUseSandbox ? "(Simulated Sandbox Token)" : "Enter developer token"}
+                        value={adsDevToken}
+                        onChange={(e) => setAdsDevToken(e.target.value)}
+                        disabled={adsUseSandbox}
+                        className="w-full px-3.5 py-2 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white disabled:bg-gray-100 disabled:text-gray-400"
+                      />
+                    </div>
+                  </div>
+
+                  {!adsUseSandbox && (
+                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 pt-2 border-t border-[#dfded4]/60">
+                      <div>
+                        <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">OAuth Client ID</label>
+                        <input
+                          type="text"
+                          placeholder="client_id.apps.googleusercontent.com"
+                          value={adsClientId}
+                          onChange={(e) => setAdsClientId(e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                        />
+                      </div>
+                      <div>
+                        <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">OAuth Client Secret</label>
+                        <input
+                          type="password"
+                          placeholder="client_secret_key"
+                          value={adsClientSecret}
+                          onChange={(e) => setAdsClientSecret(e.target.value)}
+                          className="w-full px-3.5 py-2 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                        />
+                      </div>
+                    </div>
+                  )}
+                </div>
+
+                <button
+                  onClick={() => {
+                    if (!adsCustomerId.trim()) {
+                      alert("Please provide your Google Ads Customer ID.");
+                      return;
+                    }
+                    if (!adsUseSandbox && (!adsClientId.trim() || !adsClientSecret.trim() || !adsDevToken.trim())) {
+                      alert("Production mode requires Client ID, Client Secret, and Developer Token.");
+                      return;
+                    }
+                    setAdsConnected(true);
+                  }}
+                  className="w-full py-3 bg-[#123e35] hover:bg-[#0c2b25] text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-xs flex items-center justify-center gap-2"
+                >
+                  <Link2 className="w-4 h-4" />
+                  Link Google Ads Account Now
+                </button>
+              </div>
+            ) : (
+              /* Connected Dashboard: Creator & Previews */
+              <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-start">
+                
+                {/* Left Column: Form & Copy Generator */}
+                <div className="lg:col-span-7 bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-6">
+                  <div className="border-b border-[#dfded4] pb-4">
+                    <h3 className="font-black text-[#151716] text-base tracking-tight flex items-center gap-1.5">
+                      <Target className="w-5 h-5 text-[#bc5f40]" />
+                      Campaign Settings & AI Creative Asset Compiler
+                    </h3>
+                    <p className="text-xs text-[#4e524f] font-semibold mt-1">
+                      Configure your campaign budget, location mapping, and trigger keywords. Then, call Gemini AI to structure ad assets.
+                    </p>
+                  </div>
+
+                  <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+                    <div className="sm:col-span-2">
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Campaign Name *</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Denver Plumbing Leads Search"
+                        value={campName}
+                        onChange={(e) => setCampName(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Final URL (Landing Page) *</label>
+                      <input
+                        type="url"
+                        placeholder="https://eliteplumbingdenver.com"
+                        value={campWebsite}
+                        onChange={(e) => setCampWebsite(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Daily Budget ($ USD) *</label>
+                      <input
+                        type="number"
+                        placeholder="50"
+                        value={campBudget}
+                        onChange={(e) => setCampBudget(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Target Niche / Industry</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Plumbing & Rooter"
+                        value={campIndustry}
+                        onChange={(e) => setCampIndustry(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                    <div>
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Target Location (City/State)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. Denver, CO"
+                        value={campLocation}
+                        onChange={(e) => setCampLocation(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                    <div className="sm:col-span-2">
+                      <label className="block text-[10px] font-bold text-[#151716] uppercase tracking-wider mb-1">Target Keywords (comma-separated)</label>
+                      <input
+                        type="text"
+                        placeholder="e.g. emergency plumber denver, leak repair denver, water heater setup"
+                        value={campKeywords}
+                        onChange={(e) => setCampKeywords(e.target.value)}
+                        className="w-full px-3.5 py-2.5 rounded-xl border border-[#dfded4] text-xs font-semibold text-[#1a1c1a] focus:outline-none focus:ring-1 focus:ring-[#123e35] bg-white"
+                      />
+                    </div>
+                  </div>
+
+                  <div className="flex gap-3">
+                    <button
+                      onClick={async () => {
+                        setAdCopyLoading(true);
+                        try {
+                          const token = sessionStorage.getItem('adminToken') || '';
+                          const response = await fetch('/api/google-ads/generate-copy', {
+                            method: 'POST',
+                            headers: {
+                              'Content-Type': 'application/json',
+                              'Authorization': `Bearer ${token}`
+                            },
+                            body: JSON.stringify({
+                              url: campWebsite,
+                              industry: campIndustry,
+                              keywords: campKeywords,
+                              location: campLocation
+                            })
+                          });
+                          if (response.ok) {
+                            const data = await response.json();
+                            setHeadlines(data.headlines);
+                            setLongHeadlines(data.longHeadlines || []);
+                            setDescriptions(data.descriptions);
+                            setSitelinks(data.sitelinks || []);
+                          } else {
+                            alert("Failed generating ad creatives.");
+                          }
+                        } catch (err) {
+                          console.error(err);
+                        } finally {
+                          setAdCopyLoading(false);
+                        }
+                      }}
+                      disabled={adCopyLoading || !campWebsite}
+                      className="flex-1 py-3 bg-[#bc5f40] hover:bg-[#a34d31] disabled:bg-[#888b88] text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-xs flex items-center justify-center gap-1.5"
+                    >
+                      {adCopyLoading ? (
+                        <>
+                          <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                          Gemini Writing Ad Creatives...
+                        </>
+                      ) : (
+                        <>
+                          <Sparkles className="w-3.5 h-3.5" />
+                          ✨ Auto-Generate Ad Copy (Gemini AI)
+                        </>
+                      )}
+                    </button>
+                  </div>
+
+                  {headlines.length > 0 && (
+                    <div className="space-y-6 pt-4 border-t border-[#dfded4] bg-[#faf9f6] p-4 rounded-xl border">
+                      <div>
+                        <h4 className="text-xs font-black text-[#151716] uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <span>📝</span> Headlines (Gemini Generated - Max 30 Chars)
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 max-h-48 overflow-y-auto pr-1">
+                          {headlines.map((hl, i) => (
+                            <div key={i} className="flex items-center gap-1.5 bg-white border border-[#dfded4] px-2.5 py-1 rounded-lg">
+                              <span className="text-[10px] font-bold text-[#888b88] w-4">{i + 1}</span>
+                              <input
+                                type="text"
+                                value={hl}
+                                maxLength={30}
+                                onChange={(e) => {
+                                  const updated = [...headlines];
+                                  updated[i] = e.target.value;
+                                  setHeadlines(updated);
+                                }}
+                                className="flex-1 text-[11px] font-bold text-[#151716] focus:outline-none bg-transparent"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-xs font-black text-[#151716] uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <span>📝</span> Long Headlines (Gemini Generated - Max 90 Chars)
+                        </h4>
+                        <div className="space-y-2">
+                          {longHeadlines.map((lh, i) => (
+                            <div key={i} className="flex items-center gap-1.5 bg-white border border-[#dfded4] px-2.5 py-1 rounded-lg">
+                              <span className="text-[10px] font-bold text-[#888b88] w-4">{i + 1}</span>
+                              <input
+                                type="text"
+                                value={lh}
+                                maxLength={90}
+                                onChange={(e) => {
+                                  const updated = [...longHeadlines];
+                                  updated[i] = e.target.value;
+                                  setLongHeadlines(updated);
+                                }}
+                                className="flex-1 text-[11px] font-bold text-[#151716] focus:outline-none bg-transparent"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-xs font-black text-[#151716] uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <span>📄</span> Descriptions (Gemini Generated - Max 90 Chars)
+                        </h4>
+                        <div className="space-y-2">
+                          {descriptions.map((desc, i) => (
+                            <div key={i} className="flex gap-2 items-center bg-white border border-[#dfded4] px-3 py-1.5 rounded-lg">
+                              <span className="text-[10px] font-bold text-[#888b88] shrink-0">D{i + 1}</span>
+                              <input
+                                type="text"
+                                value={desc}
+                                maxLength={90}
+                                onChange={(e) => {
+                                  const updated = [...descriptions];
+                                  updated[i] = e.target.value;
+                                  setDescriptions(updated);
+                                }}
+                                className="flex-1 text-[11px] font-semibold text-[#4e524f] focus:outline-none bg-transparent"
+                              />
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+
+                      <div>
+                        <h4 className="text-xs font-black text-[#151716] uppercase tracking-wider mb-2 flex items-center gap-1">
+                          <span>🔗</span> Sitelink Extensions (Gemini Generated)
+                        </h4>
+                        <div className="grid grid-cols-1 sm:grid-cols-2 gap-3">
+                          {sitelinks.map((sl, i) => (
+                            <div key={i} className="bg-white border border-[#dfded4] p-3 rounded-lg space-y-2">
+                              <div className="flex items-center justify-between border-b border-[#dfded4]/40 pb-1.5">
+                                <span className="text-[10px] font-bold text-[#888b88]">Sitelink {i + 1}</span>
+                              </div>
+                              <div>
+                                <label className="block text-[8px] font-bold text-[#888b88] uppercase mb-0.5">Link Title (max 25)</label>
+                                <input
+                                  type="text"
+                                  value={sl.title}
+                                  maxLength={25}
+                                  onChange={(e) => {
+                                    const updated = [...sitelinks];
+                                    updated[i] = { ...updated[i], title: e.target.value };
+                                    setSitelinks(updated);
+                                  }}
+                                  className="w-full text-[11px] font-bold text-[#151716] border border-[#dfded4] rounded px-2 py-0.5 focus:outline-none bg-white"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[8px] font-bold text-[#888b88] uppercase mb-0.5">Description Line 1 (max 35)</label>
+                                <input
+                                  type="text"
+                                  value={sl.desc1}
+                                  maxLength={35}
+                                  onChange={(e) => {
+                                    const updated = [...sitelinks];
+                                    updated[i] = { ...updated[i], desc1: e.target.value };
+                                    setSitelinks(updated);
+                                  }}
+                                  className="w-full text-[10px] text-[#4e524f] border border-[#dfded4] rounded px-2 py-0.5 focus:outline-none bg-white"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[8px] font-bold text-[#888b88] uppercase mb-0.5">Description Line 2 (max 35)</label>
+                                <input
+                                  type="text"
+                                  value={sl.desc2}
+                                  maxLength={35}
+                                  onChange={(e) => {
+                                    const updated = [...sitelinks];
+                                    updated[i] = { ...updated[i], desc2: e.target.value };
+                                    setSitelinks(updated);
+                                  }}
+                                  className="w-full text-[10px] text-[#4e524f] border border-[#dfded4] rounded px-2 py-0.5 focus:outline-none bg-white"
+                                />
+                              </div>
+                              <div>
+                                <label className="block text-[8px] font-bold text-[#888b88] uppercase mb-0.5">Path URL (e.g. /pricing)</label>
+                                <input
+                                  type="text"
+                                  value={sl.path}
+                                  onChange={(e) => {
+                                    const updated = [...sitelinks];
+                                    updated[i] = { ...updated[i], path: e.target.value };
+                                    setSitelinks(updated);
+                                  }}
+                                  className="w-full text-[10px] text-[#123e35] font-mono border border-[#dfded4] rounded px-2 py-0.5 focus:outline-none bg-white"
+                                />
+                              </div>
+                            </div>
+                          ))}
+                        </div>
+                      </div>
+                    </div>
+                  )}
+
+                  {headlines.length > 0 && (
+                    <button
+                      onClick={async () => {
+                        if (!campName.trim()) {
+                          alert("Please specify a Campaign Name before deploying.");
+                          return;
+                        }
+                        
+                        setIsDeploying(true);
+                        setDeployStep(1);
+                        setDeployMessage("Establishing API Handshake with Customer ID " + adsCustomerId + "...");
+                        
+                        setTimeout(() => {
+                          setDeployStep(2);
+                          setDeployMessage("Creating campaign budgets and territory limits for " + campLocation + "...");
+                          
+                          setTimeout(() => {
+                            setDeployStep(3);
+                            setDeployMessage("Building keyword lists and grouping keyword matches...");
+                            
+                            setTimeout(() => {
+                              setDeployStep(4);
+                              setDeployMessage("Uploading Responsive Search Ad creatives (headlines and descriptions)...");
+                              
+                              setTimeout(async () => {
+                                setDeployStep(5);
+                                setDeployMessage("Campaign launched successfully! Syncing logs...");
+                                
+                                try {
+                                  const token = sessionStorage.getItem('adminToken') || '';
+                                  const response = await fetch('/api/google-ads/create-campaign', {
+                                    method: 'POST',
+                                    headers: {
+                                      'Content-Type': 'application/json',
+                                      'Authorization': `Bearer ${token}`
+                                    },
+                                    body: JSON.stringify({
+                                      name: campName,
+                                      budget: campBudget,
+                                      location: campLocation,
+                                      website: campWebsite,
+                                      keywords: campKeywords,
+                                      headlines,
+                                      longHeadlines,
+                                      descriptions,
+                                      sitelinks,
+                                      status: "active"
+                                    })
+                                  });
+                                  if (response.ok) {
+                                    fetchCampaigns();
+                                  }
+                                } catch (e) {
+                                  console.error(e);
+                                }
+                                
+                                setTimeout(() => {
+                                  setIsDeploying(false);
+                                  setDeployStep(0);
+                                  setDeployMessage("");
+                                  setCampName("");
+                                  setHeadlines([]);
+                                  setLongHeadlines([]);
+                                  setDescriptions([]);
+                                  setSitelinks([]);
+                                }, 1500);
+                              }, 1200);
+                            }, 1000);
+                          }, 1000);
+                        }, 1000);
+                      }}
+                      className="w-full py-3 bg-[#123e35] hover:bg-[#0c2b25] text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-xs flex items-center justify-center gap-2"
+                    >
+                      <Rocket className="w-4 h-4" />
+                      Deploy Campaign to Google Ads Account
+                    </button>
+                  )}
+
+                  {isDeploying && (
+                    <div className="bg-slate-900 text-slate-100 p-5 rounded-2xl border border-slate-800 space-y-4 font-sans">
+                      <div className="flex items-center justify-between">
+                        <span className="text-xs font-bold text-slate-300 font-mono">Google Ads Deployment Log</span>
+                        <span className="text-[10px] font-black tracking-wider uppercase bg-blue-500/20 text-blue-400 px-2 py-0.5 rounded border border-blue-500/20 animate-pulse">
+                          Deploying Campaign
+                        </span>
+                      </div>
+                      
+                      <div className="space-y-2.5 font-mono text-[11px]">
+                        <div className="flex items-center gap-2">
+                          <span className={deployStep >= 1 ? "text-emerald-400 font-bold" : "text-slate-500"}>[1/5]</span>
+                          <span className={deployStep === 1 ? "text-blue-400 font-bold animate-pulse" : deployStep > 1 ? "text-slate-300" : "text-slate-500"}>
+                            Verify developer credentials & handshakes
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={deployStep >= 2 ? "text-emerald-400 font-bold" : "text-slate-500"}>[2/5]</span>
+                          <span className={deployStep === 2 ? "text-blue-400 font-bold animate-pulse" : deployStep > 2 ? "text-slate-300" : "text-slate-500"}>
+                            Allocate API budget node limits
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={deployStep >= 3 ? "text-emerald-400 font-bold" : "text-slate-500"}>[3/5]</span>
+                          <span className={deployStep === 3 ? "text-blue-400 font-bold animate-pulse" : deployStep > 3 ? "text-slate-300" : "text-slate-500"}>
+                            Generate Keyword match lists
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={deployStep >= 4 ? "text-emerald-400 font-bold" : "text-slate-500"}>[4/5]</span>
+                          <span className={deployStep === 4 ? "text-blue-400 font-bold animate-pulse" : deployStep > 4 ? "text-slate-300" : "text-slate-500"}>
+                            Bind responsive ad creatives
+                          </span>
+                        </div>
+                        <div className="flex items-center gap-2">
+                          <span className={deployStep >= 5 ? "text-emerald-400 font-bold" : "text-slate-500"}>[5/5]</span>
+                          <span className={deployStep === 5 ? "text-blue-400 font-bold animate-pulse" : deployStep > 5 ? "text-slate-300" : "text-slate-500"}>
+                            Launch campaign live on Google Search network
+                          </span>
+                        </div>
+                      </div>
+
+                      <div className="bg-slate-950 p-2.5 rounded-lg text-xs font-mono text-emerald-400 border border-slate-800 flex items-center gap-2">
+                        <RefreshCw className="w-3.5 h-3.5 animate-spin" />
+                        <span>{deployMessage}</span>
+                      </div>
+                    </div>
+                  )}
+
+                </div>
+
+                {/* Right Column: Live Search Ad Preview & Campaigns Table */}
+                <div className="lg:col-span-5 space-y-6">
+                  
+                  {/* Google Ads Live Search Preview */}
+                  <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-4">
+                    <div className="flex justify-between items-center border-b border-[#dfded4] pb-3">
+                      <h4 className="font-black text-[#151716] text-sm tracking-tight flex items-center gap-1.5">
+                        <Eye className="w-4 h-4 text-[#123e35]" />
+                        Ad Preview (Responsive Search Ad)
+                      </h4>
+                      <div className="flex bg-[#faf9f6] border border-[#dfded4] rounded-lg p-0.5 text-xs font-bold text-[#4e524f]">
+                        <button
+                          onClick={() => setPreviewDevice('mobile')}
+                          className={`px-3 py-1 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
+                            previewDevice === 'mobile' ? 'bg-[#123e35] text-white' : 'hover:text-[#151716]'
+                          }`}
+                        >
+                          <Smartphone className="w-3.5 h-3.5" /> Mobile
+                        </button>
+                        <button
+                          onClick={() => setPreviewDevice('desktop')}
+                          className={`px-3 py-1 rounded-md transition-all flex items-center gap-1 cursor-pointer ${
+                            previewDevice === 'desktop' ? 'bg-[#123e35] text-white' : 'hover:text-[#151716]'
+                          }`}
+                        >
+                          <Globe className="w-3.5 h-3.5" /> Desktop
+                        </button>
+                      </div>
+                    </div>
+
+                    {/* Google Search Mockup Card */}
+                    <div className={`border border-[#dfded4] rounded-2xl p-4 bg-white shadow-xs mx-auto transition-all ${
+                      previewDevice === 'desktop' ? 'w-full max-w-full' : 'max-w-sm'
+                    }`}>
+                      <div className="flex items-center gap-2 text-[10px] text-[#4e524f] font-semibold border-b border-[#dfded4]/40 pb-2">
+                        <span className="bg-[#123e35]/10 text-[#123e35] px-1.5 py-0.5 rounded font-black tracking-wider uppercase">Ad</span>
+                        <span className="truncate break-all">
+                          {campWebsite.replace(/https?:\/\/(www\.)?/, '') || 'yourbusiness.com'}
+                          {campLocation && ` > ${campLocation.split(',')[0].toLowerCase().replace(/\s+/g, '-')}`}
+                        </span>
+                      </div>
+                      
+                      <div className="mt-2.5 space-y-1">
+                        <h5 className="text-[#1a0dab] hover:underline text-[15px] font-medium leading-tight cursor-pointer break-words">
+                          {headlines[0] || 'Local SEO Services & Optimization'} |{' '}
+                          {headlines[1] || 'Google Business Profile'} |{' '}
+                          {headlines[2] || 'Local Surge SEO'}
+                        </h5>
+                        <p className="text-[#545454] text-xs leading-relaxed break-words">
+                          {descriptions[0] || 'Automated auditing of local maps ranking signals, directory consistency (NAP), and schemas.'}{' '}
+                          {descriptions[1] || 'Choose flat monthly subscriptions. Cancel anytime.'}
+                        </p>
+                      </div>
+
+                      {/* Sitelinks Preview */}
+                      {sitelinks.length > 0 && (
+                        <div className="mt-3 pt-3 border-t border-[#dfded4]/40 grid grid-cols-2 gap-x-4 gap-y-2 text-[11px] font-sans">
+                          {sitelinks.map((sl, index) => sl.title && (
+                            <div key={index} className="space-y-0.5">
+                              <span className="text-[#1a0dab] hover:underline font-medium block cursor-pointer truncate">
+                                {sl.title}
+                              </span>
+                              {previewDevice === 'desktop' && (sl.desc1 || sl.desc2) && (
+                                <span className="text-[#545454] text-[10px] leading-tight block truncate">
+                                  {sl.desc1} {sl.desc2}
+                                </span>
+                              )}
+                            </div>
+                          ))}
+                        </div>
+                      )}
+                    </div>
+                    
+                    <p className="text-[10px] text-[#888b88] font-bold text-center">
+                      * Preview demonstrates dynamic rotations. Actual Google Ads show rotated headlines and descriptions.
+                    </p>
+                  </div>
+
+                  {/* Territory Campaign List */}
+                  <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-4">
+                    <h4 className="font-black text-[#151716] text-sm tracking-tight flex items-center gap-1.5 border-b border-[#dfded4] pb-3">
+                      <BarChart3 className="w-4 h-4 text-[#123e35]" />
+                      Active Google Ads Campaigns
+                    </h4>
+
+                    {loadingCampaigns ? (
+                      <div className="text-center py-8 text-[#888b88] space-y-2">
+                        <RefreshCw className="w-6 h-6 animate-spin mx-auto" />
+                        <span className="text-xs font-bold block">Syncing Google Ads Campaign data...</span>
+                      </div>
+                    ) : campaigns.length === 0 ? (
+                      <p className="text-xs text-[#888b88] italic text-center py-6">
+                        No active campaigns configured. Set up credentials and deploy to get started!
+                      </p>
+                    ) : (
+                      <div className="space-y-3">
+                        {campaigns.map((camp) => (
+                          <div 
+                            key={camp.id} 
+                            onClick={() => setExpandedCampaignId(expandedCampaignId === camp.id ? null : camp.id)}
+                            className="border border-[#dfded4] rounded-xl p-4 space-y-3 hover:bg-[#faf9f6] cursor-pointer transition-all"
+                          >
+                            <div className="flex items-center justify-between">
+                              <div>
+                                <h5 className="text-xs font-black text-[#151716] tracking-tight">{camp.name}</h5>
+                                <span className="text-[10px] text-[#888b88] font-semibold block">{camp.location} • ${camp.budget}/day</span>
+                              </div>
+                              
+                              <div className="flex items-center gap-2">
+                                <span className={`px-2 py-0.5 rounded-full text-[9px] font-black uppercase tracking-wider ${
+                                  camp.status === 'active' 
+                                    ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' 
+                                    : 'bg-amber-100 text-amber-800 border border-amber-200'
+                                }`}>
+                                  {camp.status}
+                                </span>
+                                
+                                <button
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
+                                    const nextStatus = camp.status === 'active' ? 'paused' : 'active';
+                                    try {
+                                      const token = sessionStorage.getItem('adminToken') || '';
+                                      const res = await fetch('/api/google-ads/update-status', {
+                                        method: 'POST',
+                                        headers: {
+                                          'Content-Type': 'application/json',
+                                          'Authorization': `Bearer ${token}`
+                                        },
+                                        body: JSON.stringify({ id: camp.id, status: nextStatus })
+                                      });
+                                      if (res.ok) {
+                                        fetchCampaigns();
+                                      }
+                                    } catch (err) {
+                                      console.error(err);
+                                    }
+                                  }}
+                                  className="p-1 hover:bg-[#dfded4] rounded cursor-pointer transition-all"
+                                  title={camp.status === 'active' ? 'Pause Campaign' : 'Activate Campaign'}
+                                >
+                                  <Sliders className="w-3.5 h-3.5 text-[#4e524f]" />
+                                </button>
+
+                                <button
+                                  onClick={async (e) => {
+                                    e.stopPropagation();
+                                    if (!confirm("Are you sure you want to delete this campaign?")) return;
+                                    try {
+                                      const token = sessionStorage.getItem('adminToken') || '';
+                                      const res = await fetch(`/api/google-ads/campaigns/${camp.id}`, {
+                                        method: 'DELETE',
+                                        headers: {
+                                          'Authorization': `Bearer ${token}`
+                                        }
+                                      });
+                                      if (res.ok) {
+                                        fetchCampaigns();
+                                      }
+                                    } catch (err) {
+                                      console.error(err);
+                                    }
+                                  }}
+                                  className="p-1 hover:bg-red-50 text-red-500 rounded cursor-pointer transition-all"
+                                  title="Delete Campaign"
+                                >
+                                  <Trash2 className="w-3.5 h-3.5" />
+                                </button>
+                              </div>
+                            </div>
+
+                            <div className="grid grid-cols-4 gap-2 text-center bg-[#faf9f6] p-2 rounded-lg border border-[#dfded4] font-mono text-[10px]">
+                              <div>
+                                <span className="text-[#888b88] font-bold block uppercase text-[8px] tracking-wider">Clicks</span>
+                                <span className="font-extrabold text-[#151716] tabular-nums">{camp.metrics?.clicks || 0}</span>
+                              </div>
+                              <div>
+                                <span className="text-[#888b88] font-bold block uppercase text-[8px] tracking-wider">Imps</span>
+                                <span className="font-extrabold text-[#151716] tabular-nums">{camp.metrics?.impressions || 0}</span>
+                              </div>
+                              <div>
+                                <span className="text-[#888b88] font-bold block uppercase text-[8px] tracking-wider">CTR</span>
+                                <span className="font-extrabold text-[#151716] tabular-nums">{(camp.metrics?.ctr || 0.00).toFixed(2)}%</span>
+                              </div>
+                              <div>
+                                <span className="text-[#888b88] font-bold block uppercase text-[8px] tracking-wider">Cost</span>
+                                <span className="font-extrabold text-[#151716] tabular-nums">${(camp.metrics?.cost || 0.00).toFixed(2)}</span>
+                              </div>
+                            </div>
+
+                            {expandedCampaignId === camp.id && (
+                              <div className="pt-3 border-t border-[#dfded4]/40 space-y-3 text-[10px] text-[#4e524f] font-sans">
+                                {camp.longHeadlines && camp.longHeadlines.length > 0 && (
+                                  <div>
+                                    <strong className="text-[#151716] font-bold block uppercase tracking-wider text-[8px] mb-1">Long Headlines:</strong>
+                                    <ul className="list-disc pl-3.5 space-y-0.5">
+                                      {camp.longHeadlines.map((lh: string, idx: number) => <li key={idx}>{lh}</li>)}
+                                    </ul>
+                                  </div>
+                                )}
+                                {camp.sitelinks && camp.sitelinks.length > 0 && (
+                                  <div>
+                                    <strong className="text-[#151716] font-bold block uppercase tracking-wider text-[8px] mb-1">Sitelink Extensions:</strong>
+                                    <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                                      {camp.sitelinks.map((sl: any, idx: number) => sl.title && (
+                                        <div key={idx} className="bg-[#faf9f6] border border-[#dfded4] p-2 rounded text-[9px] space-y-0.5">
+                                          <span className="font-bold text-[#123e35]">{sl.title}</span>
+                                          <p className="text-[#888b88] text-[8px] leading-tight">{sl.desc1} | {sl.desc2}</p>
+                                          {sl.path && <span className="text-[7.5px] font-mono text-slate-500 block truncate">{sl.path}</span>}
+                                        </div>
+                                      ))}
+                                    </div>
+                                  </div>
+                                )}
+                              </div>
+                            )}
+                          </div>
+                        ))}
+                      </div>
+                    )}
+                  </div>
+
                 </div>
 
               </div>
