@@ -193,7 +193,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     date: 'March 15, 2026',
     readTime: '7 min read',
-    image: 'https://images.unsplash.com/photo-1542744094-3a31f103e35f?auto=format&fit=crop&q=80&w=800',
+    image: '/assets/blog_img/top-on-page-seo-mistakes-local-businesses-make.png',
     description: 'Are you hiding your business from regional customers? Fix these five common technical markup and content mistakes today to crawl the rankings with ease.',
     sections: [
       {
