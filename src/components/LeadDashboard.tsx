@@ -33,7 +33,7 @@ export default function LeadDashboard({
   const [search, setSearch] = useState<string>('');
   
   // Tab control
-  const [activeTab, setActiveTab] = useState<'leads' | 'outreach' | 'blog-studio' | 'pdf-customizer' | 'url-report' | 'google-ads'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'outreach' | 'blog-studio' | 'pdf-customizer' | 'url-report' | 'google-ads' | 'indexnow'>('leads');
 
   // Google Ads integration states
   const [campaigns, setCampaigns] = useState<any[]>([]);
@@ -70,6 +70,117 @@ export default function LeadDashboard({
 
   // Expanded Campaign Accordion state
   const [expandedCampaignId, setExpandedCampaignId] = useState<string | null>(null);
+
+  // IndexNow integration states
+  const [indexNowStatus, setIndexNowStatus] = useState<{
+    keyExists: boolean;
+    keyValid: boolean;
+    configured: boolean;
+    key: string;
+    keyLocation: string;
+    botsBlocked: boolean;
+  } | null>(null);
+  const [indexNowPages, setIndexNowPages] = useState<string[]>([]);
+  const [selectedPages, setSelectedPages] = useState<string[]>([]);
+  const [customPaths, setCustomPaths] = useState('');
+  const [indexNowHistory, setIndexNowHistory] = useState<any[]>([]);
+  const [indexNowLoading, setIndexNowLoading] = useState(false);
+  const [submittingIndexNow, setSubmittingIndexNow] = useState(false);
+  const [indexNowError, setIndexNowError] = useState<string | null>(null);
+  const [indexNowSuccessMsg, setIndexNowSuccessMsg] = useState<string | null>(null);
+  const [indexNowSearch, setIndexNowSearch] = useState('');
+
+  const fetchIndexNowStatus = async () => {
+    setIndexNowLoading(true);
+    try {
+      const res = await fetch('/api/indexnow/status');
+      if (res.ok) {
+        setIndexNowStatus(await res.json());
+      }
+    } catch (err) {
+      console.error('Error fetching IndexNow status:', err);
+    } finally {
+      setIndexNowLoading(false);
+    }
+  };
+
+  const fetchIndexNowPages = async () => {
+    try {
+      const res = await fetch('/api/indexnow/pages');
+      if (res.ok) {
+        const data = await res.json();
+        setIndexNowPages(data.pages || []);
+      }
+    } catch (err) {
+      console.error('Error fetching IndexNow pages:', err);
+    }
+  };
+
+  const fetchIndexNowHistory = async () => {
+    try {
+      const token = sessionStorage.getItem('adminToken') || '';
+      const res = await fetch('/api/indexnow/history', {
+        headers: { 'Authorization': `Bearer ${token}` }
+      });
+      if (res.ok) {
+        const data = await res.json();
+        setIndexNowHistory(data.history || []);
+      }
+    } catch (err) {
+      console.error('Error fetching IndexNow history:', err);
+    }
+  };
+
+  const handleSubmitIndexNow = async () => {
+    setIndexNowError(null);
+    setIndexNowSuccessMsg(null);
+
+    const pathsToSubmit = [...selectedPages];
+    if (customPaths.trim()) {
+      const manualLines = customPaths.split('\n').map(l => l.trim()).filter(Boolean);
+      pathsToSubmit.push(...manualLines);
+    }
+
+    if (pathsToSubmit.length === 0) {
+      setIndexNowError("Please select or write at least one page path to submit.");
+      return;
+    }
+
+    setSubmittingIndexNow(true);
+    try {
+      const token = sessionStorage.getItem('adminToken') || '';
+      const res = await fetch('/api/indexnow/submit', {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+          'Authorization': `Bearer ${token}`
+        },
+        body: JSON.stringify({ urls: pathsToSubmit })
+      });
+
+      const data = await res.json();
+      if (res.ok) {
+        setIndexNowSuccessMsg(data.message || "URLs successfully submitted to IndexNow!");
+        setSelectedPages([]);
+        setCustomPaths('');
+        fetchIndexNowHistory();
+      } else {
+        setIndexNowError(data.error || "Failed to submit URLs.");
+      }
+    } catch (err: any) {
+      setIndexNowError("Connection error: " + (err.message || err));
+    } finally {
+      setSubmittingIndexNow(false);
+    }
+  };
+
+  useEffect(() => {
+    if (activeTab === 'indexnow') {
+      fetchIndexNowStatus();
+      fetchIndexNowPages();
+      fetchIndexNowHistory();
+    }
+  }, [activeTab]);
 
   const fetchCampaigns = async () => {
     setLoadingCampaigns(true);
@@ -885,6 +996,16 @@ NOTIFY pgrst, 'reload schema';`}
             }`}
           >
             📢 Google Ads Manager
+          </button>
+          <button
+            onClick={() => setActiveTab('indexnow')}
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
+              activeTab === 'indexnow'
+                ? 'border-[#bc5f40] text-[#bc5f40]'
+                : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
+            }`}
+          >
+            ⚡ IndexNow Engine
           </button>
           <button
             onClick={() => setActiveTab('pdf-customizer')}
@@ -2342,6 +2463,324 @@ NOTIFY pgrst, 'reload schema';`}
             )}
           </div>
 
+        ) : activeTab === 'indexnow' ? (
+          // ── IndexNow Engine Tab ──────────────────────────────────────────
+          <div className="space-y-6 font-sans">
+            {/* Status overview */}
+            <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs flex flex-col md:flex-row md:items-center justify-between gap-6">
+              <div className="flex items-start gap-4">
+                <div className={`w-12 h-12 rounded-xl flex items-center justify-center shrink-0 border ${
+                  indexNowStatus?.configured ? 'bg-emerald-50 border-emerald-100 text-emerald-600' : 'bg-amber-50 border-amber-100 text-amber-600'
+                }`}>
+                  <Zap className={`w-6 h-6 ${indexNowLoading ? 'animate-spin' : ''}`} />
+                </div>
+                <div>
+                  <h2 className="text-lg font-black text-[#151716] tracking-tight flex items-center gap-2">
+                    IndexNow Search Engine Sync
+                    {indexNowLoading ? (
+                      <span className="text-[10px] text-[#888b88] animate-pulse">Checking status...</span>
+                    ) : (
+                      <span className={`px-2.5 py-0.5 rounded-full text-[10px] font-black uppercase tracking-wider ${
+                        indexNowStatus?.configured ? 'bg-emerald-100 text-emerald-800 border border-emerald-200' : 'bg-amber-100 text-amber-800 border border-amber-200'
+                      }`}>
+                        {indexNowStatus?.configured ? 'API Verified & Live' : 'Key Misconfigured / Missing'}
+                      </span>
+                    )}
+                  </h2>
+                  <p className="text-xs text-[#4e524f] font-semibold mt-1">
+                    Directly notify Bing, Yandex, and other search engines when your pages are updated. Proof of domain ownership is established via public verification file.
+                  </p>
+                </div>
+              </div>
+              
+              <button
+                onClick={fetchIndexNowStatus}
+                disabled={indexNowLoading}
+                className="px-4.5 py-2.5 bg-[#f7f6f2] hover:bg-[#e8e7e1] border border-[#dfded4] text-[#151716] text-xs font-black rounded-xl cursor-pointer transition-all flex items-center gap-1.5 shrink-0"
+              >
+                <RefreshCw className={`w-3.5 h-3.5 ${indexNowLoading ? 'animate-spin' : ''}`} />
+                Re-Verify Key Status
+              </button>
+            </div>
+
+            {/* Config & Warning info */}
+            {indexNowStatus && (
+              <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+                <div className={`p-4 rounded-xl border flex gap-3 items-start ${
+                  indexNowStatus.keyExists ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'
+                }`}>
+                  <div className="shrink-0 mt-0.5">
+                    {indexNowStatus.keyExists ? <CheckCircle2 className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-black">Verification Key Hosted</p>
+                    <p className="text-[11px] mt-0.5 font-semibold leading-relaxed">
+                      {indexNowStatus.keyExists 
+                        ? `File found: public${indexNowStatus.keyLocation}`
+                        : "Key file not found at web root. Verification will fail."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className={`p-4 rounded-xl border flex gap-3 items-start ${
+                  indexNowStatus.keyValid ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-red-50 border-red-200 text-red-800'
+                }`}>
+                  <div className="shrink-0 mt-0.5">
+                    {indexNowStatus.keyValid ? <ShieldCheck className="w-4 h-4 text-emerald-600" /> : <AlertCircle className="w-4 h-4 text-red-600" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-black">API Key Correctness</p>
+                    <p className="text-[11px] mt-0.5 font-semibold leading-relaxed">
+                      {indexNowStatus.keyValid 
+                        ? `Content matches generated key string: ${indexNowStatus.key.slice(0, 8)}...`
+                        : "Verification file content does not match API Key."}
+                    </p>
+                  </div>
+                </div>
+
+                <div className={`p-4 rounded-xl border flex gap-3 items-start ${
+                  !indexNowStatus.botsBlocked ? 'bg-emerald-50 border-emerald-200 text-emerald-800' : 'bg-amber-50 border-amber-200 text-amber-800'
+                }`}>
+                  <div className="shrink-0 mt-0.5">
+                    {!indexNowStatus.botsBlocked ? <Activity className="w-4 h-4 text-emerald-600" /> : <AlertTriangle className="w-4 h-4 text-amber-600" />}
+                  </div>
+                  <div>
+                    <p className="text-xs font-black">Robots.txt Allowance</p>
+                    <p className="text-[11px] mt-0.5 font-semibold leading-relaxed">
+                      {!indexNowStatus.botsBlocked 
+                        ? "Search engine spider indexing is allowed (verified via robots.txt)."
+                        : "Robots.txt disallows crawler indexing! IndexNow will not rank."}
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {/* Workspace Area: Bulk Sitemap + Manual submission */}
+            <div className="grid grid-cols-1 lg:grid-cols-3 gap-8">
+              
+              {/* Sitemap selection checklist */}
+              <div className="lg:col-span-2 bg-white border border-[#dfded4] rounded-2xl overflow-hidden flex flex-col h-[520px] shadow-xs">
+                <div className="p-4 border-b border-[#dfded4] space-y-4 bg-[#faf9f6]">
+                  <div className="flex justify-between items-center bg-[#faf9f6]">
+                    <span className="text-xs font-black text-[#151716] uppercase tracking-wider font-mono">
+                      Site Sitemap Directory ({indexNowPages.length} pages found)
+                    </span>
+                    
+                    <div className="flex gap-2 bg-[#faf9f6]">
+                      <button
+                        onClick={() => setSelectedPages([...indexNowPages])}
+                        className="px-2 py-1 bg-white hover:bg-slate-50 border border-[#dfded4] rounded text-[10px] font-bold text-[#4e524f] cursor-pointer transition-all"
+                      >
+                        Select All
+                      </button>
+                      <button
+                        onClick={() => setSelectedPages(indexNowPages.filter(p => p.startsWith('/blog/')))}
+                        className="px-2 py-1 bg-white hover:bg-slate-50 border border-[#dfded4] rounded text-[10px] font-bold text-[#4e524f] cursor-pointer transition-all"
+                      >
+                        Select Blogs
+                      </button>
+                      <button
+                        onClick={() => setSelectedPages([])}
+                        className="px-2 py-1 bg-white hover:bg-slate-50 border border-[#dfded4] rounded text-[10px] font-bold text-[#4e524f] cursor-pointer transition-all"
+                      >
+                        Clear
+                      </button>
+                    </div>
+                  </div>
+                  
+                  <div className="relative">
+                    <Search className="absolute left-3 top-1/2 -translate-y-1/2 w-3.5 h-3.5 text-[#888b88]" />
+                    <input
+                      type="text"
+                      placeholder="Search paths (e.g. /blog/)..."
+                      value={indexNowSearch}
+                      onChange={(e) => setIndexNowSearch(e.target.value)}
+                      className="bg-white border border-[#dfded4] rounded-xl w-full pl-9 pr-4 py-2 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40]"
+                    />
+                  </div>
+                </div>
+
+                {/* Checklist body */}
+                <div className="flex-1 overflow-y-auto p-4 divide-y divide-slate-100 bg-white">
+                  {indexNowPages.length === 0 ? (
+                    <div className="text-center py-20 text-xs text-[#888b88] font-mono animate-pulse">
+                      Loading site sitemap index...
+                    </div>
+                  ) : (
+                    indexNowPages
+                      .filter(page => page.toLowerCase().includes(indexNowSearch.toLowerCase()))
+                      .map(page => {
+                        const isChecked = selectedPages.includes(page);
+                        const isBlog = page.startsWith('/blog/');
+                        const isDirectory = page.includes('/california') || page.includes('/los-angeles-seo') || page.split('/').length > 2;
+                        
+                        return (
+                          <div 
+                            key={page}
+                            onClick={() => {
+                              if (isChecked) {
+                                setSelectedPages(selectedPages.filter(p => p !== page));
+                              } else {
+                                setSelectedPages([...selectedPages, page]);
+                              }
+                            }}
+                            className={`flex items-center gap-3 py-2.5 px-2 hover:bg-[#faf9f6] rounded-lg transition-all cursor-pointer ${
+                              isChecked ? 'bg-[#123e35]/5' : ''
+                            }`}
+                          >
+                            <input
+                              type="checkbox"
+                              checked={isChecked}
+                              readOnly
+                              className="accent-[#bc5f40] cursor-pointer"
+                            />
+                            
+                            <div className="text-slate-400 shrink-0">
+                              {isBlog ? <BookOpen className="w-3.5 h-3.5 text-[#bc5f40]" /> : 
+                               isDirectory ? <MapPin className="w-3.5 h-3.5 text-[#123e35]" /> : 
+                               <Globe className="w-3.5 h-3.5" />}
+                            </div>
+
+                            <span className="text-xs font-mono font-semibold text-[#1a1c1a] truncate">
+                              {page === "" ? "/" : page}
+                            </span>
+                          </div>
+                        );
+                      })
+                  )}
+                </div>
+              </div>
+
+              {/* Submission control board */}
+              <div className="lg:col-span-1 flex flex-col gap-6">
+                
+                {/* Submit panel */}
+                <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-4">
+                  <h3 className="text-xs font-bold text-[#bc5f40] uppercase font-mono tracking-wider">
+                    Submit URLs Action
+                  </h3>
+                  
+                  <div className="space-y-2 bg-white">
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">
+                      Selected Sitemap Pages ({selectedPages.length})
+                    </label>
+                    <div className="bg-[#faf9f6] border border-[#dfded4] p-3 rounded-xl text-xs max-h-24 overflow-y-auto divide-y divide-slate-100 font-mono text-slate-600">
+                      {selectedPages.length === 0 ? (
+                        <span className="italic text-slate-400">No pages selected in list</span>
+                      ) : (
+                        selectedPages.map(p => <div key={p} className="py-0.5 truncate">{p || "/"}</div>)
+                      )}
+                    </div>
+                  </div>
+
+                  <div className="space-y-2 bg-white">
+                    <label className="block text-[10px] font-bold text-slate-500 uppercase tracking-wide">
+                      Add Custom / External Paths <span className="font-normal text-slate-400 normal-case">(One per line)</span>
+                    </label>
+                    <textarea
+                      placeholder="/about-us&#10;/blog/new-post-slug"
+                      value={customPaths}
+                      onChange={(e) => setCustomPaths(e.target.value)}
+                      rows={4}
+                      className="w-full bg-white border border-[#dfded4] rounded-xl px-3 py-2 text-xs font-mono text-[#1a1c1a] focus:outline-none focus:border-[#bc5f40] placeholder-slate-400 leading-normal"
+                    />
+                  </div>
+
+                  {indexNowError && (
+                    <div className="flex items-start gap-2 text-[11px] text-red-700 bg-red-50 border border-red-200 rounded-xl px-3 py-2 leading-relaxed">
+                      <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                      <span>{indexNowError}</span>
+                    </div>
+                  )}
+
+                  {indexNowSuccessMsg && (
+                    <div className="flex items-start gap-2 text-[11px] text-green-700 bg-green-50 border border-green-200 rounded-xl px-3 py-2 leading-relaxed">
+                      <CheckCircle2 className="w-4 h-4 shrink-0 mt-0.5" />
+                      <span>{indexNowSuccessMsg}</span>
+                    </div>
+                  )}
+
+                  <button
+                    onClick={handleSubmitIndexNow}
+                    disabled={submittingIndexNow || (!selectedPages.length && !customPaths.trim())}
+                    className="w-full py-3 bg-[#bc5f40] hover:bg-[#a34d31] disabled:bg-slate-300 disabled:cursor-not-allowed text-white text-xs font-black rounded-xl cursor-pointer transition-all shadow-xs flex items-center justify-center gap-2"
+                  >
+                    {submittingIndexNow ? (
+                      <>
+                        <RefreshCw className="w-4 h-4 animate-spin" />
+                        IndexNow Submitting...
+                      </>
+                    ) : (
+                      <>
+                        <Rocket className="w-4 h-4" />
+                        Trigger IndexNow Sync
+                      </>
+                    )}
+                  </button>
+                </div>
+
+                {/* Info reminder card */}
+                <div className="bg-slate-50 border border-[#dfded4] rounded-2xl p-5 text-[11px] text-[#4e524f] leading-relaxed space-y-2">
+                  <h4 className="font-bold text-slate-700 uppercase tracking-wide text-[10px]">💡 IndexNow Engine Guide</h4>
+                  <p>IndexNow notifies search engines instantly. When you click **Trigger IndexNow Sync**, we compile the targets into absolute addresses mapping your Vercel domains, check the security hash, and push directly to Bing's index server.</p>
+                  <p className="font-semibold text-[#bc5f40]">Best practice: Submit URLs within minutes of writing or editing blogs to claim organic authority ranking immediately.</p>
+                </div>
+              </div>
+            </div>
+
+            {/* Submission history log table */}
+            <div className="bg-white border border-[#dfded4] rounded-2xl p-6 shadow-xs space-y-4">
+              <h3 className="text-sm font-black uppercase tracking-wider text-[#123e35] flex items-center gap-2">
+                <FileText className="w-4 h-4 text-[#bc5f40]" />
+                Recent IndexNow Sync Submissions History
+              </h3>
+
+              {indexNowHistory.length === 0 ? (
+                <div className="text-center py-10 text-[#888b88] space-y-1">
+                  <ListChecks className="w-8 h-8 mx-auto opacity-30" />
+                  <p className="text-xs font-bold">No submissions logged yet.</p>
+                  <p className="text-[11px]">Select sitemap paths or custom URLs above to trigger your first IndexNow sync!</p>
+                </div>
+              ) : (
+                <div className="overflow-x-auto">
+                  <table className="w-full text-left text-xs divide-y divide-[#dfded4] font-sans">
+                    <thead className="text-[10px] font-bold text-slate-500 uppercase tracking-wider bg-slate-50">
+                      <tr>
+                        <th className="p-3.5">Submission Timestamp</th>
+                        <th className="p-3.5">Status Code</th>
+                        <th className="p-3.5">Sync Count</th>
+                        <th className="p-3.5">Submitted URL Targets</th>
+                      </tr>
+                    </thead>
+                    <tbody className="divide-y divide-[#dfded4]">
+                      {indexNowHistory.map((item, i) => {
+                        const date = new Date(item.timestamp).toLocaleString();
+                        const isSuccess = item.success || item.status === 200 || item.status === 202;
+                        
+                        return (
+                          <tr key={i} className="hover:bg-[#faf9f6]/50 bg-white">
+                            <td className="p-3.5 font-mono text-[11px] text-slate-700">{date}</td>
+                            <td className="p-3.5">
+                              <span className={`px-2 py-0.5 font-mono text-[10px] font-black rounded border ${
+                                isSuccess ? 'bg-emerald-50 text-emerald-800 border-emerald-200' : 'bg-red-50 text-red-800 border-red-200'
+                              }`}>
+                                {item.status} ({isSuccess ? 'Accepted' : 'Failed'})
+                              </span>
+                            </td>
+                            <td className="p-3.5 font-bold font-mono text-slate-800">{item.urls?.length || 0} paths</td>
+                            <td className="p-3.5 text-[11px] font-mono text-slate-500 max-w-sm truncate" title={item.urls?.join(', ')}>
+                              {item.urls?.map((url: string) => url.replace(/https?:\/\/[^/]+/, '')).join(', ')}
+                            </td>
+                          </tr>
+                        );
+                      })}
+                    </tbody>
+                  </table>
+                </div>
+              )}
+            </div>
+          </div>
         ) : (
           <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-8 space-y-8 tracking-tight">
             <div className="border-[#dfded4] border-b pb-6">

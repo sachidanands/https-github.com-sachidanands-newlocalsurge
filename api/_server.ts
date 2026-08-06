@@ -519,6 +519,159 @@ app.post("/api/pdf-templates", requireAdmin, (req, res) => {
   res.json({ success: true, templates: readTemplates() });
 });
 
+// IndexNow Integration Helpers & Endpoints
+const INDEXNOW_HISTORY_FILE = isVercel ? "/tmp/indexnow_history.json" : path.join(process.cwd(), "data", "indexnow_history.json");
+
+function readIndexNowHistory(): any[] {
+  try {
+    if (!fs.existsSync(INDEXNOW_HISTORY_FILE)) {
+      return [];
+    }
+    const raw = fs.readFileSync(INDEXNOW_HISTORY_FILE, "utf-8");
+    return JSON.parse(raw);
+  } catch (err) {
+    console.error("Error reading IndexNow history:", err);
+    return [];
+  }
+}
+
+function writeIndexNowHistory(history: any[]) {
+  try {
+    const dir = path.dirname(INDEXNOW_HISTORY_FILE);
+    if (!fs.existsSync(dir)) {
+      fs.mkdirSync(dir, { recursive: true });
+    }
+    fs.writeFileSync(INDEXNOW_HISTORY_FILE, JSON.stringify(history, null, 2));
+  } catch (err) {
+    console.error("Error writing IndexNow history:", err);
+  }
+}
+
+app.get("/api/indexnow/status", (req, res) => {
+  const devKeyPath = path.join(process.cwd(), "public", "3689e2a29673450ab6eaa293a17fbae9.txt");
+  const prodKeyPath = path.join(process.cwd(), "dist", "3689e2a29673450ab6eaa293a17fbae9.txt");
+  const keyExists = fs.existsSync(devKeyPath) || fs.existsSync(prodKeyPath);
+  
+  let keyContent = "";
+  if (fs.existsSync(devKeyPath)) {
+    keyContent = fs.readFileSync(devKeyPath, "utf-8").trim();
+  } else if (fs.existsSync(prodKeyPath)) {
+    keyContent = fs.readFileSync(prodKeyPath, "utf-8").trim();
+  }
+  const keyValid = keyContent === "3689e2a29673450ab6eaa293a17fbae9";
+
+  const robotsDevPath = path.join(process.cwd(), "public", "robots.txt");
+  const robotsProdPath = path.join(process.cwd(), "dist", "robots.txt");
+  const robotsPath = fs.existsSync(robotsProdPath) ? robotsProdPath : robotsDevPath;
+  let botsBlocked = false;
+  
+  if (fs.existsSync(robotsPath)) {
+    const content = fs.readFileSync(robotsPath, "utf-8");
+    if (content.includes("Disallow: /") && !content.includes("Allow: /")) {
+      botsBlocked = true;
+    }
+  }
+
+  res.json({
+    configured: keyExists && keyValid,
+    key: "3689e2a29673450ab6eaa293a17fbae9",
+    keyLocation: "/3689e2a29673450ab6eaa293a17fbae9.txt",
+    keyExists,
+    keyValid,
+    botsBlocked
+  });
+});
+
+app.get("/api/indexnow/pages", (req, res) => {
+  res.json({ success: true, pages: getDynamicSitemapPages() });
+});
+
+app.post("/api/indexnow/submit", requireAdmin, async (req, res) => {
+  const { urls } = req.body;
+  if (!urls || !Array.isArray(urls) || urls.length === 0) {
+    return res.status(400).json({ error: "Missing or invalid 'urls' array in request body" });
+  }
+
+  // Derive target host URL
+  const rawUrl = process.env.APP_URL || `http://${req.headers.host}`;
+  const hostUrl = rawUrl.replace(/\/$/, "");
+  
+  // Format all entries into absolute URLs
+  const absoluteUrls = urls.map((u: string) => {
+    if (u.startsWith("http://") || u.startsWith("https://")) {
+      return u;
+    }
+    return `${hostUrl}${u.startsWith("/") ? "" : "/"}${u}`;
+  });
+
+  // Security check: validate hostname matches current host
+  try {
+    const parsedHost = new URL(hostUrl);
+    const invalidUrls = absoluteUrls.filter((u: string) => {
+      try {
+        const parsed = new URL(u);
+        return parsed.hostname !== parsedHost.hostname;
+      } catch {
+        return true;
+      }
+    });
+
+    if (invalidUrls.length > 0) {
+      return res.status(400).json({ 
+        error: `Security violation: All URLs must match the host domain: ${parsedHost.hostname}. Found invalid entries: ${invalidUrls.join(", ")}` 
+      });
+    }
+
+    const payload = {
+      host: parsedHost.hostname,
+      key: "3689e2a29673450ab6eaa293a17fbae9",
+      keyLocation: `${hostUrl}/3689e2a29673450ab6eaa293a17fbae9.txt`,
+      urlList: absoluteUrls
+    };
+
+    const response = await fetch("https://api.indexnow.org/indexnow", {
+      method: "POST",
+      headers: {
+        "Content-Type": "application/json; charset=utf-8"
+      },
+      body: JSON.stringify(payload)
+    });
+
+    const status = response.status;
+    const success = status === 200 || status === 202;
+
+    const historyItem = {
+      timestamp: new Date().toISOString(),
+      urls: absoluteUrls,
+      status,
+      success
+    };
+
+    const history = readIndexNowHistory();
+    history.unshift(historyItem);
+    writeIndexNowHistory(history.slice(0, 50));
+
+    if (success) {
+      return res.json({ 
+        success: true, 
+        message: `Successfully submitted ${absoluteUrls.length} URLs to IndexNow.org. Status: ${status}` 
+      });
+    } else {
+      const text = await response.text();
+      return res.status(status).json({ 
+        error: `IndexNow API returned status code ${status}: ${text}` 
+      });
+    }
+  } catch (err: any) {
+    console.error("IndexNow submission exception:", err);
+    return res.status(500).json({ error: `Internal server failure during submission: ${err.message || err}` });
+  }
+});
+
+app.get("/api/indexnow/history", requireAdmin, (req, res) => {
+  res.json({ success: true, history: readIndexNowHistory() });
+});
+
 // API Routes
 app.get("/api/admin/db-status", requireAdmin, async (req, res) => {
   const supabase = await getSupabase();
