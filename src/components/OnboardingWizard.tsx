@@ -311,7 +311,7 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                           <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                           <input
                             type="tel"
-                            placeholder="e.g. (415) 555-0192"
+                            placeholder="e.g. +1 (909) 757-6469"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             className="bg-[#faf9f6] border border-[#dfded4] rounded-xl w-full pl-10 pr-4 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all font-semibold"

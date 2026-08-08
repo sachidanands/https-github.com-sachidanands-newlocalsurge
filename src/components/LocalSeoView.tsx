@@ -21,7 +21,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
   const [city, setCity] = useState('San Jose');
   const [state, setState] = useState('CA');
   const [zip, setZip] = useState('95112');
-  const [phone, setPhone] = useState('(408) 555-0199');
+  const [phone, setPhone] = useState('+1 (909) 757-6469');
   const [website, setWebsite] = useState('https://bayareaconstructors.local');
   const [lat, setLat] = useState('37.3522');
   const [lng, setLng] = useState('-121.8941');

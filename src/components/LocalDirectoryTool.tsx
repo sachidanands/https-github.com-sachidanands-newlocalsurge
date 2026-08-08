@@ -71,7 +71,7 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
     const phoneClean = bizPhone.replace(/\D/g, '');
     const altPhone = phoneClean.length === 10 
       ? `(${phoneClean.slice(0,3)}) ${phoneClean.slice(3,6)}-${(parseInt(phoneClean.slice(6)) + 11).toString().padStart(4, '0')}`
-      : '(408) 555-0199';
+      : '+1 (909) 757-6469';
 
     const mockDirectories: DirectoryResult[] = [
       {
@@ -229,7 +229,7 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
                 <input
                   type="tel"
                   required
-                  placeholder="e.g. (408) 555-0199"
+                  placeholder="e.g. +1 (909) 757-6469"
                   value={bizPhone}
                   onChange={(e) => setBizPhone(e.target.value)}
                   className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full pl-10 pr-4 py-3 text-xs sm:text-sm text-[#1a1c1a]/90 placeholder-[#888b88] focus:outline-none focus:border-[#123e35] transition-colors font-semibold"

@@ -33,7 +33,7 @@ export default function SchemaMarkup({
     'url': siteUrl,
     'logo': orgLogo,
     'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-    'telephone': '+18005550199',
+    'telephone': '+19097576469',
     'priceRange': '$$',
     'knowsAbout': [
       'Search Engine Optimization',
@@ -368,7 +368,7 @@ export default function SchemaMarkup({
       'url': `${siteUrl}/${state.slug}`,
       'logo': orgLogo,
       'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-      'telephone': '+18005550199',
+      'telephone': '+19097576469',
       'priceRange': '$$',
       'knowsAbout': [
         'Search Engine Optimization',
@@ -399,7 +399,7 @@ export default function SchemaMarkup({
       'url': `${siteUrl}/${city.stateSlug}/${city.slug}`,
       'logo': orgLogo,
       'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-      'telephone': '+18005550199',
+      'telephone': '+19097576469',
       'priceRange': '$$',
       'knowsAbout': [
         'Search Engine Optimization',

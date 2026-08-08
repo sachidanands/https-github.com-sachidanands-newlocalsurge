@@ -42,7 +42,7 @@ export default function DemoView({ demoSlug, onNavigateHome }: DemoViewProps) {
           businessName: cleanName.toUpperCase().includes('PROS') ? cleanName : `${cleanName} Services`,
           niche: 'Local Trade Services',
           location: cleanCity,
-          phone: '(408) 555-0192',
+          phone: '+1 (909) 757-6469',
           email: `contact@${demoSlug}.com`,
           tagline: `Premier Licensed ${cleanName} in ${cleanCity}`,
           heroHeadline: `Fast, Trusted ${cleanName} in ${cleanCity}`,

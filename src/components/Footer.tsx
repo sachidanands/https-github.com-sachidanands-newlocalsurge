@@ -54,7 +54,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#888b88]">
                   <Clock className="w-3.5 h-3.5 text-[#bc5f40] shrink-0" />
-                  <span>Phone: +1 (800) 555-0199 (VoIP Inbox)</span>
+                  <span>Phone: +1 (909) 757-6469 (VoIP Inbox)</span>
                 </div>
                 <div className="pt-3 border-t border-[#dfded4]/65 flex gap-3">
                   <a 
