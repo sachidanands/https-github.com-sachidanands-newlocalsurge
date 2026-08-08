@@ -66,15 +66,33 @@ export default function TermsOfService({ setCurrentPage }: TermsOfServiceProps) 
             <section className="space-y-3">
               <h2 className="text-lg font-bold text-[#151711] flex items-center gap-2">
                 <span className="w-1.5 h-6 bg-[#123e35] rounded-full inline-block"></span>
-                2. Subscription Billing & Cancellations
+                2. Approval-First Billing, Cancellations & Refund Policy
               </h2>
               <p>
-                Certain features are offered on a recurring, monthly subscription plan as documented in our pricing sections:
+                Local Surge SEO operates on an approval-first billing model to ensure 100% client satisfaction and transparency prior to production launch:
               </p>
-              <ul className="list-disc pl-5 space-y-1.5 text-xs">
-                <li><strong>Billing Cadence:</strong> Fees are charged on a monthly pre-pay interval starting from the initiation date of your active campaign structure.</li>
-                <li><strong>No-Contract Flexibility:</strong> All billing profiles operate on a rolling cancel-anytime mechanism. To avoid a subsequent renewal interval, cancellation directives must be submitted via your workspace page or email at least 48 hours prior to the next scheduled debit.</li>
-                <li><strong>Refund Policy:</strong> Since local search signals, audit reporting, schema markups, and directory sync integrations represent immediate digital assets, all transactions are final. Refunds are not issued for partial monthly usage blocks.</li>
+
+              {/* Zero Risk Callout Box */}
+              <div className="bg-[#123e35]/5 border border-[#123e35]/20 p-4 rounded-xl space-y-1.5 text-xs text-[#151711]">
+                <div className="flex items-center gap-2 font-bold text-[#123e35] uppercase font-mono tracking-wide">
+                  <CheckCircle className="w-4 h-4 text-[#123e35]" />
+                  Zero Upfront Payment & Final Acceptance Guarantee
+                </div>
+                <p className="text-[#4e524f]">
+                  We do not collect payments upfront. Deliverables and service configurations are prepared in a live sandbox environment. Payment is processed <strong>only after</strong> you review, accept, and provide 100% finalization approval right before changes are deployed to production.
+                </p>
+              </div>
+
+              <ul className="list-disc pl-5 space-y-2 text-xs">
+                <li>
+                  <strong>Approval-First Payment Release:</strong> No payment is required to initiate service briefs or sandbox previews. Service fees are charged only upon your explicit written or digital acceptance right before live production release.
+                </li>
+                <li>
+                  <strong>No-Contract Flexibility:</strong> All recurring local SEO signals and maintenance profiles operate on a rolling, contract-free, cancel-anytime basis. You may stop or pause services at any time prior to the next scheduled renewal period.
+                </li>
+                <li>
+                  <strong>Refund & Finalization Policy:</strong> Because all service builds are fully inspected, accepted, and finalized by the client prior to payment, transactions processed upon final launch authorization are non-refundable. Partial month refunds are not issued once production assets are live.
+                </li>
               </ul>
             </section>
 
