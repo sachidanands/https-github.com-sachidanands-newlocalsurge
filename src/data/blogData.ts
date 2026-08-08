@@ -1012,5 +1012,72 @@ export const BLOG_POSTS: BlogPost[] = [
         content: '"WebMCP isn\'t replacing your website—it is turning your website into an action engine. Businesses that enable AI agents to interact with their forms and tools with explicit user consent will dominate customer acquisition in the AI search era."'
       }
     ]
+  },
+  {
+    slug: 'llmstxt-blueprint-ai-sitemap-local-business',
+    title: 'The llms.txt Blueprint: Why Every Local Business Needs an AI Sitemap in 2026',
+    category: 'AI Search & Automation',
+    author: {
+      name: 'Sarah Chen',
+      role: 'Chief SEO Architect',
+      avatar: 'SC'
+    },
+    date: 'August 8, 2026',
+    readTime: '6 min read',
+    image: 'https://images.unsplash.com/photo-1551836022-d5d88e9218df?auto=format&fit=crop&q=80&w=800',
+    description: 'Learn what llms.txt is, how it functions as an AI sitemap for ChatGPT, Claude, and Perplexity, and why deploying machine-readable files like llms.txt and pricing.md is critical for getting cited in AI search engines.',
+    sections: [
+      {
+        type: 'paragraph',
+        content: 'For over two decades, `sitemap.xml` was the primary file search engine crawlers used to navigate websites. But as we navigate mid-2026, search behavior is rapidly transitioning from keyword blue links to conversational AI assistants like ChatGPT, Claude, Perplexity, and Google AI Overviews. Enter `llms.txt` (llmstxt.org)—the open standard that functions as a dedicated "sitemap for AI assistants."'
+      },
+      {
+        type: 'heading',
+        content: 'What is llms.txt and How Does It Work?'
+      },
+      {
+        type: 'paragraph',
+        content: '`llms.txt` is a curated, human-and-machine-readable Markdown file placed at the root of your domain (e.g., `yourbusiness.com/llms.txt`). Unlike complex XML sitemaps built for legacy web crawlers, `llms.txt` provides Large Language Models (LLMs) with a clean, unbloated summary of your business capabilities, service area boundaries, key page routes, and product offerings.'
+      },
+      {
+        type: 'alert-box',
+        content: '💡 RESEARCH FACT: Recent Princeton GEO studies show that well-structured, citable content combined with statistics and clear machine-readable summaries increases brand citation probability in AI search engines by 37% to 40%.'
+      },
+      {
+        type: 'heading',
+        content: 'llms.txt vs. sitemap.xml vs. robots.txt: What Is the Difference?'
+      },
+      {
+        type: 'bullet-list',
+        content: 'Understanding the 3 Root Web Protocols:',
+        items: [
+          'robots.txt: Dictates crawl permissions (which bots can or cannot index specific folders).',
+          'sitemap.xml: List of raw HTML URLs for traditional search engine indexing bots (Googlebot, Bingbot).',
+          'llms.txt: A high-density semantic overview formatted specifically for AI context windows, summarizing core business capabilities, pricing models, and key routes.'
+        ]
+      },
+      {
+        type: 'heading',
+        content: 'Why AI Buying Agents Need Machine-Readable Files (pricing.md & llms.txt)'
+      },
+      {
+        type: 'paragraph',
+        content: 'AI assistants are no longer just answering informational questions—they are acting as autonomous buying agents. When a customer asks an AI: "Compare local dental implant packages in San Jose under $1,500," the AI parses accessible web files. If your pricing and service tiers are trapped behind heavy JavaScript frameworks or "contact for quote" forms, AI agents skip your business and recommend competitors whose pricing is published in clean, parseable Markdown files like `pricing.md`.'
+      },
+      {
+        type: 'numbered-list',
+        content: 'The 4-Step Checklist to Deploy llms.txt on Your Site:',
+        items: [
+          'Create /public/llms.txt: Summarize your company mission, core services, and service locations in clean Markdown format.',
+          'Index Your Core Routes: List key relative paths (/pricing, /services, /about, /contact) with brief 1-line descriptions.',
+          'Pair with /public/pricing.md: Publish clear, structured pricing tiers and deliverables so AI buying agents can evaluate your offerings instantly.',
+          'Link in Footer & Sitemap: Cross-reference your llms.txt file in your HTML sitemap and robots.txt so AI crawlers discover it immediately.'
+        ]
+      },
+      {
+        type: 'quote',
+        content: '"llms.txt is to AI search engines what sitemap.xml was to Google in 2005. Businesses that publish clean, machine-readable summaries for AI context windows will own the top citations in the AI search era."'
+      }
+    ]
   }
 ];

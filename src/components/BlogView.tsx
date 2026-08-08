@@ -34,7 +34,13 @@ export default function BlogView({
       .catch(err => console.error('Error fetching dynamic blogs:', err));
   }, []);
 
-  const allPosts = [...dynamicPosts, ...BLOG_POSTS];
+  const parseBlogDate = (dateStr?: string): number => {
+    if (!dateStr) return 0;
+    const timestamp = Date.parse(dateStr);
+    return isNaN(timestamp) ? 0 : timestamp;
+  };
+
+  const allPosts = [...dynamicPosts, ...BLOG_POSTS].sort((a, b) => parseBlogDate(b.date) - parseBlogDate(a.date));
 
   // Sync state with parent route slug trigger
   useEffect(() => {
@@ -92,7 +98,7 @@ export default function BlogView({
   };
 
   const getRelatedPosts = (currentPost: BlogPost) => {
-    return BLOG_POSTS.filter(
+    return allPosts.filter(
       p => p.slug !== currentPost.slug && (p.category === currentPost.category)
     ).slice(0, 2);
   };
