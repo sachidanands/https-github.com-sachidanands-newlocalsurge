@@ -17,7 +17,11 @@ export interface WebMcpTool {
   riskLevel: 'low' | 'medium' | 'high';
   requiresUserConsent: boolean;
   parameters: WebMcpToolParameter[];
+  handler?: (params: Record<string, any>) => Promise<any>;
 }
+
+// Active tool registry for contextual per-page / per-component tool loading
+const activeToolRegistry: Map<string, WebMcpTool> = new Map();
 
 export const WEBMCP_TOOLS: WebMcpTool[] = [
   {
@@ -76,24 +80,67 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
   }
 ];
 
-// Initialize global window.webmcp runtime for browser AI assistants
+// Initialize base tools into active registry
+WEBMCP_TOOLS.forEach(tool => activeToolRegistry.set(tool.name, tool));
+
+// Chrome WebMCP Official API Polyfill: navigator.registerTool & navigator.unregisterTool
+export function registerWebMcpTool(name: string, tool: WebMcpTool | any) {
+  const toolObj: WebMcpTool = {
+    name: name || tool.name,
+    description: tool.description || '',
+    endpoint: tool.endpoint || '/api/webmcp/invoke',
+    method: tool.method || 'POST',
+    riskLevel: tool.riskLevel || 'low',
+    requiresUserConsent: tool.requiresUserConsent !== false,
+    parameters: tool.parameters || [],
+    handler: tool.handler
+  };
+
+  activeToolRegistry.set(name, toolObj);
+
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('webmcp:tool-registered', { detail: toolObj }));
+  }
+  return toolObj;
+}
+
+export function unregisterWebMcpTool(name: string) {
+  activeToolRegistry.delete(name);
+  if (typeof window !== 'undefined') {
+    window.dispatchEvent(new CustomEvent('webmcp:tool-unregistered', { detail: { name } }));
+  }
+}
+
+// Global runtime setup
 export function initWebMcpRuntime(onInvokeRequested?: (tool: WebMcpTool, params: Record<string, any>) => void) {
   if (typeof window === 'undefined') return;
+
+  // Polyfill Chrome Native Navigator API (navigator.registerTool / navigator.unregisterTool)
+  if (typeof navigator !== 'undefined') {
+    (navigator as any).registerTool = (name: string, tool: any) => registerWebMcpTool(name, tool);
+    (navigator as any).unregisterTool = (name: string) => unregisterWebMcpTool(name);
+  }
 
   const webMcpObject = {
     version: '1.0.0',
     protocol: 'WebModelContextProtocol',
-    tools: WEBMCP_TOOLS,
-    getTools: () => WEBMCP_TOOLS,
+    tools: Array.from(activeToolRegistry.values()),
+    getTools: () => Array.from(activeToolRegistry.values()),
+    registerTool: (name: string, tool: any) => registerWebMcpTool(name, tool),
+    unregisterTool: (name: string) => unregisterWebMcpTool(name),
     invokeTool: async (toolName: string, params: Record<string, any>) => {
-      const tool = WEBMCP_TOOLS.find(t => t.name === toolName);
+      const tool = activeToolRegistry.get(toolName) || WEBMCP_TOOLS.find(t => t.name === toolName);
       if (!tool) {
-        throw new Error(`WebMCP Tool "${toolName}" not found.`);
+        throw new Error(`WebMCP Tool "${toolName}" not found in active context.`);
       }
 
       if (tool.requiresUserConsent && onInvokeRequested) {
         onInvokeRequested(tool, params);
         return { status: 'pending_user_consent', message: 'Awaiting explicit user consent prompt approval.' };
+      }
+
+      if (tool.handler) {
+        return await tool.handler(params);
       }
 
       return await executeWebMcpTool(tool, params);
@@ -115,7 +162,16 @@ export async function executeWebMcpTool(tool: WebMcpTool, params: Record<string,
       throw new Error(`WebMCP invocation error: ${response.statusText}`);
     }
 
-    return await response.json();
+    const json = await response.json();
+
+    // Trigger custom agentInvoked event for DOM form feedback
+    if (typeof window !== 'undefined') {
+      window.dispatchEvent(new CustomEvent('agentInvoked', {
+        detail: { toolName: tool.name, params, result: json }
+      }));
+    }
+
+    return json;
   } catch (err: any) {
     return { success: false, error: err.message || 'WebMCP Tool execution failed.' };
   }

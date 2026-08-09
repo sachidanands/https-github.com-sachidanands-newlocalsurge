@@ -27,5 +27,22 @@ body {
 ::-webkit-scrollbar-thumb:hover {
   background: #c3c2b8;
 }
+/* Chrome WebMCP Official Special CSS Classes for AI Active UI States */
+.tool-form-active,
+form.tool-form-active,
+input.tool-form-active,
+textarea.tool-form-active {
+  border-color: #123e35 !important;
+  box-shadow: 0 0 0 3px rgba(18, 62, 53, 0.25) !important;
+  position: relative;
+  transition: all 0.3s ease;
+}
 
-
+.tool-submit-active,
+form.tool-submit-active,
+div.tool-submit-active {
+  border-color: #bc5f40 !important;
+  box-shadow: 0 0 0 4px rgba(188, 95, 64, 0.3) !important;
+  position: relative;
+  transition: all 0.3s ease;
+}

@@ -70,23 +70,6 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
           {/* Action Button & Admin Toggle */}
           <div className="flex items-center gap-3">
             <button
-              onClick={() => {
-                if ((window as any).webmcp) {
-                  (window as any).webmcp.invokeTool('audit_local_seo', {
-                    url: 'https://localsurgeseo.com',
-                    niche: 'Local SEO Agency',
-                    location: 'San Jose, CA'
-                  });
-                }
-              }}
-              title="WebMCP Enabled: Test AI Agent Tool Execution"
-              className="hidden xl:flex items-center gap-1.5 px-2.5 py-1.5 text-[10px] font-extrabold font-mono tracking-wider bg-[#123e35]/10 text-[#123e35] border border-[#123e35]/20 rounded-lg hover:bg-[#123e35]/20 cursor-pointer transition-all"
-            >
-              <Bot className="w-3.5 h-3.5 text-[#bc5f40]" />
-              <span>WebMCP Active 🤖</span>
-            </button>
-
-            <button
               id="header-get-started"
               onClick={onOpenOnboarding}
               className="bg-[#123e35] hover:bg-[#185246] text-[#fbfaf8] shadow-sm text-xs font-bold px-5 py-2.5 rounded-lg flex items-center gap-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-95 duration-200"

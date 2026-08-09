@@ -27,7 +27,7 @@ import { STATE_DIRECTORY, CITY_DIRECTORY } from './data/directoryData';
 import {
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, Check, ChevronRight,
   ArrowRight, ShieldCheck, Mail, MapPin, Clock, Search, MessageSquare, AlertCircle, Quote, Star,
-  TrendingUp, Globe, CheckSquare, Zap, ExternalLink, HelpCircle, RefreshCw
+  TrendingUp, Globe, CheckSquare, Zap, ExternalLink, HelpCircle, RefreshCw, Bot, CheckCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -390,6 +390,7 @@ export default function App() {
   const [activeMcpTool, setActiveMcpTool] = useState<WebMcpTool | null>(null);
   const [activeMcpParams, setActiveMcpParams] = useState<Record<string, any> | null>(null);
   const [isMcpExecuting, setIsMcpExecuting] = useState(false);
+  const [isAiAgentFilled, setIsAiAgentFilled] = useState(false);
 
   useEffect(() => {
     initWebMcpRuntime((tool, params) => {
@@ -397,6 +398,28 @@ export default function App() {
       setActiveMcpParams(params);
       setIsMcpConsentOpen(true);
     });
+
+    const handleAgentInvoked = (e: CustomEvent) => {
+      const { toolName } = e.detail || {};
+      if (toolName === 'contact_form' || toolName === 'submit_onboarding_lead') {
+        setIsAiAgentFilled(true);
+      }
+      const targetForm = document.querySelector(`form[toolname="${toolName}"]`) || document.querySelector(`[toolname="${toolName}"]`);
+      if (targetForm) {
+        const autoSubmit = targetForm.getAttribute('toolautosubmit');
+        if (autoSubmit === 'false') {
+          targetForm.classList.add('tool-submit-active');
+        } else {
+          targetForm.classList.add('tool-form-active');
+          setTimeout(() => targetForm.classList.remove('tool-form-active'), 3000);
+        }
+      }
+    };
+
+    window.addEventListener('agentInvoked', handleAgentInvoked as EventListener);
+    return () => {
+      window.removeEventListener('agentInvoked', handleAgentInvoked as EventListener);
+    };
   }, []);
 
   const handleApproveMcpAction = async () => {
@@ -1832,6 +1855,26 @@ export default function App() {
                       tooldescription="Submit a consultation request or general inquiry to Local Surge SEO team"
                       toolautosubmit="false"
                     >
+                      <div className="space-y-2.5">
+                        <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#123e35]/5 border border-[#123e35]/15 text-[#123e35] text-[11px] font-semibold">
+                          <Bot className="w-4 h-4 text-[#bc5f40] shrink-0" />
+                          <span><strong>AI Agent Ready (WebMCP Protocol)</strong> — Your AI assistant can complete this form for you. Human review is required before submission.</span>
+                        </div>
+
+                        {isAiAgentFilled && (
+                          <motion.div
+                            initial={{ opacity: 0, y: -5 }}
+                            animate={{ opacity: 1, y: 0 }}
+                            className="p-3 bg-amber-50 border border-amber-200 rounded-xl text-amber-900 text-xs font-semibold flex items-center justify-between shadow-2xs"
+                          >
+                            <div className="flex items-center gap-2">
+                              <CheckCircle className="w-4 h-4 text-emerald-600 shrink-0" />
+                              <span><strong>✓ Form Populated by AI Agent</strong> — Please review the details below and click Submit to confirm your inquiry.</span>
+                            </div>
+                          </motion.div>
+                        )}
+                      </div>
+
                       <h3 className="font-bold text-[#151716] font-display">Manual Inquiry Request</h3>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">

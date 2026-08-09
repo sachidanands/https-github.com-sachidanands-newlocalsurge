@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Plan, LeadInput, SEOAuditResult, Lead } from '../types';
 import { 
   X, Check, AlertCircle, RefreshCw, BarChart2, ShieldCheck, Mail, Phone, Globe, MapPin, 
-  Search, Shield, ChevronLeft, ChevronRight, FileText, CheckSquare, Sparkles, Building2, Star
+  Search, Shield, ChevronLeft, ChevronRight, FileText, CheckSquare, Sparkles, Building2, Star, Bot
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -254,6 +254,11 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                     exit={{ opacity: 0, x: -20 }}
                     className="space-y-5"
                   >
+                    <div className="inline-flex items-center gap-2 px-3 py-1.5 rounded-xl bg-[#123e35]/5 border border-[#123e35]/15 text-[#123e35] text-[11px] font-semibold">
+                      <Bot className="w-4 h-4 text-[#bc5f40] shrink-0" />
+                      <span><strong>AI Agent Ready (WebMCP Protocol)</strong> — Your AI assistant can complete this form for you. Human review is required before submission.</span>
+                    </div>
+
                     <p className="text-sm text-[#4e524f] font-semibold leading-relaxed">
                       We gather all initial lead insights ahead of onboarding. This aligns our manual verification process and keeps everything custom for your specific location.
                     </p>
