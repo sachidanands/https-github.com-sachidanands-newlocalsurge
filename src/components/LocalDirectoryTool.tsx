@@ -202,6 +202,9 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
             exit={{ opacity: 0, y: -10 }}
             onSubmit={performScan} 
             className="grid grid-cols-1 md:grid-cols-12 gap-4"
+            toolname="directory_nap_citation_audit_tool"
+            tooldescription="Scan top local business directories to find missing listings, duplicate entries, and Name-Address-Phone (NAP) mismatch errors"
+            toolautosubmit="true"
           >
             <div className="md:col-span-4">
               <label className="block text-[10px] font-bold text-[#4e524f] uppercase tracking-wide mb-1.5 font-mono">
@@ -212,6 +215,8 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
                 <input
                   type="text"
                   required
+                  toolparamtitle="Corporate Business Name"
+                  toolparamdescription="Official registered business or storefront name"
                   placeholder="e.g. Bay Area Garage Doors"
                   value={bizName}
                   onChange={(e) => setBizName(e.target.value)}
@@ -229,6 +234,8 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
                 <input
                   type="tel"
                   required
+                  toolparamtitle="Primary Business Telephone"
+                  toolparamdescription="Main office phone number published on directory listings"
                   placeholder="e.g. +1 (909) 757-6469"
                   value={bizPhone}
                   onChange={(e) => setBizPhone(e.target.value)}
@@ -246,6 +253,8 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
                 <input
                   type="text"
                   required
+                  toolparamtitle="Business Postal ZIP Code"
+                  toolparamdescription="5-digit postal code of business headquarters or service area base"
                   placeholder="e.g. 95112"
                   value={bizZip}
                   onChange={(e) => setBizZip(e.target.value)}

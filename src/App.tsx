@@ -19,6 +19,8 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import FaqSection from './components/FaqSection';
 import DemoView from './components/DemoView';
+import WebMcpConsentModal from './components/WebMcpConsentModal';
+import { initWebMcpRuntime, executeWebMcpTool, WebMcpTool } from './utils/webmcp';
 import { BLOG_POSTS } from './data/blogData';
 
 import { STATE_DIRECTORY, CITY_DIRECTORY } from './data/directoryData';
@@ -382,6 +384,41 @@ export default function App() {
   const [isWizardOpen, setIsWizardOpen] = useState(false);
   const [preselectedPlan, setPreselectedPlan] = useState<Plan | null>(null);
   const [selectedPricingPlanId, setSelectedPricingPlanId] = useState<string>('single-page');
+
+  // WebMCP AI Agent Runtime & Consent Modal controls
+  const [isMcpConsentOpen, setIsMcpConsentOpen] = useState(false);
+  const [activeMcpTool, setActiveMcpTool] = useState<WebMcpTool | null>(null);
+  const [activeMcpParams, setActiveMcpParams] = useState<Record<string, any> | null>(null);
+  const [isMcpExecuting, setIsMcpExecuting] = useState(false);
+
+  useEffect(() => {
+    initWebMcpRuntime((tool, params) => {
+      setActiveMcpTool(tool);
+      setActiveMcpParams(params);
+      setIsMcpConsentOpen(true);
+    });
+  }, []);
+
+  const handleApproveMcpAction = async () => {
+    if (!activeMcpTool || !activeMcpParams) return;
+    setIsMcpExecuting(true);
+    try {
+      const result = await executeWebMcpTool(activeMcpTool, activeMcpParams);
+      if (result && result.success) {
+        if (activeMcpTool.name === 'audit_local_seo') {
+          const urlToAnalyze = activeMcpParams.url || 'https://localsurgeseo.com';
+          handleAnalyzeFromHome(urlToAnalyze);
+        } else if (activeMcpTool.name === 'submit_onboarding_lead') {
+          handleOpenOnboarding(null);
+        }
+      }
+    } catch (err) {
+      console.error('WebMCP execution error:', err);
+    } finally {
+      setIsMcpExecuting(false);
+      setIsMcpConsentOpen(false);
+    }
+  };
 
   // SEO Tool states
   const [toolUrl, setToolUrl] = useState('');
@@ -1788,7 +1825,13 @@ export default function App() {
                       </div>
                     </motion.div>
                   ) : (
-                    <form onSubmit={handleContactSubmit} className="space-y-5">
+                    <form
+                      onSubmit={handleContactSubmit}
+                      className="space-y-5"
+                      toolname="contact_form"
+                      tooldescription="Submit a consultation request or general inquiry to Local Surge SEO team"
+                      toolautosubmit="false"
+                    >
                       <h3 className="font-bold text-[#151716] font-display">Manual Inquiry Request</h3>
 
                       <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
@@ -1800,6 +1843,8 @@ export default function App() {
                             id="cnt-full-name-input"
                             type="text"
                             required
+                            toolparamtitle="Full Name"
+                            toolparamdescription="Enter your full legal or business contact name"
                             placeholder="e.g. Marcus Chen"
                             value={cntName}
                             onChange={(e) => setCntName(e.target.value)}
@@ -1816,6 +1861,8 @@ export default function App() {
                           <input
                             type="email"
                             required
+                            toolparamtitle="Email Address"
+                            toolparamdescription="Enter your business contact email address"
                             placeholder="e.g. contact@domain.com"
                             value={cntEmail}
                             onChange={(e) => setCntEmail(e.target.value)}
@@ -1831,6 +1878,8 @@ export default function App() {
                           </label>
                           <select
                             required
+                            toolparamtitle="Preferred Growth Tier"
+                            toolparamdescription="Select desired Local SEO service tier (Free, Starter, Premium, Custom)"
                             value={cntPlan}
                             onChange={(e) => setCntPlan(e.target.value)}
                             className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full px-3.5 py-2.5 text-xs text-[#1a1c1a] cursor-pointer focus:outline-none focus:border-[#bc5f45]"
@@ -1848,6 +1897,8 @@ export default function App() {
                           </label>
                           <input
                             type="text"
+                            toolparamtitle="Inquiry Subject"
+                            toolparamdescription="Primary topic or service inquiry"
                             placeholder="e.g. Local keywords scan"
                             value={cntSubject}
                             onChange={(e) => setCntSubject(e.target.value)}
@@ -1862,6 +1913,8 @@ export default function App() {
                         </label>
                         <textarea
                           rows={4}
+                          toolparamtitle="Message Body"
+                          toolparamdescription="Detail your business goals, project scope, or questions"
                           placeholder="Share details about your business category, current rankings, or what area you want to dominate..."
                           value={cntMessage}
                           onChange={(e) => setCntMessage(e.target.value)}
@@ -2208,6 +2261,16 @@ export default function App() {
         onClose={() => setIsWizardOpen(false)}
         preselectedPlan={preselectedPlan}
         onLeadSubmitted={handleLeadSubmitted}
+      />
+
+      {/* WebMCP (Web Model Context Protocol) AI Agent Consent Modal */}
+      <WebMcpConsentModal
+        isOpen={isMcpConsentOpen}
+        tool={activeMcpTool}
+        params={activeMcpParams}
+        isExecuting={isMcpExecuting}
+        onApprove={handleApproveMcpAction}
+        onDecline={() => setIsMcpConsentOpen(false)}
       />
     </div>
   );

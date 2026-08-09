@@ -462,7 +462,12 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
             </div>
           </div>
 
-          <div className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4 bg-white border border-[#dfded4] p-5 sm:p-6 rounded-2xl shadow-2xs">
+          <div 
+            className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4 bg-white border border-[#dfded4] p-5 sm:p-6 rounded-2xl shadow-2xs"
+            toolname="local_schema_markup_builder"
+            tooldescription="Interactive JSON-LD Schema builder for local businesses to generate structured map coordinates and business metadata"
+            toolautosubmit="true"
+          >
             <div className="space-y-3.5">
               <h4 className="text-xs font-bold font-mono text-[#123e35] uppercase tracking-wider border-b border-[#dfded4]/70 pb-1.5">Business Parameters</h4>
               
@@ -471,6 +476,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                 <select 
                   value={bizType} 
                   onChange={(e) => setBizType(e.target.value)}
+                  toolparamtitle="Business Category"
+                  toolparamdescription="Schema.org category classification"
                   className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold focus:outline-none focus:border-[#bc5f40]"
                 >
                   <option value="LocalBusiness">LocalBusiness (General)</option>
@@ -489,6 +496,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                   type="text" 
                   value={bizName} 
                   onChange={(e) => setBizName(e.target.value)}
+                  toolparamtitle="Business Name"
+                  toolparamdescription="Registered business name for JSON-LD schema"
                   className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold focus:outline-none focus:border-[#bc5f40]"
                 />
               </div>
@@ -499,6 +508,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                   type="text" 
                   value={address} 
                   onChange={(e) => setAddress(e.target.value)}
+                  toolparamtitle="Street Address"
+                  toolparamdescription="Physical street address"
                   className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold focus:outline-none focus:border-[#bc5f40]"
                 />
               </div>
@@ -510,6 +521,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                     type="text" 
                     value={city} 
                     onChange={(e) => setCity(e.target.value)}
+                    toolparamtitle="City"
+                    toolparamdescription="City locality"
                     className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold"
                   />
                 </div>
@@ -519,6 +532,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                     type="text" 
                     value={zip} 
                     onChange={(e) => setZip(e.target.value)}
+                    toolparamtitle="Zip Code"
+                    toolparamdescription="Postal zip code"
                     className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold"
                   />
                 </div>
@@ -531,6 +546,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                     type="text" 
                     value={lat} 
                     onChange={(e) => setLat(e.target.value)}
+                    toolparamtitle="Latitude Coordinate"
+                    toolparamdescription="Geographic latitude coordinate"
                     className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold"
                   />
                 </div>
@@ -540,6 +557,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                     type="text" 
                     value={lng} 
                     onChange={(e) => setLng(e.target.value)}
+                    toolparamtitle="Longitude Coordinate"
+                    toolparamdescription="Geographic longitude coordinate"
                     className="bg-[#faf9f6] border border-[#dfded4] rounded-lg w-full px-2.5 py-1.5 text-xs text-[#1a1c1a]/95 font-semibold"
                   />
                 </div>

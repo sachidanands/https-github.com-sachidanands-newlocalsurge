@@ -1,3 +1,13 @@
+declare namespace React {
+  interface HTMLAttributes<T> {
+    toolname?: string;
+    tooldescription?: string;
+    toolautosubmit?: 'true' | 'false' | boolean;
+    toolparamtitle?: string;
+    toolparamdescription?: string;
+  }
+}
+
 export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'admin' | 'blog' | 'site-map' | 'local-seo' | 'california' | 'los-angeles-seo' | 'state-seo' | 'city-seo' | 'privacy-policy' | 'terms-of-service' | 'case-studies' | 'demo';
 
 export interface DemoConfig {

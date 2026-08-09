@@ -66,7 +66,39 @@ export default function SchemaMarkup({
       'https://www.youtube.com/@LocalSurgeSEO',
       'https://x.com/localsurgeseo'
     ],
-    'description': 'High-performance web design and local SEO optimization suite for contractors, dentists, plumbers, and local service providers looking to dominate regional query hierarchies.'
+    'description': 'High-performance web design and local SEO optimization suite for contractors, dentists, plumbers, and local service providers looking to dominate regional query hierarchies.',
+    'potentialAction': [
+      {
+        '@type': 'Action',
+        'name': 'audit_local_seo',
+        'description': 'Execute automated Local SEO audit on target domain',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': `${siteUrl}/api/webmcp/invoke`,
+          'actionPlatform': ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform']
+        }
+      },
+      {
+        '@type': 'Action',
+        'name': 'scan_nap_citations',
+        'description': 'Audit local business directory listings for NAP consistency',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': `${siteUrl}/api/webmcp/invoke`,
+          'actionPlatform': ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform']
+        }
+      },
+      {
+        '@type': 'Action',
+        'name': 'submit_onboarding_lead',
+        'description': 'Submit local business SEO strategy onboarding request',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': `${siteUrl}/api/webmcp/invoke`,
+          'actionPlatform': ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform']
+        }
+      }
+    ]
   };
 
   // 2. Dynamic Breadcrumb List Schema based on routing state

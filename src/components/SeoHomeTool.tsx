@@ -138,11 +138,19 @@ export default function SeoHomeTool({
 
       {/* Input container card */}
       <div className="bg-white border border-[#dfded4] rounded-2xl p-5 sm:p-6 shadow-xs max-w-3xl mx-auto">
-        <form onSubmit={handleSubmit} className="flex flex-col sm:flex-row gap-3.5 items-center w-full">
+        <form
+          onSubmit={handleSubmit}
+          className="flex flex-col sm:flex-row gap-3.5 items-center w-full"
+          toolname="local_seo_audit_tool"
+          tooldescription="Run an instant AI-powered Local SEO audit evaluating Core Web Vitals, Google Business Profile signals, and keyword ranking opportunities for any business domain"
+          toolautosubmit="true"
+        >
           <div className="relative flex-1 w-full">
             <input
               type="text"
               required
+              toolparamtitle="Website Domain URL"
+              toolparamdescription="Enter the full business website address to analyze (e.g. https://examplecontractor.com)"
               placeholder="https://example.com"
               value={urlInput}
               onChange={(e) => setUrlInput(e.target.value)}

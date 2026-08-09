@@ -266,6 +266,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                           <Building2 className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                           <input
                             type="text"
+                            toolparamtitle="Business Name"
+                            toolparamdescription="Official registered name of the business seeking local SEO services"
                             placeholder="e.g. Apex Dental Wellness"
                             value={businessName}
                             onChange={(e) => setBusinessName(e.target.value)}
@@ -281,6 +283,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                           <FileText className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                           <input
                             type="text"
+                            toolparamtitle="Contact Person Name"
+                            toolparamdescription="Name of primary contact person or business owner"
                             placeholder="e.g. Dr. Arthur Miller"
                             value={contactName}
                             onChange={(e) => setContactName(e.target.value)}
@@ -296,6 +300,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                           <Mail className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                           <input
                             type="email"
+                            toolparamtitle="Business Email"
+                            toolparamdescription="Direct business email address to receive custom strategy roadmap"
                             placeholder="e.g. contact@apexdental.com"
                             value={email}
                             onChange={(e) => setEmail(e.target.value)}
@@ -311,6 +317,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                           <Phone className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                           <input
                             type="tel"
+                            toolparamtitle="Phone Number"
+                            toolparamdescription="Contact telephone number for lead verification"
                             placeholder="e.g. +1 (909) 757-6469"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
@@ -476,6 +484,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                           <MapPin className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                           <input
                             type="text"
+                            toolparamtitle="Target City Location"
+                            toolparamdescription="City or metropolitan area to dominate in local search map pack"
                             placeholder="e.g. San Jose, CA (or North San Jose, Milpitas)"
                             value={location}
                             onChange={(e) => setLocation(e.target.value)}
@@ -491,6 +501,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                       </label>
                       <textarea
                         rows={3}
+                        toolparamtitle="Target Keywords / Services"
+                        toolparamdescription="Core trade services or search terms to rank #1 on Google Maps"
                         placeholder="What keywords do you want to rank for? (e.g. 'root canal san jose', 'best cosmetic dentist', 'emergency tooth pain clinic')"
                         value={keywords}
                         onChange={(e) => setKeywords(e.target.value)}

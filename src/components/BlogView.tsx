@@ -422,16 +422,24 @@ export default function BlogView({
               <div className="bg-white border border-[#dfded4] p-4.5 rounded-3xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-xs">
                 
                 {/* Search query input */}
-                <div className="relative w-full md:max-w-xs">
+                <form
+                  onSubmit={(e) => e.preventDefault()}
+                  toolname="search_blog_articles"
+                  tooldescription="Search local marketing insights, AI SEO guides, and case studies on the Local Surge SEO blog"
+                  toolautosubmit="true"
+                  className="relative w-full md:max-w-xs"
+                >
                   <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
                   <input
                     type="text"
+                    toolparamtitle="Search Keywords"
+                    toolparamdescription="Keywords or topics to search within blog posts"
                     placeholder="Search articles & guides..."
                     value={searchQuery}
                     onChange={(e) => setSearchQuery(e.target.value)}
                     className="bg-[#faf9f6] border border-[#dfded4] rounded-xl w-full pl-10 pr-4 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all font-semibold"
                   />
-                </div>
+                </form>
 
                 {/* Nav Category chips */}
                 <div className="flex gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 scrollbar-none flex-wrap items-center">
