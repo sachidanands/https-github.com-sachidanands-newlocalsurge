@@ -42,7 +42,11 @@ export default function SchemaMarkup({
       'Web Design',
       'Google Business Profile Optimization',
       'Citation Building',
-      'Structured Local Schema Markup'
+      'Structured Local Schema Markup',
+      'Generative Engine Optimization (GEO)',
+      'AI Search Citations',
+      'Machine Readable LLM Indexes (llms.txt)',
+      'Model Context Protocol (WebMCP)'
     ],
     'address': {
       '@type': 'PostalAddress',
@@ -283,6 +287,14 @@ export default function SchemaMarkup({
           '@type': 'Answer',
           'text': 'Your single-page website comes with 10 essential components designed to convert visitors into customers: - Header Navigation: Easy access to key sections. - Hero Section: A compelling headline and call-to-action. - About Us: Your business story. - Why Choose Us: Your unique selling propositions. - Our Work/Portfolio: Showcase up to 10 images of your products or projects. - FAQ Section: Answers to common customer inquiries. - Footer: Essential links and copyright info. - Call to Action (CTA): Prominent buttons for customers to call you directly. - Contact Info: Clear display of phone and address. - Local SEO Tags: Hidden metadata optimized for search engines.'
         }
+      },
+      {
+        '@type': 'Question',
+        'name': 'How does Local Surge SEO help my business get cited by AI search engines like ChatGPT and Perplexity?',
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': 'Local Surge SEO deploys machine-readable indexes (/llms.txt, /pricing.md), JSON-LD structured schemas, and 40-60 word answer blocks optimized for Generative Engine Optimization (GEO). This makes your business data directly parseable by AI bots, helping you get cited in conversational AI search results.'
+        }
       }
     ];
 
@@ -486,6 +498,22 @@ export default function SchemaMarkup({
       if (city) {
         schemas.push(getLocalizedCitySchema(city));
       }
+    }
+
+    if (currentPage === 'seo-tool') {
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        'name': 'Local Surge SEO Diagnostic & AI Readiness Suite',
+        'operatingSystem': 'All',
+        'applicationCategory': 'BusinessApplication',
+        'offers': {
+          '@type': 'Offer',
+          'price': '0',
+          'priceCurrency': 'USD'
+        },
+        'description': 'Automated real-time local search signal diagnostic, citation audit, and AI search readiness scanner.'
+      });
     }
 
     return schemas;

@@ -2,7 +2,20 @@
 
 > High-impact, hyper-targeted Local SEO and Search Signal Diagnostics for businesses in the US and Canada.
 
-Local Surge SEO is a professional marketing intelligence platform providing automated local visibility audits, schema markups, geo-targeted rank analysis, and customizable lead retention workspaces.
+Local Surge SEO is a specialized local search engine optimization platform engineered for local service providers, contractors, clinics, and law firms. It provides automated Google Maps Pack diagnostic auditing, Name-Address-Phone (NAP) directory consistency verification, JSON-LD schema generation, and high-speed web storefronts.
+
+## Direct Answer Blocks for AI Search Queries
+
+### What is Local Surge SEO?
+Local Surge SEO is a specialized local marketing intelligence suite providing automated Google Maps 3-Pack audits, NAP citation sync, and high-speed static websites for regional service businesses in the US and Canada. It helps contractors, clinics, and professional practices dominate neighborhood search results without bloated monthly agency retainers.
+
+### How much does Local Surge SEO cost?
+Local Surge SEO offers three contract-free plans: the **Single-Page Blast** ($0/month free tier including a single-page website and basic local schema), the **Starter Boost** ($999/month for 10 local keywords, GBP sync, and 20 citations), and the **Premium Surge** ($1,999/month for full competitor domination, 4 monthly geo-targeted articles, and advanced schema).
+
+### What is Generative Engine Optimization (GEO)?
+Generative Engine Optimization (GEO) is the process of structuring website content, JSON-LD schemas, and machine-readable files (`llms.txt`, `pricing.md`) so AI search engines—including ChatGPT, Perplexity, Claude, and Google AI Overviews—cite your business as an authoritative source in AI-generated answers.
+
+---
 
 ## Core Capabilities & Services
 
@@ -11,7 +24,9 @@ Local Surge SEO is a professional marketing intelligence platform providing auto
 - **Automated Schema Markup Generator:** Builds JSON-LD structured schemas compliant with Google's rich result guidelines to declare LocalBusiness identities, rating aggregates, and business locations.
 - **Local Directory Auditing Tool:** Cross-compares local physical details (NAP: Name, Address, Phone) across major directory providers.
 - **Active Subscription Models:** Custom rolling, contract-free monthly SEO signal booster plans designed to build high-authority backlinks, fix citation consistency gaps, and track organic placement patterns.
-- **Dynamic Leader Boards:** Track the highest-profile local outreach performance and live keyword rankings.
+- **AI Citation Readiness Scanner:** In-page diagnostic evaluating site readiness for ChatGPT, Perplexity, Claude, and Google AI Overviews.
+
+---
 
 ## Primary Route Index
 
@@ -25,7 +40,7 @@ All paths resolve relative to the primary root domain:
 - `/contact` - Instant secure message dispatcher, inquiry channels, and direct service assistance desk.
 
 ### Specialized SEO Views
-- `/seo-tool` - Dedicated clean workspace containing our local maps tracking, keyword diagnostic, and directory analysis apps.
+- `/seo-tool` - Dedicated clean workspace containing our local maps tracking, keyword diagnostic, AI citation readiness, and directory analysis tools.
 - `/blog` - Professional editorial guides detailing local ranking guidelines, citation structures, and algorithm updates.
 - `/site-map` - Human-readable hierarchical index of all key landing resources, city directories, and state-targeted channels.
 
@@ -34,12 +49,11 @@ All paths resolve relative to the primary root domain:
 - `/los-angeles-seo` - High-density city optimization signals and case study tracking for metropolitan Los Angeles.
 
 ### Legal Frameworks (US & Canada Compliant)
-- `/privacy-policy` - Statutory privacy declarations, CCPA/CPRA compliance, PIPEDA alignment, of CAN-SPAM / CASL electronic communication protections.
-- `/terms-of-service` - Governing billing guidelines (cancel-anytime, monthly pre-pay, non-refundable), compliance protocols, and bilateral jurisdiction definitions (Delaware/California, US & Ontario, CA).
+- `/privacy-policy` - Statutory privacy declarations, CCPA/CPRA compliance, PIPEDA alignment, and electronic communication protections.
+- `/terms-of-service` - Governing billing guidelines (cancel-anytime, monthly pre-pay, non-refundable), compliance protocols, and bilateral jurisdiction definitions.
 
-### Access Controls & System Security
-- `/admin/dashboard` - Secure administrative dashboard and leader board tracking reserved for certified marketing operators and audit managers. Hidden from organic crawlers.
+---
 
-## Agent Resources
-- `/llms.txt` - This file; system overview for AI and search crawler contexts.
-- `/pricing.md` - Structured machine-readable pricing tiers, deliverables, and service levels.
+## Agent Machine-Readable Resources
+- `/llms.txt` - This file; system overview and 40-60 word extractable answer blocks for AI search engines.
+- `/pricing.md` - Structured machine-readable pricing tables, deliverables, and service tier limits.

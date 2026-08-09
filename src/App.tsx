@@ -20,8 +20,12 @@ import TermsOfService from './components/TermsOfService';
 import FaqSection from './components/FaqSection';
 import DemoView from './components/DemoView';
 import WebMcpConsentModal from './components/WebMcpConsentModal';
+import AiCitationReadinessWidget from './components/AiCitationReadinessWidget';
 import { initWebMcpRuntime, executeWebMcpTool, WebMcpTool } from './utils/webmcp';
 import { BLOG_POSTS } from './data/blogData';
+
+// Toggle flag to enable or disable the AI Citation Readiness Scanner component
+const ENABLE_AI_CITATION_WIDGET = true;
 
 import { STATE_DIRECTORY, CITY_DIRECTORY } from './data/directoryData';
 import {
@@ -2097,6 +2101,11 @@ export default function App() {
                 autoAnalyze={homeAutoAnalyze}
                 onClearAutoAnalyze={() => setHomeAutoAnalyze(false)}
               />
+              {ENABLE_AI_CITATION_WIDGET && (
+                <div className="border-t border-[#dfded4] pt-12">
+                  <AiCitationReadinessWidget onOpenOnboarding={() => setCurrentPage('contact')} />
+                </div>
+              )}
               <div className="border-t border-[#dfded4] pt-12">
                 <LocalDirectoryTool onOpenOnboarding={() => handleOpenOnboarding(null)} />
               </div>
