@@ -1,6 +1,6 @@
 import React from 'react';
 import { Page } from '../types';
-import { Rocket, Mail, MapPin, Clock, Calendar, Facebook, Youtube } from 'lucide-react';
+import { Rocket, Mail, MapPin, Clock, Calendar, Facebook, Youtube, ShieldCheck } from 'lucide-react';
 
 const XIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
   <svg 
@@ -14,9 +14,10 @@ const XIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
 
 interface FooterProps {
   setCurrentPage: (page: Page) => void;
+  onOpenDoNotSell?: () => void;
 }
 
-export default function Footer({ setCurrentPage }: FooterProps) {
+export default function Footer({ setCurrentPage, onOpenDoNotSell }: FooterProps) {
   return (
     <footer id="main-footer" className="bg-white text-[#4e524f] border-t border-[#dfded4]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -182,7 +183,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
           <div>
             © {new Date().getFullYear()} Local Surge SEO. All rights reserved. Billed monthly, cancel anytime.
           </div>
-          <div className="flex gap-4 items-center">
+          <div className="flex gap-4 items-center flex-wrap">
             <button onClick={() => {
               setCurrentPage('privacy-policy');
               window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -195,6 +196,17 @@ export default function Footer({ setCurrentPage }: FooterProps) {
               window.scrollTo({ top: 0, behavior: 'smooth' });
             }} className="hover:text-[#123e35] transition-colors cursor-pointer bg-transparent border-none p-0 inline font-semibold">
               Terms of Service
+            </button>
+            <span>•</span>
+            <button onClick={() => {
+              if (onOpenDoNotSell) onOpenDoNotSell();
+              else {
+                setCurrentPage('privacy-policy');
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }
+            }} className="hover:text-[#bc5f40] transition-colors cursor-pointer bg-transparent border-none p-0 inline font-semibold flex items-center gap-1 text-[#123e35]">
+              <ShieldCheck className="w-3.5 h-3.5 text-[#bc5f40]" />
+              Do Not Sell My Info
             </button>
             <span>•</span>
             <button onClick={() => {

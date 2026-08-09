@@ -5,9 +5,10 @@ import { motion } from 'motion/react';
 
 interface PrivacyPolicyProps {
   setCurrentPage: (page: Page) => void;
+  onOpenDoNotSell?: () => void;
 }
 
-export default function PrivacyPolicy({ setCurrentPage }: PrivacyPolicyProps) {
+export default function PrivacyPolicy({ setCurrentPage, onOpenDoNotSell }: PrivacyPolicyProps) {
   const handleBackToHome = () => {
     setCurrentPage('home');
     window.scrollTo({ top: 0, behavior: 'smooth' });
@@ -109,6 +110,17 @@ export default function PrivacyPolicy({ setCurrentPage }: PrivacyPolicyProps) {
                 <li><strong>Right to Correct & Delete:</strong> You can demand correction of inaccurate records or complete removal of your personal information.</li>
                 <li><strong>No Sale or Sharing:</strong> We do <strong>NOT</strong> sell, sell-by-proxy, or share consumer database lists with third-party data brokers for commercial monetization.</li>
               </ul>
+              {onOpenDoNotSell && (
+                <div className="pt-2">
+                  <button
+                    onClick={onOpenDoNotSell}
+                    className="px-4 py-2.5 bg-[#123e35] hover:bg-[#185246] text-white text-xs font-bold rounded-xl transition-all cursor-pointer inline-flex items-center gap-2 shadow-2xs"
+                  >
+                    <ShieldCheck className="w-4 h-4 text-[#bc5f40]" />
+                    <span>Launch Do Not Sell or Share My Info Preferences</span>
+                  </button>
+                </div>
+              )}
             </section>
 
             <section className="space-y-3">
