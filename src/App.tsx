@@ -19,7 +19,6 @@ import PrivacyPolicy from './components/PrivacyPolicy';
 import TermsOfService from './components/TermsOfService';
 import FaqSection from './components/FaqSection';
 import DemoView from './components/DemoView';
-import DoNotSellModal from './components/DoNotSellModal';
 import { BLOG_POSTS } from './data/blogData';
 
 import { STATE_DIRECTORY, CITY_DIRECTORY } from './data/directoryData';
@@ -379,9 +378,8 @@ export default function App() {
     setTwitterTag('twitter:image:alt', imageAlt);
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
-  // Onboarding Wizard & Privacy Modal controls
+  // Onboarding Wizard controls
   const [isWizardOpen, setIsWizardOpen] = useState(false);
-  const [isDoNotSellOpen, setIsDoNotSellOpen] = useState(false);
   const [preselectedPlan, setPreselectedPlan] = useState<Plan | null>(null);
   const [selectedPricingPlanId, setSelectedPricingPlanId] = useState<string>('single-page');
 
@@ -2181,7 +2179,7 @@ export default function App() {
               exit={{ opacity: 0, y: -15 }}
               transition={{ duration: 0.3 }}
             >
-              <PrivacyPolicy setCurrentPage={setCurrentPage} onOpenDoNotSell={() => setIsDoNotSellOpen(true)} />
+              <PrivacyPolicy setCurrentPage={setCurrentPage} />
             </motion.div>
           )}
 
@@ -2202,7 +2200,7 @@ export default function App() {
       </main>
 
       {/* Persistent Footer */}
-      <Footer setCurrentPage={setCurrentPage} onOpenDoNotSell={() => setIsDoNotSellOpen(true)} />
+      <Footer setCurrentPage={setCurrentPage} />
 
       {/* Shared Onboarding Wizard Modal */}
       <OnboardingWizard
@@ -2210,12 +2208,6 @@ export default function App() {
         onClose={() => setIsWizardOpen(false)}
         preselectedPlan={preselectedPlan}
         onLeadSubmitted={handleLeadSubmitted}
-      />
-
-      {/* Do Not Sell or Share My Info Modal (CCPA/CPRA) */}
-      <DoNotSellModal
-        isOpen={isDoNotSellOpen}
-        onClose={() => setIsDoNotSellOpen(false)}
       />
     </div>
   );
