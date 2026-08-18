@@ -551,7 +551,7 @@ app.get("/api/indexnow/status", (req, res) => {
   const devKeyPath = path.join(process.cwd(), "public", "3689e2a29673450ab6eaa293a17fbae9.txt");
   const prodKeyPath = path.join(process.cwd(), "dist", "3689e2a29673450ab6eaa293a17fbae9.txt");
   const keyExists = fs.existsSync(devKeyPath) || fs.existsSync(prodKeyPath);
-  
+
   let keyContent = "";
   if (fs.existsSync(devKeyPath)) {
     keyContent = fs.readFileSync(devKeyPath, "utf-8").trim();
@@ -564,7 +564,7 @@ app.get("/api/indexnow/status", (req, res) => {
   const robotsProdPath = path.join(process.cwd(), "dist", "robots.txt");
   const robotsPath = fs.existsSync(robotsProdPath) ? robotsProdPath : robotsDevPath;
   let botsBlocked = false;
-  
+
   if (fs.existsSync(robotsPath)) {
     const content = fs.readFileSync(robotsPath, "utf-8");
     if (content.includes("Disallow: /") && !content.includes("Allow: /")) {
@@ -595,7 +595,7 @@ app.post("/api/indexnow/submit", requireAdmin, async (req, res) => {
   // Derive target host URL
   const rawUrl = process.env.APP_URL || `http://${req.headers.host}`;
   const hostUrl = rawUrl.replace(/\/$/, "");
-  
+
   // Format all entries into absolute URLs
   const absoluteUrls = urls.map((u: string) => {
     if (u.startsWith("http://") || u.startsWith("https://")) {
@@ -617,8 +617,8 @@ app.post("/api/indexnow/submit", requireAdmin, async (req, res) => {
     });
 
     if (invalidUrls.length > 0) {
-      return res.status(400).json({ 
-        error: `Security violation: All URLs must match the host domain: ${parsedHost.hostname}. Found invalid entries: ${invalidUrls.join(", ")}` 
+      return res.status(400).json({
+        error: `Security violation: All URLs must match the host domain: ${parsedHost.hostname}. Found invalid entries: ${invalidUrls.join(", ")}`
       });
     }
 
@@ -652,14 +652,14 @@ app.post("/api/indexnow/submit", requireAdmin, async (req, res) => {
     writeIndexNowHistory(history.slice(0, 50));
 
     if (success) {
-      return res.json({ 
-        success: true, 
-        message: `Successfully submitted ${absoluteUrls.length} URLs to IndexNow.org. Status: ${status}` 
+      return res.json({
+        success: true,
+        message: `Successfully submitted ${absoluteUrls.length} URLs to IndexNow.org. Status: ${status}`
       });
     } else {
       const text = await response.text();
-      return res.status(status).json({ 
-        error: `IndexNow API returned status code ${status}: ${text}` 
+      return res.status(status).json({
+        error: `IndexNow API returned status code ${status}: ${text}`
       });
     }
   } catch (err: any) {
@@ -865,11 +865,11 @@ async function generateServerPDF(planId: string, name: string, email: string): P
   doc.text('PREPARED FOR:', 19, 73);
   doc.setTextColor(nDark[0], nDark[1], nDark[2]);
   doc.setFont('Helvetica', 'normal');
-  
+
   // Clean values of any non-printable or malicious control characters
   const cleanName = String(name || "").replace(/[^\x20-\x7E]/g, "").slice(0, 60);
   const cleanEmail = String(email || "").replace(/[^\x20-\x7E]/g, "").slice(0, 60);
-  
+
   doc.text(`Client Contact Name: ${cleanName}`, 19, 78);
   doc.text(`Contact Email Address: ${cleanEmail}`, 19, 83);
 
@@ -1813,7 +1813,7 @@ app.get("/api/outreach/demo/:slug", (req, res) => {
     businessName: cleanName.toUpperCase().includes('PROS') ? cleanName : `${cleanName} Services`,
     niche: 'Local Services',
     location: cleanCity,
-    phone: '+1 (909) 757-6469',
+    phone: '+1 (909) 707-5075',
     email: `contact@${slug}.com`,
     tagline: `Premier Licensed ${cleanName} in ${cleanCity}`,
     heroHeadline: `Fast, Trusted ${cleanName} in ${cleanCity}`,
@@ -1861,7 +1861,7 @@ app.post("/api/outreach/generate-pitch", requireAdmin, async (req, res) => {
     businessName: prospect.businessName,
     niche: prospect.niche,
     location: prospect.location,
-    phone: prospect.phone || '+1 (909) 757-6469',
+    phone: prospect.phone || '+1 (909) 707-5075',
     email: prospect.email,
     tagline: `Licensed & Insured ${prospect.niche} in ${prospect.location}`,
     heroHeadline: `Top-Rated ${prospect.niche} in ${prospect.location}`,
@@ -2411,13 +2411,13 @@ app.get("/api/google-ads/campaigns", requireAdmin, (req, res) => {
 
 app.post("/api/google-ads/create-campaign", requireAdmin, (req, res) => {
   const { name, budget, location, website, keywords, headlines, longHeadlines, descriptions, sitelinks, status } = req.body;
-  
+
   if (!name || !budget || !website) {
     return res.status(400).json({ error: "Missing required campaign fields (name, budget, or website)." });
   }
 
   const campaigns = readCampaigns();
-  
+
   const newCampaign = {
     id: `camp_${Date.now()}_${Math.random().toString(36).substr(2, 6)}`,
     createdAt: new Date().toISOString(),
@@ -2441,7 +2441,7 @@ app.post("/api/google-ads/create-campaign", requireAdmin, (req, res) => {
 
   campaigns.unshift(newCampaign);
   writeCampaigns(campaigns);
-  
+
   res.json({ success: true, campaign: newCampaign });
 });
 
@@ -2470,7 +2470,7 @@ app.delete("/api/google-ads/campaigns/:id", requireAdmin, (req, res) => {
 
 app.post("/api/google-ads/generate-copy", requireAdmin, async (req, res) => {
   const { url, industry, keywords, location } = req.body;
-  
+
   const cleanUrl = String(url || "").trim().slice(0, 100);
   const cleanIndustry = String(industry || "").trim().slice(0, 100);
   const cleanKeywords = String(keywords || "").trim().slice(0, 200);
@@ -2605,7 +2605,7 @@ app.post("/api/google-ads/generate-copy", requireAdmin, async (req, res) => {
 
       if (result.text) {
         const parsed = JSON.parse(result.text.trim());
-        
+
         const headlines = (parsed.headlines || [])
           .map((h: string) => h.trim().slice(0, 30))
           .filter(Boolean)
@@ -2615,7 +2615,7 @@ app.post("/api/google-ads/generate-copy", requireAdmin, async (req, res) => {
           .map((lh: string) => lh.trim().slice(0, 90))
           .filter(Boolean)
           .slice(0, 5);
-        
+
         const descriptions = (parsed.descriptions || [])
           .map((d: string) => d.trim().slice(0, 90))
           .filter(Boolean)
@@ -2756,7 +2756,7 @@ app.post("/api/webmcp/invoke", async (req, res) => {
     const phoneClean = (phone || "").replace(/\D/g, "");
     const altPhone = phoneClean.length === 10
       ? `(${phoneClean.slice(0, 3)}) ${phoneClean.slice(3, 6)}-${(parseInt(phoneClean.slice(6)) + 11).toString().padStart(4, "0")}`
-      : "+1 (909) 757-6469";
+      : "+1 (909) 707-5075";
 
     const mockDirectories = [
       { name: "Google Business Profile", status: "match", details: "Verified profile found. Consistent NAP data." },
@@ -2796,7 +2796,7 @@ app.post("/api/webmcp/invoke", async (req, res) => {
       businessName: params.businessName || "WebMCP Client",
       contactName: params.contactName || "AI Agent Delegate",
       email: params.email,
-      phone: params.phone || "+1 (909) 757-6469",
+      phone: params.phone || "+1 (909) 707-5075",
       website: params.website || "https://localsurgeseo.com",
       hasWebsite: true,
       industry: params.niche || "Local Business",

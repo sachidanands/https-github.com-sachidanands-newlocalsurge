@@ -3,12 +3,12 @@ import { Page } from '../types';
 import { Rocket, Mail, MapPin, Clock, Calendar, Facebook, Youtube } from 'lucide-react';
 
 const XIcon = ({ className = "w-4 h-4" }: { className?: string }) => (
-  <svg 
-    viewBox="0 0 24 24" 
-    fill="currentColor" 
+  <svg
+    viewBox="0 0 24 24"
+    fill="currentColor"
     className={className}
   >
-    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z"/>
+    <path d="M18.244 2.25h3.308l-7.227 8.26 8.502 11.24H16.17l-5.214-6.817L4.99 21.75H1.68l7.73-8.835L1.254 2.25H8.08l4.713 6.231zm-1.161 17.52h1.833L7.084 4.126H5.117z" />
   </svg>
 );
 
@@ -41,7 +41,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   contact@localsurgeseo.com
                 </a>
               </div>
-              
+
               {/* Service Area Business Address Block */}
               <div className="pt-3 border-t border-[#dfded4]/65 space-y-1.5 text-[11px] text-[#5c605d] leading-relaxed">
                 <p className="font-extrabold text-[#151716] text-xs">Local Surge SEO HQ (Virtual)</p>
@@ -54,31 +54,31 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#888b88]">
                   <Clock className="w-3.5 h-3.5 text-[#bc5f40] shrink-0" />
-                  <span>Phone: +1 (909) 757-6469 (VoIP Inbox)</span>
+                  <span>Phone: +1 (909) 707-5075 (VoIP Inbox)</span>
                 </div>
                 <div className="pt-3 border-t border-[#dfded4]/65 flex gap-3">
-                  <a 
-                    href="https://www.facebook.com/localsurgeseo" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <a
+                    href="https://www.facebook.com/localsurgeseo"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
                     aria-label="Facebook"
                   >
                     <Facebook className="w-4 h-4" />
                   </a>
-                  <a 
-                    href="https://www.youtube.com/@LocalSurgeSEO" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <a
+                    href="https://www.youtube.com/@LocalSurgeSEO"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#bc5f40] hover:border-[#bc5f40] hover:bg-[#bc5f40]/5 hover:scale-105 transition-all duration-200"
                     aria-label="YouTube"
                   >
                     <Youtube className="w-4 h-4" />
                   </a>
-                  <a 
-                    href="https://x.com/localsurgeseo" 
-                    target="_blank" 
-                    rel="noopener noreferrer" 
+                  <a
+                    href="https://x.com/localsurgeseo"
+                    target="_blank"
+                    rel="noopener noreferrer"
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
                     aria-label="X (formerly Twitter)"
                   >
@@ -89,11 +89,11 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   * Local Surge SEO operates as a Service Area Business (SAB). We consult with our clients virtually and do not maintain a physical walk-in storefront.
                 </p>
                 <div className="pt-3 border-t border-[#dfded4] flex justify-start">
-                  <a 
-                    href="#" 
+                  <a
+                    href="#"
                     onClick={(e) => {
                       e.preventDefault();
-                      window.open('https://www.sitelock.com/verify.php?site=localsurgeseo.com','SiteLock','width=600,height=600,left=160,top=170');
+                      window.open('https://www.sitelock.com/verify.php?site=localsurgeseo.com', 'SiteLock', 'width=600,height=600,left=160,top=170');
                     }}
                     className="inline-block hover:opacity-85 transition-opacity"
                   >

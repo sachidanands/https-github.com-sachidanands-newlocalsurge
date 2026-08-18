@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  Search, ShieldAlert, CheckCircle2, AlertTriangle, HelpCircle, 
+import {
+  Search, ShieldAlert, CheckCircle2, AlertTriangle, HelpCircle,
   RefreshCw, MapPin, Phone, Building2, Globe, ExternalLink, ArrowRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -69,9 +69,9 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
   const generateScanResults = () => {
     // Dynamically leverage inputs to create realistic, custom-tailored errors!
     const phoneClean = bizPhone.replace(/\D/g, '');
-    const altPhone = phoneClean.length === 10 
-      ? `(${phoneClean.slice(0,3)}) ${phoneClean.slice(3,6)}-${(parseInt(phoneClean.slice(6)) + 11).toString().padStart(4, '0')}`
-      : '+1 (909) 757-6469';
+    const altPhone = phoneClean.length === 10
+      ? `(${phoneClean.slice(0, 3)}) ${phoneClean.slice(3, 6)}-${(parseInt(phoneClean.slice(6)) + 11).toString().padStart(4, '0')}`
+      : '+1 (909) 707-5075';
 
     const mockDirectories: DirectoryResult[] = [
       {
@@ -150,8 +150,8 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
 
     // Calculate score
     const score = Math.round(
-      (mockDirectories.filter(d => d.status === 'match').length * 10 + 
-       mockDirectories.filter(d => d.status === 'mismatch').length * 4) / mockDirectories.length * 10
+      (mockDirectories.filter(d => d.status === 'match').length * 10 +
+        mockDirectories.filter(d => d.status === 'mismatch').length * 4) / mockDirectories.length * 10
     );
     setOverallScore(score);
   };
@@ -195,12 +195,12 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
 
       <AnimatePresence mode="wait">
         {!loading && !scanned ? (
-          <motion.form 
+          <motion.form
             key="scan-form"
             initial={{ opacity: 0, y: 10 }}
             animate={{ opacity: 1, y: 0 }}
             exit={{ opacity: 0, y: -10 }}
-            onSubmit={performScan} 
+            onSubmit={performScan}
             className="grid grid-cols-1 md:grid-cols-12 gap-4"
             toolname="directory_nap_citation_audit_tool"
             tooldescription="Scan top local business directories to find missing listings, duplicate entries, and Name-Address-Phone (NAP) mismatch errors"
@@ -236,7 +236,7 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
                   required
                   toolparamtitle="Primary Business Telephone"
                   toolparamdescription="Main office phone number published on directory listings"
-                  placeholder="e.g. +1 (909) 757-6469"
+                  placeholder="e.g. +1 (909) 707-5075"
                   value={bizPhone}
                   onChange={(e) => setBizPhone(e.target.value)}
                   className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-xl w-full pl-10 pr-4 py-3 text-xs sm:text-sm text-[#1a1c1a]/90 placeholder-[#888b88] focus:outline-none focus:border-[#123e35] transition-colors font-semibold"
@@ -274,7 +274,7 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
             </div>
           </motion.form>
         ) : loading ? (
-          <motion.div 
+          <motion.div
             key="scan-loading"
             initial={{ opacity: 0 }}
             animate={{ opacity: 1 }}
@@ -317,15 +317,15 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
                 <div className="relative w-28 h-28 flex items-center justify-center bg-white/5 border border-white/10 rounded-full">
                   <svg className="w-24 h-24 transform -rotate-90">
                     <circle className="text-white/10" strokeWidth="6" stroke="currentColor" fill="transparent" r="38" cx="48" cy="48" />
-                    <circle 
-                      className="text-[#bc5f40]" 
-                      strokeWidth="8" 
+                    <circle
+                      className="text-[#bc5f40]"
+                      strokeWidth="8"
                       strokeDasharray={2 * Math.PI * 38}
                       strokeDashoffset={2 * Math.PI * 38 * (1 - overallScore / 100)}
-                      strokeLinecap="round" 
-                      stroke="currentColor" 
-                      fill="transparent" 
-                      r="38" cx="48" cy="48" 
+                      strokeLinecap="round"
+                      stroke="currentColor"
+                      fill="transparent"
+                      r="38" cx="48" cy="48"
                     />
                   </svg>
                   <span className="absolute text-2xl font-black font-display text-white">{overallScore}%</span>
@@ -350,7 +350,7 @@ export default function LocalDirectoryTool({ onOpenOnboarding }: LocalDirectoryT
               {results.map((dir, idx) => {
                 const isMatch = dir.status === 'match';
                 const isMismatch = dir.status === 'mismatch';
-                
+
                 return (
                   <div key={idx} className="p-4 sm:p-5 flex flex-col md:flex-row md:items-center justify-between gap-4 bg-white hover:bg-[#faf9f6] transition-colors">
                     <div className="space-y-1">

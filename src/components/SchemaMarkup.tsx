@@ -18,7 +18,7 @@ export default function SchemaMarkup({
   activeCitySlug,
   plans
 }: SchemaMarkupProps) {
-  
+
   // Base site metadata definitions
   const siteUrl = 'https://localsurgeseo.com';
   const orgName = 'Local Surge SEO';
@@ -33,7 +33,7 @@ export default function SchemaMarkup({
     'url': siteUrl,
     'logo': orgLogo,
     'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-    'telephone': '+19097576469',
+    'telephone': '+19097075075',
     'priceRange': '$$',
     'knowsAbout': [
       'Search Engine Optimization',
@@ -304,7 +304,7 @@ export default function SchemaMarkup({
       'mainEntity': list
     };
   };
- 
+
   // Dynamic FAQ Page Schema for the Local SEO page
   const getLocalSeoFAQSchema = () => {
     const list = [
@@ -367,7 +367,7 @@ export default function SchemaMarkup({
         const day = String(d.getDate()).padStart(2, '0');
         return `${year}-${month}-${day}T12:00:00+00:00`;
       }
-    } catch (err) {}
+    } catch (err) { }
     return '2026-06-20T12:00:00+00:00';
   };
 
@@ -412,7 +412,7 @@ export default function SchemaMarkup({
       'url': `${siteUrl}/${state.slug}`,
       'logo': orgLogo,
       'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-      'telephone': '+19097576469',
+      'telephone': '+19097075075',
       'priceRange': '$$',
       'knowsAbout': [
         'Search Engine Optimization',
@@ -443,7 +443,7 @@ export default function SchemaMarkup({
       'url': `${siteUrl}/${city.stateSlug}/${city.slug}`,
       'logo': orgLogo,
       'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
-      'telephone': '+19097576469',
+      'telephone': '+19097075075',
       'priceRange': '$$',
       'knowsAbout': [
         'Search Engine Optimization',

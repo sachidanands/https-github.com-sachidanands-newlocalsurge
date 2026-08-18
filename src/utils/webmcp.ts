@@ -46,7 +46,7 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
     requiresUserConsent: true,
     parameters: [
       { name: 'businessName', type: 'string', description: 'Official registered business name', required: true, example: 'Bay Area Contractors' },
-      { name: 'phone', type: 'string', description: 'Primary business phone number', required: true, example: '+1 (909) 757-6469' },
+      { name: 'phone', type: 'string', description: 'Primary business phone number', required: true, example: '+1 (909) 707-5075' },
       { name: 'zipCode', type: 'string', description: 'Target 5-digit postal zip code', required: true, example: '95112' }
     ]
   },
@@ -73,7 +73,7 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
       { name: 'businessName', type: 'string', description: 'Official business name', required: true, example: 'Apex Dental Wellness' },
       { name: 'contactName', type: 'string', description: 'Contact person name', required: true, example: 'Dr. Arthur Miller' },
       { name: 'email', type: 'string', description: 'Business contact email address', required: true, example: 'contact@apexdental.com' },
-      { name: 'phone', type: 'string', description: 'Primary phone number', required: true, example: '+1 (909) 757-6469' },
+      { name: 'phone', type: 'string', description: 'Primary phone number', required: true, example: '+1 (909) 707-5075' },
       { name: 'location', type: 'string', description: 'Target city or region', required: true, example: 'San Jose, CA' },
       { name: 'keywords', type: 'string', description: 'Primary target keywords or services', required: true, example: 'emergency dentist, cosmetic dentistry' }
     ]

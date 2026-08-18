@@ -1,7 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Plan, LeadInput, SEOAuditResult, Lead } from '../types';
-import { 
-  X, Check, AlertCircle, RefreshCw, BarChart2, ShieldCheck, Mail, Phone, Globe, MapPin, 
+import {
+  X, Check, AlertCircle, RefreshCw, BarChart2, ShieldCheck, Mail, Phone, Globe, MapPin,
   Search, Shield, ChevronLeft, ChevronRight, FileText, CheckSquare, Sparkles, Building2, Star, Bot
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -188,7 +188,7 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
         <span className="hidden sm:inline-block sm:align-middle sm:h-screen" aria-hidden="true">&#8203;</span>
 
         <div className="inline-block align-bottom bg-[#f7f6f2] text-[#1a1c1a] rounded-2xl text-left overflow-hidden shadow-xl transform transition-all sm:my-8 sm:align-middle sm:max-w-3xl sm:w-full border border-[#dfded4]">
-          
+
           {/* Header */}
           <div className="bg-[#faf9f6] px-6 py-5 border-b border-[#dfded4] flex justify-between items-center mutual-modal-header">
             <div>
@@ -324,7 +324,7 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                             type="tel"
                             toolparamtitle="Phone Number"
                             toolparamdescription="Contact telephone number for lead verification"
-                            placeholder="e.g. +1 (909) 757-6469"
+                            placeholder="e.g. +1 (909) 707-5075"
                             value={phone}
                             onChange={(e) => setPhone(e.target.value)}
                             className="bg-[#faf9f6] border border-[#dfded4] rounded-xl w-full pl-10 pr-4 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all font-semibold"
@@ -352,11 +352,10 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                         <button
                           type="button"
                           onClick={() => setHasWebsite(true)}
-                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                            hasWebsite
+                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${hasWebsite
                               ? 'bg-[#123e35]/10 border-[#123e35] text-[#123e35] shadow-xs'
                               : 'bg-white border-[#dfded4] text-[#4e524f] hover:bg-[#faf9f6]'
-                          }`}
+                            }`}
                         >
                           <Check className={`w-3.5 h-3.5 ${hasWebsite ? 'opacity-100' : 'opacity-0'}`} />
                           Yes, we do
@@ -367,11 +366,10 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                             setHasWebsite(false);
                             setWebsite('');
                           }}
-                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                            !hasWebsite
+                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${!hasWebsite
                               ? 'bg-[#123e35]/10 border-[#123e35] text-[#123e35] shadow-xs'
                               : 'bg-white border-[#dfded4] text-[#4e524f] hover:bg-[#faf9f6]'
-                          }`}
+                            }`}
                         >
                           <Check className={`w-3.5 h-3.5 ${!hasWebsite ? 'opacity-100' : 'opacity-0'}`} />
                           No, we need one built
@@ -409,11 +407,10 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                         <button
                           type="button"
                           onClick={() => setHasGBP(true)}
-                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                            hasGBP
+                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${hasGBP
                               ? 'bg-[#123e35]/10 border-[#123e35] text-[#123e35] shadow-xs'
                               : 'bg-white border-[#dfded4] text-[#4e524f] hover:bg-[#faf9f6]'
-                          }`}
+                            }`}
                         >
                           <Check className={`w-3.5 h-3.5 ${hasGBP ? 'opacity-100' : 'opacity-0'}`} />
                           Yes, profile is active
@@ -424,11 +421,10 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                             setHasGBP(false);
                             setGbpLink('');
                           }}
-                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${
-                            !hasGBP
+                          className={`flex-1 py-3 px-4 rounded-xl border text-xs font-bold transition-all flex items-center justify-center gap-2 cursor-pointer ${!hasGBP
                               ? 'bg-[#123e35]/10 border-[#123e35] text-[#123e35] shadow-xs'
                               : 'bg-white border-[#dfded4] text-[#4e524f] hover:bg-[#faf9f6]'
-                          }`}
+                            }`}
                         >
                           <Check className={`w-3.5 h-3.5 ${!hasGBP ? 'opacity-100' : 'opacity-0'}`} />
                           No active profile
@@ -527,20 +523,20 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                   >
                     {/* Progress Score Header */}
                     <div className="flex flex-col md:flex-row items-center gap-6 p-5 bg-[#123e35] text-white rounded-2xl relative overflow-hidden shadow-xs border border-[#0f342e]">
-                      
+
                       {/* Circle progress overlay */}
                       <div className="relative shrink-0 flex items-center justify-center">
                         <svg className="w-24 h-24 transform -rotate-90">
                           <circle className="text-white/10" strokeWidth="6" stroke="currentColor" fill="transparent" r="40" cx="48" cy="48" />
-                          <circle 
-                            className="text-[#bc5f40] transition-all duration-1000 ease-out" 
-                            strokeWidth="8" 
+                          <circle
+                            className="text-[#bc5f40] transition-all duration-1000 ease-out"
+                            strokeWidth="8"
                             strokeDasharray={2 * Math.PI * 40}
                             strokeDashoffset={2 * Math.PI * 40 * (1 - submittedLead.aiAudit.overallScore / 100)}
-                            strokeLinecap="round" 
-                            stroke="currentColor" 
-                            fill="transparent" 
-                            r="40" cx="48" cy="48" 
+                            strokeLinecap="round"
+                            stroke="currentColor"
+                            fill="transparent"
+                            r="40" cx="48" cy="48"
                           />
                         </svg>
                         <span className="absolute text-2xl font-black font-display text-white">
@@ -579,13 +575,12 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                             <div>
                               <div className="flex justify-between items-start">
                                 <h6 className="font-extrabold text-sm text-[#111311] pr-2 font-display">{pillar.title}</h6>
-                                <span className={`text-[10px] font-black font-mono px-1.5 py-0.5 rounded border shrink-0 ${
-                                  pillar.score >= 75 
-                                    ? 'bg-[#123e35]/10 text-[#123e35] border-[#123e35]/20' 
-                                    : pillar.score >= 50 
-                                      ? 'bg-[#bc5f40]/10 text-[#bc5f40] border-[#bc5f40]/20' 
+                                <span className={`text-[10px] font-black font-mono px-1.5 py-0.5 rounded border shrink-0 ${pillar.score >= 75
+                                    ? 'bg-[#123e35]/10 text-[#123e35] border-[#123e35]/20'
+                                    : pillar.score >= 50
+                                      ? 'bg-[#bc5f40]/10 text-[#bc5f40] border-[#bc5f40]/20'
                                       : 'bg-red-50 text-red-700 border-red-200'
-                                }`}>
+                                  }`}>
                                   {pillar.score}/100
                                 </span>
                               </div>
@@ -619,7 +614,7 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                         {submittedLead.aiAudit.actionPlan.map((action, idx) => (
                           <div key={idx} className="flex gap-3 bg-white p-3 rounded-lg border border-[#dfded4]">
                             <span className="flex items-center justify-center w-6 h-6 rounded-md bg-[#123e35] text-white text-xs font-bold shrink-0 font-mono">
-                              0{idx+1}
+                              0{idx + 1}
                             </span>
                             <span className="text-xs font-bold text-[#2d2f2d] self-center">
                               {action}
@@ -653,9 +648,8 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
                   type="button"
                   disabled={step === 1}
                   onClick={handleBack}
-                  className={`flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-xl transition-all border border-[#dfded4] bg-white text-[#4e524f] hover:bg-[#faf9f6] hover:text-[#1a1c1a] cursor-pointer ${
-                    step === 1 ? 'opacity-30 cursor-not-allowed' : ''
-                  }`}
+                  className={`flex items-center gap-1.5 text-xs font-bold px-4 py-2.5 rounded-xl transition-all border border-[#dfded4] bg-white text-[#4e524f] hover:bg-[#faf9f6] hover:text-[#1a1c1a] cursor-pointer ${step === 1 ? 'opacity-30 cursor-not-allowed' : ''
+                    }`}
                 >
                   <ChevronLeft className="w-3.5 h-3.5" />
                   Back

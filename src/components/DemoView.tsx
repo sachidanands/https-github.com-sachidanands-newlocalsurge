@@ -1,6 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { DemoConfig } from '../types';
-import { 
+import {
   Phone, Mail, MapPin, CheckCircle2, Star, ShieldCheck, Clock, Award, ChevronRight, Sparkles, X, Send, Globe
 } from 'lucide-react';
 
@@ -42,7 +42,7 @@ export default function DemoView({ demoSlug, onNavigateHome }: DemoViewProps) {
           businessName: cleanName.toUpperCase().includes('PROS') ? cleanName : `${cleanName} Services`,
           niche: 'Local Trade Services',
           location: cleanCity,
-          phone: '+1 (909) 757-6469',
+          phone: '+1 (909) 707-5075',
           email: `contact@${demoSlug}.com`,
           tagline: `Premier Licensed ${cleanName} in ${cleanCity}`,
           heroHeadline: `Fast, Trusted ${cleanName} in ${cleanCity}`,
@@ -281,11 +281,10 @@ export default function DemoView({ demoSlug, onNavigateHome }: DemoViewProps) {
                     <button
                       type="button"
                       onClick={() => setClaimTier('free')}
-                      className={`p-3 rounded-xl border text-left text-xs transition cursor-pointer ${
-                        claimTier === 'free'
+                      className={`p-3 rounded-xl border text-left text-xs transition cursor-pointer ${claimTier === 'free'
                           ? 'border-[#123e35] bg-[#eff4f1] font-bold text-[#123e35]'
                           : 'border-[#dfded4] bg-white text-[#4e524f]'
-                      }`}
+                        }`}
                     >
                       <div className="font-extrabold">Single-Page Blast</div>
                       <div className="text-[11px] font-mono text-[#bc5f40]">$0 / Free Forever</div>
@@ -293,11 +292,10 @@ export default function DemoView({ demoSlug, onNavigateHome }: DemoViewProps) {
                     <button
                       type="button"
                       onClick={() => setClaimTier('starter')}
-                      className={`p-3 rounded-xl border text-left text-xs transition cursor-pointer ${
-                        claimTier === 'starter'
+                      className={`p-3 rounded-xl border text-left text-xs transition cursor-pointer ${claimTier === 'starter'
                           ? 'border-[#123e35] bg-[#eff4f1] font-bold text-[#123e35]'
                           : 'border-[#dfded4] bg-white text-[#4e524f]'
-                      }`}
+                        }`}
                     >
                       <div className="font-extrabold">Starter Maps Boost</div>
                       <div className="text-[11px] font-mono text-[#123e35]">$999 / month</div>

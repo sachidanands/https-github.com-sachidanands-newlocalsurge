@@ -1,6 +1,6 @@
 import React, { useState } from 'react';
-import { 
-  Compass, Map, Award, Star, MessageSquareCode, Share2, Clipboard, 
+import {
+  Compass, Map, Award, Star, MessageSquareCode, Share2, Clipboard,
   Check, Sliders, CheckSquare, Zap, Target, BookOpen, ShieldCheck, Copy,
   Sparkles, HelpCircle, ChevronDown
 } from 'lucide-react';
@@ -21,7 +21,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
   const [city, setCity] = useState('San Jose');
   const [state, setState] = useState('CA');
   const [zip, setZip] = useState('95112');
-  const [phone, setPhone] = useState('+1 (909) 757-6469');
+  const [phone, setPhone] = useState('+1 (909) 707-5075');
   const [website, setWebsite] = useState('https://bayareaconstructors.local');
   const [lat, setLat] = useState('37.3522');
   const [lng, setLng] = useState('-121.8941');
@@ -83,7 +83,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
       {/* 1. HERO HEADER */}
       <section className="relative overflow-hidden bg-[#123e35] text-white py-16 sm:py-24 rounded-3xl border border-[#0f342e] shadow-sm max-w-7xl mx-auto px-6 sm:px-12">
         <div className="absolute inset-0 bg-radial-at-t from-[#1d5b4e] to-[#123e35] opacity-85" />
-        
+
         {/* Subtle grid accent backgrounds */}
         <div className="absolute inset-x-0 -top-40 -z-10 transform-gpu overflow-hidden blur-3xl sm:-top-80" aria-hidden="true">
           <div className="relative left-[calc(50%-11rem)] aspect-1155/678 w-[36.125rem] -translate-x-1/2 rotate-[30deg] bg-gradient-to-tr from-[#bc5f40] to-[#f7f6f2] opacity-20 sm:left-[calc(50%-30rem)] sm:w-[72.187rem]" />
@@ -256,22 +256,20 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
         <div className="flex justify-center border-b border-[#dfded4] max-w-md mx-auto">
           <button
             onClick={() => setActiveTab('ai-prompts')}
-            className={`flex-1 pb-3 text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 border-b-2 cursor-pointer ${
-              activeTab === 'ai-prompts'
+            className={`flex-1 pb-3 text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 border-b-2 cursor-pointer ${activeTab === 'ai-prompts'
                 ? 'border-[#123e35] text-[#123e35]'
                 : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
-            }`}
+              }`}
           >
             <Sparkles className="w-3.5 h-3.5 inline mr-1.5 align-text-bottom" />
             AI Prompts Vault
           </button>
           <button
             onClick={() => setActiveTab('people-also-ask')}
-            className={`flex-1 pb-3 text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 border-b-2 cursor-pointer ${
-              activeTab === 'people-also-ask'
+            className={`flex-1 pb-3 text-xs font-mono font-black uppercase tracking-wider transition-all duration-200 border-b-2 cursor-pointer ${activeTab === 'people-also-ask'
                 ? 'border-[#123e35] text-[#123e35]'
                 : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
-            }`}
+              }`}
           >
             <HelpCircle className="w-3.5 h-3.5 inline mr-1.5 align-text-bottom" />
             People Also Ask
@@ -336,7 +334,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                           {item.prompt}
                         </div>
                       </div>
-                      
+
                       <button
                         onClick={() => {
                           navigator.clipboard.writeText(item.prompt);
@@ -434,7 +432,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
       {/* 3. INTERACTIVE CORNER: LOCAL SCHEMA BUILDER */}
       <section className="max-w-7xl mx-auto px-4 sm:px-6">
         <div className="bg-[#faf9f6]/95 border border-[#dfded4] rounded-3xl p-6 sm:p-10 grid grid-cols-1 lg:grid-cols-12 gap-8 items-stretch">
-          
+
           <div className="lg:col-span-5 space-y-5 flex flex-col justify-center">
             <span className="text-[10px] font-bold font-mono tracking-widest text-[#bc5f40] uppercase block">
               FREE TECHNICAL HELPER
@@ -445,7 +443,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
             <p className="text-xs text-[#5c605d] font-semibold leading-relaxed">
               Structured JSON-LD schema is a secret weapon that tells search engines exactly which category, latitude, longitude, and market territory belongs to your business. Fill in the data to compile a perfect markup schema you can instantly copy!
             </p>
-            
+
             <div className="space-y-3 pt-3 border-t border-[#dfded4]">
               <div className="flex gap-2">
                 <div className="w-5 h-5 rounded-md bg-emerald-50 text-emerald-600 flex items-center justify-center shrink-0 mt-0.5">
@@ -462,7 +460,7 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
             </div>
           </div>
 
-          <div 
+          <div
             className="lg:col-span-7 grid grid-cols-1 md:grid-cols-2 gap-4 bg-white border border-[#dfded4] p-5 sm:p-6 rounded-2xl shadow-2xs"
             toolname="local_schema_markup_builder"
             tooldescription="Interactive JSON-LD Schema builder for local businesses to generate structured map coordinates and business metadata"
@@ -470,11 +468,11 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
           >
             <div className="space-y-3.5">
               <h4 className="text-xs font-bold font-mono text-[#123e35] uppercase tracking-wider border-b border-[#dfded4]/70 pb-1.5">Business Parameters</h4>
-              
+
               <div className="space-y-1">
                 <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">Category</label>
-                <select 
-                  value={bizType} 
+                <select
+                  value={bizType}
                   onChange={(e) => setBizType(e.target.value)}
                   toolparamtitle="Business Category"
                   toolparamdescription="Schema.org category classification"
@@ -492,9 +490,9 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
 
               <div className="space-y-1">
                 <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">Business Name</label>
-                <input 
-                  type="text" 
-                  value={bizName} 
+                <input
+                  type="text"
+                  value={bizName}
                   onChange={(e) => setBizName(e.target.value)}
                   toolparamtitle="Business Name"
                   toolparamdescription="Registered business name for JSON-LD schema"
@@ -504,9 +502,9 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
 
               <div className="space-y-1">
                 <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">Street Address</label>
-                <input 
-                  type="text" 
-                  value={address} 
+                <input
+                  type="text"
+                  value={address}
                   onChange={(e) => setAddress(e.target.value)}
                   toolparamtitle="Street Address"
                   toolparamdescription="Physical street address"
@@ -517,9 +515,9 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">City</label>
-                  <input 
-                    type="text" 
-                    value={city} 
+                  <input
+                    type="text"
+                    value={city}
                     onChange={(e) => setCity(e.target.value)}
                     toolparamtitle="City"
                     toolparamdescription="City locality"
@@ -528,9 +526,9 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                 </div>
                 <div className="space-y-1">
                   <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">Zip Code</label>
-                  <input 
-                    type="text" 
-                    value={zip} 
+                  <input
+                    type="text"
+                    value={zip}
                     onChange={(e) => setZip(e.target.value)}
                     toolparamtitle="Zip Code"
                     toolparamdescription="Postal zip code"
@@ -542,9 +540,9 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
               <div className="grid grid-cols-2 gap-2">
                 <div className="space-y-1">
                   <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">Latitude Coordinates</label>
-                  <input 
-                    type="text" 
-                    value={lat} 
+                  <input
+                    type="text"
+                    value={lat}
                     onChange={(e) => setLat(e.target.value)}
                     toolparamtitle="Latitude Coordinate"
                     toolparamdescription="Geographic latitude coordinate"
@@ -553,9 +551,9 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
                 </div>
                 <div className="space-y-1">
                   <label className="block text-[9px] font-bold text-[#4e524f] uppercase tracking-wide font-mono">Longitude Coordinates</label>
-                  <input 
-                    type="text" 
-                    value={lng} 
+                  <input
+                    type="text"
+                    value={lng}
                     onChange={(e) => setLng(e.target.value)}
                     toolparamtitle="Longitude Coordinate"
                     toolparamdescription="Geographic longitude coordinate"
@@ -568,8 +566,8 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
             <div className="space-y-3.5 flex flex-col">
               <div className="flex justify-between items-center border-b border-[#dfded4]/70 pb-1.5">
                 <h4 className="text-xs font-bold font-mono text-[#bc5f40] uppercase tracking-wider">Output JSON-LD Code</h4>
-                <button 
-                  type="button" 
+                <button
+                  type="button"
                   onClick={copyToClipboard}
                   className="text-[#123e35] hover:text-[#185246] transition-colors flex items-center gap-1 text-[10px] font-bold font-mono bg-[#123e35]/5 px-2 py-0.5 rounded border border-[#123e35]/15 cursor-pointer"
                 >
