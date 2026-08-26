@@ -1,2 +1,6 @@
-# Prevent the .agents directory containing developer guidelines from being uploaded or hosted on Vercel
+# Prevent .agents and skill files from being uploaded, built, or hosted on Vercel
 .agents/
+.agents/**
+.venv/
+skills-lock.json
+
