@@ -402,6 +402,60 @@ export default function SchemaMarkup({
     };
   };
 
+  // Dynamic FAQPage Question/Answer schema for blog posts
+  const getBlogPostFAQSchema = (post: BlogPost) => {
+    const qaPairs: { question: string; answer: string }[] = [];
+
+    post.sections.forEach((section, idx) => {
+      // Check list items with "Question?: Answer"
+      if ((section.type === 'numbered-list' || section.type === 'bullet-list') && Array.isArray(section.items)) {
+        section.items.forEach(item => {
+          const colonIdx = item.indexOf(':');
+          if (colonIdx > 0 && colonIdx < 140) {
+            const potentialQ = item.substring(0, colonIdx).replace(/^\d+\.\s*/, '').trim();
+            const potentialA = item.substring(colonIdx + 1).trim();
+            const isFaqList = section.content.toLowerCase().includes('faq') || 
+                              section.content.toLowerCase().includes('question') || 
+                              section.content.toLowerCase().includes('paa') ||
+                              section.content.toLowerCase().includes('ask');
+            if (potentialQ.includes('?') || isFaqList) {
+              qaPairs.push({
+                question: potentialQ.replace(/[*_#`]/g, ''),
+                answer: potentialA.replace(/[*_#`]/g, '')
+              });
+            }
+          }
+        });
+      }
+
+      // Check heading with '?' followed by paragraph
+      if (section.type === 'heading' && section.content.trim().endsWith('?')) {
+        const nextSection = post.sections[idx + 1];
+        if (nextSection && (nextSection.type === 'paragraph' || nextSection.type === 'alert-box')) {
+          qaPairs.push({
+            question: section.content.replace(/[*_#`]/g, '').trim(),
+            answer: nextSection.content.replace(/[*_#`]/g, '').trim()
+          });
+        }
+      }
+    });
+
+    if (qaPairs.length === 0) return null;
+
+    return {
+      '@context': 'https://schema.org',
+      '@type': 'FAQPage',
+      'mainEntity': qaPairs.map(qa => ({
+        '@type': 'Question',
+        'name': qa.question,
+        'acceptedAnswer': {
+          '@type': 'Answer',
+          'text': qa.answer
+        }
+      }))
+    };
+  };
+
   // Localized state schema
   const getLocalizedStateSchema = (state: StateData) => {
     return {
@@ -483,6 +537,10 @@ export default function SchemaMarkup({
       const activePost = BLOG_POSTS.find(p => p.slug === activeArticleSlug);
       if (activePost) {
         schemas.push(getBlogPostSchema(activePost));
+        const faqSchema = getBlogPostFAQSchema(activePost);
+        if (faqSchema) {
+          schemas.push(faqSchema);
+        }
       }
     }
 

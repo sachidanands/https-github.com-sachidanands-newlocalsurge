@@ -2,7 +2,8 @@ import React, { useState } from 'react';
 import { MicroToolConfig } from '../types';
 import { 
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
-  RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText
+  RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText,
+  Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -43,6 +44,26 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
   const [llmsPricingSummary, setLlmsPricingSummary] = useState('Diagnostic Dispatch: $79 (waived with repair) | AC Tune-Up: $129 | Emergency Weekend Surcharge: $50 | System Replacements: $4,800 - $11,500');
   const [llmsActiveTab, setLlmsActiveTab] = useState<'llmstxt' | 'pricingmd' | 'crawler-view'>('llmstxt');
   const [llmsCopied, setLlmsCopied] = useState(false);
+
+  // State for NAP Formatter
+  const [napBusinessName, setNapBusinessName] = useState('Gotham Flow Plumbing & Drain');
+  const [napStreet, setNapStreet] = useState('347 5th Ave');
+  const [napSuite, setNapSuite] = useState('Suite 802');
+  const [napCity, setNapCity] = useState('New York');
+  const [napState, setNapState] = useState('NY');
+  const [napZip, setNapZip] = useState('10016');
+  const [napPhone, setNapPhone] = useState('(212) 555-0144');
+  const [napCategory, setNapCategory] = useState('Plumber / Emergency Drain Cleaning');
+  const [napWebsite, setNapWebsite] = useState('https://gothamflowplumbing.com');
+  const [napActiveTab, setNapActiveTab] = useState<'directory' | 'schema' | 'aggregator'>('directory');
+  const [napCopied, setNapCopied] = useState(false);
+
+  // State for LSA ROI Calculator
+  const [lsaTrade, setLsaTrade] = useState<'plumbing' | 'hvac' | 'roofing' | 'dental' | 'electrician' | 'locksmith'>('plumbing');
+  const [lsaTargetJobs, setLsaTargetJobs] = useState(15);
+  const [lsaCloseRate, setLsaCloseRate] = useState(45);
+  const [lsaCustomTicket, setLsaCustomTicket] = useState(850);
+  const [lsaCopied, setLsaCopied] = useState(false);
 
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -659,6 +680,494 @@ ${pricingLines.length > 0 ? pricingLines.map(p => `- ${p}`).join('\n') : '- Diag
             <li>Add this line to your <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">robots.txt</code>: <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">LLMs-Txt: https://{cleanDomain}/llms.txt</code>.</li>
             <li>Add a discrete text link in your website footer: <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">AI Sitemap (llms.txt)</code> linking directly to <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">/llms.txt</code>.</li>
           </ol>
+        </div>
+      </div>
+    );
+  }
+
+  if (config.toolType === 'nap-formatter') {
+    const fullStreet = napSuite.trim() ? `${napStreet.trim()}, ${napSuite.trim()}` : napStreet.trim();
+    const directoryOutput = `Business Name: ${napBusinessName}
+Address: ${fullStreet}
+City, State, Zip: ${napCity}, ${napState} ${napZip}
+Phone: ${napPhone}
+Website: ${napWebsite}
+Category: ${napCategory}
+Service Area: Regional Metro Area`;
+
+    const schemaOutput = `{
+  "@context": "https://schema.org",
+  "@type": "LocalBusiness",
+  "name": "${napBusinessName}",
+  "url": "${napWebsite}",
+  "telephone": "${napPhone}",
+  "address": {
+    "@type": "PostalAddress",
+    "streetAddress": "${fullStreet}",
+    "addressLocality": "${napCity}",
+    "addressRegion": "${napState}",
+    "postalCode": "${napZip}",
+    "addressCountry": "US"
+  }
+}`;
+
+    const aggregatorOutput = `${napBusinessName} | ${fullStreet} | ${napCity} | ${napState} | ${napZip} | ${napPhone} | ${napWebsite}`;
+
+    const activeContent = napActiveTab === 'directory' ? directoryOutput : napActiveTab === 'schema' ? schemaOutput : aggregatorOutput;
+
+    const handleCopyNap = () => {
+      navigator.clipboard.writeText(activeContent);
+      setNapCopied(true);
+      setTimeout(() => setNapCopied(false), 2200);
+    };
+
+    const isTollFree = /^(800|888|877|866|855|844|833)/.test(napPhone.replace(/\D/g, ''));
+    const isTwoLetterState = /^[A-Za-z]{2}$/.test(napState.trim());
+
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-7 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="space-y-2 border-b border-[#dfded4] pb-4">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#bc5f40]">
+            <Building2 className="w-4 h-4" />
+            <span>Local Citation Consistency Optimizer</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs sm:text-sm text-[#5c605d] leading-relaxed">{config.toolDescription}</p>
+        </div>
+
+        {/* Quick Presets */}
+        <div className="space-y-2">
+          <label className="text-[11px] font-extrabold text-[#151716] uppercase tracking-wider block">
+            Load Verified Trade Case Study Presets:
+          </label>
+          <div className="flex flex-wrap gap-2">
+            <button
+              type="button"
+              onClick={() => {
+                setNapBusinessName('Gotham Flow Plumbing & Drain');
+                setNapStreet('347 5th Ave');
+                setNapSuite('Suite 802');
+                setNapCity('New York');
+                setNapState('NY');
+                setNapZip('10016');
+                setNapPhone('(212) 555-0144');
+                setNapCategory('Residential & Commercial Plumbing');
+                setNapWebsite('https://gothamflowplumbing.com');
+              }}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#123e35]/10 text-[#123e35] hover:bg-[#123e35] hover:text-white transition-all cursor-pointer"
+            >
+              📍 NYC Plumber (Case Study)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setNapBusinessName('Bayview Family & Cosmetic Dentistry');
+                setNapStreet('120 Bloor St E');
+                setNapSuite('Suite 400');
+                setNapCity('Toronto');
+                setNapState('ON');
+                setNapZip('M4W 1B7');
+                setNapPhone('(416) 555-0182');
+                setNapCategory('Cosmetic & Family Dentist');
+                setNapWebsite('https://bayviewdentistry.ca');
+              }}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#123e35]/10 text-[#123e35] hover:bg-[#123e35] hover:text-white transition-all cursor-pointer"
+            >
+              📍 Toronto Dentist (Case Study)
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setNapBusinessName('Apex Comfort Air & Heating');
+                setNapStreet('1802 E Riverside Dr');
+                setNapSuite('');
+                setNapCity('Austin');
+                setNapState('TX');
+                setNapZip('78741');
+                setNapPhone('(512) 555-0198');
+                setNapCategory('HVAC & AC Repair');
+                setNapWebsite('https://apexcomfortair.com');
+              }}
+              className="px-3 py-1.5 rounded-lg text-xs font-bold bg-[#123e35]/10 text-[#123e35] hover:bg-[#123e35] hover:text-white transition-all cursor-pointer"
+            >
+              📍 Texas HVAC Contractor
+            </button>
+          </div>
+        </div>
+
+        {/* Form Inputs Grid */}
+        <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 bg-[#faf9f6] p-4 sm:p-5 rounded-xl border border-[#dfded4]">
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Business Legal Name *</label>
+            <input
+              type="text"
+              value={napBusinessName}
+              onChange={(e) => setNapBusinessName(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Physical Street Address *</label>
+            <input
+              type="text"
+              value={napStreet}
+              onChange={(e) => setNapStreet(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Suite / Unit / Office</label>
+            <input
+              type="text"
+              value={napSuite}
+              onChange={(e) => setNapSuite(e.target.value)}
+              placeholder="e.g. Suite 802"
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">City *</label>
+            <input
+              type="text"
+              value={napCity}
+              onChange={(e) => setNapCity(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+          <div className="grid grid-cols-2 gap-2">
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">State/Prov *</label>
+              <input
+                type="text"
+                value={napState}
+                onChange={(e) => setNapState(e.target.value.toUpperCase())}
+                maxLength={3}
+                className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              />
+            </div>
+            <div className="space-y-1">
+              <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Postal/ZIP *</label>
+              <input
+                type="text"
+                value={napZip}
+                onChange={(e) => setNapZip(e.target.value)}
+                className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              />
+            </div>
+          </div>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Local Phone Number *</label>
+            <input
+              type="text"
+              value={napPhone}
+              onChange={(e) => setNapPhone(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+          <div className="space-y-1 lg:col-span-2">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Primary Business Category *</label>
+            <input
+              type="text"
+              value={napCategory}
+              onChange={(e) => setNapCategory(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+          <div className="space-y-1">
+            <label className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">Canonical Website URL *</label>
+            <input
+              type="text"
+              value={napWebsite}
+              onChange={(e) => setNapWebsite(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+          </div>
+        </div>
+
+        {/* Validation Warnings */}
+        <div className="space-y-2">
+          {isTollFree && (
+            <div className="p-3 bg-amber-50 border border-amber-200 rounded-lg flex items-center gap-2 text-xs text-amber-900 font-semibold">
+              <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0" />
+              <span>Warning: Toll-free 1-800 numbers dilute local proximity signals. Local area codes (e.g. 212, 512, 416) are strongly rewarded by Google Maps.</span>
+            </div>
+          )}
+          {!isTwoLetterState && (
+            <div className="p-3 bg-red-50 border border-red-200 rounded-lg flex items-center gap-2 text-xs text-red-900 font-semibold">
+              <XCircle className="w-4 h-4 text-red-600 shrink-0" />
+              <span>Format error: Use standardized 2-letter state codes (e.g. NY, TX, ON, CA) for aggregator compliance.</span>
+            </div>
+          )}
+        </div>
+
+        {/* Tabs & Output Code */}
+        <div className="space-y-3">
+          <div className="flex items-center justify-between border-b border-[#dfded4] pb-2">
+            <div className="flex gap-2">
+              <button
+                type="button"
+                onClick={() => setNapActiveTab('directory')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  napActiveTab === 'directory' ? 'bg-[#123e35] text-white shadow-sm' : 'bg-[#faf9f6] text-[#5c605d] hover:text-[#151716]'
+                }`}
+              >
+                Directory Copy Block
+              </button>
+              <button
+                type="button"
+                onClick={() => setNapActiveTab('schema')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  napActiveTab === 'schema' ? 'bg-[#123e35] text-white shadow-sm' : 'bg-[#faf9f6] text-[#5c605d] hover:text-[#151716]'
+                }`}
+              >
+                JSON-LD Local Schema
+              </button>
+              <button
+                type="button"
+                onClick={() => setNapActiveTab('aggregator')}
+                className={`px-3 py-1.5 rounded-lg text-xs font-bold transition-all cursor-pointer ${
+                  napActiveTab === 'aggregator' ? 'bg-[#123e35] text-white shadow-sm' : 'bg-[#faf9f6] text-[#5c605d] hover:text-[#151716]'
+                }`}
+              >
+                Data Aggregator Feed
+              </button>
+            </div>
+            <button
+              type="button"
+              onClick={handleCopyNap}
+              className="inline-flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold bg-[#bc5f40] text-white hover:bg-[#a34f34] transition-all cursor-pointer shadow-sm"
+            >
+              {napCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{napCopied ? 'Copied!' : 'Copy Formatted Block'}</span>
+            </button>
+          </div>
+
+          <div className="p-4 bg-[#151716] text-[#e6e4dc] rounded-xl font-mono text-xs overflow-x-auto max-h-72">
+            <pre className="whitespace-pre-wrap">{activeContent}</pre>
+          </div>
+        </div>
+
+        {/* Directory Distribution Checklist */}
+        <div className="bg-[#123e35]/5 border border-[#123e35]/20 p-4 rounded-xl space-y-2 text-xs">
+          <div className="font-extrabold text-[#123e35] flex items-center gap-1.5">
+            <CheckCircle2 className="w-4 h-4 text-[#123e35]" /> Core Citation Ecosystem Distribution Checklist:
+          </div>
+          <div className="grid grid-cols-2 sm:grid-cols-4 gap-2 text-[11px] font-semibold text-[#4e524f] pt-1">
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Google Business Profile</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Apple Business Connect</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Bing Places for Business</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Yelp for Business</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Better Business Bureau</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> YellowPages / Superpages</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Data Axle Tier-1 Feed</div>
+            <div className="flex items-center gap-1.5"><Check className="w-3 h-3 text-emerald-600" /> Local Chamber Directory</div>
+          </div>
+        </div>
+      </div>
+    );
+  }
+
+  if (config.toolType === 'lsa-calculator') {
+    const tradeProfiles = {
+      plumbing: { name: 'Residential Plumbing', avgLead: 42, disputeRate: 12, defaultTicket: 850, franchisePpcAvg: 95 },
+      hvac: { name: 'Heating & AC (HVAC)', avgLead: 38, disputeRate: 14, defaultTicket: 2200, franchisePpcAvg: 110 },
+      roofing: { name: 'Roofing Replacement', avgLead: 85, disputeRate: 18, defaultTicket: 9500, franchisePpcAvg: 185 },
+      dental: { name: 'Cosmetic & Family Dental', avgLead: 65, disputeRate: 10, defaultTicket: 3400, franchisePpcAvg: 130 },
+      electrician: { name: 'Licensed Electrician', avgLead: 35, disputeRate: 11, defaultTicket: 680, franchisePpcAvg: 75 },
+      locksmith: { name: 'Emergency Locksmith', avgLead: 28, disputeRate: 15, defaultTicket: 220, franchisePpcAvg: 60 }
+    };
+
+    const currentProfile = tradeProfiles[lsaTrade];
+    const leadsNeeded = Math.ceil(lsaTargetJobs / (lsaCloseRate / 100));
+    const grossSpend = leadsNeeded * currentProfile.avgLead;
+    const disputeRecovery = Math.round(grossSpend * (currentProfile.disputeRate / 100));
+    const netSpend = grossSpend - disputeRecovery;
+    const grossRevenue = lsaTargetJobs * lsaCustomTicket;
+    const netCac = Math.round(netSpend / lsaTargetJobs);
+    const roas = netSpend > 0 ? (grossRevenue / netSpend).toFixed(1) : '0';
+    const ppcEquivalentSpend = leadsNeeded * currentProfile.franchisePpcAvg;
+    const ppcSavings = Math.max(0, ppcEquivalentSpend - netSpend);
+
+    const handleCopyLsaSummary = () => {
+      const summary = `Google Local Service Ads (LSA) ROI Projection:
+Trade: ${currentProfile.name}
+Monthly Booked Jobs: ${lsaTargetJobs}
+Close Rate: ${lsaCloseRate}%
+Leads Needed: ${leadsNeeded} phone leads
+Gross LSA Lead Spend: $${grossSpend.toLocaleString()}
+Dispute Refund Credit (~${currentProfile.disputeRate}%): -$${disputeRecovery.toLocaleString()}
+Net Monthly Ad Spend: $${netSpend.toLocaleString()}
+Estimated Gross Revenue: $${grossRevenue.toLocaleString()}
+Net Customer Acquisition Cost (CAC): $${netCac}
+Projected ROAS: ${roas}x
+PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
+      navigator.clipboard.writeText(summary);
+      setLsaCopied(true);
+      setTimeout(() => setLsaCopied(false), 2200);
+    };
+
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-7 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="space-y-2 border-b border-[#dfded4] pb-4">
+          <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-emerald-700">
+            <ShieldCheck className="w-4 h-4 text-emerald-600" />
+            <span>Google Guaranteed Lead Cost & ROI Estimator</span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs sm:text-sm text-[#5c605d] leading-relaxed">{config.toolDescription}</p>
+        </div>
+
+        {/* Trade Selector */}
+        <div className="space-y-2">
+          <label className="text-[11px] font-extrabold text-[#151716] uppercase tracking-wider block">
+            Select Your Licensed Trade / Category:
+          </label>
+          <div className="grid grid-cols-2 sm:grid-cols-3 lg:grid-cols-6 gap-2">
+            {(Object.keys(tradeProfiles) as Array<keyof typeof tradeProfiles>).map((key) => {
+              const profile = tradeProfiles[key];
+              const isSelected = lsaTrade === key;
+              return (
+                <button
+                  key={key}
+                  type="button"
+                  onClick={() => {
+                    setLsaTrade(key);
+                    setLsaCustomTicket(profile.defaultTicket);
+                  }}
+                  className={`p-2.5 rounded-xl border text-center transition-all cursor-pointer ${
+                    isSelected
+                      ? 'bg-[#123e35] text-white border-[#123e35] shadow-sm'
+                      : 'bg-[#faf9f6] text-[#4e524f] border-[#dfded4] hover:border-[#123e35]'
+                  }`}
+                >
+                  <span className="block text-xs font-bold">{profile.name}</span>
+                  <span className="block text-[10px] opacity-80 mt-0.5">${profile.avgLead}/lead</span>
+                </button>
+              );
+            })}
+          </div>
+        </div>
+
+        {/* Sliders & Inputs */}
+        <div className="grid grid-cols-1 md:grid-cols-3 gap-5 bg-[#faf9f6] p-5 rounded-xl border border-[#dfded4]">
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-xs font-bold text-[#151716]">
+              <span>Target Booked Jobs / Month:</span>
+              <span className="font-mono text-[#bc5f40] text-sm font-extrabold">{lsaTargetJobs} jobs</span>
+            </div>
+            <input
+              type="range"
+              min={5}
+              max={60}
+              step={1}
+              value={lsaTargetJobs}
+              onChange={(e) => setLsaTargetJobs(Number(e.target.value))}
+              className="w-full accent-[#123e35] cursor-pointer"
+            />
+            <span className="text-[10px] text-[#888b88] block">Requires ~{leadsNeeded} total incoming phone inquiries</span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-xs font-bold text-[#151716]">
+              <span>Inbound Phone Close Rate:</span>
+              <span className="font-mono text-[#123e35] text-sm font-extrabold">{lsaCloseRate}%</span>
+            </div>
+            <input
+              type="range"
+              min={20}
+              max={80}
+              step={5}
+              value={lsaCloseRate}
+              onChange={(e) => setLsaCloseRate(Number(e.target.value))}
+              className="w-full accent-[#123e35] cursor-pointer"
+            />
+            <span className="text-[10px] text-[#888b88] block">Top operators close 45–60% of live call transfers</span>
+          </div>
+
+          <div className="space-y-2">
+            <div className="flex justify-between items-center text-xs font-bold text-[#151716]">
+              <span>Average Job Ticket ($):</span>
+              <span className="font-mono text-[#bc5f40] text-sm font-extrabold">${lsaCustomTicket.toLocaleString()}</span>
+            </div>
+            <input
+              type="number"
+              min={100}
+              max={50000}
+              step={50}
+              value={lsaCustomTicket}
+              onChange={(e) => setLsaCustomTicket(Number(e.target.value))}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+            />
+            <span className="text-[10px] text-[#888b88] block">Gross revenue per completed service call</span>
+          </div>
+        </div>
+
+        {/* Calculated Metrics Display */}
+        <div className="grid grid-cols-2 sm:grid-cols-4 gap-4">
+          <div className="p-4 rounded-xl bg-white border border-[#dfded4] shadow-xs space-y-1">
+            <span className="text-[10px] font-bold text-[#888b88] uppercase tracking-wider block">Net Monthly Ad Spend</span>
+            <div className="text-xl sm:text-2xl font-black text-[#151716] font-mono">${netSpend.toLocaleString()}</div>
+            <span className="text-[10px] text-emerald-600 font-bold block">-${disputeRecovery} dispute credit</span>
+          </div>
+
+          <div className="p-4 rounded-xl bg-white border border-[#dfded4] shadow-xs space-y-1">
+            <span className="text-[10px] font-bold text-[#888b88] uppercase tracking-wider block">Projected Revenue</span>
+            <div className="text-xl sm:text-2xl font-black text-[#123e35] font-mono">${grossRevenue.toLocaleString()}</div>
+            <span className="text-[10px] text-[#5c605d] font-semibold block">{lsaTargetJobs} jobs completed</span>
+          </div>
+
+          <div className="p-4 rounded-xl bg-white border border-[#dfded4] shadow-xs space-y-1">
+            <span className="text-[10px] font-bold text-[#888b88] uppercase tracking-wider block">Net CAC per Customer</span>
+            <div className="text-xl sm:text-2xl font-black text-[#bc5f40] font-mono">${netCac}</div>
+            <span className="text-[10px] text-[#5c605d] font-semibold block">Only pay for valid calls</span>
+          </div>
+
+          <div className="p-4 rounded-xl bg-emerald-50 border border-emerald-200 shadow-xs space-y-1">
+            <span className="text-[10px] font-bold text-emerald-800 uppercase tracking-wider block">Projected ROAS</span>
+            <div className="text-xl sm:text-2xl font-black text-emerald-900 font-mono">{roas}x</div>
+            <span className="text-[10px] text-emerald-700 font-semibold block">Return on LSA Spend</span>
+          </div>
+        </div>
+
+        {/* Dispute Protection & PPC Comparison */}
+        <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+          <div className="p-4 bg-[#faf9f6] border border-[#dfded4] rounded-xl space-y-2 text-xs">
+            <span className="font-extrabold text-[#151716] flex items-center gap-1.5">
+              <ShieldCheck className="w-4 h-4 text-emerald-600" /> Google Guaranteed Dispute Protection
+            </span>
+            <p className="text-[11px] text-[#5c605d] leading-relaxed">
+              Unlike standard Google Ads where clicks cost money regardless of intent, LSA permits direct refunds for:
+            </p>
+            <ul className="list-disc pl-4 space-y-0.5 text-[11px] text-[#4e524f]">
+              <li>Calls outside your designated service zip codes</li>
+              <li>Requests for services you do not provide</li>
+              <li>Wrong numbers, telemarketers, and spam robocalls</li>
+              <li>Customer hung up within 15 seconds without speaking</li>
+            </ul>
+          </div>
+
+          <div className="p-4 bg-[#123e35]/5 border border-[#123e35]/20 rounded-xl space-y-2 text-xs">
+            <span className="font-extrabold text-[#123e35] flex items-center gap-1.5">
+              <Zap className="w-4 h-4 text-[#bc5f40]" /> Budget Efficiency vs. Standard Google PPC
+            </span>
+            <p className="text-[11px] text-[#4e524f] leading-relaxed">
+              In traditional Google Search Ads, high franchise competition pushes clicks up to ${currentProfile.franchisePpcAvg}/click with zero guarantee of a live conversation.
+            </p>
+            <div className="pt-1 flex items-baseline gap-2">
+              <span className="text-sm font-extrabold text-[#123e35] font-mono">+${ppcSavings.toLocaleString()}/mo</span>
+              <span className="text-[11px] text-[#5c605d]">estimated savings by paying only for booked inquiries</span>
+            </div>
+            <button
+              type="button"
+              onClick={handleCopyLsaSummary}
+              className="mt-2 w-full py-2 px-3 rounded-lg text-xs font-bold bg-[#123e35] text-white hover:bg-[#185246] transition-all cursor-pointer flex items-center justify-center gap-1.5 shadow-sm"
+            >
+              {lsaCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+              <span>{lsaCopied ? 'LSA Forecast Copied!' : 'Copy Forecast Summary'}</span>
+            </button>
+          </div>
         </div>
       </div>
     );
