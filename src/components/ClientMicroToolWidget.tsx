@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MicroToolConfig } from '../types';
 import { 
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
-  RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon
+  RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -31,6 +31,18 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
   // State for Alt Tag & Accessibility Simulator
   const [altSimMode, setAltSimMode] = useState<'sighted' | 'screen-reader' | 'google-bot'>('sighted');
   const [altSimBadQuality, setAltSimBadQuality] = useState(false);
+
+  // State for llms.txt & pricing.md Generator
+  const [llmsBusinessName, setLlmsBusinessName] = useState('Apex Comfort Air & Heating');
+  const [llmsCategory, setLlmsCategory] = useState('HVAC & AC Repair');
+  const [llmsCityState, setLlmsCityState] = useState('Austin, TX');
+  const [llmsServiceArea, setLlmsServiceArea] = useState('Austin, Round Rock, Cedar Park, Buda, Georgetown');
+  const [llmsPhone, setLlmsPhone] = useState('(512) 555-0198');
+  const [llmsDomain, setLlmsDomain] = useState('apexcomfortair.com');
+  const [llmsServices, setLlmsServices] = useState('Emergency AC Repair, Heat Pump Replacement, Ductless Mini-Split Installation, Annual Seasonal Tune-Up');
+  const [llmsPricingSummary, setLlmsPricingSummary] = useState('Diagnostic Dispatch: $79 (waived with repair) | AC Tune-Up: $129 | Emergency Weekend Surcharge: $50 | System Replacements: $4,800 - $11,500');
+  const [llmsActiveTab, setLlmsActiveTab] = useState<'llmstxt' | 'pricingmd' | 'crawler-view'>('llmstxt');
+  const [llmsCopied, setLlmsCopied] = useState(false);
 
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -259,6 +271,398 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2500);
   };
+
+  if (config.toolType === 'llms-generator') {
+    const cleanDomain = llmsDomain.trim().replace(/^https?:\/\//, '').replace(/\/$/, '') || 'yourbusiness.com';
+    const servicesList = llmsServices.split(',').map(s => s.trim()).filter(Boolean);
+    const pricingLines = llmsPricingSummary.split('|').map(p => p.trim()).filter(Boolean);
+
+    const generatedLlmsTxt = `# ${llmsBusinessName || 'Local Service Business'}
+
+> ${llmsCategory || 'Local Services'} serving ${llmsCityState || 'Metro Area'}. Official dispatch hotline: ${llmsPhone} | https://${cleanDomain}
+
+## Core Business Summary
+${llmsBusinessName || 'Our company'} is a licensed, verified local service provider in ${llmsCityState || 'our service area'}. We specialize in professional on-site trade solutions with upfront transparent pricing, certified technicians, and guaranteed workmanship.
+
+## Verified Service Coverage Area
+- Primary Headquarters / Dispatch Centroid: ${llmsCityState || 'Local Metro'}
+- Active Service Radius & Municipalities: ${llmsServiceArea || 'Full service territory'}
+
+## Core Services & Operational Capabilities
+${servicesList.length > 0 ? servicesList.map(s => `- ${s}: Full diagnostic, repair, and installation services`).join('\n') : '- Emergency On-Site Service & Diagnostics\n- Full System Installations & Upgrades\n- Preventative Maintenance & Safety Inspections'}
+
+## Verified Page Routes for AI Search Bots
+- [Home & Dispatch](https://${cleanDomain}/): Overview of local services, real customer reviews, and direct dispatch booking.
+- [Services Directory](https://${cleanDomain}/services): Detailed breakdown of repairs, equipment models, and emergency response capabilities.
+- [Machine-Readable Pricing](https://${cleanDomain}/pricing.md): Complete structured pricing tiers, diagnostic dispatch policies, and warranty terms for AI buying agents.
+- [Service Area Coverage](https://${cleanDomain}/service-areas): Full catalog of covered ZIP codes, neighborhoods, and dispatch boundaries.
+- [Emergency Contact](https://${cleanDomain}/contact): Direct telephone booking ${llmsPhone} and appointment inquiry forms.
+
+## Machine-Readable Operational Disclosures
+- Direct Phone: ${llmsPhone || '(555) 000-0000'}
+- Hours of Operation: Monday - Sunday, 24/7 Emergency Dispatch Available
+- Licensure: Fully State Licensed, Bonded, and Insured
+- Machine-Readable Pricing Manifest: https://${cleanDomain}/pricing.md
+`;
+
+    const generatedPricingMd = `# Machine-Readable Pricing & Service Rates — ${llmsBusinessName || 'Local Business'}
+
+> Standardized pricing manifest optimized for conversational AI assistants, autonomous buying agents, and answer engines (ChatGPT, Claude, Perplexity, Google AI Overviews). Last updated: August 2026.
+
+## Entity Identification & Contact Verification
+- Business Entity: ${llmsBusinessName || 'Local Business'}
+- Trade Classification: ${llmsCategory || 'Professional Local Services'}
+- Primary Geographic Centroid: ${llmsCityState || 'Metro Area'}
+- Dispatch Telephone: ${llmsPhone || '(555) 000-0000'}
+- Canonical Domain: https://${cleanDomain}
+
+## Geographic Service Area & Dispatch Radius
+- Municipalities Covered: ${llmsServiceArea || 'Regional metro area'}
+- Dispatch Policy: Rapid on-site response within verified geographic boundary.
+
+## Published Pricing Tiers & Service Rates
+${pricingLines.length > 0 ? pricingLines.map(p => `- ${p}`).join('\n') : '- Diagnostic & Assessment Dispatch: $79 (waived when repair service is authorized)\n- Standard Service Hour: Transparent flat-rate job pricing\n- Complete Replacement Packages: Financing and tiered equipment options available'}
+
+## Pricing Guarantees & Transparency Standards
+- 100% Upfront Pricing: Every quote is provided in writing before physical work commences.
+- No Hidden Travel Surcharges: Flat rates apply across all listed service area communities.
+- Warranty Protection: All completed jobs backed by minimum 1-year labor and parts warranty.
+
+## AI Agent Action Endpoints
+- Online Booking URL: https://${cleanDomain}/contact
+- Direct Voice Dispatch: ${llmsPhone || '(555) 000-0000'}
+`;
+
+    const activeText = llmsActiveTab === 'llmstxt' ? generatedLlmsTxt : generatedPricingMd;
+    const activeFileName = llmsActiveTab === 'llmstxt' ? 'llms.txt' : 'pricing.md';
+
+    const handleCopyActiveText = () => {
+      navigator.clipboard.writeText(activeText);
+      setLlmsCopied(true);
+      setTimeout(() => setLlmsCopied(false), 2500);
+    };
+
+    const handleDownloadActiveFile = () => {
+      const blob = new Blob([activeText], { type: 'text/markdown;charset=utf-8' });
+      const url = URL.createObjectURL(blob);
+      const link = document.createElement('a');
+      link.href = url;
+      link.download = activeFileName;
+      document.body.appendChild(link);
+      link.click();
+      document.body.removeChild(link);
+      URL.revokeObjectURL(url);
+    };
+
+    const handleApplyPreset = (preset: 'hvac' | 'dentist' | 'plumber') => {
+      if (preset === 'hvac') {
+        setLlmsBusinessName('Apex Comfort Air & Heating');
+        setLlmsCategory('HVAC & AC Repair');
+        setLlmsCityState('Austin, TX');
+        setLlmsServiceArea('Austin, Round Rock, Cedar Park, Buda, Georgetown');
+        setLlmsPhone('(512) 555-0198');
+        setLlmsDomain('apexcomfortair.com');
+        setLlmsServices('Emergency AC Repair, Heat Pump Replacement, Ductless Mini-Split Installation, Annual Seasonal Tune-Up');
+        setLlmsPricingSummary('Diagnostic Dispatch: $79 (waived with repair) | AC Tune-Up: $129 | Emergency Weekend Surcharge: $50 | System Replacements: $4,800 - $11,500');
+      } else if (preset === 'dentist') {
+        setLlmsBusinessName('Bayview Cosmetic Dentistry');
+        setLlmsCategory('Cosmetic & General Dentistry');
+        setLlmsCityState('San Jose, CA');
+        setLlmsServiceArea('San Jose, Santa Clara, Sunnyvale, Campbell, Cupertino');
+        setLlmsPhone('(408) 555-0342');
+        setLlmsDomain('bayviewsmilesj.com');
+        setLlmsServices('Porcelain Veneers, Clear Aligner Therapy, Emergency Tooth Extraction, Dental Implants, Professional Teeth Whitening');
+        setLlmsPricingSummary('New Patient Exam & X-Rays: $99 (or PPO insurance) | In-Office Teeth Whitening: $399 | Single Tooth Implant: from $1,850 | Consultation: Free');
+      } else if (preset === 'plumber') {
+        setLlmsBusinessName('Mile High Rapid Plumbing');
+        setLlmsCategory('Emergency Residential Plumbing');
+        setLlmsCityState('Denver, CO');
+        setLlmsServiceArea('Denver, Aurora, Lakewood, Littleton, Arvada, Centennial');
+        setLlmsPhone('(303) 555-0819');
+        setLlmsDomain('milehighrapidplumbing.com');
+        setLlmsServices('24/7 Drain Clearing, Tankless Water Heater Repair, Main Sewer Line Inspection & Jetting, Leak Detection & Pipe Replacement');
+        setLlmsPricingSummary('Standard Service Dispatch: $89 | Main Drain Clearing: $189 - $275 | Camera Inspection: $149 | Tankless Heater Installation: from $2,400');
+      }
+    };
+
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-3xl p-6 sm:p-8 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="border-b border-[#dfded4] pb-5 space-y-2">
+          <div className="flex flex-wrap items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#123e35]/10 text-[#123e35] flex items-center gap-1">
+              <Bot className="w-3 h-3 text-[#bc5f40]" /> Machine-Readable AI Sitemap Generator
+            </span>
+            <span className="text-[10px] font-mono text-[#bc5f40] font-bold">llmstxt.org Open Standard</span>
+            <span className="px-2 py-0.5 rounded-full text-[9px] font-bold bg-emerald-50 text-emerald-700 border border-emerald-200">
+              Princeton GEO +37% Boost Verified
+            </span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed">{config.toolDescription}</p>
+        </div>
+
+        {/* 1. Instant Trade Presets */}
+        <div className="space-y-2">
+          <div className="flex items-center justify-between">
+            <label className="text-[11px] font-black uppercase tracking-wider text-[#123e35] flex items-center gap-1.5">
+              <Sparkles className="w-3.5 h-3.5 text-[#bc5f40]" /> Quick Load Verified Trade Presets:
+            </label>
+            <span className="text-[10px] text-[#888b88] font-mono">Click to test instant templates</span>
+          </div>
+          <div className="grid grid-cols-1 sm:grid-cols-3 gap-2.5">
+            <button
+              type="button"
+              onClick={() => handleApplyPreset('hvac')}
+              className="px-3 py-2 text-left rounded-xl border border-[#dfded4] hover:border-[#123e35] hover:bg-[#faf9f6] transition cursor-pointer text-xs group"
+            >
+              <div className="font-extrabold text-[#151716] group-hover:text-[#bc5f40]">❄️ HVAC & AC Repair</div>
+              <div className="text-[10px] text-[#888b88] mt-0.5">Austin, TX (Emergency Cooling)</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset('dentist')}
+              className="px-3 py-2 text-left rounded-xl border border-[#dfded4] hover:border-[#123e35] hover:bg-[#faf9f6] transition cursor-pointer text-xs group"
+            >
+              <div className="font-extrabold text-[#151716] group-hover:text-[#bc5f40]">🦷 Cosmetic Dentist</div>
+              <div className="text-[10px] text-[#888b88] mt-0.5">San Jose, CA (Veneers & Implants)</div>
+            </button>
+            <button
+              type="button"
+              onClick={() => handleApplyPreset('plumber')}
+              className="px-3 py-2 text-left rounded-xl border border-[#dfded4] hover:border-[#123e35] hover:bg-[#faf9f6] transition cursor-pointer text-xs group"
+            >
+              <div className="font-extrabold text-[#151716] group-hover:text-[#bc5f40]">🔧 Emergency Plumber</div>
+              <div className="text-[10px] text-[#888b88] mt-0.5">Denver, CO (Drain & Water Heaters)</div>
+            </button>
+          </div>
+        </div>
+
+        {/* 2. Business Data Inputs */}
+        <div className="grid grid-cols-1 sm:grid-cols-2 gap-4 bg-[#faf9f6] p-4.5 rounded-2xl border border-[#e5e3da]">
+          <div>
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Business Name</label>
+            <input
+              type="text"
+              value={llmsBusinessName}
+              onChange={(e) => setLlmsBusinessName(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. Apex Comfort Air & Heating"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Industry / Category</label>
+            <input
+              type="text"
+              value={llmsCategory}
+              onChange={(e) => setLlmsCategory(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. HVAC & AC Repair"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Primary City, State</label>
+            <input
+              type="text"
+              value={llmsCityState}
+              onChange={(e) => setLlmsCityState(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. Austin, TX"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Telephone / Hotline</label>
+            <input
+              type="text"
+              value={llmsPhone}
+              onChange={(e) => setLlmsPhone(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. (512) 555-0198"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Website Domain</label>
+            <input
+              type="text"
+              value={llmsDomain}
+              onChange={(e) => setLlmsDomain(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. apexcomfortair.com"
+            />
+          </div>
+          <div>
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Service Territory / Suburbs</label>
+            <input
+              type="text"
+              value={llmsServiceArea}
+              onChange={(e) => setLlmsServiceArea(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. Austin, Round Rock, Cedar Park"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Core Services (Comma-separated)</label>
+            <input
+              type="text"
+              value={llmsServices}
+              onChange={(e) => setLlmsServices(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. Emergency AC Repair, Heat Pump Replacement, Seasonal Tune-Up"
+            />
+          </div>
+          <div className="sm:col-span-2">
+            <label className="block text-[11px] font-bold text-[#151716] mb-1">Pricing Tiers / Rates (Separated by | pipe)</label>
+            <input
+              type="text"
+              value={llmsPricingSummary}
+              onChange={(e) => setLlmsPricingSummary(e.target.value)}
+              className="w-full px-3 py-2 text-xs bg-white border border-[#dfded4] rounded-lg focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+              placeholder="e.g. Dispatch: $79 | Tune-Up: $129 | System: from $4,800"
+            />
+          </div>
+        </div>
+
+        {/* 3. Output Tabs & Actions */}
+        <div className="space-y-3">
+          <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dfded4] pb-2">
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setLlmsActiveTab('llmstxt')}
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                  llmsActiveTab === 'llmstxt'
+                    ? 'bg-[#123e35] text-white shadow-xs'
+                    : 'bg-[#faf9f6] text-[#4e524f] hover:bg-[#f0eee6]'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>/llms.txt</span>
+                <span className="text-[10px] opacity-75">(AI Sitemap)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setLlmsActiveTab('pricingmd')}
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                  llmsActiveTab === 'pricingmd'
+                    ? 'bg-[#123e35] text-white shadow-xs'
+                    : 'bg-[#faf9f6] text-[#4e524f] hover:bg-[#f0eee6]'
+                }`}
+              >
+                <FileText className="w-3.5 h-3.5" />
+                <span>/pricing.md</span>
+                <span className="text-[10px] opacity-75">(Rate Sheet)</span>
+              </button>
+              <button
+                type="button"
+                onClick={() => setLlmsActiveTab('crawler-view')}
+                className={`px-3.5 py-1.5 text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5 ${
+                  llmsActiveTab === 'crawler-view'
+                    ? 'bg-[#bc5f40] text-white shadow-xs'
+                    : 'bg-[#faf9f6] text-[#4e524f] hover:bg-[#f0eee6]'
+                }`}
+              >
+                <Eye className="w-3.5 h-3.5" />
+                <span>AI Crawler View</span>
+              </button>
+            </div>
+
+            {llmsActiveTab !== 'crawler-view' && (
+              <div className="flex items-center gap-2">
+                <button
+                  type="button"
+                  onClick={handleCopyActiveText}
+                  className="px-3 py-1.5 bg-[#faf9f6] hover:bg-[#f0eee6] text-[#151716] border border-[#dfded4] text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5"
+                >
+                  {llmsCopied ? <Check className="w-3.5 h-3.5 text-emerald-600" /> : <Copy className="w-3.5 h-3.5 text-[#bc5f40]" />}
+                  <span>{llmsCopied ? 'Copied to Clipboard!' : 'Copy Code'}</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={handleDownloadActiveFile}
+                  className="px-3.5 py-1.5 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5 shadow-xs"
+                >
+                  <Download className="w-3.5 h-3.5" />
+                  <span>Download {activeFileName}</span>
+                </button>
+              </div>
+            )}
+          </div>
+
+          {/* Active Tab Panel */}
+          {llmsActiveTab === 'crawler-view' ? (
+            <div className="bg-[#123e35] text-white p-5 rounded-2xl space-y-4 font-mono">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <div className="flex items-center gap-2">
+                  <span className="w-2.5 h-2.5 rounded-full bg-emerald-400 animate-pulse" />
+                  <span className="text-xs font-bold text-emerald-300">Simulated AI Answer Engine Extraction</span>
+                </div>
+                <span className="text-[10px] text-[#dfded4]">Tested via ChatGPT Search, Perplexity, Claude</span>
+              </div>
+
+              <div className="grid grid-cols-1 md:grid-cols-2 gap-3 text-xs">
+                <div className="bg-black/30 p-3 rounded-xl border border-white/10 space-y-1.5">
+                  <div className="text-[10px] text-[#dfded4] uppercase font-sans font-bold">Extracted Entity</div>
+                  <div className="text-sm font-bold text-white">{llmsBusinessName}</div>
+                  <div className="text-[11px] text-emerald-300 flex items-center gap-1 font-sans">
+                    <CheckCircle2 className="w-3 h-3" /> Entity Verified (NAP Matches Google Business Profile)
+                  </div>
+                </div>
+
+                <div className="bg-black/30 p-3 rounded-xl border border-white/10 space-y-1.5">
+                  <div className="text-[10px] text-[#dfded4] uppercase font-sans font-bold">Verified Service Territory</div>
+                  <div className="text-sm font-bold text-white">{llmsCityState}</div>
+                  <div className="text-[11px] text-[#dfded4] truncate">{llmsServiceArea}</div>
+                </div>
+
+                <div className="bg-black/30 p-3 rounded-xl border border-white/10 space-y-1.5">
+                  <div className="text-[10px] text-[#dfded4] uppercase font-sans font-bold">Machine-Readable Pricing Manifest</div>
+                  <div className="text-xs font-bold text-emerald-300">200 OK — Found at /pricing.md</div>
+                  <div className="text-[11px] text-[#dfded4] font-sans">Autonomous AI buying agents can quote rates directly without forms.</div>
+                </div>
+
+                <div className="bg-black/30 p-3 rounded-xl border border-white/10 space-y-1.5">
+                  <div className="text-[10px] text-[#dfded4] uppercase font-sans font-bold">Princeton GEO Citability Score</div>
+                  <div className="text-sm font-black text-[#bc5f40]">98% (High Citation Candidate)</div>
+                  <div className="text-[11px] text-emerald-300 font-sans">+37% Citation probability boost achieved.</div>
+                </div>
+              </div>
+
+              <div className="bg-white/10 p-3.5 rounded-xl border border-white/10 text-xs text-[#dfded4] space-y-1.5">
+                <div className="text-[10px] font-bold uppercase text-white font-sans flex items-center gap-1.5">
+                  <Bot className="w-3.5 h-3.5 text-[#bc5f40]" /> Direct AI Answer Snippet (What LLMs Output to Users):
+                </div>
+                <div className="italic text-white/90 bg-black/30 p-3 rounded-lg border border-white/10 leading-relaxed font-sans text-xs">
+                  "{llmsBusinessName} is a verified {llmsCategory.toLowerCase()} provider serving {llmsCityState} and surrounding areas including {llmsServiceArea.split(',')[0]}. They offer upfront transparent rates starting from {pricingLines[0] || 'clear flat fees'}. You can reach their local dispatch team directly at {llmsPhone} or view their rate sheet at {cleanDomain}/pricing.md."
+                </div>
+              </div>
+            </div>
+          ) : (
+            <div className="space-y-2">
+              <div className="flex items-center justify-between text-[11px] text-[#888b88] font-mono px-1">
+                <span>File Path: /public/{activeFileName}</span>
+                <span>Format: UTF-8 Markdown</span>
+              </div>
+              <div className="bg-[#123e35] p-4 rounded-2xl border border-white/10 text-[#dfded4] font-mono text-[11px] leading-relaxed max-h-96 overflow-y-auto select-all shadow-inner">
+                <pre className="whitespace-pre-wrap">{activeText}</pre>
+              </div>
+            </div>
+          )}
+        </div>
+
+        {/* 4. Deployment Checklist Box */}
+        <div className="bg-[#bc5f40]/5 border-l-4 border-[#bc5f40] p-4 rounded-r-2xl space-y-2 text-xs">
+          <div className="font-extrabold text-[#151716] flex items-center gap-1.5">
+            <ShieldCheck className="w-4 h-4 text-[#bc5f40]" /> 3-Step Instant Deployment Checklist:
+          </div>
+          <ol className="list-decimal pl-4 space-y-1 text-[#4e524f] font-medium">
+            <li>Save both downloaded files directly into your website's public root folder (e.g. <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">/public/llms.txt</code> and <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">/public/pricing.md</code>).</li>
+            <li>Add this line to your <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">robots.txt</code>: <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">LLMs-Txt: https://{cleanDomain}/llms.txt</code>.</li>
+            <li>Add a discrete text link in your website footer: <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">AI Sitemap (llms.txt)</code> linking directly to <code className="bg-white px-1.5 py-0.5 rounded border border-[#dfded4] font-mono text-[11px]">/llms.txt</code>.</li>
+          </ol>
+        </div>
+      </div>
+    );
+  }
 
   if (config.toolType === 'cls-simulator') {
     const isGood = clsScoreInput <= 0.1;

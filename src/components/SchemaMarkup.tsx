@@ -383,7 +383,7 @@ export default function SchemaMarkup({
       },
       'headline': post.title,
       'description': post.description,
-      'image': post.image,
+      'image': post.image.startsWith('http') ? post.image : `${siteUrl}${post.image}`,
       'datePublished': isoDate,
       'dateModified': isoDate,
       'author': {

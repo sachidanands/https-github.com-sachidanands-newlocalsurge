@@ -86,79 +86,75 @@ const PLANS: Plan[] = [
   }
 ];
 
+function getPageFromPath(pathname: string): {
+  page: Page;
+  stateSlug: string | null;
+  citySlug: string | null;
+  blogSlug: string | null;
+  demoSlug: string | null;
+} {
+  const cleanPath = pathname.replace(/\/+$/, '');
+  if (cleanPath === '' || cleanPath === '/') return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/about') return { page: 'about', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/why-us') return { page: 'why-us', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/site-map') return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/california') return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/los-angeles-seo') return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath.startsWith('/blog/')) {
+    const slug = cleanPath.slice(6);
+    return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: slug, demoSlug: null };
+  }
+  if (cleanPath.startsWith('/demo/')) {
+    const slug = cleanPath.slice(6);
+    return { page: 'demo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: slug };
+  }
+
+  // Check dynamic state or city paths
+  const parts = cleanPath.split('/').filter(Boolean);
+  const knownStates = ['california', ...Object.keys(STATE_DIRECTORY)];
+
+  if (parts.length === 1 && knownStates.includes(parts[0])) {
+    if (parts[0] === 'california') {
+      return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+    }
+    return { page: 'state-seo', stateSlug: parts[0], citySlug: null, blogSlug: null, demoSlug: null };
+  }
+
+  if (parts.length === 2 && knownStates.includes(parts[0])) {
+    if (parts[1] === 'los-angeles-seo') {
+      return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+    }
+    return { page: 'city-seo', stateSlug: parts[0], citySlug: parts[1], blogSlug: null, demoSlug: null };
+  }
+
+  return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+}
+
 export default function App() {
-  const [currentPage, setCurrentPage] = useState<Page>('home');
-  const [activeArticleSlug, setActiveArticleSlug] = useState<string | null>(null);
-  const [activeStateSlug, setActiveStateSlug] = useState<string | null>(null);
-  const [activeCitySlug, setActiveCitySlug] = useState<string | null>(null);
-  const [activeDemoSlug, setActiveDemoSlug] = useState<string | null>(null);
+  const initialRoute = typeof window !== 'undefined' 
+    ? getPageFromPath(window.location.pathname) 
+    : { page: 'home' as Page, stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+
+  const [currentPage, setCurrentPage] = useState<Page>(() => initialRoute.page);
+  const [activeArticleSlug, setActiveArticleSlug] = useState<string | null>(() => initialRoute.blogSlug);
+  const [activeStateSlug, setActiveStateSlug] = useState<string | null>(() => initialRoute.stateSlug);
+  const [activeCitySlug, setActiveCitySlug] = useState<string | null>(() => initialRoute.citySlug);
+  const [activeDemoSlug, setActiveDemoSlug] = useState<string | null>(() => initialRoute.demoSlug);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loadingLeads, setLoadingLeads] = useState(false);
 
   // Address Bar Routing and Synchronizer
   useEffect(() => {
-    const getPageFromPath = (pathname: string): {
-      page: Page;
-      stateSlug: string | null;
-      citySlug: string | null;
-      blogSlug: string | null;
-      demoSlug: string | null;
-    } => {
-      const cleanPath = pathname.replace(/\/+$/, '');
-      if (cleanPath === '' || cleanPath === '/') return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/about') return { page: 'about', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/why-us') return { page: 'why-us', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/site-map') return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/california') return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/los-angeles-seo') return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-      if (cleanPath.startsWith('/blog/')) {
-        const slug = cleanPath.slice(6);
-        return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: slug, demoSlug: null };
-      }
-      if (cleanPath.startsWith('/demo/')) {
-        const slug = cleanPath.slice(6);
-        return { page: 'demo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: slug };
-      }
-
-      // Check dynamic state or city paths
-      const parts = cleanPath.split('/').filter(Boolean);
-      const knownStates = ['california', ...Object.keys(STATE_DIRECTORY)];
-
-      if (parts.length === 1 && knownStates.includes(parts[0])) {
-        if (parts[0] === 'california') {
-          return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-        }
-        return { page: 'state-seo', stateSlug: parts[0], citySlug: null, blogSlug: null, demoSlug: null };
-      }
-
-      if (parts.length === 2 && knownStates.includes(parts[0])) {
-        if (parts[1] === 'los-angeles-seo') {
-          return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-        }
-        return { page: 'city-seo', stateSlug: parts[0], citySlug: parts[1], blogSlug: null, demoSlug: null };
-      }
-
-      return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-    };
-
-    // Load initial URL
-    const { page, stateSlug, citySlug, blogSlug, demoSlug } = getPageFromPath(window.location.pathname);
-    setCurrentPage(page);
-    setActiveStateSlug(stateSlug);
-    setActiveCitySlug(citySlug);
-    setActiveArticleSlug(blogSlug);
-    setActiveDemoSlug(demoSlug);
-
     // Track Back/Forward
     const handlePopState = () => {
       const { page, stateSlug, citySlug, blogSlug, demoSlug } = getPageFromPath(window.location.pathname);
@@ -168,7 +164,6 @@ export default function App() {
       setActiveArticleSlug(blogSlug);
       setActiveDemoSlug(demoSlug);
     };
-
 
     window.addEventListener('popstate', handlePopState);
     return () => {
@@ -313,7 +308,9 @@ export default function App() {
       if (post) {
         title = `${post.title} | Local Surge Insights`;
         description = post.description;
-        ogImage = 'https://localsurgeseo.com/assets/og-blog.png';
+        ogImage = post.image
+          ? (post.image.startsWith('http') ? post.image : `https://localsurgeseo.com${post.image}`)
+          : 'https://localsurgeseo.com/assets/og-blog.png';
       }
     }
 

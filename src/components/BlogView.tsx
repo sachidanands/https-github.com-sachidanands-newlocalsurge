@@ -150,10 +150,28 @@ export default function BlogView({
           </button>
         );
       } else {
+        let externalHref = linkUrl;
+        try {
+          if (externalHref.startsWith('http://') || externalHref.startsWith('https://')) {
+            const parsedUrl = new URL(externalHref);
+            if (!parsedUrl.hostname.includes('localsurgeseo.com')) {
+              if (!parsedUrl.searchParams.has('campaignName')) {
+                parsedUrl.searchParams.set('campaignName', 'localsurgeseo.com');
+              }
+              if (!parsedUrl.searchParams.has('campaigenName')) {
+                parsedUrl.searchParams.set('campaigenName', 'localsurgeseo.com');
+              }
+              externalHref = parsedUrl.toString();
+            }
+          }
+        } catch (e) {
+          // Keep original linkUrl if URL parsing fails
+        }
+
         parts.push(
           <a
             key={`link-${match.index}`}
-            href={linkUrl}
+            href={externalHref}
             target="_blank"
             rel="noopener noreferrer"
             className="text-[#bc5f40] hover:text-[#cf6d4e] underline font-bold transition-colors inline-flex items-center gap-0.5"
