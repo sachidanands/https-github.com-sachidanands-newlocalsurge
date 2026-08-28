@@ -103,6 +103,96 @@ export default function BlogView({
     ).slice(0, 2);
   };
 
+  const renderFormattedText = (text: string) => {
+    if (!text) return null;
+    const linkRegex = /\[([^\]]+)\]\(([^)]+)\)/g;
+    const parts: (string | React.ReactNode)[] = [];
+    let lastIndex = 0;
+    let match: RegExpExecArray | null;
+
+    while ((match = linkRegex.exec(text)) !== null) {
+      const precedingText = text.substring(lastIndex, match.index);
+      if (precedingText) {
+        parts.push(precedingText);
+      }
+
+      const linkLabel = match[1];
+      const linkUrl = match[2];
+
+      if (linkUrl.startsWith('/blog/')) {
+        const targetSlug = linkUrl.replace('/blog/', '');
+        parts.push(
+          <button
+            key={`link-${match.index}`}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              handleArticleClick(targetSlug);
+            }}
+            className="text-[#bc5f40] hover:text-[#cf6d4e] underline font-bold transition-colors cursor-pointer inline text-left"
+          >
+            {linkLabel}
+          </button>
+        );
+      } else if (linkUrl.startsWith('/')) {
+        const pageName = linkUrl.replace('/', '') as any;
+        parts.push(
+          <button
+            key={`link-${match.index}`}
+            type="button"
+            onClick={(e) => {
+              e.preventDefault();
+              onNavigateToPage(pageName || 'home');
+            }}
+            className="text-[#bc5f40] hover:text-[#cf6d4e] underline font-bold transition-colors cursor-pointer inline text-left"
+          >
+            {linkLabel}
+          </button>
+        );
+      } else {
+        parts.push(
+          <a
+            key={`link-${match.index}`}
+            href={linkUrl}
+            target="_blank"
+            rel="noopener noreferrer"
+            className="text-[#bc5f40] hover:text-[#cf6d4e] underline font-bold transition-colors inline-flex items-center gap-0.5"
+          >
+            <span>{linkLabel}</span>
+            <ExternalLink className="w-3 h-3 inline-block shrink-0 opacity-75" />
+          </a>
+        );
+      }
+
+      lastIndex = linkRegex.lastIndex;
+    }
+
+    if (lastIndex < text.length) {
+      parts.push(text.substring(lastIndex));
+    }
+
+    return (
+      <>
+        {parts.map((part, i) => {
+          if (typeof part === 'string') {
+            const boldParts = part.split(/(\*\*[^*]+\*\*)/g);
+            return (
+              <React.Fragment key={i}>
+                {boldParts.map((bp, j) => {
+                  if (bp.startsWith('**') && bp.endsWith('**')) {
+                    return <strong key={j} className="font-extrabold text-[#151716]">{bp.slice(2, -2)}</strong>;
+                  }
+                  return bp;
+                })}
+              </React.Fragment>
+            );
+          }
+          return <React.Fragment key={i}>{part}</React.Fragment>;
+        })}
+      </>
+    );
+  };
+
   return (
     <div id="blog-viewport-section" className="min-h-screen py-12 px-4 sm:px-6 lg:px-8 bg-[#f7f6f2]">
       <div className="max-w-7xl mx-auto">
@@ -209,7 +299,7 @@ export default function BlogView({
                           key={idx} 
                           className="text-sm text-[#4e524f] font-semibold leading-relaxed"
                         >
-                          {section.content}
+                          {renderFormattedText(section.content)}
                         </p>
                       );
                     }
@@ -219,7 +309,7 @@ export default function BlogView({
                           key={idx} 
                           className="p-4.5 bg-[#bc5f40]/5 border-l-4 border-[#bc5f40] rounded-r-xl text-xs font-bold text-[#2d2f2d] flex items-start gap-3 shadow-xs"
                         >
-                          <span>{section.content}</span>
+                          <span>{renderFormattedText(section.content)}</span>
                         </div>
                       );
                     }
@@ -231,7 +321,7 @@ export default function BlogView({
                             {section.items?.map((item, idy) => (
                               <li key={idy} className="flex gap-2.5 items-start text-xs text-[#4e524f] font-semibold">
                                 <span className="w-1.5 h-1.5 rounded-full bg-[#123e35] mt-1.5 shrink-0" />
-                                <span>{item}</span>
+                                <span>{renderFormattedText(item)}</span>
                               </li>
                             ))}
                           </ul>
@@ -254,10 +344,10 @@ export default function BlogView({
                                     {descPart ? (
                                       <>
                                         <span className="font-extrabold text-[#1a1c1a] block mb-0.5">{titlePart}</span>
-                                        <span>{descPart}</span>
+                                        <span>{renderFormattedText(descPart)}</span>
                                       </>
                                     ) : (
-                                      <span>{item}</span>
+                                      <span>{renderFormattedText(item)}</span>
                                     )}
                                   </div>
                                 </li>
@@ -278,11 +368,11 @@ export default function BlogView({
                       return (
                         <div 
                           key={idx} 
-                          className="p-5 border border-[#dfded4] bg-[#faf9f6]/90 rounded-2xl relative overflow-hidden flex gap-4 pr-10 hover:shadow-xs transition-shadow"
+                          className="my-6 p-6 border-y border-[#dfded4] bg-[#faf9f6] rounded-xl text-center space-y-2"
                         >
-                          <div className="text-[#bc5f40] text-4xl font-serif font-black leading-none shrink-0 select-none">“</div>
-                          <p className="text-xs font-semibold text-[#123e35] italic leading-relaxed self-center">
-                            {section.content}
+                          <span className="text-3xl text-[#bc5f40] font-serif block">“</span>
+                          <p className="text-sm font-semibold italic text-[#151716] leading-relaxed max-w-xl mx-auto">
+                            {renderFormattedText(section.content)}
                           </p>
                         </div>
                       );

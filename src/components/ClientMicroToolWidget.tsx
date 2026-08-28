@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { MicroToolConfig } from '../types';
 import { 
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
-  RotateCcw, Activity, Gauge, MousePointer, Info, Zap
+  RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -27,6 +27,10 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
   const [simFeedback, setSimFeedback] = useState<string | null>(null);
   const [clsScoreInput, setClsScoreInput] = useState(0.18);
   const [testDomain, setTestDomain] = useState('');
+
+  // State for Alt Tag & Accessibility Simulator
+  const [altSimMode, setAltSimMode] = useState<'sighted' | 'screen-reader' | 'google-bot'>('sighted');
+  const [altSimBadQuality, setAltSimBadQuality] = useState(false);
 
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -155,10 +159,80 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
         score = [ogTitle, ogImage, ogDesc].filter(Boolean).length * 33;
       } else if (config.toolType === 'alt-tag') {
         const images = Array.from(doc.querySelectorAll('img'));
-        const missingAlt = images.filter(img => !img.getAttribute('alt')?.trim());
+        const totalImages = images.length;
+        const missingAlt = images.filter(img => !img.hasAttribute('alt') || !img.getAttribute('alt')?.trim());
+        const placeholderAlt = images.filter(img => {
+          const alt = img.getAttribute('alt')?.trim().toLowerCase() || '';
+          return /^(image|img|photo|picture|graphic|banner|logo|untitled|\.jpe?g|\.png|\.webp|dsc_|screen\s?shot)/i.test(alt);
+        });
+        const localGeoAlt = images.filter(img => {
+          const alt = (img.getAttribute('alt') || '').toLowerCase();
+          const src = (img.getAttribute('src') || '').toLowerCase();
+          return /(repair|service|plumb|roof|dent|contractor|clinic|near me|local|austin|denver|chicago|miami|dallas|california|los angeles|san jose|houston|phoenix|atlanta|seattle)/i.test(alt + ' ' + src);
+        });
+        const overlengthAlt = images.filter(img => (img.getAttribute('alt')?.trim() || '').length > 125);
 
-        itemsFound.push({ label: 'Image Alt Attributes', pass: missingAlt.length === 0, detail: missingAlt.length === 0 ? `All ${images.length} images have descriptive alt text.` : `${missingAlt.length} out of ${images.length} images are missing alt tags.` });
-        score = images.length > 0 ? Math.round(((images.length - missingAlt.length) / images.length) * 100) : 100;
+        const altPass = totalImages > 0 ? (missingAlt.length === 0) : true;
+        itemsFound.push({
+          label: 'WCAG 2.1 SC 1.1.1 Image Alt Presence',
+          pass: altPass,
+          detail: totalImages === 0 
+            ? 'No <img> elements found on this page.' 
+            : altPass 
+              ? `All ${totalImages} images have defined alt attributes.` 
+              : `${missingAlt.length} of ${totalImages} images are completely missing alt attributes (violates WCAG 2.1 Level A & ADA Title III standards).`
+        });
+
+        const placeholderPass = placeholderAlt.length === 0;
+        itemsFound.push({
+          label: 'Semantic Quality (No Filenames or Placeholders)',
+          pass: placeholderPass,
+          detail: placeholderPass 
+            ? 'No generic filenames (e.g. "IMG_1234.jpg") or lazy placeholder phrases detected.' 
+            : `Detected ${placeholderAlt.length} image(s) using placeholder or filename alt text like "${placeholderAlt[0]?.getAttribute('alt')}".`
+        });
+
+        const geoPass = localGeoAlt.length > 0;
+        itemsFound.push({
+          label: 'Local SEO Geo & Service Context in Visuals',
+          pass: geoPass,
+          detail: geoPass 
+            ? `Found localized service or geo keywords in ${localGeoAlt.length} image(s), reinforcing Google Map Pack & Image Pack relevance.` 
+            : 'No local geographic or service keywords detected in image alt text. Visual relevance is untapped for local search.'
+        });
+
+        const lengthPass = overlengthAlt.length === 0;
+        itemsFound.push({
+          label: 'Optimal Screen Reader Length (<=125 characters)',
+          pass: lengthPass,
+          detail: lengthPass 
+            ? 'All alt descriptions are concise and within screen reader buffer limits.' 
+            : `${overlengthAlt.length} image(s) exceed 125 characters, risking screen reader cutoff or Google keyword stuffing penalties.`
+        });
+
+        let calculatedScore = 100;
+        if (totalImages > 0) {
+          calculatedScore -= (missingAlt.length / totalImages) * 45;
+          calculatedScore -= (placeholderAlt.length / totalImages) * 25;
+          if (!geoPass) calculatedScore -= 20;
+          if (!lengthPass) calculatedScore -= 10;
+        }
+        score = Math.max(25, Math.min(100, Math.round(calculatedScore)));
+
+        const sampleDomain = urlToScan.replace(/https?:\/\/(www\.)?/, '').split('.')[0];
+        const formattedDomain = sampleDomain.charAt(0).toUpperCase() + sampleDomain.slice(1);
+        generatedSchemaCode = `<!-- Accessible & Local SEO-Optimized Image Markup -->
+<picture>
+  <source srcset="/images/hero-service.webp" type="image/webp">
+  <img 
+    src="/images/hero-service.jpg" 
+    alt="${formattedDomain} technician performing professional repair service for local homeowners"
+    width="800" 
+    height="600" 
+    loading="lazy" 
+    decoding="async" 
+  />
+</picture>`;
       } else {
         const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href');
         itemsFound.push({ label: 'Canonical Link Tag', pass: !!canonical, detail: canonical ? `Canonical URL: ${canonical}` : 'Missing rel="canonical" tag.' });
@@ -404,6 +478,310 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
           <p className="text-[11px] text-[#6d716d]">
             💡 <strong>Pro Tip:</strong> Look for the metric labeled <strong>Cumulative Layout Shift (CLS)</strong> under the "Core Web Vitals Assessment" section. Make sure to check the <strong>Mobile</strong> tab!
           </p>
+        </div>
+      </div>
+    );
+  }
+
+  if (config.toolType === 'alt-tag') {
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-7 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="border-b border-[#dfded4] pb-4 space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#123e35]/10 text-[#123e35] flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#bc5f40]" /> Interactive Simulator & DOM Audit
+            </span>
+            <span className="text-[10px] font-mono text-[#bc5f40]">WCAG 2.1 & Local Image SEO</span>
+          </div>
+          <h3 className="text-xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs text-[#4e524f] leading-relaxed">{config.toolDescription}</p>
+        </div>
+
+        {/* 1. Multi-Lens Image Simulator */}
+        <div className="space-y-3">
+          <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+            <h4 className="text-xs font-black uppercase tracking-wider text-[#123e35] flex items-center gap-1.5">
+              <Layers className="w-3.5 h-3.5 text-[#bc5f40]" /> 1. The 3-Way Lens: See Through Visitors, Screen Readers & Googlebot
+            </h4>
+            <div className="flex items-center gap-1.5 bg-[#faf9f6] p-1 border border-[#dfded4] rounded-xl self-start sm:self-auto">
+              <button
+                type="button"
+                onClick={() => setAltSimMode('sighted')}
+                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition flex items-center gap-1 cursor-pointer ${
+                  altSimMode === 'sighted' ? 'bg-[#123e35] text-white shadow-xs' : 'text-[#4e524f] hover:text-[#151716]'
+                }`}
+              >
+                <Eye className="w-3 h-3" /> Sighted Visitor
+              </button>
+              <button
+                type="button"
+                onClick={() => setAltSimMode('screen-reader')}
+                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition flex items-center gap-1 cursor-pointer ${
+                  altSimMode === 'screen-reader' ? 'bg-[#123e35] text-white shadow-xs' : 'text-[#4e524f] hover:text-[#151716]'
+                }`}
+              >
+                <Volume2 className="w-3 h-3" /> Screen Reader (ADA)
+              </button>
+              <button
+                type="button"
+                onClick={() => setAltSimMode('google-bot')}
+                className={`px-2.5 py-1 text-[11px] font-bold rounded-lg transition flex items-center gap-1 cursor-pointer ${
+                  altSimMode === 'google-bot' ? 'bg-[#123e35] text-white shadow-xs' : 'text-[#4e524f] hover:text-[#151716]'
+                }`}
+              >
+                <Bot className="w-3 h-3" /> Google Vision AI
+              </button>
+            </div>
+          </div>
+
+          {/* Quality Toggle */}
+          <div className="flex items-center justify-between bg-[#f0eee6]/60 p-2.5 rounded-xl border border-[#dfded4] text-xs">
+            <span className="text-[11px] font-bold text-[#4e524f]">Simulated Alt Tag Quality:</span>
+            <div className="flex items-center gap-2">
+              <button
+                type="button"
+                onClick={() => setAltSimBadQuality(true)}
+                className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-bold transition cursor-pointer ${
+                  altSimBadQuality ? 'bg-red-600 text-white shadow-xs' : 'bg-white text-red-700 border border-red-200'
+                }`}
+              >
+                Broken / Placeholder (IMG_4901.jpg)
+              </button>
+              <button
+                type="button"
+                onClick={() => setAltSimBadQuality(false)}
+                className={`px-2.5 py-1 rounded-md text-[10px] font-mono font-bold transition cursor-pointer ${
+                  !altSimBadQuality ? 'bg-emerald-600 text-white shadow-xs' : 'bg-white text-emerald-700 border border-emerald-200'
+                }`}
+              >
+                WCAG + Local SEO Gold Standard
+              </button>
+            </div>
+          </div>
+
+          {/* Interactive Simulation Sandbox Container */}
+          <div className="border-2 border-[#dfded4] rounded-xl overflow-hidden bg-[#faf9f6] p-5 sm:p-6">
+            {altSimMode === 'sighted' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-xs text-[#6d716d]">
+                  <span className="font-bold text-[#151716]">Visual Rendering (What 20/20 sighted visitors see)</span>
+                  <span className="px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 text-[10px] font-mono font-bold">100% Visual Clarity</span>
+                </div>
+                <div className="flex flex-col sm:flex-row items-center gap-4 bg-white p-4 rounded-xl border border-[#dfded4]">
+                  <div className="w-full sm:w-48 h-32 rounded-lg bg-gradient-to-tr from-amber-100 via-amber-200 to-orange-100 flex flex-col items-center justify-center p-3 text-center border border-amber-300/50 shrink-0">
+                    <span className="text-2xl mb-1">🥖</span>
+                    <span className="text-xs font-black text-amber-950">Austin Artisan Breads</span>
+                    <span className="text-[10px] text-amber-800 font-semibold">Fresh Morning Sourdough</span>
+                  </div>
+                  <div className="space-y-1 text-left flex-1">
+                    <h5 className="text-sm font-black text-[#151716]">Fresh Organic Sourdough Boule</h5>
+                    <p className="text-xs text-[#4e524f] leading-relaxed">
+                      Sighted visitors instantly recognize high-craft golden loaves, natural blistering, and warm artisanal atmosphere. They know within milliseconds whether this local bakery offers what they desire.
+                    </p>
+                    <p className="text-[11px] font-mono text-[#bc5f40]">
+                      HTML: &lt;img src="sourdough.jpg" alt="{altSimBadQuality ? 'IMG_2026_08_4901.jpg' : 'Austin artisan baker removing golden organic sourdough loaf from deck oven'}"&gt;
+                    </p>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {altSimMode === 'screen-reader' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-xs text-[#6d716d]">
+                  <span className="font-bold text-[#151716]">Screen Reader Auditory Output (VoiceOver / NVDA / JAWS)</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    altSimBadQuality ? 'bg-red-100 text-red-800' : 'bg-emerald-100 text-emerald-800'
+                  }`}>
+                    {altSimBadQuality ? '❌ ADA Non-Compliant' : '✅ 100% WCAG 2.1 Pass'}
+                  </span>
+                </div>
+
+                <div className={`p-5 rounded-xl border-2 transition-all ${
+                  altSimBadQuality ? 'bg-red-50/60 border-red-300' : 'bg-emerald-50/60 border-emerald-300'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+                      altSimBadQuality ? 'bg-red-200 text-red-800' : 'bg-emerald-200 text-emerald-800'
+                    }`}>
+                      <Volume2 className="w-4 h-4 animate-pulse" />
+                    </div>
+                    <div className="space-y-1.5 flex-1">
+                      <span className="text-[10px] font-mono font-black uppercase tracking-wider text-[#6d716d]">
+                        Synthesized Screen Reader Speech Stream:
+                      </span>
+                      <p className="text-sm font-mono font-bold text-[#151716] bg-white/80 p-3 rounded-lg border border-black/5 shadow-xs">
+                        {altSimBadQuality ? (
+                          <span className="text-red-900">
+                            "Graphic. I-M-G underscore twenty-twenty-six underscore zero-eight underscore four-nine-zero-one dot J-P-G."
+                          </span>
+                        ) : (
+                          <span className="text-emerald-950">
+                            "Image: Austin artisan baker removing golden organic sourdough loaf from deck oven."
+                          </span>
+                        )}
+                      </p>
+                    </div>
+                  </div>
+
+                  <div className="mt-3 pt-3 border-t border-black/5 flex items-center justify-between text-xs font-semibold">
+                    <span className={altSimBadQuality ? 'text-red-800' : 'text-emerald-800'}>
+                      {altSimBadQuality 
+                        ? '⚠️ Result: Visually impaired customers receive zero product context. Violates ADA Title III & WCAG 2.1 Criterion 1.1.1.'
+                        : '🎉 Result: Visually impaired visitors get complete descriptive clarity, establishing brand trust and accessibility.'}
+                    </span>
+                  </div>
+                </div>
+              </div>
+            )}
+
+            {altSimMode === 'google-bot' && (
+              <div className="space-y-4">
+                <div className="flex items-center justify-between text-xs text-[#6d716d]">
+                  <span className="font-bold text-[#151716]">Google Vision AI & Local Map Pack Crawler Output</span>
+                  <span className={`px-2 py-0.5 rounded text-[10px] font-mono font-bold ${
+                    altSimBadQuality ? 'bg-amber-100 text-amber-800' : 'bg-emerald-100 text-emerald-800'
+                  }`}>
+                    {altSimBadQuality ? '⚠️ Zero Local Intent' : '🚀 High Local Search Authority'}
+                  </span>
+                </div>
+
+                <div className={`p-5 rounded-xl border-2 transition-all ${
+                  altSimBadQuality ? 'bg-amber-50/60 border-amber-300' : 'bg-emerald-50/60 border-emerald-300'
+                }`}>
+                  <div className="flex items-start gap-3">
+                    <div className={`w-9 h-9 rounded-full flex items-center justify-center shrink-0 ${
+                      altSimBadQuality ? 'bg-amber-200 text-amber-900' : 'bg-emerald-200 text-emerald-900'
+                    }`}>
+                      <Bot className="w-4 h-4" />
+                    </div>
+                    <div className="space-y-2 flex-1">
+                      <span className="text-[10px] font-mono font-black uppercase tracking-wider text-[#6d716d]">
+                        Googlebot Knowledge Graph Entity Ingestion:
+                      </span>
+                      <div className="grid grid-cols-1 sm:grid-cols-3 gap-2 text-xs font-mono">
+                        <div className="bg-white p-2.5 rounded-lg border border-black/5">
+                          <span className="text-[10px] text-[#6d716d] block">Identified Subject:</span>
+                          <span className="font-bold text-[#151716]">
+                            {altSimBadQuality ? 'Generic Object (Unverified)' : 'Artisan Organic Sourdough'}
+                          </span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-black/5">
+                          <span className="text-[10px] text-[#6d716d] block">Local Geo Signal:</span>
+                          <span className={`font-bold ${altSimBadQuality ? 'text-red-700' : 'text-emerald-700'}`}>
+                            {altSimBadQuality ? '0% (Missing Location)' : 'Austin, Texas (100%)'}
+                          </span>
+                        </div>
+                        <div className="bg-white p-2.5 rounded-lg border border-black/5">
+                          <span className="text-[10px] text-[#6d716d] block">Image Search Traffic:</span>
+                          <span className={`font-bold ${altSimBadQuality ? 'text-red-700' : 'text-emerald-700'}`}>
+                            {altSimBadQuality ? 'Near Zero' : 'Top 3 Eligibility'}
+                          </span>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+
+                  <p className="text-xs text-[#4e524f] mt-3 leading-relaxed font-medium">
+                    {altSimBadQuality 
+                      ? 'Google treats filenames as unverified binary code. Without descriptive alt text, your photos cannot rank for high-intent queries like "best artisan bakery in Austin" or feed localized image packs in Google search results.'
+                      : 'Google extracts the geographic anchor ("Austin") and commercial service ("artisan baker"), reinforcing your local topical authority for Google Maps 3-Pack and Google Images.'}
+                  </p>
+                </div>
+              </div>
+            )}
+          </div>
+        </div>
+
+        {/* 2. Live DOM URL Alt Tag Scanner */}
+        <div className="pt-2 border-t border-[#dfded4] space-y-4">
+          <div className="flex items-center justify-between">
+            <h4 className="text-xs font-black uppercase tracking-wider text-[#123e35] flex items-center gap-1.5">
+              <Globe className="w-3.5 h-3.5 text-[#bc5f40]" /> 2. Run Free Alt Tag Audit on Your Own Website
+            </h4>
+            <span className="text-[10px] text-[#6d716d]">Zero Server Lag • 100% Private DOM Audit</span>
+          </div>
+
+          <form onSubmit={handleRunScan} className="flex flex-col sm:flex-row gap-3">
+            <div className="relative flex-1">
+              <Globe className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
+              <input
+                type="text"
+                value={targetUrl}
+                onChange={e => setTargetUrl(e.target.value)}
+                placeholder={config.placeholderUrl || 'Enter website URL (e.g. yourbusiness.com)'}
+                className="w-full pl-10 pr-4 py-2.5 text-xs border border-[#dfded4] rounded-xl focus:outline-none focus:border-[#123e35] bg-[#faf9f6] font-semibold"
+              />
+            </div>
+            <button
+              type="submit"
+              disabled={scanning}
+              className="px-6 py-2.5 bg-[#123e35] hover:bg-[#0d2e27] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 shrink-0"
+            >
+              {scanning ? (
+                <>
+                  <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                  Scanning Images...
+                </>
+              ) : (
+                <>
+                  <Search className="w-3.5 h-3.5" /> Run Free Alt Tag Scan
+                </>
+              )}
+            </button>
+          </form>
+
+          {results && (
+            <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-5 space-y-4 animate-fadeIn">
+              <div className="flex items-center justify-between border-b border-[#dfded4] pb-3">
+                <span className="text-xs font-bold text-[#151716] flex items-center gap-1.5">
+                  <ShieldCheck className="w-4 h-4 text-[#123e35]" /> Image Accessibility & Local SEO Results
+                </span>
+                <span className={`px-3 py-1 rounded-full text-xs font-black font-mono ${
+                  results.score >= 80 ? 'bg-emerald-100 text-emerald-800' : results.score >= 50 ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+                }`}>
+                  Audit Score: {results.score}/100
+                </span>
+              </div>
+
+              <div className="space-y-2.5">
+                {results.itemsFound.map((item, idx) => (
+                  <div key={idx} className="bg-white border border-[#dfded4] p-3 rounded-lg flex items-start gap-3">
+                    {item.pass ? (
+                      <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                    ) : (
+                      <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                    )}
+                    <div>
+                      <h5 className="text-xs font-extrabold text-[#151716]">{item.label}</h5>
+                      <p className="text-xs text-[#4e524f] mt-0.5">{item.detail}</p>
+                    </div>
+                  </div>
+                ))}
+              </div>
+
+              {results.generatedSchemaCode && (
+                <div className="bg-[#123e35] text-white p-4 rounded-xl space-y-2">
+                  <div className="flex items-center justify-between">
+                    <span className="text-xs font-mono font-bold text-[#dfded4] flex items-center gap-1.5">
+                      <Code className="w-3.5 h-3.5 text-[#bc5f40]" /> Recommended Accessible Image Snippet
+                    </span>
+                    <button
+                      onClick={handleCopyCode}
+                      className="px-2.5 py-1 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-[10px] font-black rounded-lg transition cursor-pointer flex items-center gap-1"
+                    >
+                      {copiedCode ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                      {copiedCode ? 'Copied!' : 'Copy Code'}
+                    </button>
+                  </div>
+                  <pre className="text-[10px] font-mono text-[#dfded4] overflow-x-auto p-2 bg-black/30 rounded border border-white/10 select-all">
+                    {results.generatedSchemaCode}
+                  </pre>
+                </div>
+              )}
+            </div>
+          )}
         </div>
       </div>
     );
