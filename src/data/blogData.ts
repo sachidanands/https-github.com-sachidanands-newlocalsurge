@@ -25,6 +25,144 @@ export interface BlogPost {
 
 export const BLOG_POSTS: BlogPost[] = [
   {
+    slug: 'why-your-website-jumps-cls-guide',
+    title: 'Why Does Your Website Jump When You Try to Click? The Silent Conversion Killer Known as CLS (And How to Test Yours)',
+    category: 'Core Web Vitals',
+    author: {
+      name: 'Alex Rivera',
+      role: 'Lead SEO Strategist',
+      avatar: 'AR'
+    },
+    date: 'August 28, 2026',
+    readTime: '6 min read',
+    image: '/assets/blog_img/cumulative-layout-shift-cls-guide.png',
+    description: 'Ever tried to tap a button on your phone, only for the page to jump at the last second and make you click an ad instead? That is Cumulative Layout Shift (CLS). Here is why it costs you customers, how Google scores it, and how to test your own website in 10 seconds.',
+    sections: [
+      {
+        type: 'paragraph',
+        content: 'We’ve all lived through this exact moment of phone-rage: You’re browsing a local business website on your phone, trying to tap "View Services" or "Call Now". Your thumb is literally millimeters away from the screen. And then—BAM. An image finishes loading, the entire page jolts downward by two inches, and your thumb accidentally taps a full-screen banner or an accidental link instead. You sigh, hit the back button, and call a competitor instead.'
+      },
+      {
+        type: 'paragraph',
+        content: 'That abrupt, jarring jump has an official technical name in the web design world: Cumulative Layout Shift (or CLS). And behind closed doors at Google, it is one of the quickest ways for a local business to quietly lose both search rankings and paying customers without even knowing why.'
+      },
+      {
+        type: 'heading',
+        content: 'What Exactly is Cumulative Layout Shift (In Plain English)?'
+      },
+      {
+        type: 'paragraph',
+        content: 'Think of your website as a physical brick-and-mortar shop. Imagine a customer walks through your front door, reaches out their hand to pick up a product from your shelf, and your staff suddenly yanks the shelf two feet to the left. The customer misses, knocks something over, and feels embarrassed and annoyed. That is exactly what layout shifts feel like to someone browsing your website on a mobile device.'
+      },
+      {
+        type: 'paragraph',
+        content: 'When a web browser renders a page, it downloads text, images, videos, fonts, and scripts all at once. If your website code doesn’t explicitly tell the browser ahead of time how much vertical space an image or widget will take up, the browser makes an uneducated guess. It places the text where it thinks it belongs, and then violently shoves everything downward the split-second the image finally loads.'
+      },
+      {
+        type: 'alert-box',
+        content: '💡 THE 0.10 GOLDEN RULE: Google measures CLS on a decimal scale from 0 to 1. A score below 0.10 is considered "Good" (passing). A score between 0.10 and 0.25 "Needs Improvement". Anything above 0.25 is graded "Poor"—and Google will actively penalize your site in mobile search rankings.'
+      },
+      {
+        type: 'heading',
+        content: 'Why Google (and Your Customers) Care So Deeply'
+      },
+      {
+        type: 'paragraph',
+        content: 'For years, website speed was judged purely on total load time in seconds. But Google realized a dirty truth: a webpage can load in under two seconds, but if buttons and text dance all over the screen for the next three seconds, the actual human experience is miserable.'
+      },
+      {
+        type: 'paragraph',
+        content: 'Google bundled CLS into their official Core Web Vitals ranking factor alongside Largest Contentful Paint (LCP) and Interaction to Next Paint (INP). But beyond SEO algorithms, erratic layout shifts directly kill your revenue. Independent data from Google’s Web Vitals team shows that sites meeting the Core Web Vitals thresholds enjoyed a 24% lower abandonment rate. When visitors cannot trust where their finger will land on your screen, they stop tapping.'
+      },
+      {
+        type: 'heading',
+        content: 'Feel It Firsthand: The Interactive CLS Sandbox'
+      },
+      {
+        type: 'paragraph',
+        content: 'Before we check your score, test this live interactive simulation below. Try tapping the green button, or click the shift trigger to see what un-dimensioned elements do to user coordination in real-time.'
+      },
+      {
+        type: 'micro-tool',
+        content: 'Interactive CLS Simulator & Score Impact Analyzer',
+        toolConfig: {
+          toolType: 'cls-simulator',
+          toolTitle: 'Interactive CLS Simulator & Score Impact Analyzer',
+          toolDescription: 'Simulate an un-dimensioned layout shift, test what your score means for customer bounce rates, and run a free live test on Google PageSpeed Insights.',
+          placeholderUrl: 'yourbusiness.com',
+          checkCriteria: [
+            'Layout stability on mobile touch screens',
+            'Google Core Web Vitals 0.10 passing threshold',
+            'Real-time PageSpeed Insights launcher'
+          ]
+        }
+      },
+      {
+        type: 'heading',
+        content: 'The 3 Common Culprits That Cause Websites to Jump'
+      },
+      {
+        type: 'paragraph',
+        content: 'In over 90% of the website audits we perform for local contractors and service businesses at LocalSurge, layout shift comes down to three preventable coding shortcuts:'
+      },
+      {
+        type: 'numbered-list',
+        content: 'The Primary Offenders Behind Erratic Page Jumps:',
+        items: [
+          'Images and Videos Without Dimensions: If your HTML has an <img> tag without explicit width and height attributes (or CSS aspect-ratio), the browser reserves zero space while downloading. When the file arrives, it inflates like an airbag, instantly shoving all the paragraphs and buttons below it downward.',
+          'Dynamic Ads, Cookie Banners, and Announcement Bars: Promo banners and cookie consents injected at the top of the screen without a reserved container height will push the hero headline and navigation down after the page already appears ready.',
+          'Custom Web Fonts Snapping In (FOIT / FOUT): When your site loads custom fonts from Google or Adobe, the browser often displays a default system font first. When the custom font finally loads with different letter widths and line heights, the text re-wraps and shifts the layout half a second late.'
+        ]
+      },
+      {
+        type: 'heading',
+        content: 'How to Test Your Own Website’s CLS Score (The 3-Tier Guide)'
+      },
+      {
+        type: 'paragraph',
+        content: 'You do not need an expensive technical consultant or coding knowledge to see where your website stands. Here is the step-by-step 3-tier toolkit you can use yourself in under a minute:'
+      },
+      {
+        type: 'bullet-list',
+        content: 'Your 3-Tier Self-Audit Toolkit:',
+        items: [
+          'Tier 1 — The 10-Second Web Check (Google PageSpeed Insights): Head over to pagespeed.web.dev, enter your website URL, and click Analyze. Crucial step: Always look at the "Mobile" tab first! Scroll to the "Core Web Vitals Assessment" card and look for Cumulative Layout Shift. If the score is 0.10 or lower with a green badge, your site passes.',
+          'Tier 2 — Live In-Browser Testing (Chrome Web Vitals Extension & DevTools): If you want to catch shifts as you actively browse, install Google\'s free "Web Vitals" Chrome extension. It displays a green/red badge in your toolbar that flags shifts in real-time. For a visual map, open Chrome DevTools (F12), press Cmd+Shift+P (or Ctrl+Shift+P), search for "Show Rendering", and check "Layout Shift Regions"—Chrome will flash bright blue rectangles across any element that moves.',
+          'Tier 3 — Real Customer Health (Google Search Console): Single-URL tools like PageSpeed Insights run synthetic lab tests on simulated mobile networks. But Google Search Console collects 28 days of real field data from actual Chrome users visiting your site. In Search Console, click "Core Web Vitals" under the Experience section on the left sidebar to see if any URLs are officially flagged by Google.'
+        ]
+      },
+      {
+        type: 'heading',
+        content: 'The Non-Technical Fix Checklist: What to Tell Your Web Team'
+      },
+      {
+        type: 'paragraph',
+        content: 'If your site scored in the yellow (0.11 - 0.25) or red (0.25+) zone, there is good news: you rarely need to rebuild your website from scratch. Simply copy and paste these three bullet points directly to your web developer or agency:'
+      },
+      {
+        type: 'bullet-list',
+        content: 'Action Items for Your Developer:',
+        items: [
+          'Always declare explicit width & height (or CSS aspect-ratio) on all <img>, <video>, and <iframe> elements so the browser reserves the exact layout box before downloading images.',
+          'Reserve minimum height (min-height) on headers, announcement bars, and dynamic embeds so late-loading widgets do not shove the main content downward.',
+          'Preload critical brand web fonts in the HTML <head> and specify font-display: swap with matching fallback font metrics to prevent text reflow.'
+        ]
+      },
+      {
+        type: 'quote',
+        content: 'A website that jumps around isn’t just slow—it feels broken. Keep your layout rock-solid, and your customers will finally tap where they intended to.'
+      },
+      {
+        type: 'heading',
+        content: 'Want Us to Audit Your Core Web Vitals for Free?'
+      },
+      {
+        type: 'paragraph',
+        content: 'If you checked your score and discovered layout shift issues, or if you suspect your local business website is silently losing calls and quote requests to faster competitors, LocalSurge can help. Run a free audit through our scanner or reach out to our team for a complimentary Core Web Vitals & Local SEO inspection.'
+      }
+    ]
+  },
+  {
     slug: '10-second-website-hack-why-meta-titles-matter',
     title: 'The 10-Second Website Hack That Google Loves: Why Your Meta Title is Your Storefront Sign',
     category: 'Technical SEO',

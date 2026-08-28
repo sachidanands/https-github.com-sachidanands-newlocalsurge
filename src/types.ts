@@ -117,7 +117,7 @@ export interface OutreachPitchItem {
 }
 
 export interface MicroToolConfig {
-  toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical';
+  toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator';
   toolTitle: string;
   toolDescription: string;
   placeholderUrl: string;
