@@ -212,18 +212,19 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
             {!loading && (
               <button
                 type="button"
+                aria-label="Close onboarding wizard"
                 className="bg-white hover:bg-[#dfded4] text-[#4e524f] hover:text-[#1a1c1a] rounded-full p-1.5 transition-all cursor-pointer border border-[#dfded4]"
                 onClick={onClose}
               >
-                <X className="w-4 h-4" />
+                <X className="w-4 h-4" aria-hidden="true" />
               </button>
             )}
           </div>
 
           <div className="px-6 py-6 max-h-[75vh] overflow-y-auto">
             {error && (
-              <div className="mb-6 p-4 bg-red-50 text-red-800 border-l-4 border-[#bc5f40] text-xs font-semibold rounded-r-lg flex gap-3 items-start">
-                <AlertCircle className="w-4 h-4 shrink-0 text-[#bc5f40] mt-0.5" />
+              <div role="alert" aria-live="assertive" className="mb-6 p-4 bg-red-50 text-red-800 border-l-4 border-[#bc5f40] text-xs font-semibold rounded-r-lg flex gap-3 items-start">
+                <AlertCircle className="w-4 h-4 shrink-0 text-[#bc5f40] mt-0.5" aria-hidden="true" />
                 <div>
                   <span className="font-bold">Notice:</span> {error}
                 </div>

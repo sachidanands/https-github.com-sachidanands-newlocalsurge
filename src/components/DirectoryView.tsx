@@ -101,30 +101,31 @@ export default function DirectoryView({
       <div className="max-w-5xl mx-auto space-y-16">
         
         {/* Dynamic Breadcrumbs */}
-        <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => setCurrentPage('home')}>Home</span>
-          <span>/</span>
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => setCurrentPage('site-map')}>Sitemap</span>
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('home')}>Home</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('site-map')}>Sitemap</button>
           
           {isCity ? (
             <>
-              <span>/</span>
+              <span aria-hidden="true">/</span>
               <button 
-                className="hover:text-[#bc5f40] cursor-pointer text-[10px] font-bold font-mono uppercase"
+                type="button"
+                className="hover:text-[#bc5f40] cursor-pointer text-[10px] font-bold font-mono uppercase focus:outline-none focus-visible:underline"
                 onClick={() => handleNavigateToState(cityData!.stateSlug)}
               >
                 {cityData!.stateName}
               </button>
-              <span>/</span>
-              <span className="text-[#123e35]">{cityData!.name}</span>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#123e35]" aria-current="page">{cityData!.name}</span>
             </>
           ) : (
             <>
-              <span>/</span>
-              <span className="text-[#123e35]">{stateData!.name}</span>
+              <span aria-hidden="true">/</span>
+              <span className="text-[#123e35]" aria-current="page">{stateData!.name}</span>
             </>
           )}
-        </div>
+        </nav>
 
         {/* Hero Section */}
         <div className="bg-white border border-[#dfded4] rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xs">

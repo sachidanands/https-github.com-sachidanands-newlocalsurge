@@ -160,8 +160,17 @@ export default function BlogStudioDashboard() {
             {drafts.map(draft => (
               <div
                 key={draft.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => setSelectedDraft(draft)}
-                className="bg-[#faf9f6] border border-[#dfded4] hover:border-[#123e35]/40 rounded-xl p-4 transition cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    setSelectedDraft(draft);
+                  }
+                }}
+                aria-label={`Select draft: ${draft.title}`}
+                className="bg-[#faf9f6] border border-[#dfded4] hover:border-[#123e35]/40 rounded-xl p-4 transition cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center gap-4 focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
               >
                 <div className="space-y-1 flex-1 min-w-0">
                   <div className="flex items-center gap-2">
@@ -176,7 +185,7 @@ export default function BlogStudioDashboard() {
                   <p className="text-xs text-[#4e524f] truncate">{draft.description}</p>
                 </div>
 
-                <div className="flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()}>
+                <div className="flex items-center gap-2 shrink-0" onClick={e => e.stopPropagation()} onKeyDown={e => e.stopPropagation()}>
                   <button
                     onClick={() => setSelectedDraft(draft)}
                     className="px-3 py-1.5 text-xs font-bold bg-white border border-[#dfded4] hover:bg-[#f0efea] text-[#151716] rounded-lg transition flex items-center gap-1 cursor-pointer"

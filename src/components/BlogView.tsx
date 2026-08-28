@@ -11,7 +11,7 @@ interface BlogViewProps {
   initialSlug: string | null;
   onNavigateToArticle: (slug: string | null) => void;
   onOpenOnboarding: () => void;
-  onNavigateToPage: (page: 'seo-tool' | 'pricing' | 'contact') => void;
+  onNavigateToPage: (page: 'home' | 'seo-tool' | 'pricing' | 'contact' | 'site-map') => void;
 }
 
 export default function BlogView({ 
@@ -221,13 +221,13 @@ export default function BlogView({
                     Back to Blog Landing
                   </button>
 
-                  <div className="flex items-center gap-2 text-xs font-mono font-bold text-[#888b88] flex-wrap">
-                    <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => onNavigateToPage('contact')}>Home</span>
-                    <span>/</span>
-                    <span className="hover:text-[#bc5f40] cursor-pointer" onClick={handleReturnToList}>Blog</span>
-                    <span>/</span>
-                    <span className="text-[#123e35] uppercase">{activeArticle.category}</span>
-                  </div>
+                  <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-xs font-mono font-bold text-[#888b88] flex-wrap">
+                    <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => onNavigateToPage('home')}>Home</button>
+                    <span aria-hidden="true">/</span>
+                    <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={handleReturnToList}>Blog</button>
+                    <span aria-hidden="true">/</span>
+                    <span className="text-[#123e35] uppercase" aria-current="page">{activeArticle.category}</span>
+                  </nav>
                 </div>
               </div>
 
@@ -270,10 +270,10 @@ export default function BlogView({
 
                 {/* Article Main Image */}
                 <div className="relative h-64 sm:h-96 w-full rounded-2xl overflow-hidden border border-[#dfded4] shadow-inner-lg">
-                  <div className="absolute inset-0 bg-[#123e35]/5 mix-blend-multiply" />
+                  <div className="absolute inset-0 bg-[#123e35]/5 mix-blend-multiply" aria-hidden="true" />
                   <img
                     src={activeArticle.image}
-                    alt={activeArticle.title}
+                    alt={`Hero illustration for article: ${activeArticle.title}`}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transform hover:scale-102 transition-transform duration-500"
                   />
@@ -519,9 +519,10 @@ export default function BlogView({
                   toolautosubmit="true"
                   className="relative w-full md:max-w-xs"
                 >
-                  <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
+                  <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" aria-hidden="true" />
                   <input
                     type="text"
+                    aria-label="Search articles and guides"
                     toolparamtitle="Search Keywords"
                     toolparamdescription="Keywords or topics to search within blog posts"
                     placeholder="Search articles & guides..."
@@ -557,15 +558,25 @@ export default function BlogView({
               {/* FEATURED HERO POST (ONLY visible when searching/filters are empty) */}
               {selectedCategory === 'All' && searchQuery === '' && (
                 <div 
+                  role="button"
+                  tabIndex={0}
                   onClick={() => handleArticleClick(featuredPost.slug)}
-                  className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 cursor-pointer group"
+                  onKeyDown={(e) => {
+                    if (e.key === 'Enter' || e.key === ' ') {
+                      e.preventDefault();
+                      handleArticleClick(featuredPost.slug);
+                    }
+                  }}
+                  aria-label={`Read featured article: ${featuredPost.title}`}
+                  className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 cursor-pointer group focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
                 >
                   {/* Left Hero Image */}
                   <div className="lg:col-span-7 h-64 sm:h-80 lg:h-full relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[#123e35]/10 mix-blend-multiply group-hover:bg-transparent transition-all duration-500" />
+                    <div className="absolute inset-0 bg-[#123e35]/10 mix-blend-multiply group-hover:bg-transparent transition-all duration-500" aria-hidden="true" />
                     <img
                       src={featuredPost.image}
-                      alt={featuredPost.title}
+                      alt=""
+                      role="presentation"
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700 block"
                     />
@@ -625,18 +636,27 @@ export default function BlogView({
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     {listPosts.map((post) => (
-                      <div 
-                        id={`post-card-${post.slug}`}
+                      <div
                         key={post.slug}
+                        role="button"
+                        tabIndex={0}
                         onClick={() => handleArticleClick(post.slug)}
-                        className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative"
+                        onKeyDown={(e) => {
+                          if (e.key === 'Enter' || e.key === ' ') {
+                            e.preventDefault();
+                            handleArticleClick(post.slug);
+                          }
+                        }}
+                        aria-label={`Read article: ${post.title}`}
+                        className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
                       >
                         <div>
                           {/* Image box */}
                           <div className="h-44 w-full relative overflow-hidden border-b border-[#dfded4]">
                             <img
                               src={post.image}
-                              alt={post.title}
+                              alt=""
+                              role="presentation"
                               referrerPolicy="no-referrer"
                               className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                             />

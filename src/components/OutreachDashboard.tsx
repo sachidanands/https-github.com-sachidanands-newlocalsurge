@@ -313,8 +313,17 @@ export default function OutreachDashboard() {
             {queue.map(item => (
               <div
                 key={item.id}
+                role="button"
+                tabIndex={0}
                 onClick={() => handleOpenPitchModal(item)}
-                className="bg-[#faf9f6] border border-[#dfded4] hover:border-[#123e35]/40 rounded-xl p-4.5 transition cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center gap-4"
+                onKeyDown={(e) => {
+                  if (e.key === 'Enter' || e.key === ' ') {
+                    e.preventDefault();
+                    handleOpenPitchModal(item);
+                  }
+                }}
+                aria-label={`Review pitch for ${item.prospect.businessName}`}
+                className="bg-[#faf9f6] border border-[#dfded4] hover:border-[#123e35]/40 rounded-xl p-4.5 transition cursor-pointer flex flex-col md:flex-row justify-between items-start md:items-center gap-4 focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
               >
                 <div className="space-y-1.5 flex-1 min-w-0">
                   <div className="flex flex-wrap items-center gap-2.5">

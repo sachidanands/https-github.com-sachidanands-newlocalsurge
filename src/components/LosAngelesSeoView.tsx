@@ -25,15 +25,15 @@ export default function LosAngelesSeoView({ setCurrentPage, onOpenOnboarding, on
       <div className="max-w-5xl mx-auto space-y-16">
         
         {/* State Page Breadcrumbs */}
-        <div className="flex items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => setCurrentPage('home')}>Home</span>
-          <span>/</span>
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => setCurrentPage('site-map')}>Sitemap</span>
-          <span>/</span>
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => setCurrentPage('california')}>California</span>
-          <span>/</span>
-          <span className="text-[#123e35]">Los Angeles SEO</span>
-        </div>
+        <nav aria-label="Breadcrumb" className="flex items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('home')}>Home</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('site-map')}>Sitemap</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('california')}>California</button>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#123e35]" aria-current="page">Los Angeles SEO</span>
+        </nav>
 
         {/* Hero Section */}
         <div className="bg-white border border-[#dfded4] rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xs">

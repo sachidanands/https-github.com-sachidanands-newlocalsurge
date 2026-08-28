@@ -34,9 +34,9 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             <p className="text-xs text-[#5c605d] max-w-sm leading-relaxed">
               We empower local businesses to thrive in the digital landscape. Bridging the gap between you and your neighborhood customers through expert, transparent, and results-oriented SEO strategies.
             </p>
-            <div className="pt-2 space-y-3">
+              <div className="pt-2 space-y-3">
               <div className="flex items-center gap-2 text-xs text-[#2d2f2d] font-semibold">
-                <Mail className="w-4 h-4 text-[#123e35] shrink-0" />
+                <Mail className="w-4 h-4 text-[#123e35] shrink-0" aria-hidden="true" />
                 <a href="mailto:contact@localsurgeseo.com" className="hover:text-[#bc5f40] transition-colors">
                   contact@localsurgeseo.com
                 </a>
@@ -46,14 +46,14 @@ export default function Footer({ setCurrentPage }: FooterProps) {
               <div className="pt-3 border-t border-[#dfded4]/65 space-y-1.5 text-[11px] text-[#5c605d] leading-relaxed">
                 <p className="font-extrabold text-[#151716] text-xs">Local Surge SEO HQ (Virtual)</p>
                 <div className="flex items-start gap-1.5 font-semibold">
-                  <MapPin className="w-3.5 h-3.5 text-[#bc5f40] shrink-0 mt-0.5" />
+                  <MapPin className="w-3.5 h-3.5 text-[#bc5f40] shrink-0 mt-0.5" aria-hidden="true" />
                   <div>
                     <p>Administration Base: San Jose, CA 95112</p>
                     <p className="text-[#123e35] text-[10px] font-bold">Service Area: United States, Canada & Remote Nationwide</p>
                   </div>
                 </div>
                 <div className="flex items-center gap-1.5 font-mono text-[10px] font-bold text-[#888b88]">
-                  <Clock className="w-3.5 h-3.5 text-[#bc5f40] shrink-0" />
+                  <Clock className="w-3.5 h-3.5 text-[#bc5f40] shrink-0" aria-hidden="true" />
                   <span>Phone: +1 (909) 707-5075 (VoIP Inbox)</span>
                 </div>
                 <div className="pt-3 border-t border-[#dfded4]/65 flex gap-3">
@@ -64,7 +64,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
                     aria-label="Facebook"
                   >
-                    <Facebook className="w-4 h-4" />
+                    <Facebook className="w-4 h-4" aria-hidden="true" />
                   </a>
                   <a
                     href="https://www.youtube.com/@LocalSurgeSEO"
@@ -73,7 +73,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#bc5f40] hover:border-[#bc5f40] hover:bg-[#bc5f40]/5 hover:scale-105 transition-all duration-200"
                     aria-label="YouTube"
                   >
-                    <Youtube className="w-4 h-4" />
+                    <Youtube className="w-4 h-4" aria-hidden="true" />
                   </a>
                   <a
                     href="https://x.com/localsurgeseo"
@@ -82,7 +82,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                     className="p-2 rounded-xl bg-white border border-[#e6e4dc] text-[#5c605d] hover:text-[#123e35] hover:border-[#123e35] hover:bg-[#123e35]/5 hover:scale-105 transition-all duration-200"
                     aria-label="X (formerly Twitter)"
                   >
-                    <XIcon className="w-4 h-4" />
+                    <XIcon className="w-4 h-4" aria-hidden="true" />
                   </a>
                 </div>
                 <p className="text-[9px] text-[#888b88] italic pt-2 border-t border-dashed border-[#dfded4]">
@@ -96,8 +96,9 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                       window.open('https://www.sitelock.com/verify.php?site=localsurgeseo.com', 'SiteLock', 'width=600,height=600,left=160,top=170');
                     }}
                     className="inline-block hover:opacity-85 transition-opacity"
+                    aria-label="Verify SiteLock security certification"
                   >
-                    <img className="h-8 w-auto img-fluid" alt="SiteLock" title="SiteLock" src="https://shield.sitelock.com/shield/localsurgeseo.com" />
+                    <img className="h-8 w-auto img-fluid" alt="SiteLock verified website security seal" title="SiteLock" src="https://shield.sitelock.com/shield/localsurgeseo.com" />
                   </a>
                 </div>
               </div>

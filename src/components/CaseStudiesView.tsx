@@ -59,13 +59,13 @@ export default function CaseStudiesView({ setCurrentPage, onOpenOnboarding }: Ca
       <div className="max-w-5xl mx-auto space-y-16">
         
         {/* Dynamic Breadcrumbs */}
-        <div className="flex flex-wrap items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => { setCurrentPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Home</span>
-          <span>/</span>
-          <span className="hover:text-[#bc5f40] cursor-pointer" onClick={() => { setCurrentPage('site-map'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Sitemap</span>
-          <span>/</span>
-          <span className="text-[#123e35]">Case Studies</span>
-        </div>
+        <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => { setCurrentPage('home'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Home</button>
+          <span aria-hidden="true">/</span>
+          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => { setCurrentPage('site-map'); window.scrollTo({ top: 0, behavior: 'smooth' }); }}>Sitemap</button>
+          <span aria-hidden="true">/</span>
+          <span className="text-[#123e35]" aria-current="page">Case Studies</span>
+        </nav>
 
         {/* Banner Intro */}
         <div className="text-center space-y-3.5 max-w-2xl mx-auto">

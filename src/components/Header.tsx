@@ -31,7 +31,7 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
               className="flex items-center gap-2.5 group cursor-pointer text-left"
             >
               <div className="w-10 h-10 rounded-lg bg-[#123e35] flex items-center justify-center text-[#faf9f6] shadow-sm group-hover:scale-105 transition-transform duration-300">
-                <Rocket className="w-5 h-5 text-[#fbfaf8]" />
+                <Rocket className="w-5 h-5 text-[#fbfaf8]" aria-hidden="true" />
               </div>
               <div className="text-left">
                 <span className="block text-xl font-black font-display text-[#151716] leading-none tracking-tight">
@@ -45,7 +45,7 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
           </div>
 
           {/* Nav Links */}
-          <nav className="hidden md:flex space-x-1 lg:space-x-2">
+          <nav aria-label="Main Navigation" className="hidden md:flex space-x-1 lg:space-x-2">
             {navItems.map((item) => {
               const Icon = item.icon;
               const isActive = currentPage === item.id;
@@ -54,13 +54,14 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
                   id={`nav-link-${item.id}`}
                   key={item.id}
                   onClick={() => setCurrentPage(item.id)}
+                  aria-current={isActive ? 'page' : undefined}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs lg:text-sm font-bold transition-all duration-200 cursor-pointer ${
                     isActive
                       ? 'bg-white text-[#123e35] border-b-2 border-[#123e35] rounded-b-none'
                       : 'text-[#4e524f] hover:text-[#111111] hover:bg-[#e6e4dc]/40'
                   }`}
                 >
-                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#123e35]' : 'text-[#888b88]'}`} />
+                  <Icon className={`w-4 h-4 ${isActive ? 'text-[#123e35]' : 'text-[#888b88]'}`} aria-hidden="true" />
                   {item.label}
                 </button>
               );

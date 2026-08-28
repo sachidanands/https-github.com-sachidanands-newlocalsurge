@@ -9,7 +9,8 @@
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist server.js",
     "generate-reel": "tsx scripts/generate-reel.ts",
-    "lint": "tsc --noEmit"
+    "lint": "tsc --noEmit",
+    "lint:a11y": "tsx .agents/skills/accessibility/scripts/audit_a11y.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

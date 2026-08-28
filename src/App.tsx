@@ -975,6 +975,14 @@ export default function App() {
 
   return (
     <div className="min-h-screen bg-[#f7f6f2] text-[#1a1c1a] flex flex-col font-sans select-none antialiased">
+      {/* Accessibility Skip Link (WCAG 2.4.1) */}
+      <a
+        href="#main-content"
+        className="sr-only focus:not-sr-only focus:fixed focus:top-3 focus:left-1/2 focus:-translate-x-1/2 focus:z-[9999] focus:px-5 focus:py-2.5 focus:bg-[#123e35] focus:text-[#faf9f6] focus:font-bold focus:text-xs focus:tracking-wide focus:rounded-full focus:shadow-xl focus:border focus:border-[#faf9f6]/20 focus:outline-none focus:ring-2 focus:ring-offset-2 focus:ring-[#bc5f40] focus:transition-transform focus:duration-200"
+      >
+        Skip to main content
+      </a>
+
       {/* Search Engine Structured JSON-LD Markup */}
       <SchemaMarkup
         currentPage={currentPage}
@@ -992,7 +1000,7 @@ export default function App() {
       />
 
       {/* Main viewport */}
-      <main className="flex-grow">
+      <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
         <AnimatePresence mode="wait">
 
           {/* HOME SCREEN */}

@@ -73,7 +73,7 @@ export default function AdminLoginForm({ onLoginSuccess, onBackToHome }: AdminLo
           {/* Header block */}
           <div className="text-center space-y-2">
             <div className="w-12 h-12 rounded-2xl bg-[#123e35]/5 border border-[#123e35]/10 flex items-center justify-center mx-auto text-[#123e35] mb-4 shadow-3xs">
-              <ShieldCheck className="w-6 h-6 animate-pulse" />
+              <ShieldCheck className="w-6 h-6 animate-pulse" aria-hidden="true" />
             </div>
             <span className="text-[10px] sm:text-xs font-black uppercase tracking-widest text-[#bc5f40] font-mono">
               Administrative Lockroom
@@ -90,11 +90,13 @@ export default function AdminLoginForm({ onLoginSuccess, onBackToHome }: AdminLo
           <form onSubmit={handleSubmit} className="space-y-4 pt-1.5">
             {error && (
               <motion.div
+                role="alert"
+                aria-live="assertive"
                 initial={{ opacity: 0, height: 0 }}
                 animate={{ opacity: 1, height: 'auto' }}
                 className="p-3.5 bg-rose-50 border border-rose-200/60 rounded-xl text-xs text-rose-600 font-semibold flex items-start gap-2.5"
               >
-                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" />
+                <AlertCircle className="w-4 h-4 shrink-0 mt-0.5" aria-hidden="true" />
                 <span>{error}</span>
               </motion.div>
             )}
@@ -109,7 +111,7 @@ export default function AdminLoginForm({ onLoginSuccess, onBackToHome }: AdminLo
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#888b88]">
-                  <User className="w-4 h-4" />
+                  <User className="w-4 h-4" aria-hidden="true" />
                 </div>
                 <input
                   id="admin-username"
@@ -134,7 +136,7 @@ export default function AdminLoginForm({ onLoginSuccess, onBackToHome }: AdminLo
               </label>
               <div className="relative">
                 <div className="absolute inset-y-0 left-0 pl-3.5 flex items-center pointer-events-none text-[#888b88]">
-                  <Lock className="w-4 h-4" />
+                  <Lock className="w-4 h-4" aria-hidden="true" />
                 </div>
                 <input
                   id="admin-password"
@@ -149,9 +151,10 @@ export default function AdminLoginForm({ onLoginSuccess, onBackToHome }: AdminLo
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                   className="absolute inset-y-0 right-0 pr-3 flex items-center text-[#888b88] hover:text-[#4e524f] cursor-pointer"
                 >
-                  {showPassword ? <EyeOff className="w-4 h-4" /> : <Eye className="w-4 h-4" />}
+                  {showPassword ? <EyeOff className="w-4 h-4" aria-hidden="true" /> : <Eye className="w-4 h-4" aria-hidden="true" />}
                 </button>
               </div>
             </div>
