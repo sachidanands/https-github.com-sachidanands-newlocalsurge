@@ -71,9 +71,9 @@ export default function InteractiveLocationsMap({
 
     mapInstanceRef.current = map;
 
-    // Add high-performance, crisp CartoDB Voyager tiles
-    L.tileLayer('https://{s}.basemaps.cartocdn.com/rastertiles/voyager/{z}/{x}/{y}{r}.png', {
-      subdomains: 'abcd',
+    // Add 100% free, open-source OpenStreetMap tiles (zero API key, zero watermark)
+    L.tileLayer('https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png', {
+      subdomains: ['a', 'b', 'c'],
       maxZoom: 11,
       minZoom: 3
     }).addTo(map);

@@ -137,9 +137,18 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                 </button>
               </li>
               <li>
-                <button onClick={() => { setCurrentPage('locations-index'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="text-[#123e35] font-bold hover:text-[#bc5f40] transition-colors cursor-pointer text-left">
-                  🗺️ U.S. Locations & Maps
-                </button>
+                <a
+                  href="/locations"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    setCurrentPage('locations-index');
+                    window.history.pushState({}, '', '/locations');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="text-[#123e35] font-bold hover:text-[#bc5f40] transition-colors cursor-pointer text-left inline-flex items-center gap-1.5"
+                >
+                  <span>🗺️ U.S. Locations & Maps</span>
+                </a>
               </li>
             </ul>
           </div>
