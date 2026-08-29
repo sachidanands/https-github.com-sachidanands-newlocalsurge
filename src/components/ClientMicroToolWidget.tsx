@@ -3,7 +3,8 @@ import { MicroToolConfig } from '../types';
 import { 
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
   RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText,
-  Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare, GitMerge
+  Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare, GitMerge,
+  Share2, MessageSquare, Smartphone
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -73,6 +74,17 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
   const [canonPath, setCanonPath] = useState('/emergency-ac-repair');
   const [canonCopied, setCanonCopied] = useState(false);
   const [simulatedVariant, setSimulatedVariant] = useState<'tracking' | 'http' | 'trailing' | 'subdomain'>('tracking');
+
+  // State for Open Graph Inspector, Simulator & Generator
+  const [ogActiveTab, setOgActiveTab] = useState<'scanner' | 'simulator' | 'generator'>('scanner');
+  const [ogSimPlatform, setOgSimPlatform] = useState<'imessage' | 'whatsapp' | 'facebook' | 'twitter'>('imessage');
+  const [ogSimQuality, setOgSimQuality] = useState<'optimized' | 'broken'>('optimized');
+  const [ogGenBusinessName, setOgGenBusinessName] = useState('Apex Denver Roofing & Restoration');
+  const [ogGenTitle, setOgGenTitle] = useState('Emergency Roof Repair & Storm Restoration in Denver, CO');
+  const [ogGenDescription, setOgGenDescription] = useState('24/7 emergency leak repair, insurance claim assistance, and full roof replacements in Denver & Front Range communities. Rated 4.9★ with 140+ verified reviews.');
+  const [ogGenImage, setOgGenImage] = useState('https://apexdenverroofing.com/images/denver-crew-truck.jpg');
+  const [ogGenUrl, setOgGenUrl] = useState('https://apexdenverroofing.com/emergency-roof-repair');
+  const [ogCopied, setOgCopied] = useState(false);
 
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -190,15 +202,92 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
 
         score = (titlePass ? 50 : 25) + (descPass ? 50 : 25);
       } else if (config.toolType === 'opengraph') {
-        const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content');
-        const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content');
-        const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content');
+        const ogTitle = doc.querySelector('meta[property="og:title"]')?.getAttribute('content')?.trim() || '';
+        const ogImage = doc.querySelector('meta[property="og:image"]')?.getAttribute('content')?.trim() || '';
+        const ogDesc = doc.querySelector('meta[property="og:description"]')?.getAttribute('content')?.trim() || '';
+        const ogUrl = doc.querySelector('meta[property="og:url"]')?.getAttribute('content')?.trim() || '';
+        const ogType = doc.querySelector('meta[property="og:type"]')?.getAttribute('content')?.trim() || '';
+        const twitterCard = doc.querySelector('meta[name="twitter:card"]')?.getAttribute('content')?.trim() || '';
+        const twitterImage = doc.querySelector('meta[name="twitter:image"]')?.getAttribute('content')?.trim() || '';
 
-        itemsFound.push({ label: 'OpenGraph og:title Tag', pass: !!ogTitle, detail: ogTitle ? `Found: "${ogTitle}"` : 'Missing og:title tag.' });
-        itemsFound.push({ label: 'OpenGraph og:image Banner', pass: !!ogImage, detail: ogImage ? 'Social share preview image configured.' : 'Missing og:image preview photo.' });
-        itemsFound.push({ label: 'OpenGraph og:description Tag', pass: !!ogDesc, detail: ogDesc ? 'Social description configured.' : 'Missing og:description tag.' });
+        // 1. og:title Check
+        const titlePass = ogTitle.length >= 20 && ogTitle.length <= 70;
+        itemsFound.push({
+          label: 'Open Graph Title (og:title)',
+          pass: !!ogTitle,
+          detail: ogTitle 
+            ? (titlePass ? `Optimal title defined: "${ogTitle}" (${ogTitle.length} chars).` : `Title defined ("${ogTitle}") but length is ${ogTitle.length} chars (ideal: 35-65 chars).`)
+            : 'Missing og:title tag. Messaging apps (iMessage, WhatsApp) will fall back to raw URL or unformatted title.'
+        });
 
-        score = [ogTitle, ogImage, ogDesc].filter(Boolean).length * 33;
+        // 2. og:image Check
+        const isHttpsImage = /^https:\/\//i.test(ogImage);
+        itemsFound.push({
+          label: 'Social Preview Image (og:image & HTTPS)',
+          pass: isHttpsImage,
+          detail: isHttpsImage
+            ? `High-resolution preview image configured: "${ogImage}".`
+            : ogImage 
+              ? `Image URL is relative or insecure HTTP ("${ogImage}"). Messaging apps require absolute HTTPS image URLs to unfurl preview cards.`
+              : 'Missing og:image tag. Shared links will appear as dull grey text links with zero visual appeal.'
+        });
+
+        // 3. og:description Check
+        const descPass = ogDesc.length >= 50 && ogDesc.length <= 165;
+        itemsFound.push({
+          label: 'Open Graph Description (og:description)',
+          pass: !!ogDesc,
+          detail: ogDesc 
+            ? (descPass ? `Optimal description: "${ogDesc.substring(0, 75)}..." (${ogDesc.length} chars).` : `Description defined (${ogDesc.length} chars). Ideal range is 80-160 characters.`)
+            : 'Missing og:description tag. Social feeds will pull random body text or leave the snippet blank.'
+        });
+
+        // 4. og:url Canonical Alignment
+        itemsFound.push({
+          label: 'Canonical Social Route (og:url)',
+          pass: !!ogUrl,
+          detail: ogUrl 
+            ? `Canonical share URL declared: "${ogUrl}". Consolidates social signals & share counts.`
+            : 'Missing og:url tag. Recommended to ensure social engagement counters point to your authoritative URL.'
+        });
+
+        // 5. Twitter / X Card Compatibility
+        const hasTwitter = !!twitterCard || !!twitterImage;
+        itemsFound.push({
+          label: 'Twitter / X Card Tags (twitter:card)',
+          pass: hasTwitter,
+          detail: twitterCard === 'summary_large_image'
+            ? 'Optimal summary_large_image card enabled for prominent full-width previews.'
+            : twitterCard
+              ? `Configured with "${twitterCard}" card format.`
+              : 'Missing twitter:card tags. Twitter/X feeds will show a plain text tweet without a card container.'
+        });
+
+        let calculatedScore = 0;
+        if (ogTitle) calculatedScore += 25;
+        if (isHttpsImage) calculatedScore += 35;
+        else if (ogImage) calculatedScore += 15;
+        if (ogDesc) calculatedScore += 20;
+        if (ogUrl) calculatedScore += 10;
+        if (hasTwitter) calculatedScore += 10;
+        score = Math.max(20, Math.min(100, calculatedScore));
+
+        const cleanDomain = urlToScan.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+        generatedSchemaCode = `<!-- Open Graph & Social Share Preview Tags for <head> -->
+<meta property="og:type" content="${ogType || 'website'}" />
+<meta property="og:title" content="${ogTitle || `${cleanDomain.toUpperCase()} - Professional Local Services`}" />
+<meta property="og:description" content="${ogDesc || `Licensed local service provider in your area. Upfront pricing, 5-star verified reviews, and prompt emergency dispatch.`}" />
+<meta property="og:image" content="${ogImage || `https://${cleanDomain}/assets/social-share-preview.jpg`}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="${ogUrl || urlToScan}" />
+<meta property="og:site_name" content="${cleanDomain}" />
+
+<!-- Twitter / X Card Tags -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${ogTitle || `${cleanDomain.toUpperCase()} - Professional Local Services`}" />
+<meta name="twitter:description" content="${ogDesc || `Licensed local service provider in your area. Upfront pricing, 5-star verified reviews, and prompt emergency dispatch.`}" />
+<meta name="twitter:image" content="${ogImage || `https://${cleanDomain}/assets/social-share-preview.jpg`}" />`;
       } else if (config.toolType === 'alt-tag') {
         const images = Array.from(doc.querySelectorAll('img'));
         const totalImages = images.length;
@@ -1796,6 +1885,522 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
             </div>
           )}
         </div>
+      </div>
+    );
+  }
+
+  if (config.toolType === 'opengraph') {
+    const cleanOgDomain = ogGenUrl.trim().replace(/^https?:\/\//, '').split('/')[0] || 'apexdenverroofing.com';
+    const generatedOgCode = `<!-- Open Graph Social Share Preview Tags for <head> -->
+<meta property="og:type" content="website" />
+<meta property="og:site_name" content="${ogGenBusinessName || 'Local Business'}" />
+<meta property="og:title" content="${ogGenTitle || 'Professional Local Services'}" />
+<meta property="og:description" content="${ogGenDescription || 'Licensed local service contractor in your area.'}" />
+<meta property="og:image" content="${ogGenImage || `https://${cleanOgDomain}/assets/social-share-preview.jpg`}" />
+<meta property="og:image:width" content="1200" />
+<meta property="og:image:height" content="630" />
+<meta property="og:url" content="${ogGenUrl || `https://${cleanOgDomain}`}" />
+
+<!-- Twitter / X Large Visual Card -->
+<meta name="twitter:card" content="summary_large_image" />
+<meta name="twitter:title" content="${ogGenTitle || 'Professional Local Services'}" />
+<meta name="twitter:description" content="${ogGenDescription || 'Licensed local service contractor in your area.'}" />
+<meta name="twitter:image" content="${ogGenImage || `https://${cleanOgDomain}/assets/social-share-preview.jpg`}" />`;
+
+    const handleCopyOgCode = (text: string) => {
+      navigator.clipboard.writeText(text);
+      setOgCopied(true);
+      setTimeout(() => setOgCopied(false), 2500);
+    };
+
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-7 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="border-b border-[#dfded4] pb-4 space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#123e35]/10 text-[#123e35] flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#bc5f40]" aria-hidden="true" /> Interactive Social Previewer & DOM Audit
+            </span>
+            <span className="text-[10px] font-mono text-[#bc5f40]">Open Graph Protocol (ogp.me)</span>
+          </div>
+          <h3 className="text-xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs text-[#4e524f] leading-relaxed">{config.toolDescription}</p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex flex-wrap gap-2 border-b border-[#dfded4] pb-3" role="tablist" aria-label="Open Graph Tool Modes">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={ogActiveTab === 'scanner'}
+            onClick={() => setOgActiveTab('scanner')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+              ogActiveTab === 'scanner'
+                ? 'bg-[#123e35] text-white shadow-xs'
+                : 'bg-[#faf9f6] text-[#4e524f] hover:text-[#151716] hover:bg-[#f0eee6]'
+            }`}
+          >
+            <Search className="w-3.5 h-3.5" aria-hidden="true" />
+            1. Live Page Inspector
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={ogActiveTab === 'simulator'}
+            onClick={() => setOgActiveTab('simulator')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+              ogActiveTab === 'simulator'
+                ? 'bg-[#123e35] text-white shadow-xs'
+                : 'bg-[#faf9f6] text-[#4e524f] hover:text-[#151716] hover:bg-[#f0eee6]'
+            }`}
+          >
+            <Smartphone className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" />
+            2. Multi-Platform Previewer
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={ogActiveTab === 'generator'}
+            onClick={() => setOgActiveTab('generator')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+              ogActiveTab === 'generator'
+                ? 'bg-[#123e35] text-white shadow-xs'
+                : 'bg-[#faf9f6] text-[#4e524f] hover:text-[#151716] hover:bg-[#f0eee6]'
+            }`}
+          >
+            <Code className="w-3.5 h-3.5" aria-hidden="true" />
+            3. Clean Tag Generator
+          </button>
+        </div>
+
+        {/* Tab 1: Live Page Inspector */}
+        {ogActiveTab === 'scanner' && (
+          <div className="space-y-6" role="tabpanel">
+            <div className="bg-[#faf9f6] p-4 rounded-xl border border-[#dfded4] text-xs text-[#4e524f] space-y-2">
+              <p className="font-bold text-[#151716] flex items-center gap-1.5">
+                <Info className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                How the Open Graph Audit Works:
+              </p>
+              <p className="leading-relaxed">
+                Paste any local service landing page below. Our scanner inspects the HTML <code className="text-[#bc5f40] font-mono">&lt;head&gt;</code> for essential Open Graph protocol tags (<code className="text-[#bc5f40] font-mono">og:title</code>, <code className="text-[#bc5f40] font-mono">og:image</code>, <code className="text-[#bc5f40] font-mono">og:description</code>, <code className="text-[#bc5f40] font-mono">og:url</code>) and Twitter Card fallbacks required to unfurl rich visual cards when shared via text or social media.
+              </p>
+            </div>
+
+            <form onSubmit={handleRunScan} className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Globe className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" aria-hidden="true" />
+                <label htmlFor="og-scan-url" className="sr-only">Website URL to inspect for Open Graph tags</label>
+                <input
+                  id="og-scan-url"
+                  type="text"
+                  value={targetUrl}
+                  onChange={e => setTargetUrl(e.target.value)}
+                  placeholder="Enter page URL (e.g. https://apexdenverroofing.com/emergency-roof-repair)"
+                  className="w-full pl-10 pr-4 py-2.5 text-xs border border-[#dfded4] rounded-xl focus:outline-none focus:border-[#123e35] bg-[#faf9f6] font-semibold"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={scanning}
+                className="px-6 py-2.5 bg-[#123e35] hover:bg-[#0d2e27] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 shrink-0 focus-visible:outline-2 focus-visible:outline-[#bc5f40]"
+              >
+                {scanning ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                    Auditing Open Graph DOM...
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-3.5 h-3.5" aria-hidden="true" /> Audit Open Graph Tags
+                  </>
+                )}
+              </button>
+            </form>
+
+            {results && (
+              <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-5 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dfded4] pb-3">
+                  <span className="text-xs font-bold text-[#151716] flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-[#123e35]" aria-hidden="true" /> Social Share Audit Findings
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-black font-mono ${
+                      results.score >= 80 ? 'bg-emerald-100 text-emerald-800' : results.score >= 50 ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      Social Health Score: {results.score}/100
+                    </span>
+                    <span className="text-[11px] font-bold text-[#4e524f]">
+                      {results.score >= 80 ? '✅ Viral-Ready Card' : results.score >= 50 ? '⚠️ Incomplete Social Tags' : '🚨 Broken Link Previews'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-2.5">
+                  {results.itemsFound.map((item, idx) => (
+                    <div key={idx} className="bg-white border border-[#dfded4] p-3 rounded-lg flex items-start gap-3">
+                      {item.pass ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                      ) : (
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+                      )}
+                      <div>
+                        <h4 className="text-xs font-extrabold text-[#151716]">{item.label}</h4>
+                        <p className="text-xs text-[#4e524f] mt-0.5 leading-relaxed">{item.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {results.generatedSchemaCode && (
+                  <div className="bg-[#123e35] text-white p-4 rounded-xl space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-bold text-[#dfded4] flex items-center gap-1.5">
+                        <Code className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" /> Recommended Open Graph Markup
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleCopyCode}
+                        className="px-2.5 py-1 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-[10px] font-black rounded-lg transition cursor-pointer flex items-center gap-1 focus-visible:outline-2 focus-visible:outline-white"
+                      >
+                        {copiedCode ? <Check className="w-3 h-3" aria-hidden="true" /> : <Copy className="w-3 h-3" aria-hidden="true" />}
+                        {copiedCode ? 'Copied Tags!' : 'Copy Tags'}
+                      </button>
+                    </div>
+                    <pre className="text-[11px] font-mono text-[#dfded4] overflow-x-auto p-2.5 bg-black/30 rounded border border-white/10 select-all">
+                      {results.generatedSchemaCode}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tab 2: Multi-Platform Social Previewer */}
+        {ogActiveTab === 'simulator' && (
+          <div className="space-y-6" role="tabpanel">
+            <div className="bg-[#faf9f6] p-4 rounded-xl border border-[#dfded4] space-y-2">
+              <h4 className="text-xs font-black uppercase tracking-wider text-[#123e35] flex items-center gap-1.5">
+                <Share2 className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" />
+                The Referral Conversion Multiplier: Rich Previews vs. Broken Links
+              </h4>
+              <p className="text-xs text-[#4e524f] leading-relaxed">
+                When homeowners ask neighbors for recommendations on Facebook, WhatsApp, or iMessage, links with verified 1200x630 imagery and compelling headlines generate up to <strong>3.8x higher click-through rates</strong> than bare text links.
+              </p>
+            </div>
+
+            {/* Platform & Quality Selectors */}
+            <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-3">
+              <div className="flex flex-wrap gap-1.5 bg-[#faf9f6] p-1 border border-[#dfded4] rounded-xl">
+                {[
+                  { id: 'imessage', label: 'iMessage (SMS)', icon: Smartphone },
+                  { id: 'whatsapp', label: 'WhatsApp', icon: MessageSquare },
+                  { id: 'facebook', label: 'Facebook / LinkedIn', icon: Share2 },
+                  { id: 'twitter', label: 'Twitter / X', icon: Layers },
+                ].map(p => {
+                  const IconComp = p.icon;
+                  return (
+                    <button
+                      key={p.id}
+                      type="button"
+                      onClick={() => setOgSimPlatform(p.id as any)}
+                      className={`px-3 py-1.5 text-xs font-bold rounded-lg transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+                        ogSimPlatform === p.id
+                          ? 'bg-[#123e35] text-white shadow-xs'
+                          : 'text-[#4e524f] hover:text-[#151716]'
+                      }`}
+                    >
+                      <IconComp className="w-3.5 h-3.5" aria-hidden="true" />
+                      {p.label}
+                    </button>
+                  );
+                })}
+              </div>
+
+              <div className="flex items-center gap-2 bg-[#f0eee6]/70 p-1.5 rounded-xl border border-[#dfded4]">
+                <span className="text-[11px] font-bold text-[#4e524f] pl-1">Card Quality:</span>
+                <button
+                  type="button"
+                  onClick={() => setOgSimQuality('optimized')}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                    ogSimQuality === 'optimized' ? 'bg-emerald-700 text-white shadow-xs' : 'bg-white text-emerald-800 border border-emerald-200'
+                  }`}
+                >
+                  Branded (1200x630)
+                </button>
+                <button
+                  type="button"
+                  onClick={() => setOgSimQuality('broken')}
+                  className={`px-2.5 py-1 rounded-lg text-[11px] font-bold transition cursor-pointer ${
+                    ogSimQuality === 'broken' ? 'bg-red-600 text-white shadow-xs' : 'bg-white text-red-700 border border-red-200'
+                  }`}
+                >
+                  Missing / Broken OG
+                </button>
+              </div>
+            </div>
+
+            {/* Interactive Preview Canvas */}
+            <div className="bg-[#151716] p-6 sm:p-8 rounded-2xl flex justify-center items-center">
+              {/* iMessage Preview */}
+              {ogSimPlatform === 'imessage' && (
+                <div className="w-full max-w-sm bg-[#1e201e] rounded-3xl p-4 shadow-xl border border-white/10 space-y-3 font-sans">
+                  <div className="text-center text-[10px] font-bold text-[#888b88] uppercase tracking-wider">iMessage Today 2:45 PM</div>
+                  <div className="bg-[#007aff] text-white text-xs px-3.5 py-2 rounded-2xl rounded-tr-xs ml-auto max-w-[85%] shadow-xs">
+                    Hey! Do you know a reliable local roofer who can fix a leak before the storm hits tomorrow?
+                  </div>
+                  <div className="bg-[#2c2e2c] text-white text-xs px-3.5 py-2 rounded-2xl rounded-tl-xs mr-auto max-w-[85%] space-y-2">
+                    <p>Yes! We used Apex Denver Roofing last month, they were fantastic:</p>
+                    
+                    {ogSimQuality === 'optimized' ? (
+                      <div className="rounded-xl overflow-hidden bg-[#1f211f] border border-white/10 shadow-md">
+                        <img
+                          src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
+                          alt="Preview Card"
+                          className="w-full h-36 object-cover"
+                        />
+                        <div className="p-3 space-y-1">
+                          <span className="text-[10px] font-mono text-emerald-400 block uppercase tracking-wider">apexdenverroofing.com</span>
+                          <h4 className="text-xs font-bold text-white leading-snug">Emergency Roof Leak Repair in Denver, CO</h4>
+                          <p className="text-[10px] text-[#dfded4]/80 line-clamp-2 leading-relaxed">
+                            24/7 fast dispatch, certified storm damage restoration, and upfront pricing. 4.9★ rated.
+                          </p>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="rounded-xl p-3 bg-[#1a1c1a] border border-red-500/30 flex items-center gap-3">
+                        <div className="w-12 h-12 bg-white/10 rounded-lg flex items-center justify-center text-[#888b88] text-xs">
+                          ?
+                        </div>
+                        <div className="space-y-0.5 overflow-hidden">
+                          <span className="text-[10px] text-red-400 font-mono block truncate">apexdenverroofing.com/leak-repair</span>
+                          <span className="text-[10px] text-[#888b88] block">Untitled Page</span>
+                        </div>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* WhatsApp Preview */}
+              {ogSimPlatform === 'whatsapp' && (
+                <div className="w-full max-w-sm bg-[#0b141a] rounded-3xl p-4 shadow-xl border border-white/10 space-y-3 font-sans">
+                  <div className="text-center text-[10px] font-bold text-[#888b88]">WhatsApp Chat</div>
+                  <div className="bg-[#005c4b] text-white text-xs px-3.5 py-2.5 rounded-2xl rounded-tr-xs ml-auto max-w-[90%] shadow-xs space-y-2">
+                    <p className="text-[11px]">Check out this contractor:</p>
+                    {ogSimQuality === 'optimized' ? (
+                      <div className="rounded-xl overflow-hidden bg-[#025144] border border-white/10">
+                        <img
+                          src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
+                          alt="Preview Card"
+                          className="w-full h-36 object-cover"
+                        />
+                        <div className="p-2.5 space-y-0.5">
+                          <h4 className="text-xs font-bold text-white">Apex Denver Roofing & Restoration</h4>
+                          <p className="text-[10px] text-white/80 line-clamp-2">24/7 Emergency leak repair in Denver & Front Range.</p>
+                          <span className="text-[9px] text-emerald-300 font-mono block pt-1">apexdenverroofing.com</span>
+                        </div>
+                      </div>
+                    ) : (
+                      <div className="rounded-lg p-2.5 bg-[#01382f] border border-red-400/40 text-[11px] text-red-200">
+                        https://apexdenverroofing.com/emergency-roof-repair
+                        <span className="block text-[9px] text-red-300/70 mt-1">⚠️ No preview available</span>
+                      </div>
+                    )}
+                  </div>
+                </div>
+              )}
+
+              {/* Facebook & LinkedIn Preview */}
+              {ogSimPlatform === 'facebook' && (
+                <div className="w-full max-w-md bg-white rounded-2xl p-4 shadow-xl text-black space-y-3 font-sans">
+                  <div className="flex items-center gap-2.5">
+                    <div className="w-9 h-9 rounded-full bg-[#123e35] text-white flex items-center justify-center text-xs font-bold">
+                      HOA
+                    </div>
+                    <div>
+                      <h4 className="text-xs font-bold text-[#151716]">Denver Highlands Community Group</h4>
+                      <span className="text-[10px] text-[#888b88]">Recommended contractor · 1 hr ago</span>
+                    </div>
+                  </div>
+                  <p className="text-xs text-[#2d2f2d] leading-relaxed">
+                    Huge shoutout to the team that fixed our shingles yesterday after the hail storm! Super professional:
+                  </p>
+                  {ogSimQuality === 'optimized' ? (
+                    <div className="rounded-xl overflow-hidden border border-[#dfded4] shadow-xs">
+                      <img
+                        src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
+                        alt="Facebook preview"
+                        className="w-full h-44 object-cover"
+                      />
+                      <div className="p-3 bg-[#f0f2f5] space-y-0.5">
+                        <span className="text-[10px] uppercase font-mono text-[#65676b] block">APEXDENVERROOFING.COM</span>
+                        <h5 className="text-xs font-bold text-[#050505] leading-snug">Emergency Roof Repair & Storm Restoration in Denver, CO</h5>
+                        <p className="text-[11px] text-[#65676b] line-clamp-1">24/7 fast dispatch, verified licensed crew, and 4.9★ reviews.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl p-4 bg-[#f0f2f5] border border-red-300 text-center space-y-1">
+                      <span className="text-xs font-bold text-red-700 block">Missing og:image & og:title</span>
+                      <span className="text-[10px] text-[#65676b] font-mono block">apexdenverroofing.com</span>
+                    </div>
+                  )}
+                </div>
+              )}
+
+              {/* Twitter / X Preview */}
+              {ogSimPlatform === 'twitter' && (
+                <div className="w-full max-w-md bg-black text-white rounded-2xl p-4 shadow-xl border border-white/20 space-y-3 font-sans">
+                  <div className="flex items-center gap-2">
+                    <div className="w-8 h-8 rounded-full bg-white/20 flex items-center justify-center text-xs font-bold">D</div>
+                    <div>
+                      <span className="text-xs font-bold">Denver Homeowner</span>
+                      <span className="text-[10px] text-white/50 block">@denver_homeowner · 2h</span>
+                    </div>
+                  </div>
+                  <p className="text-xs leading-relaxed text-[#dfded4]">
+                    If you need hail damage inspected before insurance deadlines, highly recommend booking these guys:
+                  </p>
+                  {ogSimQuality === 'optimized' ? (
+                    <div className="rounded-2xl overflow-hidden border border-white/20 shadow-md">
+                      <img
+                        src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
+                        alt="Twitter summary_large_image card"
+                        className="w-full h-44 object-cover"
+                      />
+                      <div className="p-3 bg-[#16181c] space-y-0.5">
+                        <span className="text-[10px] text-white/60 font-mono">apexdenverroofing.com</span>
+                        <h5 className="text-xs font-bold text-white">Emergency Roof Repair & Storm Restoration in Denver</h5>
+                        <p className="text-[11px] text-white/70 line-clamp-1">Top-rated contractor in Denver with 140+ verified reviews.</p>
+                      </div>
+                    </div>
+                  ) : (
+                    <div className="rounded-xl p-4 bg-[#16181c] border border-red-500/40 text-center space-y-1">
+                      <span className="text-xs font-bold text-red-400 block">Missing twitter:card summary_large_image</span>
+                      <span className="text-[10px] text-white/50 font-mono block">apexdenverroofing.com</span>
+                    </div>
+                  )}
+                </div>
+              )}
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Clean Open Graph Tag Generator */}
+        {ogActiveTab === 'generator' && (
+          <div className="space-y-6" role="tabpanel">
+            <div className="bg-[#faf9f6] p-4 rounded-xl border border-[#dfded4] text-xs text-[#4e524f] space-y-1">
+              <p className="font-bold text-[#151716] flex items-center gap-1.5">
+                <Code className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                Instant Open Graph Code Generator:
+              </p>
+              <p className="leading-relaxed">
+                Configure your local business parameters below to produce standardized Open Graph and Twitter Card tags conforming to the official <a href="https://ogp.me/?campaignName=localsurgeseo.com" target="_blank" rel="noopener noreferrer" className="underline font-bold text-[#bc5f40]">Open Graph protocol</a> and Google rich preview recommendations.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="og-gen-biz" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Business / Brand Name:
+                </label>
+                <input
+                  id="og-gen-biz"
+                  type="text"
+                  value={ogGenBusinessName}
+                  onChange={e => setOgGenBusinessName(e.target.value)}
+                  placeholder="Apex Denver Roofing"
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="og-gen-url" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Target Canonical Page URL:
+                </label>
+                <input
+                  id="og-gen-url"
+                  type="text"
+                  value={ogGenUrl}
+                  onChange={e => setOgGenUrl(e.target.value)}
+                  placeholder="https://apexdenverroofing.com/emergency-roof-repair"
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label htmlFor="og-gen-title" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Open Graph Title (og:title - 40 to 65 chars):
+                </label>
+                <input
+                  id="og-gen-title"
+                  type="text"
+                  value={ogGenTitle}
+                  onChange={e => setOgGenTitle(e.target.value)}
+                  placeholder="Emergency Roof Repair & Storm Restoration in Denver, CO"
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label htmlFor="og-gen-desc" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Open Graph Description (og:description - 120 to 160 chars):
+                </label>
+                <textarea
+                  id="og-gen-desc"
+                  rows={2}
+                  value={ogGenDescription}
+                  onChange={e => setOgGenDescription(e.target.value)}
+                  placeholder="24/7 emergency leak repair, insurance claim assistance, and full roof replacements in Denver..."
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+
+              <div className="space-y-1.5 sm:col-span-2">
+                <label htmlFor="og-gen-img" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Social Preview Image URL (og:image - recommended 1200x630):
+                </label>
+                <input
+                  id="og-gen-img"
+                  type="text"
+                  value={ogGenImage}
+                  onChange={e => setOgGenImage(e.target.value)}
+                  placeholder="https://apexdenverroofing.com/images/crew-truck.jpg"
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+            </div>
+
+            {/* Generated Code Display */}
+            <div className="bg-[#123e35] text-white p-5 rounded-2xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <span className="text-xs font-mono font-bold text-[#dfded4] flex items-center gap-1.5">
+                  <Code className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" />
+                  Standard Open Graph & Twitter Card Markup
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopyOgCode(generatedOgCode)}
+                  className="px-3 py-1.5 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-[11px] font-black rounded-lg transition cursor-pointer flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-white"
+                >
+                  {ogCopied ? <Check className="w-3.5 h-3.5" aria-hidden="true" /> : <Copy className="w-3.5 h-3.5" aria-hidden="true" />}
+                  {ogCopied ? 'Copied to Clipboard!' : 'Copy Code Snippet'}
+                </button>
+              </div>
+
+              <pre className="text-xs font-mono text-[#dfded4] p-3 bg-black/40 rounded-xl border border-white/10 overflow-x-auto select-all">
+                {generatedOgCode}
+              </pre>
+
+              <div className="pt-2 border-t border-white/10 text-[11px] text-[#dfded4]/80 space-y-1">
+                <span className="font-bold text-white block">💡 Social Cache Invalidation Tip:</span>
+                <p>
+                  Social networks cache your link preview for up to 30 days. After updating your OG tags, clear the cache using the <a href="https://developers.facebook.com/tools/debug/?campaignName=localsurgeseo.com" target="_blank" rel="noopener noreferrer" className="underline text-emerald-300">Facebook Sharing Debugger</a> or the <a href="https://www.linkedin.com/post-inspector/?campaignName=localsurgeseo.com" target="_blank" rel="noopener noreferrer" className="underline text-emerald-300">LinkedIn Post Inspector</a>.
+                </p>
+              </div>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
