@@ -155,11 +155,10 @@ export default function BlogView({
           if (externalHref.startsWith('http://') || externalHref.startsWith('https://')) {
             const parsedUrl = new URL(externalHref);
             if (!parsedUrl.hostname.includes('localsurgeseo.com')) {
+              parsedUrl.searchParams.delete('campaigenName');
+              parsedUrl.searchParams.delete('campainName');
               if (!parsedUrl.searchParams.has('campaignName')) {
                 parsedUrl.searchParams.set('campaignName', 'localsurgeseo.com');
-              }
-              if (!parsedUrl.searchParams.has('campaigenName')) {
-                parsedUrl.searchParams.set('campaigenName', 'localsurgeseo.com');
               }
               externalHref = parsedUrl.toString();
             }

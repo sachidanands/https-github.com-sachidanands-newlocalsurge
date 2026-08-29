@@ -459,7 +459,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "paragraph",
-        "content": "According to [Google Search Central guidance on spatial queries](https://developers.google.com/search/docs/fundamentals/creating-helpful-content?campaignName=localsurgeseo.com&campainName=localsurgeseo.com), modern search engines do not look for the words \"near me\" on your web page. Instead, they synthesize three distinct layers:"
+        "content": "According to [Google Search Central guidance on spatial queries](https://developers.google.com/search/docs/fundamentals/creating-helpful-content?campaignName=localsurgeseo.com), modern search engines do not look for the words \"near me\" on your web page. Instead, they synthesize three distinct layers:"
       },
       {
         "type": "numbered-list",
@@ -1878,11 +1878,11 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "paragraph",
-        "content": "Spearheaded at [llmstxt.org](https://llmstxt.org/?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com), the standard was conceived to solve a fundamental friction in how AI systems consume the modern web: **token context windows and crawler efficiency**. An average local business website built on WordPress, Webflow, or Wix loads 3 to 7 megabytes of bloated JavaScript bundles, CSS stylesheets, third-party analytics trackers, and layout wrappers before reaching the actual text describing what the company does."
+        "content": "Spearheaded at [llmstxt.org](https://llmstxt.org/?campaignName=localsurgeseo.com), the standard was conceived to solve a fundamental friction in how AI systems consume the modern web: **token context windows and crawler efficiency**. An average local business website built on WordPress, Webflow, or Wix loads 3 to 7 megabytes of bloated JavaScript bundles, CSS stylesheets, third-party analytics trackers, and layout wrappers before reaching the actual text describing what the company does."
       },
       {
         "type": "paragraph",
-        "content": "Human visitors browse visually and filter out the code noise. AI web crawlers (such as OpenAI's [GPTBot crawler documentation](https://platform.openai.com/docs/bots?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com), Perplexity's **PerplexityBot**, and Anthropic's **ClaudeBot**) must ingest raw tokens. When an AI crawler encounters 45,000 lines of minified markup just to determine if a dentist offers emergency root canals on Saturdays, it burns token budget and frequently truncates the page. By contrast, a well-formed `llms.txt` file serves that exact business context in under 800 tokens of pristine, semantically grounded Markdown."
+        "content": "Human visitors browse visually and filter out the code noise. AI web crawlers (such as OpenAI's [GPTBot crawler documentation](https://platform.openai.com/docs/bots?campaignName=localsurgeseo.com), Perplexity's **PerplexityBot**, and Anthropic's **ClaudeBot**) must ingest raw tokens. When an AI crawler encounters 45,000 lines of minified markup just to determine if a dentist offers emergency root canals on Saturdays, it burns token budget and frequently truncates the page. By contrast, a well-formed `llms.txt` file serves that exact business context in under 800 tokens of pristine, semantically grounded Markdown."
       },
       {
         "type": "heading",
@@ -1896,9 +1896,9 @@ export const BLOG_POSTS: BlogPost[] = [
         "type": "bullet-list",
         "content": "The 3-Layer Search & AI Protocol Stack:",
         "items": [
-          "robots.txt (Crawl Permissions): Governed by the [official Robots Exclusion Protocol](https://www.robotstxt.org/robotstxt.html?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com), it tells web crawlers and AI bots which server directories they have permission to access or are forbidden from crawling. Think of it as the security gate at the entrance of your property.",
+          "robots.txt (Crawl Permissions): Governed by the [official Robots Exclusion Protocol](https://www.robotstxt.org/robotstxt.html?campaignName=localsurgeseo.com), it tells web crawlers and AI bots which server directories they have permission to access or are forbidden from crawling. Think of it as the security gate at the entrance of your property.",
           "sitemap.xml (Indexing Directory): Provides a structured XML list of all public HTML URLs on your site along with last-modified timestamps so traditional search bots (Googlebot, Bingbot) can discover and schedule pages for indexing. Think of it as the building blueprint.",
-          "llms.txt (Semantic Knowledge & Grounding): Following the [llmstxt.org standard specifications](https://llmstxt.org/?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com), it serves an unbloated, plain-text Markdown dossier summarizing who you are, what trades you perform, where your service boundaries lie, and where AI agents can locate machine-readable rate cards. Think of it as the executive briefing folder handed directly to an AI researcher."
+          "llms.txt (Semantic Knowledge & Grounding): Following the [llmstxt.org standard specifications](https://llmstxt.org/?campaignName=localsurgeseo.com), it serves an unbloated, plain-text Markdown dossier summarizing who you are, what trades you perform, where your service boundaries lie, and where AI agents can locate machine-readable rate cards. Think of it as the executive briefing folder handed directly to an AI researcher."
         ]
       },
       {
@@ -1907,7 +1907,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "paragraph",
-        "content": "In 2024, computer science researchers from Princeton University, Georgia Tech, and the Allen Institute for AI published a landmark study titled [GEO: Generative Engine Optimization (arXiv:2311.09735)](https://arxiv.org/abs/2311.09735?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com). The researchers tested thousands of queries across Perplexity, Google, and simulated generative engines to quantify what factors actually compel an AI system to cite one website over another."
+        "content": "In 2024, computer science researchers from Princeton University, Georgia Tech, and the Allen Institute for AI published a landmark study titled [GEO: Generative Engine Optimization (arXiv:2311.09735)](https://arxiv.org/abs/2311.09735?campaignName=localsurgeseo.com). The researchers tested thousands of queries across Perplexity, Google, and simulated generative engines to quantify what factors actually compel an AI system to cite one website over another."
       },
       {
         "type": "paragraph",
@@ -2022,9 +2022,9 @@ export const BLOG_POSTS: BlogPost[] = [
         "content": "The 4-Step Technical Deployment Blueprint:",
         "items": [
           "Step 1: Upload to Your Public Web Root: Place both files in the root public directory of your web server or static build repository (e.g. yourbusiness.com/llms.txt and yourbusiness.com/pricing.md). Verify in an incognito browser window that navigating to those URLs renders clean raw text with Content-Type: text/markdown or text/plain.",
-          "Step 2: Declare in Your robots.txt File: Open your robots.txt file and append direct pointers for AI crawlers conforming to [RFC 9309 standards](https://www.robotstxt.org/robotstxt.html?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com): LLMs-Txt: https://yourbusiness.com/llms.txt. Ensure that you are not accidentally blocking AI search bots like GPTBot, PerplexityBot, or ClaudeBot with Disallow directives.",
+          "Step 2: Declare in Your robots.txt File: Open your robots.txt file and append direct pointers for AI crawlers conforming to [RFC 9309 standards](https://www.robotstxt.org/robotstxt.html?campaignName=localsurgeseo.com): LLMs-Txt: https://yourbusiness.com/llms.txt. Ensure that you are not accidentally blocking AI search bots like GPTBot, PerplexityBot, or ClaudeBot with Disallow directives.",
           "Step 3: Add a Subtle Footer Link: Place a discrete text link in your website global footer next to your Privacy Policy and HTML sitemap: \"AI Sitemap (llms.txt)\" linking to /llms.txt. This provides a direct HTML crawl path from every page on your domain.",
-          "Step 4: Cross-Reference in Local Schema Markup: If you use JSON-LD structured data (such as [Schema.org LocalBusiness](https://schema.org/LocalBusiness?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com) or [Schema.org ProfessionalService](https://schema.org/ProfessionalService?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com)), add the llms.txt URL to your schema's subjectOf or sameAs properties so Google's knowledge graph links your website entity with your AI sitemap."
+          "Step 4: Cross-Reference in Local Schema Markup: If you use JSON-LD structured data (such as [Schema.org LocalBusiness](https://schema.org/LocalBusiness?campaignName=localsurgeseo.com) or [Schema.org ProfessionalService](https://schema.org/ProfessionalService?campaignName=localsurgeseo.com)), add the llms.txt URL to your schema's subjectOf or sameAs properties so Google's knowledge graph links your website entity with your AI sitemap."
         ]
       },
       {
@@ -2041,7 +2041,7 @@ export const BLOG_POSTS: BlogPost[] = [
         "items": [
           "Will AI replace local SEO in 2026?: No, AI is not replacing local SEO—it is transforming how search intent is resolved. Traditional Google Maps ranking signals (proximity, verified citations, review velocity, and [Citation NAP Alignment](/local-seo)) remain the bedrock foundation. AI search engines use those signals to identify credible candidates, then use llms.txt to extract specific answers. Without strong local SEO, AI engines won't consider you; without llms.txt, they can't easily quote you.",
           "Will publishing pricing in pricing.md give my local competitors an unfair advantage?: This is the #1 hesitation trade owners express. The reality of modern search is that competitors can already call your office for a quote if they wish. What you lose by hiding prices is not competitive secrecy—it is the customer. Autonomous AI agents cannot recommend a business whose costs are completely unknown when a customer specifies a budget constraint.",
-          "Does Google AI Overviews read llms.txt?: According to [Google Search Central guidance on generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide?campaignName=localsurgeseo.com&campaigenName=localsurgeseo.com), standard web pages, helpful content, and core search rankings remain primary for Google Search. However, Google's multi-query retrieval algorithms and generative answering engines heavily prioritize clean, extractable text. Furthermore, third-party search engines like Perplexity and ChatGPT Search actively parse machine-readable files.",
+          "Does Google AI Overviews read llms.txt?: According to [Google Search Central guidance on generative AI features](https://developers.google.com/search/docs/fundamentals/ai-optimization-guide?campaignName=localsurgeseo.com), standard web pages, helpful content, and core search rankings remain primary for Google Search. However, Google's multi-query retrieval algorithms and generative answering engines heavily prioritize clean, extractable text. Furthermore, third-party search engines like Perplexity and ChatGPT Search actively parse machine-readable files.",
           "How does llms.txt affect my Google Maps Local 3-Pack rankings?: While llms.txt is primarily an AEO (Answer Engine Optimization) tool, grounding your service cities and phone number in plain text reinforces your Google Business Profile entity alignment. It prevents AI search engines from hallucinating incorrect phone numbers or outdated addresses. Test your current listing with our [free instant SEO tool](/seo-tool) or review our [Local SEO Packages](/pricing) to see how schema and directory citations align."
         ]
       },
