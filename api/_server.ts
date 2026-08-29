@@ -378,6 +378,15 @@ function writeLeads(leads: any) {
   }
 }
 
+// 301 Permanent Redirects for legacy routes to preserve SEO ranking equity
+app.get(["/california", "/california/"], (req, res) => {
+  res.redirect(301, "/locations/california/");
+});
+
+app.get(["/los-angeles-seo", "/los-angeles-seo/"], (req, res) => {
+  res.redirect(301, "/locations/california/los-angeles");
+});
+
 // SEO Crawl Controls & Route Protection
 app.get("/robots.txt", (req, res) => {
   const prodPath = path.join(process.cwd(), "dist", "robots.txt");
@@ -413,12 +422,38 @@ function getDynamicSitemapPages(): string[] {
     "/pricing",
     "/seo-tool",
     "/contact",
-    "/california",
-    "/los-angeles-seo",
+    "/locations",
     "/privacy-policy",
     "/terms-of-service",
     "/blog",
   ];
+
+  try {
+    const locFilePath = path.join(process.cwd(), "src", "data", "locationsData.ts");
+    if (fs.existsSync(locFilePath)) {
+      const locContent = fs.readFileSync(locFilePath, "utf-8");
+      // Extract state slugs
+      const stateMatch = locContent.match(/STATES_REGISTRY:\s*Record<[^>]+>\s*=\s*\{([\s\S]+?)\};/);
+      if (stateMatch) {
+        const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
+        let sm;
+        while ((sm = slugRegex.exec(stateMatch[1])) !== null) {
+          pages.push(`/locations/${sm[1]}/`);
+        }
+      }
+      // Extract district slugs
+      const distMatch = locContent.match(/DISTRICTS_REGISTRY:\s*Record<[^>]+>\s*=\s*\{([\s\S]+?)\};/);
+      if (distMatch) {
+        const distRegex = /slug:\s*['"]([^'"]+)['"],\s*stateSlug:\s*['"]([^'"]+)['"]/g;
+        let dm;
+        while ((dm = distRegex.exec(distMatch[1])) !== null) {
+          pages.push(`/locations/${dm[2]}/${dm[1]}`);
+        }
+      }
+    }
+  } catch (err) {
+    console.error("Error reading locations for sitemap:", err);
+  }
 
   try {
     const blogFilePath = path.join(process.cwd(), "src", "data", "blogData.ts");

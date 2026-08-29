@@ -13,6 +13,10 @@ import LocalDirectoryTool from './components/LocalDirectoryTool';
 import CaliforniaView from './components/CaliforniaView';
 import LosAngelesSeoView from './components/LosAngelesSeoView';
 import DirectoryView from './components/DirectoryView';
+import LocationsIndexView from './components/LocationsIndexView';
+import LocationsStateView from './components/LocationsStateView';
+import LocationsDistrictView from './components/LocationsDistrictView';
+import { getStateBySlug, getDistrictBySlug } from './data/locationsData';
 import CaseStudiesView from './components/CaseStudiesView';
 import SchemaMarkup from './components/SchemaMarkup';
 import PrivacyPolicy from './components/PrivacyPolicy';
@@ -106,8 +110,20 @@ function getPageFromPath(pathname: string): {
   if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/california') return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/los-angeles-seo') return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/california') return { page: 'locations-state', stateSlug: 'california', citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/los-angeles-seo') return { page: 'locations-district', stateSlug: 'california', citySlug: 'los-angeles', blogSlug: null, demoSlug: null };
+  if (cleanPath === '/locations' || cleanPath === '/locations/') {
+    return { page: 'locations-index', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  }
+  if (cleanPath.startsWith('/locations/')) {
+    const locParts = cleanPath.slice('/locations/'.length).split('/').filter(Boolean);
+    if (locParts.length === 1) {
+      return { page: 'locations-state', stateSlug: locParts[0], citySlug: null, blogSlug: null, demoSlug: null };
+    }
+    if (locParts.length >= 2) {
+      return { page: 'locations-district', stateSlug: locParts[0], citySlug: locParts[1], blogSlug: null, demoSlug: null };
+    }
+  }
   if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath.startsWith('/blog/')) {
     const slug = cleanPath.slice(6);
@@ -185,9 +201,14 @@ export default function App() {
     else if (currentPage === 'case-studies') path = '/case-studies';
     else if (currentPage === 'privacy-policy') path = '/privacy-policy';
     else if (currentPage === 'terms-of-service') path = '/terms-of-service';
-    else if (currentPage === 'california') path = '/california';
-    else if (currentPage === 'los-angeles-seo') path = '/los-angeles-seo';
-    else if (currentPage === 'blog') {
+    else if (currentPage === 'california') path = '/locations/california/';
+    else if (currentPage === 'los-angeles-seo') path = '/locations/california/los-angeles';
+    else if (currentPage === 'locations-index') path = '/locations';
+    else if (currentPage === 'locations-state') {
+      path = activeStateSlug ? `/locations/${activeStateSlug}/` : '/locations';
+    } else if (currentPage === 'locations-district') {
+      path = (activeStateSlug && activeCitySlug) ? `/locations/${activeStateSlug}/${activeCitySlug}` : '/locations';
+    } else if (currentPage === 'blog') {
       path = activeArticleSlug ? `/blog/${activeArticleSlug}` : '/blog';
     } else if (currentPage === 'state-seo') {
       path = activeStateSlug ? `/${activeStateSlug}` : '/site-map';
@@ -279,12 +300,29 @@ export default function App() {
       description = 'Browse our directory of state and city-specific local SEO analysis maps.';
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'california') {
-      title = 'California SEO Directory & Market Analysis - Local Surge';
-      description = 'Analyze search traffic opportunities and local SEO trends across major California counties and metropolitan cities.';
+      title = 'California Local Search Behavior & Small Business SEO Strategy - Local Surge';
+      description = 'Explore California consumer search habits, web adoption percentages, and the strategic SEO playbooks required to dominate Google Maps.';
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'los-angeles-seo') {
-      title = 'Los Angeles SEO Services & Maps Optimization - Local Surge';
-      description = 'Dominating the Los Angeles local search market. Highly-optimized GBP tuning, citation audits, and schema markup for LA service providers.';
+      title = 'Los Angeles Local SEO Strategy & Consumer Search Behavior Study - Local Surge';
+      description = 'Empirical study on how 9.86M Los Angeles consumers search and choose local businesses, and the playbook required to rank in the Google Local 3-Pack.';
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
+    } else if (currentPage === 'locations-index') {
+      title = 'U.S. Local Search Markets & Consumer Behavior Directory - Local Surge SEO';
+      description = 'Explore interactive maps, consumer web utilization studies, and local business SEO strategies across U.S. states and districts.';
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
+    } else if (currentPage === 'locations-state' && activeStateSlug) {
+      const stateObj = getStateBySlug(activeStateSlug);
+      const stName = stateObj ? stateObj.name : activeStateSlug;
+      title = `${stName} Local Search Behavior & Small Business SEO Guide - Local Surge`;
+      description = stateObj?.heroSubheadline || `Empirical local consumer research and SEO blueprints for ${stName} local businesses.`;
+      ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
+    } else if (currentPage === 'locations-district' && activeCitySlug) {
+      const distObj = getDistrictBySlug(activeCitySlug);
+      const dName = distObj ? distObj.name : activeCitySlug;
+      const stName = distObj ? distObj.stateName : '';
+      title = `${dName}, ${stName} Local SEO Strategy & Consumer Search Study - Local Surge`;
+      description = distObj?.heroSubheadline || `In-depth empirical consumer search study and Google Map Pack ranking strategy for ${dName}.`;
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'blog') {
       title = 'Local Marketing Insights Blog - Local Surge SEO';
@@ -460,6 +498,17 @@ export default function App() {
     setHomePrefilledUrl(url);
     setHomeAutoAnalyze(true);
     setCurrentPage('seo-tool');
+  };
+
+  const handleNavigateToLocation = (targetPath: string) => {
+    const route = getPageFromPath(targetPath);
+    setCurrentPage(route.page);
+    setActiveStateSlug(route.stateSlug);
+    setActiveCitySlug(route.citySlug);
+    if (window.location.pathname !== targetPath) {
+      window.history.pushState(null, '', targetPath);
+    }
+    window.scrollTo({ top: 0, behavior: 'instant' });
   };
 
   // Simple Contact form states
@@ -2204,6 +2253,92 @@ export default function App() {
                 setActiveStateSlug={setActiveStateSlug}
                 setActiveCitySlug={setActiveCitySlug}
               />
+            </motion.div>
+          )}
+
+          {/* LOCATIONS DIRECTORY INDEX */}
+          {currentPage === 'locations-index' && (
+            <motion.div
+              key="locations-index"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <LocationsIndexView
+                setCurrentPage={setCurrentPage}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+                onGetFreeStrategy={handleGetFreeStrategy}
+                onNavigateToLocation={handleNavigateToLocation}
+              />
+            </motion.div>
+          )}
+
+          {/* LOCATIONS STATE VIEW */}
+          {currentPage === 'locations-state' && (
+            <motion.div
+              key={`loc-state-${activeStateSlug}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              {(() => {
+                const stateObj = activeStateSlug ? getStateBySlug(activeStateSlug) : null;
+                if (stateObj) {
+                  return (
+                    <LocationsStateView
+                      stateData={stateObj}
+                      setCurrentPage={setCurrentPage}
+                      onOpenOnboarding={() => handleOpenOnboarding(null)}
+                      onGetFreeStrategy={handleGetFreeStrategy}
+                      onNavigateToLocation={handleNavigateToLocation}
+                    />
+                  );
+                }
+                return (
+                  <CaliforniaView
+                    setCurrentPage={setCurrentPage}
+                    onOpenOnboarding={() => handleOpenOnboarding(null)}
+                    onGetFreeStrategy={handleGetFreeStrategy}
+                    setActiveStateSlug={setActiveStateSlug}
+                    setActiveCitySlug={setActiveCitySlug}
+                  />
+                );
+              })()}
+            </motion.div>
+          )}
+
+          {/* LOCATIONS DISTRICT VIEW */}
+          {currentPage === 'locations-district' && (
+            <motion.div
+              key={`loc-district-${activeCitySlug}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              {(() => {
+                const distObj = activeCitySlug ? getDistrictBySlug(activeCitySlug) : null;
+                if (distObj) {
+                  return (
+                    <LocationsDistrictView
+                      districtData={distObj}
+                      setCurrentPage={setCurrentPage}
+                      onOpenOnboarding={() => handleOpenOnboarding(null)}
+                      onGetFreeStrategy={handleGetFreeStrategy}
+                      onNavigateToLocation={handleNavigateToLocation}
+                    />
+                  );
+                }
+                return (
+                  <LosAngelesSeoView
+                    setCurrentPage={setCurrentPage}
+                    onOpenOnboarding={() => handleOpenOnboarding(null)}
+                    onGetFreeStrategy={handleGetFreeStrategy}
+                  />
+                );
+              })()}
             </motion.div>
           )}
 
