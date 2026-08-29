@@ -3,7 +3,7 @@ import { MicroToolConfig } from '../types';
 import { 
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
   RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText,
-  Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare
+  Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare, GitMerge
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -64,6 +64,15 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
   const [lsaCloseRate, setLsaCloseRate] = useState(45);
   const [lsaCustomTicket, setLsaCustomTicket] = useState(850);
   const [lsaCopied, setLsaCopied] = useState(false);
+
+  // State for Canonical Tag Inspector & Generator
+  const [canonActiveTab, setCanonActiveTab] = useState<'scanner' | 'simulator' | 'generator'>('scanner');
+  const [canonDomain, setCanonDomain] = useState('apexcomfortair.com');
+  const [canonProtocol, setCanonProtocol] = useState<'https://' | 'http://'>('https://');
+  const [canonWww, setCanonWww] = useState<'non-www' | 'www'>('non-www');
+  const [canonPath, setCanonPath] = useState('/emergency-ac-repair');
+  const [canonCopied, setCanonCopied] = useState(false);
+  const [simulatedVariant, setSimulatedVariant] = useState<'tracking' | 'http' | 'trailing' | 'subdomain'>('tracking');
 
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -266,6 +275,97 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
     decoding="async" 
   />
 </picture>`;
+      } else if (config.toolType === 'canonical') {
+        const canonicalLinks = Array.from(doc.querySelectorAll('link[rel="canonical"]'));
+        const canonicalHref = canonicalLinks[0]?.getAttribute('href')?.trim() || '';
+
+        // 1. Presence & Single Tag Check
+        if (canonicalLinks.length === 0) {
+          itemsFound.push({
+            label: 'rel="canonical" Link Tag Presence',
+            pass: false,
+            detail: 'No <link rel="canonical"> tag detected in HTML <head>. Search engines must guess your primary URL, exposing your local rankings to duplicate content penalties.'
+          });
+        } else if (canonicalLinks.length > 1) {
+          itemsFound.push({
+            label: 'Single Canonical Declaration (Google Standard)',
+            pass: false,
+            detail: `Found ${canonicalLinks.length} conflicting canonical tags. According to Google Search Central guidelines, multiple canonical declarations cause crawlers to ignore all of them.`
+          });
+        } else {
+          itemsFound.push({
+            label: 'rel="canonical" Link Tag Presence',
+            pass: true,
+            detail: `Canonical tag detected: "${canonicalHref}"`
+          });
+        }
+
+        // 2. Absolute URL Format Check (RFC 6596)
+        const isAbsolute = /^https?:\/\//i.test(canonicalHref);
+        itemsFound.push({
+          label: 'Absolute URL Format (RFC 6596 & Google Standard)',
+          pass: isAbsolute,
+          detail: isAbsolute
+            ? 'Canonical URL is fully qualified with scheme and domain (absolute format).'
+            : canonicalHref 
+              ? `Canonical URL is relative ("${canonicalHref}"). Google Search Central strictly requires absolute URLs to prevent crawl misinterpretation.`
+              : 'Cannot evaluate URL format because canonical tag is missing.'
+        });
+
+        // 3. Protocol Security Check (HTTPS)
+        const isHttps = /^https:\/\//i.test(canonicalHref);
+        itemsFound.push({
+          label: 'Protocol Security (HTTPS)',
+          pass: isHttps,
+          detail: isHttps
+            ? 'Canonical URL uses secure HTTPS protocol.'
+            : canonicalHref
+              ? 'Insecure HTTP canonical URL detected. Canonical tags must specify the secure HTTPS version to avoid protocol split.'
+              : 'Missing canonical URL.'
+        });
+
+        // 4. Query Parameter & Tracking Audit
+        const hasTrackingParams = /[?&](utm_|gclid|fbclid|sessionid|affiliate)/i.test(canonicalHref);
+        itemsFound.push({
+          label: 'Query Parameter & Ad Tracking Cleanliness',
+          pass: !hasTrackingParams,
+          detail: !hasTrackingParams
+            ? 'Canonical URL is clean and strips tracking/session parameters (utm_*, gclid).'
+            : `Canonical URL contains tracking parameters. Canonical targets must always point to the clean base URL.`
+        });
+
+        // 5. Self-referential Domain & Path Alignment
+        let domainMatch = false;
+        try {
+          if (isAbsolute) {
+            const canonicalUrlObj = new URL(canonicalHref);
+            const scannedUrlObj = new URL(urlToScan);
+            domainMatch = canonicalUrlObj.hostname.replace(/^www\./, '') === scannedUrlObj.hostname.replace(/^www\./, '');
+          }
+        } catch (e) {}
+
+        itemsFound.push({
+          label: 'Self-Referencing Domain Alignment',
+          pass: domainMatch,
+          detail: domainMatch
+            ? 'Canonical tag points directly to this domain entity, cementing local ranking authority.'
+            : isAbsolute
+              ? `Cross-domain canonical detected (${canonicalHref}). Verify if syndication was intended.`
+              : 'Domain alignment could not be confirmed.'
+        });
+
+        let calculatedScore = 100;
+        if (canonicalLinks.length === 0) calculatedScore -= 50;
+        if (canonicalLinks.length > 1) calculatedScore -= 30;
+        if (!isAbsolute) calculatedScore -= 25;
+        if (!isHttps) calculatedScore -= 15;
+        if (hasTrackingParams) calculatedScore -= 20;
+        if (!domainMatch && isAbsolute) calculatedScore -= 10;
+        score = Math.max(20, Math.min(100, calculatedScore));
+
+        const cleanBaseUrl = urlToScan.split('?')[0].replace(/\/+$/, '');
+        generatedSchemaCode = `<!-- Recommended Clean Canonical Tag for <head> -->
+<link rel="canonical" href="${cleanBaseUrl}" />`;
       } else {
         const canonical = doc.querySelector('link[rel="canonical"]')?.getAttribute('href');
         itemsFound.push({ label: 'Canonical Link Tag', pass: !!canonical, detail: canonical ? `Canonical URL: ${canonical}` : 'Missing rel="canonical" tag.' });
@@ -1696,6 +1796,412 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
             </div>
           )}
         </div>
+      </div>
+    );
+  }
+
+  if (config.toolType === 'canonical') {
+    const cleanDomain = canonDomain.trim().replace(/^https?:\/\//, '').replace(/\/$/, '') || 'apexcomfortair.com';
+    const cleanPrefix = canonWww === 'www' ? 'www.' : '';
+    const cleanPathFormatted = canonPath.startsWith('/') ? canonPath : `/${canonPath}`;
+    const fullCanonicalUrl = `${canonProtocol}${cleanPrefix}${cleanDomain}${cleanPathFormatted}`;
+    const generatedHtmlTag = `<link rel="canonical" href="${fullCanonicalUrl}" />`;
+    const generatedHttpHeader = `Link: <${fullCanonicalUrl}>; rel="canonical"`;
+
+    const handleCopyCanonicalCode = (text: string) => {
+      navigator.clipboard.writeText(text);
+      setCanonCopied(true);
+      setTimeout(() => setCanonCopied(false), 2500);
+    };
+
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-7 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="border-b border-[#dfded4] pb-4 space-y-1.5">
+          <div className="flex items-center gap-2">
+            <span className="px-2.5 py-0.5 rounded text-[10px] font-black uppercase tracking-wider bg-[#123e35]/10 text-[#123e35] flex items-center gap-1">
+              <Sparkles className="w-3 h-3 text-[#bc5f40]" aria-hidden="true" /> Interactive DOM Audit & Simulator
+            </span>
+            <span className="text-[10px] font-mono text-[#bc5f40]">Google RFC 6596 Standards</span>
+          </div>
+          <h3 className="text-xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs text-[#4e524f] leading-relaxed">{config.toolDescription}</p>
+        </div>
+
+        {/* Tab Navigation */}
+        <div className="flex flex-wrap gap-2 border-b border-[#dfded4] pb-3" role="tablist" aria-label="Canonical Inspector Modes">
+          <button
+            type="button"
+            role="tab"
+            aria-selected={canonActiveTab === 'scanner'}
+            onClick={() => setCanonActiveTab('scanner')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+              canonActiveTab === 'scanner'
+                ? 'bg-[#123e35] text-white shadow-xs'
+                : 'bg-[#faf9f6] text-[#4e524f] hover:text-[#151716] hover:bg-[#f0eee6]'
+            }`}
+          >
+            <Search className="w-3.5 h-3.5" aria-hidden="true" />
+            1. Live Page Inspector
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={canonActiveTab === 'simulator'}
+            onClick={() => setCanonActiveTab('simulator')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+              canonActiveTab === 'simulator'
+                ? 'bg-[#123e35] text-white shadow-xs'
+                : 'bg-[#faf9f6] text-[#4e524f] hover:text-[#151716] hover:bg-[#f0eee6]'
+            }`}
+          >
+            <GitMerge className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" />
+            2. Google Duplicate Resolver
+          </button>
+          <button
+            type="button"
+            role="tab"
+            aria-selected={canonActiveTab === 'generator'}
+            onClick={() => setCanonActiveTab('generator')}
+            className={`px-3.5 py-2 rounded-xl text-xs font-bold transition flex items-center gap-1.5 cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+              canonActiveTab === 'generator'
+                ? 'bg-[#123e35] text-white shadow-xs'
+                : 'bg-[#faf9f6] text-[#4e524f] hover:text-[#151716] hover:bg-[#f0eee6]'
+            }`}
+          >
+            <Code className="w-3.5 h-3.5" aria-hidden="true" />
+            3. Clean Canonical Tag Generator
+          </button>
+        </div>
+
+        {/* Tab 1: Live Page Inspector */}
+        {canonActiveTab === 'scanner' && (
+          <div className="space-y-6" role="tabpanel">
+            <div className="bg-[#faf9f6] p-4 rounded-xl border border-[#dfded4] text-xs text-[#4e524f] space-y-2">
+              <p className="font-bold text-[#151716] flex items-center gap-1.5">
+                <Info className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                How the Browser Canonical Scanner Works:
+              </p>
+              <p className="leading-relaxed">
+                Paste any local service URL below. Our client-side DOM parser evaluates whether your page declares a valid <code className="text-[#bc5f40] font-mono">&lt;link rel="canonical"&gt;</code>, checks for absolute HTTPS protocol compliance, audits query parameter stripping, and confirms domain alignment.
+              </p>
+            </div>
+
+            <form onSubmit={handleRunScan} className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Globe className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" aria-hidden="true" />
+                <label htmlFor="canonical-scan-url" className="sr-only">Website URL to inspect for canonical tags</label>
+                <input
+                  id="canonical-scan-url"
+                  type="text"
+                  value={targetUrl}
+                  onChange={e => setTargetUrl(e.target.value)}
+                  placeholder="Enter page URL (e.g. https://apexcomfortair.com/emergency-ac-repair)"
+                  className="w-full pl-10 pr-4 py-2.5 text-xs border border-[#dfded4] rounded-xl focus:outline-none focus:border-[#123e35] bg-[#faf9f6] font-semibold"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={scanning}
+                className="px-6 py-2.5 bg-[#123e35] hover:bg-[#0d2e27] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 shrink-0 focus-visible:outline-2 focus-visible:outline-[#bc5f40]"
+              >
+                {scanning ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" aria-hidden="true" />
+                    Auditing Canonical DOM...
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-3.5 h-3.5" aria-hidden="true" /> Audit Canonical Tag
+                  </>
+                )}
+              </button>
+            </form>
+
+            {results && (
+              <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-5 space-y-4">
+                <div className="flex flex-wrap items-center justify-between gap-3 border-b border-[#dfded4] pb-3">
+                  <span className="text-xs font-bold text-[#151716] flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-[#123e35]" aria-hidden="true" /> Canonicalization Audit Results
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className={`px-3 py-1 rounded-full text-xs font-black font-mono ${
+                      results.score >= 80 ? 'bg-emerald-100 text-emerald-800' : results.score >= 50 ? 'bg-amber-100 text-amber-800' : 'bg-red-100 text-red-800'
+                    }`}>
+                      Canonical Score: {results.score}/100
+                    </span>
+                    <span className="text-[11px] font-bold text-[#4e524f]">
+                      {results.score >= 80 ? '✅ Duplicate-Protected' : results.score >= 50 ? '⚠️ High Indexation Risk' : '🚨 Critical Crawl Conflict'}
+                    </span>
+                  </div>
+                </div>
+
+                <div className="space-y-2.5">
+                  {results.itemsFound.map((item, idx) => (
+                    <div key={idx} className="bg-white border border-[#dfded4] p-3 rounded-lg flex items-start gap-3">
+                      {item.pass ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" aria-hidden="true" />
+                      ) : (
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" aria-hidden="true" />
+                      )}
+                      <div>
+                        <h4 className="text-xs font-extrabold text-[#151716]">{item.label}</h4>
+                        <p className="text-xs text-[#4e524f] mt-0.5 leading-relaxed">{item.detail}</p>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {results.generatedSchemaCode && (
+                  <div className="bg-[#123e35] text-white p-4 rounded-xl space-y-2">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono font-bold text-[#dfded4] flex items-center gap-1.5">
+                        <Code className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" /> Clean Standardized Canonical Markup
+                      </span>
+                      <button
+                        type="button"
+                        onClick={handleCopyCode}
+                        className="px-2.5 py-1 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-[10px] font-black rounded-lg transition cursor-pointer flex items-center gap-1 focus-visible:outline-2 focus-visible:outline-white"
+                      >
+                        {copiedCode ? <Check className="w-3 h-3" aria-hidden="true" /> : <Copy className="w-3 h-3" aria-hidden="true" />}
+                        {copiedCode ? 'Copied Tag!' : 'Copy Tag'}
+                      </button>
+                    </div>
+                    <pre className="text-[11px] font-mono text-[#dfded4] overflow-x-auto p-2.5 bg-black/30 rounded border border-white/10 select-all">
+                      {results.generatedSchemaCode}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
+          </div>
+        )}
+
+        {/* Tab 2: Google Duplicate Resolver Simulator */}
+        {canonActiveTab === 'simulator' && (
+          <div className="space-y-6" role="tabpanel">
+            <div className="bg-[#faf9f6] p-4 rounded-xl border border-[#dfded4] space-y-2">
+              <h4 className="text-xs font-black uppercase tracking-wider text-[#123e35] flex items-center gap-1.5">
+                <GitMerge className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" />
+                How Canonical Tags Prevent Google Maps Rank Fragmentation
+              </h4>
+              <p className="text-xs text-[#4e524f] leading-relaxed">
+                When homeowners search for local services, web servers frequently respond to multiple URL variations for the exact same landing page. Without a canonical tag, Googlebot treats each version as a distinct page, fragmenting your backlink authority and Local 3-Pack rank signals.
+              </p>
+            </div>
+
+            {/* Interactive Duplicate URL Switcher */}
+            <div className="space-y-3">
+              <label className="text-[11px] font-bold uppercase tracking-wider text-[#151716] block">
+                Select a Common Local Duplicate URL Scenario:
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                {[
+                  { id: 'tracking', label: 'Paid Ad Tracking Parameters', example: 'https://apexcomfortair.com/ac-repair?gclid=9482&utm_source=google' },
+                  { id: 'http', label: 'Insecure HTTP Version', example: 'http://apexcomfortair.com/ac-repair' },
+                  { id: 'subdomain', label: 'www vs Non-www Subdomain', example: 'https://www.apexcomfortair.com/ac-repair' },
+                  { id: 'trailing', label: 'Trailing Slash Inconsistency', example: 'https://apexcomfortair.com/ac-repair/' },
+                ].map(scenario => (
+                  <button
+                    key={scenario.id}
+                    type="button"
+                    onClick={() => setSimulatedVariant(scenario.id as any)}
+                    className={`p-3 rounded-xl text-left border transition cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+                      simulatedVariant === scenario.id
+                        ? 'bg-[#123e35]/5 border-[#123e35] shadow-xs'
+                        : 'bg-white border-[#dfded4] hover:bg-[#faf9f6]'
+                    }`}
+                  >
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-bold text-[#151716]">{scenario.label}</span>
+                      {simulatedVariant === scenario.id && (
+                        <span className="w-2 h-2 rounded-full bg-[#123e35]" aria-hidden="true" />
+                      )}
+                    </div>
+                    <code className="text-[10px] font-mono text-[#888b88] mt-1 block truncate">
+                      {scenario.example}
+                    </code>
+                  </button>
+                ))}
+              </div>
+            </div>
+
+            {/* Visual Resolution Flow */}
+            <div className="bg-[#151716] text-[#faf9f6] p-5 rounded-2xl space-y-4 font-mono text-xs">
+              <div className="flex items-center justify-between border-b border-white/10 pb-3">
+                <span className="text-[#bc5f40] font-bold text-[11px] flex items-center gap-1.5">
+                  <Activity className="w-3.5 h-3.5" aria-hidden="true" /> CRAWLER SIGNAL CONSOLIDATION ENGINE
+                </span>
+                <span className="bg-emerald-500/20 text-emerald-300 px-2.5 py-0.5 rounded text-[10px] font-bold">
+                  Status: 100% Consolidated
+                </span>
+              </div>
+
+              <div className="space-y-3">
+                <div className="p-3 bg-red-500/10 border border-red-500/30 rounded-xl space-y-1">
+                  <span className="text-[10px] text-red-400 font-bold uppercase tracking-wider block">
+                    Incoming Request URL (Crawl Target):
+                  </span>
+                  <div className="text-white text-[11px] break-all">
+                    {simulatedVariant === 'tracking' && 'https://apexcomfortair.com/ac-repair?gclid=9482&utm_source=google'}
+                    {simulatedVariant === 'http' && 'http://apexcomfortair.com/ac-repair'}
+                    {simulatedVariant === 'subdomain' && 'https://www.apexcomfortair.com/ac-repair'}
+                    {simulatedVariant === 'trailing' && 'https://apexcomfortair.com/ac-repair/'}
+                  </div>
+                  <span className="text-[10px] text-red-300/80 block mt-1">
+                    ⚠️ Without canonicalization: Google splits PageRank & proximity weight between duplicate variants.
+                  </span>
+                </div>
+
+                <div className="flex justify-center text-[#dfded4]/60 py-1">
+                  <ArrowRight className="w-5 h-5 rotate-90 text-[#bc5f40]" aria-hidden="true" />
+                </div>
+
+                <div className="p-3 bg-emerald-500/10 border border-emerald-500/30 rounded-xl space-y-1">
+                  <span className="text-[10px] text-emerald-400 font-bold uppercase tracking-wider block">
+                    Master Canonical Directive (&lt;head&gt; Link):
+                  </span>
+                  <div className="text-emerald-300 font-bold text-[11px] break-all">
+                    &lt;link rel="canonical" href="https://apexcomfortair.com/ac-repair" /&gt;
+                  </div>
+                  <span className="text-[10px] text-emerald-200/90 block mt-1">
+                    ✅ Result: Googlebot attributes 100% of link citations, Google Reviews, and geo-relevance to the single authoritative target.
+                  </span>
+                </div>
+              </div>
+            </div>
+          </div>
+        )}
+
+        {/* Tab 3: Clean Canonical Tag Generator */}
+        {canonActiveTab === 'generator' && (
+          <div className="space-y-6" role="tabpanel">
+            <div className="bg-[#faf9f6] p-4 rounded-xl border border-[#dfded4] text-xs text-[#4e524f] space-y-1">
+              <p className="font-bold text-[#151716] flex items-center gap-1.5">
+                <Code className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                Instant Canonical Code Generator:
+              </p>
+              <p className="leading-relaxed">
+                Configure your verified canonical parameters below to produce clean, absolute canonical HTML code conforming to Google Search Central and RFC 6596 standards.
+              </p>
+            </div>
+
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
+              <div className="space-y-1.5">
+                <label htmlFor="canon-domain-input" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Target Domain Name:
+                </label>
+                <input
+                  id="canon-domain-input"
+                  type="text"
+                  value={canonDomain}
+                  onChange={e => setCanonDomain(e.target.value)}
+                  placeholder="yourbusiness.com"
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <label htmlFor="canon-path-input" className="text-[11px] font-bold text-[#151716] uppercase tracking-wider">
+                  Page Path / Route:
+                </label>
+                <input
+                  id="canon-path-input"
+                  type="text"
+                  value={canonPath}
+                  onChange={e => setCanonPath(e.target.value)}
+                  placeholder="/services/emergency-plumbing"
+                  className="w-full px-3.5 py-2 text-xs border border-[#dfded4] rounded-xl bg-[#faf9f6] font-semibold focus:outline-none focus:border-[#123e35]"
+                />
+              </div>
+
+              <div className="space-y-1.5">
+                <span className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">
+                  Protocol Preference:
+                </span>
+                <div className="flex gap-2">
+                  {(['https://', 'http://'] as const).map(p => (
+                    <button
+                      key={p}
+                      type="button"
+                      onClick={() => setCanonProtocol(p)}
+                      className={`flex-1 py-2 text-xs font-bold rounded-xl border transition cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+                        canonProtocol === p
+                          ? 'bg-[#123e35] text-white border-[#123e35]'
+                          : 'bg-[#faf9f6] text-[#4e524f] border-[#dfded4] hover:bg-[#f0eee6]'
+                      }`}
+                    >
+                      {p}
+                    </button>
+                  ))}
+                </div>
+              </div>
+
+              <div className="space-y-1.5">
+                <span className="text-[11px] font-bold text-[#151716] uppercase tracking-wider block">
+                  Subdomain Format:
+                </span>
+                <div className="flex gap-2">
+                  {[
+                    { id: 'non-www', label: 'non-www (apex.com)' },
+                    { id: 'www', label: 'www (www.apex.com)' },
+                  ].map(w => (
+                    <button
+                      key={w.id}
+                      type="button"
+                      onClick={() => setCanonWww(w.id as any)}
+                      className={`flex-1 py-2 text-xs font-bold rounded-xl border transition cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+                        canonWww === w.id
+                          ? 'bg-[#123e35] text-white border-[#123e35]'
+                          : 'bg-[#faf9f6] text-[#4e524f] border-[#dfded4] hover:bg-[#f0eee6]'
+                      }`}
+                    >
+                      {w.label}
+                    </button>
+                  ))}
+                </div>
+              </div>
+            </div>
+
+            {/* Generated Code Display */}
+            <div className="bg-[#123e35] text-white p-5 rounded-2xl space-y-4">
+              <div className="flex flex-wrap items-center justify-between gap-2 border-b border-white/10 pb-3">
+                <span className="text-xs font-mono font-bold text-[#dfded4] flex items-center gap-1.5">
+                  <Code className="w-3.5 h-3.5 text-[#bc5f40]" aria-hidden="true" />
+                  Standard HTML &lt;head&gt; Tag (Google Recommended)
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopyCanonicalCode(generatedHtmlTag)}
+                  className="px-3 py-1.5 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-[11px] font-black rounded-lg transition cursor-pointer flex items-center gap-1.5 focus-visible:outline-2 focus-visible:outline-white"
+                >
+                  {canonCopied ? <Check className="w-3.5 h-3.5" aria-hidden="true" /> : <Copy className="w-3.5 h-3.5" aria-hidden="true" />}
+                  {canonCopied ? 'Copied to Clipboard!' : 'Copy HTML Tag'}
+                </button>
+              </div>
+
+              <pre className="text-xs font-mono text-[#dfded4] p-3 bg-black/40 rounded-xl border border-white/10 overflow-x-auto select-all">
+                {generatedHtmlTag}
+              </pre>
+
+              <div className="pt-2 border-t border-white/10 flex flex-wrap items-center justify-between gap-2">
+                <span className="text-[11px] font-mono text-[#dfded4]/80">
+                  HTTP Link Header Alternative (For PDFs & Downloads):
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopyCanonicalCode(generatedHttpHeader)}
+                  className="px-2.5 py-1 bg-white/10 hover:bg-white/20 text-white text-[10px] font-bold rounded-md transition cursor-pointer flex items-center gap-1 focus-visible:outline-2 focus-visible:outline-white"
+                >
+                  <Copy className="w-3 h-3" aria-hidden="true" /> Copy Header
+                </button>
+              </div>
+              <code className="text-[10px] font-mono text-[#dfded4]/80 block p-2 bg-black/20 rounded truncate">
+                {generatedHttpHeader}
+              </code>
+            </div>
+          </div>
+        )}
       </div>
     );
   }
