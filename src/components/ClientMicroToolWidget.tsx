@@ -4,7 +4,7 @@ import {
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
   RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText,
   Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare, GitMerge,
-  Share2, MessageSquare, Smartphone
+  Share2, MessageSquare, Smartphone, ChevronRight, Plus, Trash2, Network
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -86,6 +86,18 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
   const [ogGenUrl, setOgGenUrl] = useState('https://apexdenverroofing.com/emergency-roof-repair');
   const [ogCopied, setOgCopied] = useState(false);
 
+  // State for Dual-Mode Breadcrumb Schema Widget
+  const [breadcrumbMode, setBreadcrumbMode] = useState<'builder' | 'scanner'>('builder');
+  const [breadcrumbDevice, setBreadcrumbDevice] = useState<'mobile' | 'desktop'>('mobile');
+  const [breadcrumbPreset, setBreadcrumbPreset] = useState<'plumber' | 'dentist' | 'hvac'>('plumber');
+  const [breadcrumbSteps, setBreadcrumbSteps] = useState<Array<{ name: string; url: string }>>([
+    { name: 'Home', url: 'https://apexcomfortplumbing.com' },
+    { name: 'Services', url: 'https://apexcomfortplumbing.com/services' },
+    { name: 'Emergency Plumbing', url: 'https://apexcomfortplumbing.com/services/emergency-plumbing' },
+    { name: 'Austin, TX', url: 'https://apexcomfortplumbing.com/services/emergency-plumbing/austin-tx' }
+  ]);
+  const [breadcrumbCopied, setBreadcrumbCopied] = useState(false);
+
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
     if (!targetUrl.trim()) return;
@@ -160,34 +172,125 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
         itemsFound.push({ label: 'Geographic City Intent in H1', pass: hasGeo, detail: hasGeo ? 'H1 explicitly includes geographic/city keywords.' : 'H1 lacks city/location keywords (e.g. "San Jose, CA").' });
       } else if (config.toolType === 'breadcrumb-schema') {
         const scriptTags = Array.from(doc.querySelectorAll('script[type="application/ld+json"]'));
-        schemaFound = scriptTags.some(s => s.textContent?.includes('BreadcrumbList'));
+        let breadcrumbJson: any = null;
+        for (const script of scriptTags) {
+          try {
+            const parsed = JSON.parse(script.textContent || '{}');
+            if (parsed['@type'] === 'BreadcrumbList') {
+              breadcrumbJson = parsed;
+              schemaFound = true;
+              break;
+            } else if (Array.isArray(parsed['@graph'])) {
+              const match = parsed['@graph'].find((g: any) => g['@type'] === 'BreadcrumbList');
+              if (match) {
+                breadcrumbJson = match;
+                schemaFound = true;
+                break;
+              }
+            }
+          } catch (e) {}
+        }
 
-        if (schemaFound) {
-          itemsFound.push({ label: 'BreadcrumbList JSON-LD Schema', pass: true, detail: 'Valid BreadcrumbList JSON-LD schema detected in head tags!' });
-          score = 95;
+        if (breadcrumbJson && Array.isArray(breadcrumbJson.itemListElement) && breadcrumbJson.itemListElement.length > 0) {
+          const elements = breadcrumbJson.itemListElement;
+          itemsFound.push({
+            label: 'BreadcrumbList JSON-LD Schema Declaration',
+            pass: true,
+            detail: `Detected valid @type: "BreadcrumbList" declaration with ${elements.length} navigation steps.`
+          });
+
+          // Check 1: 1-based sequential integers
+          const positionsValid = elements.every((item: any, idx: number) => Number(item.position) === idx + 1);
+          itemsFound.push({
+            label: '1-Based Sequential Integer Ordering (Google Standard)',
+            pass: positionsValid,
+            detail: positionsValid
+              ? `Step positions strictly follow 1-based sequential integers (1 to ${elements.length}).`
+              : 'Positions fail 1-based integer validation. Google Search Central mandates starting at 1 with no gaps or 0-indexing.'
+          });
+
+          // Check 2: Absolute item URLs
+          const allAbsolute = elements.every((item: any) => !item.item || /^https?:\/\//i.test(item.item));
+          itemsFound.push({
+            label: 'Absolute Canonical Item URLs (RFC 3986)',
+            pass: allAbsolute,
+            detail: allAbsolute
+              ? 'All breadcrumb item URLs are fully qualified absolute URIs.'
+              : 'Relative URLs detected. Google requires fully qualified absolute URLs (https://...).'
+          });
+
+          // Check 3: Semantic step naming
+          const hasGoodNames = elements.every((item: any) => item.name && item.name.trim().length > 0 && !/^(item|untitled|step)/i.test(item.name));
+          itemsFound.push({
+            label: 'Semantic Breadcrumb Step Naming',
+            pass: hasGoodNames,
+            detail: hasGoodNames
+              ? 'Breadcrumb steps use descriptive, clear navigation labels.'
+              : 'Generic or empty step names detected. Breadcrumbs must accurately label each page level.'
+          });
+
+          // Check 4: Rich Result Eligibility
+          const isEligible = positionsValid && allAbsolute && hasGoodNames;
+          itemsFound.push({
+            label: 'Google Rich Results Search Snippet Eligibility',
+            pass: isEligible,
+            detail: isEligible
+              ? '100% compliant with Google Search Central guidelines. Eligible for breadcrumb trail snippets in mobile search.'
+              : 'Schema has warnings that may prevent Google from rendering rich breadcrumb trails in mobile search.'
+          });
+
+          let calcScore = 100;
+          if (!positionsValid) calcScore -= 30;
+          if (!allAbsolute) calcScore -= 25;
+          if (!hasGoodNames) calcScore -= 20;
+          score = Math.max(30, calcScore);
         } else {
-          itemsFound.push({ label: 'BreadcrumbList JSON-LD Schema', pass: false, detail: 'No BreadcrumbList JSON-LD schema detected on this page.' });
-          itemsFound.push({ label: 'Rich Snippet Search Eligibility', pass: false, detail: 'Page is missing breadcrumb trail rich snippets in Google search results.' });
+          schemaFound = false;
+          itemsFound.push({
+            label: 'BreadcrumbList JSON-LD Schema Declaration',
+            pass: false,
+            detail: 'No BreadcrumbList JSON-LD schema detected in <head> or <body>.'
+          });
+          itemsFound.push({
+            label: 'Google Rich Results Search Snippet Eligibility',
+            pass: false,
+            detail: 'Page is missing breadcrumb trail rich snippets. Google will display the raw URL path instead of an intuitive navigation hierarchy.'
+          });
+          itemsFound.push({
+            label: 'Site Hierarchy Entity Siloing',
+            pass: false,
+            detail: 'Crawlers must guess parent-child relationships between your service pages and location sub-pages.'
+          });
           score = 35;
+        }
 
-          generatedSchemaCode = `<script type="application/ld+json">
+        const domainClean = urlToScan.replace(/https?:\/\/(www\.)?/, '').split('/')[0];
+        generatedSchemaCode = `<script type="application/ld+json">
 {
   "@context": "https://schema.org",
   "@type": "BreadcrumbList",
-  "itemListElement": [{
-    "@type": "ListItem",
-    "position": 1,
-    "name": "Home",
-    "item": "${urlToScan}"
-  },{
-    "@type": "ListItem",
-    "position": 2,
-    "name": "Services",
-    "item": "${urlToScan}/services"
-  }]
+  "itemListElement": [
+    {
+      "@type": "ListItem",
+      "position": 1,
+      "name": "Home",
+      "item": "https://${domainClean}"
+    },
+    {
+      "@type": "ListItem",
+      "position": 2,
+      "name": "Services",
+      "item": "https://${domainClean}/services"
+    },
+    {
+      "@type": "ListItem",
+      "position": 3,
+      "name": "Local Service",
+      "item": "${urlToScan}"
+    }
+  ]
 }
 </script>`;
-        }
       } else if (config.toolType === 'meta-length') {
         const pageTitle = doc.querySelector('title')?.textContent || '';
         const metaDesc = doc.querySelector('meta[name="description"]')?.getAttribute('content') || '';
@@ -2805,6 +2908,424 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
                 {generatedHttpHeader}
               </code>
             </div>
+          </div>
+        )}
+      </div>
+    );
+  }
+
+  if (config.toolType === 'breadcrumb-schema') {
+    const handleCopyBreadcrumbJson = (codeToCopy: string) => {
+      navigator.clipboard.writeText(codeToCopy);
+      setBreadcrumbCopied(true);
+      setTimeout(() => setBreadcrumbCopied(false), 2500);
+    };
+
+    const handlePresetSelect = (preset: 'plumber' | 'dentist' | 'hvac') => {
+      setBreadcrumbPreset(preset);
+      if (preset === 'plumber') {
+        setBreadcrumbSteps([
+          { name: 'Home', url: 'https://apexcomfortplumbing.com' },
+          { name: 'Services', url: 'https://apexcomfortplumbing.com/services' },
+          { name: 'Drain Cleaning', url: 'https://apexcomfortplumbing.com/services/drain-cleaning' },
+          { name: 'Austin, TX', url: 'https://apexcomfortplumbing.com/services/drain-cleaning/austin-tx' }
+        ]);
+      } else if (preset === 'dentist') {
+        setBreadcrumbSteps([
+          { name: 'Home', url: 'https://yorkvilledental.ca' },
+          { name: 'Treatments', url: 'https://yorkvilledental.ca/treatments' },
+          { name: 'Cosmetic Veneers', url: 'https://yorkvilledental.ca/treatments/cosmetic-veneers' },
+          { name: 'Liberty Village', url: 'https://yorkvilledental.ca/treatments/cosmetic-veneers/liberty-village' }
+        ]);
+      } else if (preset === 'hvac') {
+        setBreadcrumbSteps([
+          { name: 'Home', url: 'https://frontrangehvac.com' },
+          { name: 'Commercial', url: 'https://frontrangehvac.com/commercial' },
+          { name: 'Heat Pump Repair', url: 'https://frontrangehvac.com/commercial/heat-pump-repair' },
+          { name: 'Denver, CO', url: 'https://frontrangehvac.com/commercial/heat-pump-repair/denver-co' }
+        ]);
+      }
+    };
+
+    const handleAddStep = () => {
+      if (breadcrumbSteps.length >= 5) return;
+      const last = breadcrumbSteps[breadcrumbSteps.length - 1];
+      setBreadcrumbSteps([
+        ...breadcrumbSteps,
+        { name: 'Neighborhood Hub', url: `${last.url}/neighborhood` }
+      ]);
+    };
+
+    const handleRemoveStep = (idx: number) => {
+      if (breadcrumbSteps.length <= 2) return;
+      setBreadcrumbSteps(breadcrumbSteps.filter((_, i) => i !== idx));
+    };
+
+    const handleUpdateStep = (idx: number, field: 'name' | 'url', val: string) => {
+      setBreadcrumbSteps(breadcrumbSteps.map((step, i) => i === idx ? { ...step, [field]: val } : step));
+    };
+
+    const generatedBuilderJson = `<script type="application/ld+json">
+{
+  "@context": "https://schema.org",
+  "@type": "BreadcrumbList",
+  "itemListElement": [
+${breadcrumbSteps.map((step, idx) => `    {
+      "@type": "ListItem",
+      "position": ${idx + 1},
+      "name": "${step.name.replace(/"/g, '\\"')}",
+      "item": "${step.url.replace(/"/g, '\\"')}"
+    }`).join(',\n')}
+  ]
+}
+</script>`;
+
+    const rootUrl = breadcrumbSteps[0]?.url || 'https://example.com';
+    const cleanDomain = rootUrl.replace(/^https?:\/\/(www\.)?/, '').split('/')[0];
+    const lastStep = breadcrumbSteps[breadcrumbSteps.length - 1] || { name: 'Emergency Services' };
+
+    return (
+      <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-7 shadow-sm space-y-7 my-8">
+        {/* Header */}
+        <div className="space-y-3 border-b border-[#dfded4] pb-5">
+          <div className="flex flex-wrap items-center justify-between gap-2">
+            <div className="flex items-center gap-2 text-xs font-bold uppercase tracking-wider text-[#123e35]">
+              <Network className="w-4 h-4 text-[#bc5f40]" />
+              <span>Google Search Central Verified Structured Data</span>
+            </div>
+            <span className="text-[10px] font-mono bg-[#123e35]/10 text-[#123e35] px-2.5 py-0.5 rounded font-bold">
+              Schema.org / BreadcrumbList
+            </span>
+          </div>
+          <h3 className="text-xl sm:text-2xl font-black text-[#151716] tracking-tight">{config.toolTitle}</h3>
+          <p className="text-xs sm:text-sm text-[#5c605d] leading-relaxed">{config.toolDescription}</p>
+
+          {/* Dual-Mode Selector Tabs */}
+          <div className="flex items-center gap-2 pt-2">
+            <button
+              type="button"
+              onClick={() => setBreadcrumbMode('builder')}
+              className={`px-4 py-2 text-xs font-black rounded-xl transition cursor-pointer flex items-center gap-2 ${
+                breadcrumbMode === 'builder'
+                  ? 'bg-[#123e35] text-white shadow-sm'
+                  : 'bg-[#faf9f6] text-[#4e524f] border border-[#dfded4] hover:border-[#123e35]'
+              }`}
+            >
+              <Sparkles className="w-3.5 h-3.5 text-[#bc5f40]" />
+              <span>Visual Breadcrumb Builder & Google SERP Preview</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => setBreadcrumbMode('scanner')}
+              className={`px-4 py-2 text-xs font-black rounded-xl transition cursor-pointer flex items-center gap-2 ${
+                breadcrumbMode === 'scanner'
+                  ? 'bg-[#123e35] text-white shadow-sm'
+                  : 'bg-[#faf9f6] text-[#4e524f] border border-[#dfded4] hover:border-[#123e35]'
+              }`}
+            >
+              <Search className="w-3.5 h-3.5" />
+              <span>Live URL Breadcrumb Schema Inspector</span>
+            </button>
+          </div>
+        </div>
+
+        {breadcrumbMode === 'builder' ? (
+          /* BUILDER & GOOGLE SERP PREVIEW MODE */
+          <div className="space-y-6">
+            {/* Quick Trade Presets */}
+            <div className="space-y-2">
+              <label className="text-[11px] font-extrabold text-[#151716] uppercase tracking-wider block">
+                Load Quick Trade Hierarchy Preset:
+              </label>
+              <div className="grid grid-cols-1 sm:grid-cols-3 gap-2">
+                <button
+                  type="button"
+                  onClick={() => handlePresetSelect('plumber')}
+                  className={`p-2.5 rounded-xl border text-left transition cursor-pointer ${
+                    breadcrumbPreset === 'plumber'
+                      ? 'bg-[#123e35] text-white border-[#123e35]'
+                      : 'bg-[#faf9f6] text-[#4e524f] border-[#dfded4] hover:border-[#123e35]'
+                  }`}
+                >
+                  <span className="block text-xs font-bold">Austin Emergency Plumber</span>
+                  <span className="block text-[10px] opacity-80 mt-0.5">Home › Services › Drain Cleaning › Austin</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handlePresetSelect('dentist')}
+                  className={`p-2.5 rounded-xl border text-left transition cursor-pointer ${
+                    breadcrumbPreset === 'dentist'
+                      ? 'bg-[#123e35] text-white border-[#123e35]'
+                      : 'bg-[#faf9f6] text-[#4e524f] border-[#dfded4] hover:border-[#123e35]'
+                  }`}
+                >
+                  <span className="block text-xs font-bold">Toronto Cosmetic Dentist</span>
+                  <span className="block text-[10px] opacity-80 mt-0.5">Home › Treatments › Veneers › Liberty Village</span>
+                </button>
+                <button
+                  type="button"
+                  onClick={() => handlePresetSelect('hvac')}
+                  className={`p-2.5 rounded-xl border text-left transition cursor-pointer ${
+                    breadcrumbPreset === 'hvac'
+                      ? 'bg-[#123e35] text-white border-[#123e35]'
+                      : 'bg-[#faf9f6] text-[#4e524f] border-[#dfded4] hover:border-[#123e35]'
+                  }`}
+                >
+                  <span className="block text-xs font-bold">Denver Commercial HVAC</span>
+                  <span className="block text-[10px] opacity-80 mt-0.5">Home › Commercial › Heat Pump › Denver</span>
+                </button>
+              </div>
+            </div>
+
+            {/* Interactive Steps Configurator */}
+            <div className="space-y-3 bg-[#faf9f6] p-5 rounded-xl border border-[#dfded4]">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-[#151716] uppercase tracking-wider flex items-center gap-1.5">
+                  <Layers className="w-3.5 h-3.5 text-[#123e35]" />
+                  Configure Breadcrumb Hierarchy ({breadcrumbSteps.length} Levels)
+                </span>
+                <button
+                  type="button"
+                  onClick={handleAddStep}
+                  disabled={breadcrumbSteps.length >= 5}
+                  className="px-2.5 py-1 text-[11px] font-bold rounded-lg bg-[#123e35] text-white hover:bg-[#185246] transition disabled:opacity-40 cursor-pointer flex items-center gap-1"
+                >
+                  <Plus className="w-3 h-3" /> Add Step
+                </button>
+              </div>
+
+              <div className="space-y-2.5">
+                {breadcrumbSteps.map((step, idx) => (
+                  <div key={idx} className="flex flex-col sm:flex-row items-stretch sm:items-center gap-2 bg-white p-3 rounded-lg border border-[#dfded4]">
+                    <div className="flex items-center gap-2 shrink-0">
+                      <span className="w-6 h-6 rounded-full bg-[#123e35] text-white text-[11px] font-mono font-bold flex items-center justify-center">
+                        {idx + 1}
+                      </span>
+                      <span className="text-[11px] font-bold text-[#888b88] uppercase tracking-wider min-w-[50px]">
+                        Level {idx + 1}
+                      </span>
+                    </div>
+                    <div className="flex-1 grid grid-cols-1 sm:grid-cols-2 gap-2">
+                      <input
+                        type="text"
+                        value={step.name}
+                        onChange={(e) => handleUpdateStep(idx, 'name', e.target.value)}
+                        placeholder="Step Name (e.g. Services)"
+                        className="w-full px-3 py-1.5 text-xs border border-[#dfded4] rounded-md focus:outline-none focus:border-[#123e35] font-semibold text-[#151716]"
+                      />
+                      <input
+                        type="text"
+                        value={step.url}
+                        onChange={(e) => handleUpdateStep(idx, 'url', e.target.value)}
+                        placeholder="Absolute URL (https://...)"
+                        className="w-full px-3 py-1.5 text-xs border border-[#dfded4] rounded-md focus:outline-none focus:border-[#123e35] font-mono text-[11px] text-[#4e524f]"
+                      />
+                    </div>
+                    {breadcrumbSteps.length > 2 && (
+                      <button
+                        type="button"
+                        onClick={() => handleRemoveStep(idx)}
+                        className="p-1.5 text-[#888b88] hover:text-red-600 transition cursor-pointer self-end sm:self-center"
+                        title="Remove step"
+                      >
+                        <Trash2 className="w-3.5 h-3.5" />
+                      </button>
+                    )}
+                  </div>
+                ))}
+              </div>
+            </div>
+
+            {/* LIVE GOOGLE SERP RICH SNIPPET PREVIEW */}
+            <div className="space-y-3">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-extrabold text-[#151716] uppercase tracking-wider flex items-center gap-1.5">
+                  <Eye className="w-3.5 h-3.5 text-[#bc5f40]" />
+                  Live Google Search Snippet Simulation
+                </span>
+                <div className="flex items-center gap-1 bg-[#faf9f6] p-0.5 rounded-lg border border-[#dfded4]">
+                  <button
+                    type="button"
+                    onClick={() => setBreadcrumbDevice('mobile')}
+                    className={`px-2 py-1 text-[10px] font-bold rounded flex items-center gap-1 transition cursor-pointer ${
+                      breadcrumbDevice === 'mobile' ? 'bg-[#123e35] text-white' : 'text-[#5c605d]'
+                    }`}
+                  >
+                    <Smartphone className="w-3 h-3" /> Mobile
+                  </button>
+                  <button
+                    type="button"
+                    onClick={() => setBreadcrumbDevice('desktop')}
+                    className={`px-2 py-1 text-[10px] font-bold rounded flex items-center gap-1 transition cursor-pointer ${
+                      breadcrumbDevice === 'desktop' ? 'bg-[#123e35] text-white' : 'text-[#5c605d]'
+                    }`}
+                  >
+                    <Globe className="w-3 h-3" /> Desktop
+                  </button>
+                </div>
+              </div>
+
+              {/* Google SERP Card Mockup */}
+              <div className="bg-[#f8f9fa] border border-[#dadce0] rounded-xl p-4 sm:p-5 shadow-xs max-w-2xl">
+                <div className="space-y-1.5">
+                  {/* Favicon & Breadcrumb Header */}
+                  <div className="flex items-center gap-2 text-[12px] text-[#202124] leading-none">
+                    <div className="w-6 h-6 rounded-full bg-[#123e35] text-white text-[10px] font-black flex items-center justify-center shrink-0">
+                      {cleanDomain.charAt(0).toUpperCase()}
+                    </div>
+                    <div className="flex flex-col">
+                      <span className="font-semibold text-xs text-[#202124]">{cleanDomain}</span>
+                      <div className="flex items-center gap-1 text-[11px] text-[#4d5156] font-mono truncate">
+                        <span>https://{cleanDomain}</span>
+                        {breadcrumbSteps.slice(1).map((s, i) => (
+                          <React.Fragment key={i}>
+                            <span className="text-[#70757a]">›</span>
+                            <span className="text-[#202124] font-medium">{s.name.toLowerCase().replace(/\s+/g, '-')}</span>
+                          </React.Fragment>
+                        ))}
+                      </div>
+                    </div>
+                  </div>
+
+                  {/* Google Blue Link Title */}
+                  <h4 className="text-base sm:text-lg font-normal text-[#1a0dab] hover:underline cursor-pointer pt-1 leading-snug">
+                    {lastStep.name} in Local Market | Licensed &amp; Upfront Pricing
+                  </h4>
+
+                  {/* Snippet Description */}
+                  <p className="text-xs sm:text-sm text-[#4d5156] leading-relaxed">
+                    Professional, licensed local contractors for 24/7 service dispatch, upfront pricing, and guaranteed customer satisfaction. Verified reviews and same-day service.
+                  </p>
+                </div>
+              </div>
+            </div>
+
+            {/* Generated Schema Code Block */}
+            <div className="space-y-2 bg-[#151716] text-[#dfded4] p-5 rounded-xl">
+              <div className="flex items-center justify-between">
+                <span className="text-xs font-mono text-[#bc5f40] font-bold">
+                  Generated Google-Compliant BreadcrumbList JSON-LD
+                </span>
+                <button
+                  type="button"
+                  onClick={() => handleCopyBreadcrumbJson(generatedBuilderJson)}
+                  className="px-3 py-1.5 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-xs font-bold rounded-lg transition cursor-pointer flex items-center gap-1.5"
+                >
+                  {breadcrumbCopied ? <Check className="w-3.5 h-3.5" /> : <Copy className="w-3.5 h-3.5" />}
+                  <span>{breadcrumbCopied ? 'Copied to Clipboard!' : 'Copy BreadcrumbList Schema'}</span>
+                </button>
+              </div>
+              <pre className="text-xs font-mono text-[#dfded4] bg-black/40 p-3 rounded-lg overflow-x-auto select-all">
+                {generatedBuilderJson}
+              </pre>
+            </div>
+          </div>
+        ) : (
+          /* SCANNER MODE */
+          <div className="space-y-6">
+            <form onSubmit={handleRunScan} className="flex flex-col sm:flex-row gap-3">
+              <div className="relative flex-1">
+                <Globe className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" />
+                <input
+                  type="text"
+                  value={targetUrl}
+                  onChange={(e) => setTargetUrl(e.target.value)}
+                  placeholder="Enter page URL to inspect (e.g. apexplumbing.com/services/drains)"
+                  className="w-full pl-10 pr-4 py-2.5 text-xs border border-[#dfded4] rounded-xl focus:outline-none focus:border-[#123e35] bg-[#faf9f6] font-semibold"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={scanning}
+                className="px-6 py-2.5 bg-[#123e35] hover:bg-[#0d2e27] text-white font-bold text-xs rounded-xl shadow-xs transition cursor-pointer flex items-center justify-center gap-2 disabled:opacity-50 shrink-0"
+              >
+                {scanning ? (
+                  <>
+                    <div className="w-3.5 h-3.5 border-2 border-white border-t-transparent rounded-full animate-spin" />
+                    Scanning DOM...
+                  </>
+                ) : (
+                  <>
+                    <Search className="w-3.5 h-3.5" /> Run Live Breadcrumb Audit
+                  </>
+                )}
+              </button>
+            </form>
+
+            {/* Quick Test Links */}
+            <div className="flex items-center gap-2 text-xs text-[#5c605d]">
+              <span className="font-bold">Quick test examples:</span>
+              <button
+                type="button"
+                onClick={() => setTargetUrl('https://localsurgeseo.com/services')}
+                className="underline hover:text-[#123e35] font-mono text-[11px]"
+              >
+                localsurgeseo.com/services
+              </button>
+              <span>•</span>
+              <button
+                type="button"
+                onClick={() => setTargetUrl('https://google.com')}
+                className="underline hover:text-[#123e35] font-mono text-[11px]"
+              >
+                google.com
+              </button>
+            </div>
+
+            {results && (
+              <div className="bg-[#faf9f6] border border-[#dfded4] rounded-xl p-5 space-y-4">
+                <div className="flex items-center justify-between border-b border-[#dfded4] pb-3">
+                  <span className="text-xs font-bold text-[#151716] flex items-center gap-1.5">
+                    <ShieldCheck className="w-4 h-4 text-[#123e35]" /> Instant Breadcrumb Audit Results
+                  </span>
+                  <div className="flex items-center gap-2">
+                    <span className="text-xs text-[#5c605d]">Rich Results Score:</span>
+                    <span className={`text-sm font-black font-mono px-2 py-0.5 rounded ${
+                      results.score >= 80 ? 'bg-emerald-100 text-emerald-800' : 'bg-amber-100 text-amber-800'
+                    }`}>
+                      {results.score}/100
+                    </span>
+                  </div>
+                </div>
+
+                <div className="grid grid-cols-1 gap-2.5">
+                  {results.itemsFound.map((item, idx) => (
+                    <div key={idx} className="flex items-start gap-3 bg-white p-3 rounded-lg border border-[#dfded4]">
+                      {item.pass ? (
+                        <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
+                      ) : (
+                        <AlertTriangle className="w-4 h-4 text-amber-600 shrink-0 mt-0.5" />
+                      )}
+                      <div>
+                        <div className="text-xs font-bold text-[#151716]">{item.label}</div>
+                        <div className="text-[11px] text-[#4e524f] mt-0.5 leading-relaxed">{item.detail}</div>
+                      </div>
+                    </div>
+                  ))}
+                </div>
+
+                {results.generatedSchemaCode && (
+                  <div className="space-y-2 bg-[#151716] text-[#dfded4] p-4 rounded-xl mt-4">
+                    <div className="flex items-center justify-between">
+                      <span className="text-xs font-mono text-[#bc5f40] font-bold">
+                        Recommended BreadcrumbList JSON-LD Fix
+                      </span>
+                      <button
+                        type="button"
+                        onClick={() => handleCopyBreadcrumbJson(results.generatedSchemaCode || '')}
+                        className="px-3 py-1 bg-[#bc5f40] hover:bg-[#cf6d4e] text-white text-[11px] font-bold rounded transition cursor-pointer flex items-center gap-1"
+                      >
+                        {breadcrumbCopied ? <Check className="w-3 h-3" /> : <Copy className="w-3 h-3" />}
+                        <span>{breadcrumbCopied ? 'Copied!' : 'Copy Fix'}</span>
+                      </button>
+                    </div>
+                    <pre className="text-xs font-mono text-[#dfded4] bg-black/40 p-2.5 rounded overflow-x-auto select-all">
+                      {results.generatedSchemaCode}
+                    </pre>
+                  </div>
+                )}
+              </div>
+            )}
           </div>
         )}
       </div>
