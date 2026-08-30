@@ -1,5 +1,5 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<rsl version="1.0" xmlns="https://reallysimplelicensing.org/schema/1.0">
+<rsl version="1.0" xmlns="https://rslstandard.org/rsl">
   <identity>
     <name>Local Surge SEO</name>
     <url>https://localsurgeseo.com</url>
