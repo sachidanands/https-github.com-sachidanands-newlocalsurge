@@ -877,8 +877,12 @@ function injectMetadataAndFallback(
   const schemaString = `\n  <script type="application/ld+json">\n  ${JSON.stringify(schemaJson, null, 2)}\n  </script>\n`;
   result = result.replace('</head>', `${schemaString}</head>`);
 
-  // Inject Crawlable Pre-Rendered HTML inside #root
-  result = result.replace('<div id="root">', `<div id="root">\n${crawlMarkup}`);
+  // Inject Crawlable Pre-Rendered HTML inside #root (replacing generic fallback if present)
+  if (result.includes('id="ssr-fallback-default"')) {
+    result = result.replace(/<div id="ssr-fallback-default"[\s\S]*?<\/div>\s*<\/div>/i, `${crawlMarkup}\n    </div>`);
+  } else {
+    result = result.replace('<div id="root">', `<div id="root">\n${crawlMarkup}`);
+  }
 
   return result;
 }
