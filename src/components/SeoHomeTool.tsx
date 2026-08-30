@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { 
-  Bot, RefreshCw, Star, CheckCircle, AlertCircle, Sparkles, ArrowRight, ShieldCheck, HelpCircle
+  Bot, RefreshCw, Star, CheckCircle, AlertCircle, Sparkles, ArrowRight, ShieldCheck, HelpCircle,
+  Code, Copy, Check, ExternalLink
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -42,6 +43,8 @@ export default function SeoHomeTool({
   const [result, setResult] = useState<SeoResult | null>(null);
   const [error, setError] = useState<string | null>(null);
   const [progressMsg, setProgressMsg] = useState('Initiating domain audits...');
+  const [embedSnippetCopied, setEmbedSnippetCopied] = useState<string | null>(null);
+  const [activeEmbedTab, setActiveEmbedTab] = useState<'badge' | 'widget'>('badge');
 
   const runAnalysis = async (targetUrl?: string) => {
     const urlToUse = (targetUrl !== undefined ? targetUrl : urlInput).trim();
@@ -399,6 +402,119 @@ export default function SeoHomeTool({
             <div>
               <strong className="font-bold">Why Search Signals Matter:</strong> A fully optimized local presence doesn't just display your telephone number; it creates a structured trust profile that search engines use to answer conversational AI queries. Resolving technical citation gaps and deploying targeted local schema can double organic maps telephone calls.
             </div>
+          </div>
+
+          {/* Backlink Magnet: Embed Free Local SEO Audit Widget */}
+          <div className="bg-white border border-[#dfded4] p-6 sm:p-8 rounded-3xl space-y-6 shadow-xs">
+            <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-3 border-b border-[#dfded4] pb-4">
+              <div className="flex items-center gap-2.5">
+                <div className="w-9 h-9 rounded-xl bg-[#123e35]/10 flex items-center justify-center text-[#123e35]">
+                  <Code className="w-5 h-5" />
+                </div>
+                <div>
+                  <h4 className="text-sm font-black font-display text-[#151716]">
+                    Embed This Free Local SEO Audit Tool On Your Website
+                  </h4>
+                  <p className="text-[11px] text-[#5c605d] font-semibold">
+                    Provide your audience or clients instant domain analysis with a lightweight badge or embedded scanner widget.
+                  </p>
+                </div>
+              </div>
+
+              {/* Tab Selector */}
+              <div className="flex gap-1.5 p-1 bg-[#faf9f6] border border-[#dfded4] rounded-xl self-start sm:self-auto">
+                <button
+                  onClick={() => setActiveEmbedTab('badge')}
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
+                    activeEmbedTab === 'badge' ? 'bg-[#123e35] text-white' : 'text-[#4e524f] hover:text-[#111]'
+                  }`}
+                >
+                  Badge Link
+                </button>
+                <button
+                  onClick={() => setActiveEmbedTab('widget')}
+                  className={`px-3 py-1 text-xs font-bold rounded-lg transition-colors cursor-pointer ${
+                    activeEmbedTab === 'widget' ? 'bg-[#123e35] text-white' : 'text-[#4e524f] hover:text-[#111]'
+                  }`}
+                >
+                  Full Scanner Widget
+                </button>
+              </div>
+            </div>
+
+            {/* Embed Tab Content */}
+            {activeEmbedTab === 'badge' ? (
+              <div className="grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+                <div className="md:col-span-4 flex flex-col items-center justify-center p-6 bg-[#faf9f6] rounded-2xl border border-[#e6e4dc] space-y-2">
+                  <span className="text-[10px] font-mono text-[#888b88] uppercase font-bold">Preview</span>
+                  <a href="/seo-tool" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-95 transition-opacity">
+                    <img src="/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" className="h-12 w-auto" />
+                  </a>
+                </div>
+                <div className="md:col-span-8 space-y-3">
+                  <div className="flex justify-between items-center">
+                    <span className="text-xs font-bold text-[#151716] font-mono">HTML Embed Code (Copy &amp; Paste)</span>
+                    <button
+                      onClick={() => {
+                        const snippet = '<a href="https://localsurgeseo.com/seo-tool" target="_blank" rel="noopener" title="Free Local SEO Audit by Local Surge SEO">\n  <img src="https://localsurgeseo.com/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" width="240" height="60" />\n</a>';
+                        navigator.clipboard.writeText(snippet);
+                        setEmbedSnippetCopied('badge');
+                        setTimeout(() => setEmbedSnippetCopied(null), 2500);
+                      }}
+                      className="flex items-center gap-1 text-xs font-bold text-[#123e35] hover:text-[#bc5f40] cursor-pointer"
+                    >
+                      {embedSnippetCopied === 'badge' ? (
+                        <>
+                          <Check className="w-3.5 h-3.5 text-emerald-600" />
+                          <span>Copied Snippet!</span>
+                        </>
+                      ) : (
+                        <>
+                          <Copy className="w-3.5 h-3.5" />
+                          <span>Copy HTML</span>
+                        </>
+                      )}
+                    </button>
+                  </div>
+                  <pre className="p-3 bg-[#151716] text-[#dfded4] text-[11px] font-mono rounded-xl overflow-x-auto leading-relaxed border border-[#2d2f2d] select-all">
+{`<a href="https://localsurgeseo.com/seo-tool" target="_blank" rel="noopener" title="Free Local SEO Audit by Local Surge SEO">
+  <img src="https://localsurgeseo.com/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" width="240" height="60" />
+</a>`}
+                  </pre>
+                </div>
+              </div>
+            ) : (
+              <div className="space-y-4">
+                <div className="flex justify-between items-center">
+                  <span className="text-xs font-bold text-[#151716] font-mono">Responsive Iframe Widget (Copy &amp; Paste)</span>
+                  <button
+                    onClick={() => {
+                      const snippet = '<iframe src="https://localsurgeseo.com/seo-tool" width="100%" height="700" style="border:1px solid #dfded4; border-radius:16px; max-width:900px;" title="Local Surge Free SEO Tool"></iframe>\n<p style="font-size:11px; color:#666; font-family:sans-serif; text-align:center;">Free Local SEO Audit by <a href="https://localsurgeseo.com/" target="_blank" rel="noopener" style="color:#123e35; font-weight:bold;">Local Surge SEO</a></p>';
+                      navigator.clipboard.writeText(snippet);
+                      setEmbedSnippetCopied('widget');
+                      setTimeout(() => setEmbedSnippetCopied(null), 2500);
+                    }}
+                    className="flex items-center gap-1 text-xs font-bold text-[#123e35] hover:text-[#bc5f40] cursor-pointer"
+                  >
+                    {embedSnippetCopied === 'widget' ? (
+                      <>
+                        <Check className="w-3.5 h-3.5 text-emerald-600" />
+                        <span>Copied Snippet!</span>
+                      </>
+                    ) : (
+                      <>
+                        <Copy className="w-3.5 h-3.5" />
+                        <span>Copy HTML</span>
+                      </>
+                    )}
+                  </button>
+                </div>
+                <pre className="p-3 bg-[#151716] text-[#dfded4] text-[11px] font-mono rounded-xl overflow-x-auto leading-relaxed border border-[#2d2f2d] select-all">
+{`<iframe src="https://localsurgeseo.com/seo-tool" width="100%" height="700" style="border:1px solid #dfded4; border-radius:16px; max-width:900px;" title="Local Surge Free SEO Tool"></iframe>
+<p style="font-size:11px; color:#666; font-family:sans-serif; text-align:center;">Free Local SEO Audit by <a href="https://localsurgeseo.com/" target="_blank" rel="noopener" style="color:#123e35; font-weight:bold;">Local Surge SEO</a></p>`}
+                </pre>
+              </div>
+            )}
           </div>
         </div>
       )}

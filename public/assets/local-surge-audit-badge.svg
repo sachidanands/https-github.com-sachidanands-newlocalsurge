@@ -1,0 +1,23 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 240 60" width="240" height="60">
+  <defs>
+    <linearGradient id="lsBg" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#123e35" />
+      <stop offset="100%" stop-color="#1a5347" />
+    </linearGradient>
+    <linearGradient id="lsAccent" x1="0%" y1="0%" x2="100%" y2="100%">
+      <stop offset="0%" stop-color="#bc5f40" />
+      <stop offset="100%" stop-color="#e07a5f" />
+    </linearGradient>
+  </defs>
+  <!-- Background Container -->
+  <rect x="1" y="1" width="238" height="58" rx="12" fill="url(#lsBg)" stroke="#26695b" stroke-width="1.5" />
+  
+  <!-- Icon Circle -->
+  <circle cx="30" cy="30" r="16" fill="url(#lsAccent)" />
+  <!-- Rocket / Sparkle Minimal Symbol -->
+  <path d="M30 18 L33 26 L41 29 L33 32 L30 40 L27 32 L19 29 L27 26 Z" fill="#ffffff" />
+
+  <!-- Text -->
+  <text x="56" y="24" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="9" font-weight="700" fill="#e07a5f" letter-spacing="1.5">VERIFIED AUDIT</text>
+  <text x="56" y="42" font-family="-apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif" font-size="14" font-weight="900" fill="#ffffff" letter-spacing="-0.2">Local Surge SEO</text>
+</svg>

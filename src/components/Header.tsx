@@ -9,15 +9,24 @@ interface HeaderProps {
 }
 
 export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }: HeaderProps) {
-  const navItems = [
-    { id: 'home' as Page, label: 'Home', icon: Rocket },
-    { id: 'about' as Page, label: 'About Us', icon: Users },
-    { id: 'why-us' as Page, label: 'Why Us', icon: Landmark },
-    { id: 'local-seo' as Page, label: 'Local SEO', icon: MapPin },
-    { id: 'pricing' as Page, label: 'Pricing', icon: BarChart3 },
-    { id: 'seo-tool' as Page, label: 'SEO Tool', icon: Sparkles },
-    { id: 'contact' as Page, label: 'Contact', icon: Contact },
+  const navItems: { id: Page; label: string; icon: any; path: string }[] = [
+    { id: 'home', label: 'Home', icon: Rocket, path: '/' },
+    { id: 'about', label: 'About Us', icon: Users, path: '/about' },
+    { id: 'why-us', label: 'Why Us', icon: Landmark, path: '/why-us' },
+    { id: 'local-seo', label: 'Local SEO', icon: MapPin, path: '/local-seo' },
+    { id: 'pricing', label: 'Pricing', icon: BarChart3, path: '/pricing' },
+    { id: 'seo-tool', label: 'SEO Tool', icon: Sparkles, path: '/seo-tool' },
+    { id: 'contact', label: 'Contact', icon: Contact, path: '/contact' },
   ];
+
+  const handleNavClick = (e: React.MouseEvent, pageId: Page, path: string) => {
+    e.preventDefault();
+    setCurrentPage(pageId);
+    if (typeof window !== 'undefined') {
+      window.history.pushState(null, '', path);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
 
   return (
     <header id="main-header" className="sticky top-0 z-50 bg-[#f7f6f2]/90 backdrop-blur-md border-b border-[#e6e4dc] shadow-sm">
@@ -25,10 +34,12 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
         <div className="flex justify-between items-center h-20">
           {/* Logo */}
           <div className="flex-shrink-0 flex items-center">
-            <button
+            <a
               id="logo-button"
-              onClick={() => setCurrentPage('home')}
-              className="flex items-center gap-2.5 group cursor-pointer text-left"
+              href="/"
+              onClick={(e) => handleNavClick(e, 'home', '/')}
+              className="flex items-center gap-2.5 group cursor-pointer text-left focus-visible:outline-2 focus-visible:outline-[#123e35]"
+              aria-label="Local Surge SEO Home"
             >
               <div className="w-10 h-10 rounded-lg bg-[#123e35] flex items-center justify-center text-[#faf9f6] shadow-sm group-hover:scale-105 transition-transform duration-300">
                 <Rocket className="w-5 h-5 text-[#fbfaf8]" aria-hidden="true" />
@@ -41,7 +52,7 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
                   LOCAL SEARCH SEO
                 </span>
               </div>
-            </button>
+            </a>
           </div>
 
           {/* Nav Links */}
@@ -50,10 +61,11 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
               const Icon = item.icon;
               const isActive = currentPage === item.id;
               return (
-                <button
+                <a
                   id={`nav-link-${item.id}`}
                   key={item.id}
-                  onClick={() => setCurrentPage(item.id)}
+                  href={item.path}
+                  onClick={(e) => handleNavClick(e, item.id, item.path)}
                   aria-current={isActive ? 'page' : undefined}
                   className={`flex items-center gap-1.5 px-3 py-2 rounded-lg text-xs lg:text-sm font-bold transition-all duration-200 cursor-pointer ${
                     isActive
@@ -63,7 +75,7 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
                 >
                   <Icon className={`w-4 h-4 ${isActive ? 'text-[#123e35]' : 'text-[#888b88]'}`} aria-hidden="true" />
                   {item.label}
-                </button>
+                </a>
               );
             })}
           </nav>

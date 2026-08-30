@@ -25,6 +25,7 @@ export default function BlogView({
   const [searchQuery, setSearchQuery] = useState('');
   const [selectedCategory, setSelectedCategory] = useState('All');
   const [copiedLink, setCopiedLink] = useState(false);
+  const [copiedCitation, setCopiedCitation] = useState<'markdown' | 'apa' | null>(null);
   const [showAiSummarize, setShowAiSummarize] = useState(false);
   const summarizeMenuRef = useRef<HTMLDivElement>(null);
 
@@ -533,6 +534,99 @@ export default function BlogView({
 
                 </div>
 
+                {/* Open Attribution Citation & Verified Primary Sources */}
+                <div className="my-8 p-6 bg-white border border-[#dfded4] rounded-2xl shadow-xs space-y-4">
+                  <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-2 border-b border-[#dfded4] pb-3">
+                    <div className="flex items-center gap-2">
+                      <BookOpen className="w-4 h-4 text-[#123e35]" aria-hidden="true" />
+                      <h4 className="text-xs font-black font-mono text-[#151716] uppercase tracking-wider">
+                        Cite This Strategy Guide / Editorial Study
+                      </h4>
+                    </div>
+                    <span className="text-[9px] font-mono text-[#bc5f40] font-bold uppercase bg-[#bc5f40]/10 px-2 py-0.5 rounded w-fit">
+                      Open Attribution Citation
+                    </span>
+                  </div>
+                  
+                  <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                    Publishing an industry article, local case study, or research analysis citing these findings? Use the pre-formatted citation anchors below:
+                  </p>
+
+                  <div className="grid grid-cols-1 md:grid-cols-2 gap-3 pt-1">
+                    <div className="p-3 bg-[#faf9f6] border border-[#e6e4dc] rounded-xl space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-mono font-bold text-[#123e35]">Markdown Format (Web / Blog)</span>
+                        <button
+                          onClick={() => {
+                            const citeText = `[${activeArticle.title}](https://localsurgeseo.com/blog/${activeArticle.slug})`;
+                            navigator.clipboard.writeText(citeText);
+                            setCopiedCitation('markdown');
+                            setTimeout(() => setCopiedCitation(null), 2000);
+                          }}
+                          className="text-[10px] font-bold text-[#bc5f40] hover:underline cursor-pointer"
+                        >
+                          {copiedCitation === 'markdown' ? 'Copied! 📎' : 'Copy Markdown'}
+                        </button>
+                      </div>
+                      <code className="text-[11px] text-[#2d2f2d] font-mono block bg-white p-2 rounded border border-[#dfded4] truncate select-all">
+                        [{activeArticle.title}](https://localsurgeseo.com/blog/{activeArticle.slug})
+                      </code>
+                    </div>
+
+                    <div className="p-3 bg-[#faf9f6] border border-[#e6e4dc] rounded-xl space-y-2">
+                      <div className="flex justify-between items-center">
+                        <span className="text-[10px] font-mono font-bold text-[#123e35]">APA / Academic Format</span>
+                        <button
+                          onClick={() => {
+                            const citeText = `${activeArticle.author.name} (2026). "${activeArticle.title}". Local Surge SEO Research Insights. https://localsurgeseo.com/blog/${activeArticle.slug}`;
+                            navigator.clipboard.writeText(citeText);
+                            setCopiedCitation('apa');
+                            setTimeout(() => setCopiedCitation(null), 2000);
+                          }}
+                          className="text-[10px] font-bold text-[#bc5f40] hover:underline cursor-pointer"
+                        >
+                          {copiedCitation === 'apa' ? 'Copied! 📎' : 'Copy APA'}
+                        </button>
+                      </div>
+                      <code className="text-[11px] text-[#2d2f2d] font-mono block bg-white p-2 rounded border border-[#dfded4] truncate select-all">
+                        {activeArticle.author.name} (2026). "{activeArticle.title}". Local Surge SEO.
+                      </code>
+                    </div>
+                  </div>
+
+                  {/* Authoritative Outbound Verification Sources */}
+                  <div className="pt-2 border-t border-[#dfded4]/60 flex flex-wrap items-center gap-4 text-[11px] font-semibold text-[#5c605d]">
+                    <span className="font-bold text-[#151716] text-[10px] uppercase font-mono tracking-wider">Primary Verification Sources:</span>
+                    <a 
+                      href="https://developers.google.com/search/docs" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#123e35] hover:text-[#bc5f40] hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>Google Search Central</span>
+                      <ExternalLink className="w-3 h-3 text-[#888b88]" aria-hidden="true" />
+                    </a>
+                    <a 
+                      href="https://schema.org" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#123e35] hover:text-[#bc5f40] hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>Schema.org Vocabularies</span>
+                      <ExternalLink className="w-3 h-3 text-[#888b88]" aria-hidden="true" />
+                    </a>
+                    <a 
+                      href="https://www.w3.org/WAI/standards-guidelines/wcag/" 
+                      target="_blank" 
+                      rel="noopener noreferrer" 
+                      className="text-[#123e35] hover:text-[#bc5f40] hover:underline inline-flex items-center gap-1"
+                    >
+                      <span>W3C Standards</span>
+                      <ExternalLink className="w-3 h-3 text-[#888b88]" aria-hidden="true" />
+                    </a>
+                  </div>
+                </div>
+
                 {/* Interaction Footer widget */}
                 <div className="border-t border-[#dfded4] pt-6 flex flex-wrap justify-between items-center gap-4">
                   <div className="flex gap-2">
@@ -615,17 +709,21 @@ export default function BlogView({
                     
                     <div className="divide-y divide-[#dfded4] space-y-4">
                       {getRelatedPosts(activeArticle).map((post) => (
-                        <div 
+                        <a 
                           key={post.slug} 
-                          onClick={() => handleArticleClick(post.slug)}
-                          className="pt-4 first:pt-0 group cursor-pointer space-y-1.5 block"
+                          href={`/blog/${post.slug}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleArticleClick(post.slug);
+                          }}
+                          className="pt-4 first:pt-0 group cursor-pointer space-y-1.5 block focus-visible:outline-2 focus-visible:outline-[#123e35]"
                         >
                           <span className="text-[9px] text-[#bc5f40] font-black uppercase font-mono tracking-widest">{post.category}</span>
                           <h5 className="font-extrabold text-xs text-[#151716] group-hover:text-[#bc5f40] transition-colors leading-snug">
                             {post.title}
                           </h5>
                           <span className="text-[9px] text-[#4e524f] font-semibold block font-mono">{post.readTime}</span>
-                        </div>
+                        </a>
                       ))}
                     </div>
                   </div>
@@ -708,18 +806,14 @@ export default function BlogView({
 
               {/* FEATURED HERO POST (ONLY visible when searching/filters are empty) */}
               {selectedCategory === 'All' && searchQuery === '' && (
-                <div 
-                  role="button"
-                  tabIndex={0}
-                  onClick={() => handleArticleClick(featuredPost.slug)}
-                  onKeyDown={(e) => {
-                    if (e.key === 'Enter' || e.key === ' ') {
-                      e.preventDefault();
-                      handleArticleClick(featuredPost.slug);
-                    }
+                <a 
+                  href={`/blog/${featuredPost.slug}`}
+                  onClick={(e) => {
+                    e.preventDefault();
+                    handleArticleClick(featuredPost.slug);
                   }}
                   aria-label={`Read featured article: ${featuredPost.title}`}
-                  className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 cursor-pointer group focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
+                  className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 cursor-pointer group focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none block"
                 >
                   {/* Left Hero Image */}
                   <div className="lg:col-span-7 h-64 sm:h-80 lg:h-full relative overflow-hidden">
@@ -769,7 +863,7 @@ export default function BlogView({
                       </div>
                     </div>
                   </div>
-                </div>
+                </a>
               )}
 
               {/* POST RESULTS GRID */}
@@ -787,19 +881,15 @@ export default function BlogView({
                 ) : (
                   <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
                     {listPosts.map((post) => (
-                      <div
+                      <a
                         key={post.slug}
-                        role="button"
-                        tabIndex={0}
-                        onClick={() => handleArticleClick(post.slug)}
-                        onKeyDown={(e) => {
-                          if (e.key === 'Enter' || e.key === ' ') {
-                            e.preventDefault();
-                            handleArticleClick(post.slug);
-                          }
+                        href={`/blog/${post.slug}`}
+                        onClick={(e) => {
+                          e.preventDefault();
+                          handleArticleClick(post.slug);
                         }}
                         aria-label={`Read article: ${post.title}`}
-                        className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
+                        className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none block"
                       >
                         <div>
                           {/* Image box */}
@@ -850,7 +940,7 @@ export default function BlogView({
                           </div>
                         </div>
 
-                      </div>
+                      </a>
                     ))}
                   </div>
                 )}

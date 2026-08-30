@@ -135,8 +135,8 @@ function getPageFromPath(pathname: string): {
   }
 
   // Check dynamic state or city paths
-  const parts = cleanPath.split('/').filter(Boolean);
-  const knownStates = ['california', ...Object.keys(STATE_DIRECTORY)];
+  const allCityStateSlugs = Array.from(new Set(Object.values(CITY_DIRECTORY).map(c => c.stateSlug)));
+  const knownStates = Array.from(new Set(['california', ...Object.keys(STATE_DIRECTORY), ...allCityStateSlugs]));
 
   if (parts.length === 1 && knownStates.includes(parts[0])) {
     if (parts[0] === 'california') {

@@ -387,21 +387,29 @@ app.get(["/los-angeles-seo", "/los-angeles-seo/"], (req, res) => {
   res.redirect(301, "/locations/california/los-angeles");
 });
 
+// Clean base URL helper to prevent placeholder tokens from leaking into sitemaps or robots.txt
+function getSafeBaseUrl(): string {
+  const envUrl = process.env.APP_URL;
+  if (envUrl && envUrl.startsWith("http") && !envUrl.includes("MY_APP_URL")) {
+    return envUrl.replace(/\/+$/, "");
+  }
+  return "https://localsurgeseo.com";
+}
+
 // SEO Crawl Controls & Route Protection
 app.get("/robots.txt", (req, res) => {
   const prodPath = path.join(process.cwd(), "dist", "robots.txt");
   const devPath = path.join(process.cwd(), "public", "robots.txt");
   const targetPath = fs.existsSync(prodPath) ? prodPath : devPath;
+  const baseUrl = getSafeBaseUrl();
 
   if (fs.existsSync(targetPath)) {
     res.type("text/plain");
     let content = fs.readFileSync(targetPath, "utf-8");
-    const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
     content = content.replace(/https:\/\/localsurgeseo\.com/g, baseUrl);
     return res.send(content);
   }
 
-  const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
   res.type("text/plain").send(
     `User-agent: *
 Disallow: /admin
@@ -419,13 +427,18 @@ function getDynamicSitemapPages(): string[] {
     "/about",
     "/why-us",
     "/local-seo",
+    "/case-studies",
     "/pricing",
     "/seo-tool",
     "/contact",
     "/locations",
+    "/demo/contractor-surge",
+    "/demo/dental-surge",
+    "/demo/legal-surge",
     "/privacy-policy",
     "/terms-of-service",
     "/blog",
+    "/site-map"
   ];
 
   try {
@@ -473,7 +486,7 @@ function getDynamicSitemapPages(): string[] {
     const directoryFilePath = path.join(process.cwd(), "src", "data", "directoryData.ts");
     if (fs.existsSync(directoryFilePath)) {
       const content = fs.readFileSync(directoryFilePath, "utf-8");
-      const stateDirMatch = content.match(/const STATE_DIRECTORY[\s\S]+?const CITY_DIRECTORY/);
+      const stateDirMatch = content.match(/STATE_DIRECTORY[\s\S]+?CITY_DIRECTORY/);
       if (stateDirMatch) {
         const stateBlock = stateDirMatch[0];
         const stateSlugRegex = /slug:\s*['"]([^'"]+)['"]/g;
@@ -483,16 +496,15 @@ function getDynamicSitemapPages(): string[] {
         }
       }
 
-      const cityDirMatch = content.match(/const CITY_DIRECTORY[\s\S]+$/);
-      if (cityDirMatch) {
-        const cityBlock = cityDirMatch[0];
-        const cityRegex = /slug:\s*['"]([^'"]+)['"],\s*stateSlug:\s*['"]([^'"]+)['"]/g;
-        let cityMatch;
-        while ((cityMatch = cityRegex.exec(cityBlock)) !== null) {
-          const citySlug = cityMatch[1];
-          const stateSlug = cityMatch[2];
-          pages.push(`/${stateSlug}/${citySlug}`);
-        }
+      pages.push("/california");
+      pages.push("/los-angeles-seo");
+
+      const cityRegex = /slug:\s*['"]([^'"]+)['"],\s*stateSlug:\s*['"]([^'"]+)['"]/g;
+      let cityMatch;
+      while ((cityMatch = cityRegex.exec(content)) !== null) {
+        const citySlug = cityMatch[1];
+        const stateSlug = cityMatch[2];
+        pages.push(`/${stateSlug}/${citySlug}`);
       }
     }
   } catch (err) {

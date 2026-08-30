@@ -17,6 +17,15 @@ interface FooterProps {
 }
 
 export default function Footer({ setCurrentPage }: FooterProps) {
+  const handleFooterNav = (e: React.MouseEvent, page: Page, path: string) => {
+    e.preventDefault();
+    setCurrentPage(page);
+    if (typeof window !== 'undefined') {
+      window.history.pushState({}, '', path);
+      window.scrollTo({ top: 0, behavior: 'smooth' });
+    }
+  };
+
   return (
     <footer id="main-footer" className="bg-white text-[#4e524f] border-t border-[#dfded4]">
       <div className="max-w-7xl mx-auto px-4 sm:px-6 lg:px-8 py-12 lg:py-16">
@@ -112,39 +121,54 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             </h3>
             <ul className="space-y-2.5 text-sm font-semibold">
               <li>
-                <button onClick={() => setCurrentPage('local-seo')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/local-seo"
+                  onClick={(e) => handleFooterNav(e, 'local-seo', '/local-seo')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Local SEO Optimization
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => { setCurrentPage('case-studies'); window.scrollTo({ top: 0, behavior: 'smooth' }); }} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/case-studies"
+                  onClick={(e) => handleFooterNav(e, 'case-studies', '/case-studies')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Case Studies & Results
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('pricing')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/pricing"
+                  onClick={(e) => handleFooterNav(e, 'pricing', '/pricing')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Transparent Pricing
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('seo-tool')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/seo-tool"
+                  onClick={(e) => handleFooterNav(e, 'seo-tool', '/seo-tool')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Free SEO Analysis Tool
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('why-us')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/why-us"
+                  onClick={(e) => handleFooterNav(e, 'why-us', '/why-us')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Why Choose Us
-                </button>
+                </a>
               </li>
               <li>
                 <a
                   href="/locations"
-                  onClick={(e) => {
-                    e.preventDefault();
-                    setCurrentPage('locations-index');
-                    window.history.pushState({}, '', '/locations');
-                    window.scrollTo({ top: 0, behavior: 'smooth' });
-                  }}
+                  onClick={(e) => handleFooterNav(e, 'locations-index', '/locations')}
                   className="text-[#123e35] font-bold hover:text-[#bc5f40] transition-colors cursor-pointer text-left inline-flex items-center gap-1.5"
                 >
                   <span>🗺️ U.S. Locations & Maps</span>
@@ -160,27 +184,40 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             </h3>
             <ul className="space-y-2.5 text-sm font-semibold">
               <li>
-                <button onClick={() => setCurrentPage('about')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/about"
+                  onClick={(e) => handleFooterNav(e, 'about', '/about')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Our Mission & About Us
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('contact')} className="hover:text-[#123e35] transition-colors cursor-pointer text-left">
+                <a
+                  href="/contact"
+                  onClick={(e) => handleFooterNav(e, 'contact', '/contact')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
                   Get in Touch
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => setCurrentPage('blog')} className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1">
+                <a
+                  href="/blog"
+                  onClick={(e) => handleFooterNav(e, 'blog', '/blog')}
+                  className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1"
+                >
                   📚 Blog
-                </button>
+                </a>
               </li>
               <li>
-                <button onClick={() => {
-                  setCurrentPage('admin');
-                  window.scrollTo({ top: 0, behavior: 'smooth' });
-                }} className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1">
+                <a
+                  href="/admin"
+                  onClick={(e) => handleFooterNav(e, 'admin', '/admin')}
+                  className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1"
+                >
                   🏆 Admin Board
-                </button>
+                </a>
               </li>
               <li className="text-xs text-[#888b88] pt-1">
                 <div className="flex items-center gap-1">
@@ -198,24 +235,29 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             © {new Date().getFullYear()} Local Surge SEO. All rights reserved. Billed monthly, cancel anytime.
           </div>
           <div className="flex gap-4 items-center">
-            <button onClick={() => {
-              setCurrentPage('privacy-policy');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} className="hover:text-[#123e35] transition-colors cursor-pointer bg-transparent border-none p-0 inline font-semibold">
+            <a
+              href="/privacy-policy"
+              onClick={(e) => handleFooterNav(e, 'privacy-policy', '/privacy-policy')}
+              className="hover:text-[#123e35] transition-colors cursor-pointer inline font-semibold"
+            >
               Privacy Policy
-            </button>
+            </a>
             <span>•</span>
-            <button onClick={() => {
-              setCurrentPage('terms-of-service');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} className="hover:text-[#123e35] transition-colors cursor-pointer bg-transparent border-none p-0 inline font-semibold">
+            <a
+              href="/terms-of-service"
+              onClick={(e) => handleFooterNav(e, 'terms-of-service', '/terms-of-service')}
+              className="hover:text-[#123e35] transition-colors cursor-pointer inline font-semibold"
+            >
               Terms of Service
-            </button>
+            </a>
             <span>•</span>
-            <button onClick={() => {
-              setCurrentPage('site-map');
-              window.scrollTo({ top: 0, behavior: 'smooth' });
-            }} className="hover:text-[#123e35] transition-colors cursor-pointer font-semibold bg-transparent border-none p-0 inline">Sitemap</button>
+            <a
+              href="/site-map"
+              onClick={(e) => handleFooterNav(e, 'site-map', '/site-map')}
+              className="hover:text-[#123e35] transition-colors cursor-pointer font-semibold inline"
+            >
+              Sitemap
+            </a>
           </div>
         </div>
       </div>
