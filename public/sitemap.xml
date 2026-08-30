@@ -1,457 +1,640 @@
 <?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
   <url>
-    <loc>https://localsurgeseo.com</loc>
+    <loc>https://localsurgeseo.com/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/" />
     <changefreq>daily</changefreq>
     <priority>1.0</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/about</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/about" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/about" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/why-us</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/why-us" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/why-us" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/local-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/local-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/local-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/case-studies</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/case-studies" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/case-studies" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/pricing</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/pricing" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/pricing" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/seo-tool</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/seo-tool" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/seo-tool" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/contact</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/contact" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/contact" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/demo/contractor-surge</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/demo/contractor-surge" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/demo/contractor-surge" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/demo/dental-surge</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/demo/dental-surge" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/demo/dental-surge" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/demo/legal-surge</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/demo/legal-surge" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/demo/legal-surge" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/privacy-policy</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/privacy-policy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/privacy-policy" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/terms-of-service</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/terms-of-service" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/terms-of-service" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/site-map</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/site-map" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/site-map" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/california/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/california/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/california/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/texas/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/texas/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/texas/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/florida/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/florida/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/florida/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/new-york/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/new-york/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/new-york/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/illinois/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/illinois/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/illinois/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/washington/</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/washington/" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/washington/" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/california/los-angeles</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/california/los-angeles" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/california/los-angeles" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/california/san-jose</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/california/san-jose" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/california/san-jose" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/california/oakland</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/california/oakland" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/california/oakland" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/california/san-diego</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/california/san-diego" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/california/san-diego" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/texas/austin</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/texas/austin" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/texas/austin" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/texas/houston</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/texas/houston" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/texas/houston" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/texas/dallas</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/texas/dallas" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/texas/dallas" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/florida/miami</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/florida/miami" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/florida/miami" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/locations/new-york/new-york-city</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/locations/new-york/new-york-city" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/locations/new-york/new-york-city" />
     <changefreq>weekly</changefreq>
     <priority>0.9</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/google-business-profile-critical-local-contractors</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-business-profile-critical-local-contractors" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-business-profile-critical-local-contractors" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/single-page-blueprint-dominate-local-search</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/single-page-blueprint-dominate-local-search" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/single-page-blueprint-dominate-local-search" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/top-on-page-seo-mistakes-local-businesses-make</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/top-on-page-seo-mistakes-local-businesses-make" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/top-on-page-seo-mistakes-local-businesses-make" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/unlocking-the-power-of-local-seo-for-small-businesses</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/unlocking-the-power-of-local-seo-for-small-businesses" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/unlocking-the-power-of-local-seo-for-small-businesses" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/from-zero-to-hero-scaling-your-local-seo-strategy</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/from-zero-to-hero-scaling-your-local-seo-strategy" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/from-zero-to-hero-scaling-your-local-seo-strategy" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/mastering-google-business-profile-optimization</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/mastering-google-business-profile-optimization" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/mastering-google-business-profile-optimization" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/map-pack-vs-organic-seo-revenue</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/map-pack-vs-organic-seo-revenue" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/map-pack-vs-organic-seo-revenue" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/google-map-pack-optimization-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-map-pack-optimization-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-map-pack-optimization-guide" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/what-is-nap-consistency-citation-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/what-is-nap-consistency-citation-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/what-is-nap-consistency-citation-guide" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/local-seo-vs-ai-2026-survival-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-seo-vs-ai-2026-survival-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-seo-vs-ai-2026-survival-guide" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.7</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/new-york</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/new-york" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/new-york" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/ontario</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/ontario" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/ontario" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/british-columbia</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/british-columbia" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/british-columbia" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/california</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/california" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/california" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/los-angeles-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/los-angeles-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/los-angeles-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/california/san-jose-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/california/san-jose-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/california/san-jose-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/california/oakland-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/california/oakland-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/california/oakland-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/california/san-francisco-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/california/san-francisco-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/california/san-francisco-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/california/sacramento-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/california/sacramento-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/california/sacramento-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/california/san-diego-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/california/san-diego-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/california/san-diego-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas/austin-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas/austin-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas/austin-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas/houston-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas/houston-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas/houston-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas/dallas-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas/dallas-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas/dallas-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas/san-antonio-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas/san-antonio-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas/san-antonio-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas/fort-worth-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas/fort-worth-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas/fort-worth-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/texas/el-paso-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/texas/el-paso-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/texas/el-paso-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona/phoenix-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona/phoenix-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona/phoenix-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona/tucson-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona/tucson-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona/tucson-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona/mesa-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona/mesa-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona/mesa-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona/scottsdale-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona/scottsdale-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona/scottsdale-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona/chandler-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona/chandler-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona/chandler-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/arizona/glendale-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/arizona/glendale-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/arizona/glendale-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida/miami-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida/miami-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida/miami-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida/tampa-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida/tampa-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida/tampa-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida/orlando-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida/orlando-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida/orlando-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida/jacksonville-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida/jacksonville-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida/jacksonville-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida/fort-lauderdale-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida/fort-lauderdale-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida/fort-lauderdale-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/florida/st-petersburg-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/florida/st-petersburg-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/florida/st-petersburg-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/new-york/new-york-city-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/new-york/new-york-city-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/new-york/new-york-city-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/new-york/buffalo-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/new-york/buffalo-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/new-york/buffalo-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/ontario/toronto-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/ontario/toronto-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/ontario/toronto-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/ontario/ottawa-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/ontario/ottawa-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/ontario/ottawa-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/british-columbia/vancouver-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/british-columbia/vancouver-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/british-columbia/vancouver-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>
   <url>
     <loc>https://localsurgeseo.com/british-columbia/victoria-seo</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/british-columbia/victoria-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/british-columbia/victoria-seo" />
     <changefreq>monthly</changefreq>
     <priority>0.8</priority>
   </url>

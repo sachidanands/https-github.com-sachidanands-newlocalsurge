@@ -606,11 +606,27 @@ function injectMetadataAndFallback(
   // Replace Meta Description
   result = result.replace(/<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="description" content="${description}" />`);
 
+  // Ensure lang="en-US"
+  result = result.replace(/<html(\s+[^>]*)?lang=["'][^"']*["']/i, '<html$1lang="en-US"');
+
   // Replace or Add Canonical
   if (result.includes('<link rel="canonical"')) {
     result = result.replace(/<link\s+rel=["']canonical["']\s+href=["'][^"']*["']\s*\/?>/i, `<link rel="canonical" href="${canonical}" />`);
   } else {
     result = result.replace('</head>', `  <link rel="canonical" href="${canonical}" />\n  </head>`);
+  }
+
+  // Replace or Add Hreflang Alternates (en-US self-referencing and x-default fallback)
+  if (result.includes('hreflang="en-US"')) {
+    result = result.replace(/<link\s+rel=["']alternate["']\s+hreflang=["']en-US["']\s+href=["'][^"']*["']\s*\/?>/i, `<link rel="alternate" hreflang="en-US" href="${canonical}" />`);
+  } else {
+    result = result.replace('</head>', `  <link rel="alternate" hreflang="en-US" href="${canonical}" />\n  </head>`);
+  }
+
+  if (result.includes('hreflang="x-default"')) {
+    result = result.replace(/<link\s+rel=["']alternate["']\s+hreflang=["']x-default["']\s+href=["'][^"']*["']\s*\/?>/i, `<link rel="alternate" hreflang="x-default" href="${canonical}" />`);
+  } else {
+    result = result.replace('</head>', `  <link rel="alternate" hreflang="x-default" href="${canonical}" />\n  </head>`);
   }
 
   // Replace OpenGraph Title & Description & Image

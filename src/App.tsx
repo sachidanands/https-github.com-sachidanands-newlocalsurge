@@ -369,6 +369,8 @@ export default function App() {
     const cleanPath = window.location.pathname.replace(/\/+$/, '') || '/';
     const canonicalUrl = `${baseSiteUrl}${cleanPath}`;
 
+    document.documentElement.lang = 'en-US';
+
     let canonicalLink = document.querySelector('link[rel="canonical"]');
     if (!canonicalLink) {
       canonicalLink = document.createElement('link');
@@ -376,6 +378,21 @@ export default function App() {
       document.head.appendChild(canonicalLink);
     }
     canonicalLink.setAttribute('href', canonicalUrl);
+
+    // Set dynamic hreflang alternate links (en-US self-referencing and x-default fallback)
+    const setHreflangTag = (lang: string, href: string) => {
+      let tag = document.querySelector(`link[rel="alternate"][hreflang="${lang}"]`);
+      if (!tag) {
+        tag = document.createElement('link');
+        tag.setAttribute('rel', 'alternate');
+        tag.setAttribute('hreflang', lang);
+        document.head.appendChild(tag);
+      }
+      tag.setAttribute('href', href);
+    };
+
+    setHreflangTag('en-US', canonicalUrl);
+    setHreflangTag('x-default', canonicalUrl);
 
     // Set Open Graph tags dynamically
     const setOgTag = (property: string, content: string) => {

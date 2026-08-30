@@ -524,8 +524,11 @@ app.get("/sitemap.xml", (req, res) => {
     .map((page) => {
       const priority = page === "" ? "1.0" : page.startsWith("/blog/") ? "0.6" : "0.8";
       const changefreq = page === "" ? "daily" : "weekly";
+      const fullUrl = page === "" ? `${baseUrl}/` : `${baseUrl}${page}`;
       return `  <url>
-    <loc>${baseUrl}${page}</loc>
+    <loc>${fullUrl}</loc>
+    <xhtml:link rel="alternate" hreflang="en-US" href="${fullUrl}" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="${fullUrl}" />
     <changefreq>${changefreq}</changefreq>
     <priority>${priority}</priority>
   </url>`;
@@ -533,7 +536,8 @@ app.get("/sitemap.xml", (req, res) => {
     .join("\n");
 
   const xmlContent = `<?xml version="1.0" encoding="UTF-8"?>
-<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9">
+<urlset xmlns="http://www.sitemaps.org/schemas/sitemap/0.9"
+        xmlns:xhtml="http://www.w3.org/1999/xhtml">
 ${urlEntries}
 </urlset>`;
 
