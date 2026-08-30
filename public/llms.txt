@@ -36,17 +36,38 @@ All paths resolve relative to the primary root domain:
 - `/` - The primary dashboard entry point. Features the interactive Free SEO Analysis Tool.
 - `/about` - Core values, agency history, and compliance frameworks across the US and Canada.
 - `/why-us` - Unique value propositions, comparison matrices against traditional agencies, and algorithmic approach overview.
+- `/local-seo` - Core local search optimization framework: GBP setup, NAP citations, and directory synchronization.
+- `/case-studies` - Real-world customer surges, revenue growth metrics, and map pack ranking case studies.
 - `/pricing` - Pricing cards detailing the Single-Page Blast, Starter Boost, and Premium Surge monthly blueprints.
 - `/contact` - Instant secure message dispatcher, inquiry channels, and direct service assistance desk.
+
+### Industry Demonstrations
+- `/demo/contractor-surge` - Interactive demonstration for trade contractors (HVAC, roofing, plumbing).
+- `/demo/dental-surge` - Interactive demonstration for dental clinics and healthcare practices.
+- `/demo/legal-surge` - Interactive demonstration for law firms and regional attorneys.
 
 ### Specialized SEO Views
 - `/seo-tool` - Dedicated clean workspace containing our local maps tracking, keyword diagnostic, AI citation readiness, and directory analysis tools.
 - `/blog` - Professional editorial guides detailing local ranking guidelines, citation structures, and algorithm updates.
-- `/site-map` - Human-readable hierarchical index of all key landing resources, city directories, and state-targeted channels.
+- `/site-map` - Human-readable hierarchical index of all 91 active pages, city directories, and state-targeted channels.
 
-### Location-Specific Directories
-- `/california` - Regional hub focusing on search ranking signals, local competition factors, and optimization pipelines for California.
-- `/los-angeles-seo` - High-density city optimization signals and case study tracking for metropolitan Los Angeles.
+### U.S. Consumer Behavior & Research Locations Directory
+- `/locations` - National Locations Index featuring interactive maps and consumer search behavior metrics.
+- `/locations/california/` - California state market intelligence hub.
+- `/locations/texas/` - Texas enterprise and commercial search study hub.
+- `/locations/florida/` - Florida regional consumer search hub.
+- `/locations/new-york/` - New York high-density urban search corridor hub.
+- `/locations/illinois/` - Illinois Midwest regional search hub.
+- `/locations/washington/` - Washington Pacific Northwest commercial search hub.
+- `/locations/california/los-angeles` - Los Angeles metro district consumer search study.
+- `/locations/california/san-jose` - Silicon Valley & San Jose district study.
+- `/locations/california/oakland` - East Bay & Oakland district study.
+- `/locations/california/san-diego` - San Diego coastal corridor district study.
+- `/locations/texas/austin` - Austin tech and service corridor study.
+- `/locations/texas/houston` - Houston industrial and commercial district study.
+- `/locations/texas/dallas` - Dallas-Fort Worth metroplex study.
+- `/locations/florida/miami` - Miami multicultural commercial hub study.
+- `/locations/new-york/new-york-city` - NYC five-borough density study.
 
 ### Legal Frameworks (US & Canada Compliant)
 - `/privacy-policy` - Statutory privacy declarations, CCPA/CPRA compliance, PIPEDA alignment, and electronic communication protections.
@@ -56,4 +77,5 @@ All paths resolve relative to the primary root domain:
 
 ## Agent Machine-Readable Resources
 - `/llms.txt` - This file; system overview and 40-60 word extractable answer blocks for AI search engines.
+- `/llms-full.txt` - Comprehensive full-text synthesis for AI coding and search agents.
 - `/pricing.md` - Structured machine-readable pricing tables, deliverables, and service tier limits.

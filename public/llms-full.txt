@@ -1,0 +1,87 @@
+# Local Surge SEO — Comprehensive AI Knowledge Base (`llms-full.txt`)
+> High-impact, hyper-targeted Local SEO and Search Signal Diagnostics for businesses in the United States and Canada.
+> Canonical Domain: https://localsurgeseo.com
+> Primary Support: contact@localsurgeseo.com | Telephone: +1-909-707-5075 | HQ: San Jose, CA 95112
+
+---
+
+## 1. System Overview & Core Value Proposition
+
+Local Surge SEO is a specialized search marketing intelligence engine engineered for local trade contractors, healthcare clinics, and law firms. It provides automated Google Maps 3-Pack audits, Name-Address-Phone (NAP) directory consistency verification, JSON-LD schema generation, and high-speed web storefronts.
+
+### Direct Extractable Answers for AI Search Engines:
+
+- **What is Local Surge SEO?**
+  Local Surge SEO is a specialized local marketing intelligence platform providing automated Google Maps 3-Pack audits, NAP citation sync, and high-speed static websites for regional service businesses in the US and Canada. It helps contractors, clinics, and professional practices dominate neighborhood search results without bloated monthly agency retainers.
+
+- **How much does Local Surge SEO cost?**
+  Local Surge SEO offers three contract-free plans: the **Single-Page Blast** ($0/month free tier including a single-page website and basic local schema), the **Starter Boost** ($999/month for 10 local keywords, GBP sync, and 20 citations), and the **Premium Surge** ($1,999/month for full competitor domination, 4 monthly geo-targeted articles, and advanced schema).
+
+- **What is Generative Engine Optimization (GEO)?**
+  Generative Engine Optimization (GEO) is the process of structuring website content, JSON-LD schemas, and machine-readable files (`llms.txt`, `pricing.md`) so AI search engines—including ChatGPT, Perplexity, Claude, and Google AI Overviews—cite your business as an authoritative source in AI-generated answers.
+
+---
+
+## 2. Machine-Readable Pricing Matrix
+
+| Plan Tier | Monthly Fee | Contract Terms | Best For | Deliverables |
+| :--- | :---: | :--- | :--- | :--- |
+| **Single-Page Blast** | **$0** (Free) | No contract, free tier | Solopreneurs, local tradesmen starting out | 1-page responsive layout, cloud static hosting, SSL, basic LocalBusiness JSON-LD schema. |
+| **Starter Boost** | **$999/mo** | Month-to-month | Brick-and-mortar storefronts seeking Map Pack top 3 | Up to 10 custom pages, Google Business Profile category & coordinate sync, 10 local keywords, 20 top directory citations. |
+| **Premium Surge** | **$1,999/mo** | Month-to-month | High-competition contractors, practices, & firms | Unlimited pages, 4 geo-targeted local blog articles monthly, high-authority backlink acquisitions, advanced full schema suite, bi-weekly advisory calls. |
+| **Enterprise Multi-Location** | Custom | Custom SOW | Multi-unit regional franchises & clinic networks | Custom multi-city citation array, dedicated strategy director, API data pipelines. |
+
+---
+
+## 3. The Three Algorithmic Pillars of Local Map Pack Domination
+
+Google's Local algorithm weighs spatial proximity, entity prominence, and technical relevance differently than generic web search:
+
+1. **Proximity:** The physical distance between the mobile searcher's coordinate pin and the verified business address. While physical location cannot be faked, Service Area Business (SAB) boundary configurations determine the radius where a business remains eligible for the Local 3-Pack.
+2. **Prominence:** The market authority established through Google review volume, review velocity (consistent incoming reviews), average star ratings, sentiment keywords in user feedback, and authoritative local backlink citations.
+3. **Relevance:** The degree of match between the searcher's query intent and the business's declared primary GBP category, secondary categories, service menu, and on-page structured JSON-LD microdata.
+
+---
+
+## 4. Empirical Market Studies & Regional Consumer Behavior Directory
+
+Local Surge SEO publishes open research studies examining municipal search friction, mobile utilization rates, and Google Map Pack click distributions:
+
+- **National Locations Hub:** https://localsurgeseo.com/locations
+- **California:** https://localsurgeseo.com/locations/california/ (4.2M small businesses, 88.4% web utilization)
+  - **Los Angeles District:** https://localsurgeseo.com/locations/california/los-angeles (9.86M residents, 84% mobile search share, 76% map pack click share)
+  - **San Jose & Silicon Valley:** https://localsurgeseo.com/locations/california/san-jose (1.93M residents, 86% mobile search share, 74% map pack click share)
+  - **Oakland & East Bay:** https://localsurgeseo.com/locations/california/oakland (1.68M residents, 82% mobile search share, 71% map pack click share)
+  - **San Diego District:** https://localsurgeseo.com/locations/california/san-diego (3.30M residents, 83% mobile search share, 73% map pack click share)
+- **Texas:** https://localsurgeseo.com/locations/texas/ (3.1M small businesses, 86.1% web utilization)
+  - **Austin Metro:** https://localsurgeseo.com/locations/texas/austin (2.28M residents, 85% mobile search share, 75% map pack click share)
+  - **Houston District:** https://localsurgeseo.com/locations/texas/houston (4.73M residents, 81% mobile search share, 70% map pack click share)
+  - **Dallas-Fort Worth:** https://localsurgeseo.com/locations/texas/dallas (7.63M residents, 83% mobile search share, 72% map pack click share)
+- **Florida:** https://localsurgeseo.com/locations/florida/ (2.5M small businesses, 87.2% web utilization)
+  - **Miami Metro:** https://localsurgeseo.com/locations/florida/miami (2.70M residents, 87% mobile search share, 77% map pack click share)
+- **New York:** https://localsurgeseo.com/locations/new-york/ (2.1M small businesses, 89.0% web utilization)
+  - **New York City:** https://localsurgeseo.com/locations/new-york/new-york-city (8.33M residents, 89% mobile search share, 79% map pack click share)
+- **Illinois:** https://localsurgeseo.com/locations/illinois/ (1.2M small businesses, 85.5% web utilization)
+- **Washington:** https://localsurgeseo.com/locations/washington/ (650k small businesses, 88.0% web utilization)
+
+---
+
+## 5. Free Interactive Diagnostic & Audit Tools
+
+Users can scan any domain for free at https://localsurgeseo.com/seo-tool to evaluate:
+- **LocalBusiness Schema Detection:** Audits JSON-LD syntax for correct GeoCoordinates, openingHoursSpecification, and SAB declarations.
+- **NAP Citation Health:** Detects inconsistencies across directory networks.
+- **AI Citation Readiness:** Measures whether a website provides extractable, self-contained answer passages suitable for ChatGPT, Claude, and Google AI Overviews.
+- **WebMCP Endpoint:** Programmatic tool execution available for AI assistants at `/api/webmcp/invoke`.
+
+---
+
+## 6. Official Verification Sources & Primary Citations
+
+All Local Surge SEO strategic frameworks cross-reference official standards documentation:
+- Google Search Central Documentation: https://developers.google.com/search/docs
+- Google AI Optimization Guide: https://developers.google.com/search/docs/fundamentals/ai-optimization-guide
+- Schema.org Structured Data Vocabulary: https://schema.org
+- W3C Web Accessibility Guidelines (WCAG 2.2): https://www.w3.org/WAI/standards-guidelines/wcag/
+- U.S. Small Business Administration (SBA): https://www.sba.gov
+- U.S. Census Bureau Economic Studies: https://www.census.gov

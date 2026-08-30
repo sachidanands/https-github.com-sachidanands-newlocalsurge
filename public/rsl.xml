@@ -1,0 +1,16 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<rsl version="1.0" xmlns="https://reallysimplelicensing.org/schema/1.0">
+  <identity>
+    <name>Local Surge SEO</name>
+    <url>https://localsurgeseo.com</url>
+    <contact>contact@localsurgeseo.com</contact>
+  </identity>
+  <policy>
+    <ai-usage allowed="true">
+      <search-grounding allowed="true" />
+      <citation-allowed>true</citation-allowed>
+      <attribution-required>true</attribution-required>
+      <commercial-derivative allowed="false" />
+    </ai-usage>
+  </policy>
+</rsl>

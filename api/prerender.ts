@@ -1,4 +1,5 @@
 import { STATES_REGISTRY, DISTRICTS_REGISTRY, getStateBySlug, getDistrictBySlug, getAllMappedStates, getAllMappedDistricts } from "../src/data/locationsData";
+import { BLOG_POSTS } from "../src/data/blogData";
 
 export function prerenderLocationHtml(rawHtml: string, requestPath: string): string {
   const cleanPath = requestPath.split('?')[0].replace(/\/$/, '') || '/';
@@ -248,6 +249,183 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
         return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
       }
     }
+  }
+
+  // 3. Blog Article SSR: /blog/:slug
+  if (cleanPath.startsWith('/blog/')) {
+    const slug = cleanPath.slice('/blog/'.length).trim().toLowerCase();
+    const post = BLOG_POSTS.find(p => p.slug.toLowerCase() === slug);
+    if (post) {
+      const title = `${post.title} - Local Surge SEO`;
+      const description = post.description;
+      const canonical = `https://localsurgeseo.com/blog/${post.slug}`;
+      const ogImage = post.image.startsWith('http') ? post.image : `https://localsurgeseo.com${post.image}`;
+
+      const schemaJson = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://localsurgeseo.com/blog" },
+              { "@type": "ListItem", "position": 3, "name": post.title, "item": canonical }
+            ]
+          },
+          {
+            "@type": "BlogPosting",
+            "headline": post.title,
+            "description": post.description,
+            "image": ogImage,
+            "datePublished": "2026-08-01",
+            "dateModified": "2026-08-30",
+            "author": {
+              "@type": "Person",
+              "name": post.author.name,
+              "jobTitle": post.author.role
+            },
+            "publisher": {
+              "@type": "Organization",
+              "name": "Local Surge SEO",
+              "logo": {
+                "@type": "ImageObject",
+                "url": "https://localsurgeseo.com/favicon.svg"
+              }
+            },
+            "mainEntityOfPage": {
+              "@type": "WebPage",
+              "@id": canonical
+            }
+          }
+        ]
+      };
+
+      const sectionsHtml = post.sections.map(sec => {
+        if (sec.type === 'heading') {
+          return `<h2>${sec.content}</h2>`;
+        }
+        if (sec.type === 'paragraph') {
+          return `<p>${sec.content}</p>`;
+        }
+        if (sec.type === 'bullet-list' && sec.items) {
+          return `<ul>${sec.items.map(it => `<li>${it}</li>`).join('\n')}</ul>`;
+        }
+        if (sec.type === 'numbered-list' && sec.items) {
+          return `<ol>${sec.items.map(it => `<li>${it}</li>`).join('\n')}</ol>`;
+        }
+        if (sec.type === 'quote') {
+          return `<blockquote>${sec.content}</blockquote>`;
+        }
+        if (sec.type === 'alert-box') {
+          return `<div role="note"><p>${sec.content}</p></div>`;
+        }
+        return '';
+      }).filter(Boolean).join('\n');
+
+      const crawlMarkup = `
+        <div id="ssr-blog-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+          <nav aria-label="Breadcrumb">
+            <a href="/">Home</a> / <a href="/blog">Blog</a> / <span>${post.title}</span>
+          </nav>
+          <article>
+            <header>
+              <span>${post.category}</span>
+              <h1>${post.title}</h1>
+              <p>By ${post.author.name} (${post.author.role}) • Published ${post.date} • ${post.readTime}</p>
+              <p>${post.description}</p>
+            </header>
+            <main>
+              ${sectionsHtml}
+            </main>
+            <footer>
+              <section>
+                <h3>Primary Verification Sources</h3>
+                <ul>
+                  <li><a href="https://developers.google.com/search/docs" target="_blank" rel="noopener">Google Search Central Documentation</a></li>
+                  <li><a href="https://schema.org" target="_blank" rel="noopener">Schema.org Structured Data Vocabularies</a></li>
+                  <li><a href="https://www.w3.org/WAI/standards-guidelines/wcag/" target="_blank" rel="noopener">W3C Web Standards</a></li>
+                </ul>
+              </section>
+            </footer>
+          </article>
+        </div>
+      `;
+
+      return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+    }
+  }
+
+  // 4. Core Pages SSR: /pricing, /about, /why-us, /case-studies, /local-seo
+  if (cleanPath === '/pricing') {
+    const title = "Transparent Local SEO Pricing & Plans - Local Surge SEO";
+    const description = "Contract-free monthly SEO signal boosters: Single-Page Blast ($0/mo), Starter Boost ($999/mo), and Premium Surge ($1,999/mo). Complete pricing matrix.";
+    const canonical = "https://localsurgeseo.com/pricing";
+    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@type": "OfferCatalog",
+      "name": "Local Surge SEO Pricing Plans",
+      "itemListElement": [
+        { "@type": "Offer", "name": "Single-Page Blast", "price": "0", "priceCurrency": "USD", "description": "Professional mobile-first single page optimized instantly for local keywords." },
+        { "@type": "Offer", "name": "Starter Boost", "price": "999", "priceCurrency": "USD", "description": "GBP syncing, localized keyword mapping (10 terms), and 20 top directory citations." },
+        { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD", "description": "Full competitor domination, 4 monthly localized articles, and high-authority backlinks." }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-pricing-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>Transparent Local SEO Pricing & Service Plans</h1>
+        <p>${description}</p>
+        <section>
+          <h2>Single-Page Blast - $0 / Month (Free Tier)</h2>
+          <p>Ideal for solopreneurs, local tradesmen, and early-stage service providers needing an immediate search presence.</p>
+        </section>
+        <section>
+          <h2>Starter Boost - $999 / Month</h2>
+          <p>For brick-and-mortar businesses seeking Google Local 3-Pack rankings, GBP synchronization, 10 local target keywords, and 20 directory citation builds.</p>
+        </section>
+        <section>
+          <h2>Premium Surge - $1,999 / Month</h2>
+          <p>For high-competition contractors, cosmetic practices, and law firms. Includes unlimited pages, 4 localized articles monthly, high-authority backlink development, and bi-weekly strategy calls.</p>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  if (cleanPath === '/case-studies') {
+    const title = "Local SEO Case Studies & Map Pack Revenue Surges - Local Surge";
+    const description = "Proven results: see how contractors, dental clinics, and regional law firms doubled inbound phone calls and dominated Google Map Pack rankings.";
+    const canonical = "https://localsurgeseo.com/case-studies";
+    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@type": "BreadcrumbList",
+      "itemListElement": [
+        { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+        { "@type": "ListItem", "position": 2, "name": "Case Studies", "item": canonical }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-casestudies-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>Local SEO Case Studies & Search Revenue Surges</h1>
+        <p>${description}</p>
+        <article>
+          <h2>Apex Roofing & Restoration (Dallas, TX)</h2>
+          <p>Result: +312% organic Map Pack impressions, 44 new commercial roofing inbound leads per month within 90 days of GBP category restructuring and coordinate pinning.</p>
+        </article>
+        <article>
+          <h2>Harbor View Dental Care (Miami, FL)</h2>
+          <p>Result: Rank #1 in Local 3-Pack for 'emergency dentist near me', +185% patient appointment requests following schema deployment.</p>
+        </article>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
   }
 
   return rawHtml;
