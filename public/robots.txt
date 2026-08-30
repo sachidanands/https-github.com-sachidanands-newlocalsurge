@@ -48,3 +48,4 @@ Disallow: /admin/dashboard/
 
 # Human-Readable Sitemap Pointer
 Sitemap: https://localsurgeseo.com/sitemap.xml
+Sitemap: https://localsurgeseo.com/sitemap_index.xml

@@ -515,22 +515,32 @@ function getDynamicSitemapPages(): string[] {
   return Array.from(new Set(pages));
 }
 
+app.get("/sitemap_index.xml", (req, res) => {
+  res.type("application/xml");
+  const sitemapIndexPath = path.join(process.cwd(), "public", "sitemap_index.xml");
+  if (fs.existsSync(sitemapIndexPath)) {
+    return res.send(fs.readFileSync(sitemapIndexPath, "utf-8"));
+  }
+  res.status(404).send("Sitemap index not found");
+});
+
 app.get("/sitemap.xml", (req, res) => {
   res.type("application/xml");
+  const sitemapPath = path.join(process.cwd(), "public", "sitemap.xml");
+  if (fs.existsSync(sitemapPath)) {
+    return res.send(fs.readFileSync(sitemapPath, "utf-8"));
+  }
   const baseUrl = process.env.APP_URL || "https://localsurgeseo.com";
   const publicPages = getDynamicSitemapPages();
 
   const urlEntries = publicPages
     .map((page) => {
-      const priority = page === "" ? "1.0" : page.startsWith("/blog/") ? "0.6" : "0.8";
-      const changefreq = page === "" ? "daily" : "weekly";
       const fullUrl = page === "" ? `${baseUrl}/` : `${baseUrl}${page}`;
       return `  <url>
     <loc>${fullUrl}</loc>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="${fullUrl}" />
     <xhtml:link rel="alternate" hreflang="x-default" href="${fullUrl}" />
-    <changefreq>${changefreq}</changefreq>
-    <priority>${priority}</priority>
   </url>`;
     })
     .join("\n");
