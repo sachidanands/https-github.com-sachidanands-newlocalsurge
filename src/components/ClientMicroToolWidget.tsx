@@ -2258,8 +2258,12 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
                     {ogSimQuality === 'optimized' ? (
                       <div className="rounded-xl overflow-hidden bg-[#1f211f] border border-white/10 shadow-md">
                         <img
-                          src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
-                          alt="Preview Card"
+                          src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.webp"
+                          alt="iMessage Open Graph rich link preview card"
+                          width={360}
+                          height={144}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-36 object-cover"
                         />
                         <div className="p-3 space-y-1">
@@ -2294,8 +2298,12 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
                     {ogSimQuality === 'optimized' ? (
                       <div className="rounded-xl overflow-hidden bg-[#025144] border border-white/10">
                         <img
-                          src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
-                          alt="Preview Card"
+                          src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.webp"
+                          alt="WhatsApp Open Graph link preview card"
+                          width={360}
+                          height={144}
+                          loading="lazy"
+                          decoding="async"
                           className="w-full h-36 object-cover"
                         />
                         <div className="p-2.5 space-y-0.5">
@@ -2332,8 +2340,12 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
                   {ogSimQuality === 'optimized' ? (
                     <div className="rounded-xl overflow-hidden border border-[#dfded4] shadow-xs">
                       <img
-                        src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
-                        alt="Facebook preview"
+                        src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.webp"
+                        alt="Facebook community group rich feed card preview"
+                        width={400}
+                        height={176}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-44 object-cover"
                       />
                       <div className="p-3 bg-[#f0f2f5] space-y-0.5">
@@ -2367,8 +2379,12 @@ PPC Equivalent Savings vs AdWords: $${ppcSavings.toLocaleString()}/month`;
                   {ogSimQuality === 'optimized' ? (
                     <div className="rounded-2xl overflow-hidden border border-white/20 shadow-md">
                       <img
-                        src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.png"
-                        alt="Twitter summary_large_image card"
+                        src="/assets/blog_img/open-graph-meta-tags-local-seo-guide.webp"
+                        alt="Twitter X summary_large_image preview card"
+                        width={400}
+                        height={176}
+                        loading="lazy"
+                        decoding="async"
                         className="w-full h-44 object-cover"
                       />
                       <div className="p-3 bg-[#16181c] space-y-0.5">

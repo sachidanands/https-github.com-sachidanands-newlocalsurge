@@ -107,7 +107,16 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                     className="inline-block hover:opacity-85 transition-opacity"
                     aria-label="Verify SiteLock security certification"
                   >
-                    <img className="h-8 w-auto img-fluid" alt="SiteLock verified website security seal" title="SiteLock" src="https://shield.sitelock.com/shield/localsurgeseo.com" />
+                    <img 
+                      className="h-8 w-auto img-fluid" 
+                      alt="SiteLock verified website security seal" 
+                      title="SiteLock" 
+                      src="https://shield.sitelock.com/shield/localsurgeseo.com" 
+                      loading="lazy"
+                      decoding="async"
+                      width={100}
+                      height={32}
+                    />
                   </a>
                 </div>
               </div>

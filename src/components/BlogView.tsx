@@ -439,7 +439,11 @@ export default function BlogView({
                   <div className="absolute inset-0 bg-[#123e35]/5 mix-blend-multiply" aria-hidden="true" />
                   <img
                     src={activeArticle.image}
-                    alt={`Hero illustration for article: ${activeArticle.title}`}
+                    alt={`${activeArticle.title} - Local Surge SEO Strategy Guide`}
+                    fetchPriority="high"
+                    decoding="async"
+                    width={1200}
+                    height={670}
                     referrerPolicy="no-referrer"
                     className="w-full h-full object-cover transform hover:scale-102 transition-transform duration-500"
                   />
@@ -936,8 +940,11 @@ export default function BlogView({
                     <div className="absolute inset-0 bg-[#123e35]/10 mix-blend-multiply group-hover:bg-transparent transition-all duration-500" aria-hidden="true" />
                     <img
                       src={featuredPost.image}
-                      alt=""
-                      role="presentation"
+                      alt={`${featuredPost.title} - Featured Strategy Guide`}
+                      loading="lazy"
+                      decoding="async"
+                      width={800}
+                      height={450}
                       referrerPolicy="no-referrer"
                       className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-700 block"
                     />
@@ -1012,8 +1019,11 @@ export default function BlogView({
                           <div className="h-44 w-full relative overflow-hidden border-b border-[#dfded4]">
                             <img
                               src={post.image}
-                              alt=""
-                              role="presentation"
+                              alt={`${post.title} editorial cover`}
+                              loading="lazy"
+                              decoding="async"
+                              width={600}
+                              height={340}
                               referrerPolicy="no-referrer"
                               className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
                             />

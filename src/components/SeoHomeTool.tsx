@@ -448,7 +448,15 @@ export default function SeoHomeTool({
                 <div className="md:col-span-4 flex flex-col items-center justify-center p-6 bg-[#faf9f6] rounded-2xl border border-[#e6e4dc] space-y-2">
                   <span className="text-[10px] font-mono text-[#888b88] uppercase font-bold">Preview</span>
                   <a href="/seo-tool" target="_blank" rel="noopener noreferrer" className="inline-block hover:opacity-95 transition-opacity">
-                    <img src="/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" className="h-12 w-auto" />
+                    <img 
+                      src="/assets/local-surge-audit-badge.svg" 
+                      alt="Local Surge Verified Local SEO Scanner" 
+                      className="h-12 w-auto" 
+                      width={192} 
+                      height={48} 
+                      loading="lazy" 
+                      decoding="async" 
+                    />
                   </a>
                 </div>
                 <div className="md:col-span-8 space-y-3">
@@ -456,7 +464,7 @@ export default function SeoHomeTool({
                     <span className="text-xs font-bold text-[#151716] font-mono">HTML Embed Code (Copy &amp; Paste)</span>
                     <button
                       onClick={() => {
-                        const snippet = '<a href="https://localsurgeseo.com/seo-tool" target="_blank" rel="noopener" title="Free Local SEO Audit by Local Surge SEO">\n  <img src="https://localsurgeseo.com/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" width="240" height="60" />\n</a>';
+                        const snippet = '<a href="https://localsurgeseo.com/seo-tool" target="_blank" rel="noopener" title="Free Local SEO Audit by Local Surge SEO">\n  <img src="https://localsurgeseo.com/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" width="240" height="60" loading="lazy" decoding="async" />\n</a>';
                         navigator.clipboard.writeText(snippet);
                         setEmbedSnippetCopied('badge');
                         setTimeout(() => setEmbedSnippetCopied(null), 2500);
@@ -478,7 +486,7 @@ export default function SeoHomeTool({
                   </div>
                   <pre className="p-3 bg-[#151716] text-[#dfded4] text-[11px] font-mono rounded-xl overflow-x-auto leading-relaxed border border-[#2d2f2d] select-all">
 {`<a href="https://localsurgeseo.com/seo-tool" target="_blank" rel="noopener" title="Free Local SEO Audit by Local Surge SEO">
-  <img src="https://localsurgeseo.com/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" width="240" height="60" />
+  <img src="https://localsurgeseo.com/assets/local-surge-audit-badge.svg" alt="Local Surge Verified Local SEO Scanner" width="240" height="60" loading="lazy" decoding="async" />
 </a>`}
                   </pre>
                 </div>

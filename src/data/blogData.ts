@@ -134,7 +134,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 29, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog_img/open-graph-meta-tags-local-seo-guide.png",
+    "image": "/assets/blog_img/open-graph-meta-tags-local-seo-guide.webp",
     "description": "Why missing Open Graph tags secretly kill your local word-of-mouth referrals and social click-through rates. Learn how iMessage, WhatsApp, Facebook, and Google parse your link previews, and audit your site with our free Open Graph Inspector.",
     "sections": [
       {
@@ -290,7 +290,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 29, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog_img/canonical-link-tag-checker-guide.png",
+    "image": "/assets/blog_img/canonical-link-tag-checker-guide.webp",
     "description": "Why missing or misconfigured canonical link tags silently divide your local search equity and tank Google Maps rankings. Learn how Google consolidates duplicate URLs, avoid 5 fatal canonical traps, and run an instant browser audit with our free Canonical Checker.",
     "sections": [
       {
@@ -428,7 +428,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 28, 2026",
     "readTime": "7 min read",
-    "image": "/assets/blog_img/image-alt-tag-accessibility-scanner-guide.png",
+    "image": "/assets/blog_img/image-alt-tag-accessibility-scanner-guide.webp",
     "description": "Why missing image alt tags quietly destroy your local rankings and expose your business to predatory ADA accessibility lawsuits. Discover how screen readers, Google Vision AI, and local search algorithms evaluate your photos, and run an instant browser audit with our free scanner.",
     "sections": [
       {
@@ -595,7 +595,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 28, 2026",
     "readTime": "6 min read",
-    "image": "/assets/blog_img/cumulative-layout-shift-cls-guide.png",
+    "image": "/assets/blog_img/cumulative-layout-shift-cls-guide.webp",
     "description": "Ever tried to tap a button on your phone, only for the page to jump at the last second and make you click an ad instead? That is Cumulative Layout Shift (CLS). Here is why it costs you customers, how Google scores it, and how to test your own website in 10 seconds.",
     "sections": [
       {
@@ -733,7 +733,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 2, 2026",
     "readTime": "4 min read",
-    "image": "/assets/blog_img/meta-title-guide.png",
+    "image": "/assets/blog_img/meta-title-guide.webp",
     "description": "If you came here from our latest Facebook Reel, you already know that a bad meta title can destroy your search visibility. Here is the complete step-by-step breakdown on how to fix it.",
     "sections": [
       {
@@ -825,7 +825,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 14, 2026",
     "readTime": "11 min read",
-    "image": "/assets/blog_img/local-seo-near-me-evolution.png",
+    "image": "/assets/blog_img/local-seo-near-me-evolution.webp",
     "description": "Why static \"near me\" keyword stuffing is obsolete, and how conversational AI engines, entity spatial mapping, and structured citations determine modern local rankings.",
     "sections": [
       {
@@ -927,7 +927,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 12, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/google-business-profile-critical-contractors.png",
+    "image": "/assets/blog_img/google-business-profile-critical-contractors.webp",
     "description": "A comprehensive practitioner guide for HVAC, plumbing, electrical, and roofing contractors to capture high-ticket neighborhood calls through verified Google Business Profile optimization.",
     "sections": [
       {
@@ -1018,7 +1018,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 10, 2026",
     "readTime": "10 min read",
-    "image": "/assets/blog_img/single-page-blueprint-dominate-local-search.png",
+    "image": "/assets/blog_img/single-page-blueprint-dominate-local-search.webp",
     "description": "How ultra-fast single-page web architecture outranks bloated 50-page franchise WordPress sites by maximizing mobile Core Web Vitals, conversion focus, and structured schema.",
     "sections": [
       {
@@ -1109,7 +1109,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "March 15, 2026",
     "readTime": "7 min read",
-    "image": "/assets/blog_img/top-on-page-seo-mistakes-local-businesses-make.png",
+    "image": "/assets/blog_img/top-on-page-seo-mistakes-local-businesses-make.webp",
     "description": "Are you hiding your business from regional customers? Fix these five common technical markup and content mistakes today to crawl the rankings with ease.",
     "sections": [
       {
@@ -1157,7 +1157,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 08, 2026",
     "readTime": "11 min read",
-    "image": "/assets/blog_img/unlocking-local-seo-small-businesses.png",
+    "image": "/assets/blog_img/unlocking-local-seo-small-businesses.webp",
     "description": "A strategic blueprint for small business owners to bypass national conglomerates, secure top Google Maps placement, and capture predictable high-intent local customer revenue.",
     "sections": [
       {
@@ -1251,7 +1251,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 06, 2026",
     "readTime": "13 min read",
-    "image": "/assets/blog_img/scaling-local-seo-strategy-guide.png",
+    "image": "/assets/blog_img/scaling-local-seo-strategy-guide.webp",
     "description": "A phased, tactical expansion framework for growing local service businesses to scale organic visibility across multiple cities and regional service territories.",
     "sections": [
       {
@@ -1337,7 +1337,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 04, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/mastering-google-business-profile-optimization.png",
+    "image": "/assets/blog_img/mastering-google-business-profile-optimization.webp",
     "description": "A step-by-step masterclass on configuring, optimizing, and protecting your Google Business Profile to achieve top-3 Local Pack rankings in competitive metros.",
     "sections": [
       {
@@ -1427,7 +1427,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 02, 2026",
     "readTime": "11 min read",
-    "image": "/assets/blog_img/why-business-needs-local-seo-guide.png",
+    "image": "/assets/blog_img/why-business-needs-local-seo-guide.webp",
     "description": "How autonomous AI search engines, voice assistants, and ChatGPT Search evaluate local businesses, and why traditional web marketing is no longer enough to stay visible.",
     "sections": [
       {
@@ -1516,7 +1516,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 30, 2026",
     "readTime": "10 min read",
-    "image": "/assets/blog_img/map-pack-vs-organic-seo-revenue.png",
+    "image": "/assets/blog_img/map-pack-vs-organic-seo-revenue.webp",
     "description": "A revenue-focused analytical comparison revealing why 70% to 80% of high-intent local customer calls originate from the Google Local 3-Pack rather than traditional organic links.",
     "sections": [
       {
@@ -1607,7 +1607,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 28, 2026",
     "readTime": "13 min read",
-    "image": "/assets/blog_img/google-map-pack-optimization-guide.png",
+    "image": "/assets/blog_img/google-map-pack-optimization-guide.webp",
     "description": "A deep-dive technical guide on geo-grid ranking factors, centroid proximity, review velocity, and SAB configurations to expand your Google Maps ranking radius.",
     "sections": [
       {
@@ -1698,7 +1698,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 25, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/nap-consistency-citation-guide.png",
+    "image": "/assets/blog_img/nap-consistency-citation-guide.webp",
     "description": "Why inconsistent Name, Address, and Phone data confuses search algorithms, triggers ranking suppression, and how to audit and fix citations across 100+ platforms.",
     "sections": [
       {
@@ -1788,7 +1788,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 22, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/local-seo-vs-ai-survival-guide.png",
+    "image": "/assets/blog_img/local-seo-vs-ai-survival-guide.webp",
     "description": "An objective practitioner analysis debunking rumors that AI replaces local SEO, explaining how LLMs, answer engines, and local ranking signals integrate in the real world.",
     "sections": [
       {
@@ -1878,7 +1878,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 18, 2026",
     "readTime": "11 min read",
-    "image": "/assets/blog_img/does-local-seo-still-work-80-20.png",
+    "image": "/assets/blog_img/does-local-seo-still-work-80-20.webp",
     "description": "How applying the Pareto Principle to local SEO allows trade contractors and private practices to generate 80% of customer calls from just 20% of high-leverage optimization actions.",
     "sections": [
       {
@@ -1968,7 +1968,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 15, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/google-local-service-ads-optimization.png",
+    "image": "/assets/blog_img/google-local-service-ads-optimization.webp",
     "description": "A contractor’s complete guide to Google Guaranteed Local Services Ads: how to secure the green badge, dispute bad leads, and maximize pay-per-lead profitability.",
     "sections": [
       {
@@ -2059,7 +2059,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 10, 2026",
     "readTime": "11 min read",
-    "image": "/assets/blog_img/website-builders-vs-franchise-web-design.png",
+    "image": "/assets/blog_img/website-builders-vs-franchise-web-design.webp",
     "description": "An objective architectural audit comparing DIY website builders (Wix, Squarespace, WordPress) against custom ultra-lean web architecture for local service providers.",
     "sections": [
       {
@@ -2149,7 +2149,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "July 05, 2026",
     "readTime": "13 min read",
-    "image": "/assets/blog_img/webmcp-ai-agent-websites-guide.png",
+    "image": "/assets/blog_img/webmcp-ai-agent-websites-guide.webp",
     "description": "A comprehensive technical overview of the Web Model Context Protocol (WebMCP): allowing autonomous AI buying agents to prepare quotes and book service appointments directly with cryptographic user consent.",
     "sections": [
       {
@@ -2240,7 +2240,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 28, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/llmstxt-blueprint-ai-sitemap-local-business.png",
+    "image": "/assets/blog_img/llmstxt-blueprint-ai-sitemap-local-business.webp",
     "description": "Learn how llms.txt and machine-readable pricing.md files function as dedicated AI sitemaps for ChatGPT, Perplexity, Claude, and Google AI Overviews. Step-by-step blueprint with copy-paste trade templates and an interactive generator.",
     "sections": [
       {
@@ -2465,7 +2465,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "August 26, 2026",
     "readTime": "12 min read",
-    "image": "/assets/blog_img/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo.png",
+    "image": "/assets/blog_img/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo.webp",
     "description": "How BreadcrumbList JSON-LD schema transforms messy URL paths into clickable rich search snippets, prevents flat architecture penalties, and why a schema checker is crucial for Google compliance.",
     "sections": [
       {
