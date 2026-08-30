@@ -133,10 +133,18 @@ export default function DirectoryView({
           "description": cityData.intro,
           "url": `https://localsurgeseo.com/${cityData.stateSlug}/${cityData.slug}`,
           "telephone": "+1-909-707-5075",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Debit Card, Invoice",
           "address": {
             "@type": "PostalAddress",
+            "addressLocality": cityData.name,
             "addressRegion": cityData.stateCode,
             "addressCountry": "US"
+          },
+          "areaServed": {
+            "@type": "City",
+            "name": cityData.name
           }
         }
       ] : [])

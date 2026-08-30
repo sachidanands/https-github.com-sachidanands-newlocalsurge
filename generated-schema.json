@@ -1,0 +1,255 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "title": "Local Surge SEO - Authoritative Schema.org Graph Collection",
+  "version": "2.2.0",
+  "updated": "2026-08-30",
+  "schemas": {
+    "organization_and_website": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "Organization",
+          "@id": "https://localsurgeseo.com/#organization",
+          "name": "Local Surge SEO",
+          "url": "https://localsurgeseo.com/",
+          "logo": {
+            "@type": "ImageObject",
+            "url": "https://localsurgeseo.com/favicon.svg"
+          },
+          "sameAs": [
+            "https://www.youtube.com/@LocalSurgeSEO",
+            "https://x.com/localsurgeseo",
+            "https://twitter.com/localsurgeseo",
+            "https://www.facebook.com/localsurgeseo"
+          ],
+          "description": "Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings, spatial proximity optimization, and NAP consistency for local service businesses."
+        },
+        {
+          "@type": "WebSite",
+          "@id": "https://localsurgeseo.com/#website",
+          "name": "Local Surge SEO",
+          "url": "https://localsurgeseo.com/",
+          "inLanguage": "en-US",
+          "publisher": {
+            "@id": "https://localsurgeseo.com/#organization"
+          },
+          "potentialAction": {
+            "@type": "SearchAction",
+            "target": "https://localsurgeseo.com/blog?q={search_term_string}",
+            "query-input": "required name=search_term_string"
+          }
+        },
+        {
+          "@type": "ProfessionalService",
+          "@id": "https://localsurgeseo.com/#service",
+          "name": "Local Surge SEO",
+          "url": "https://localsurgeseo.com/",
+          "image": "https://localsurgeseo.com/assets/og-image.jpg",
+          "telephone": "+1-909-707-5075",
+          "email": "contact@localsurgeseo.com",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Debit Card, Invoice",
+          "address": {
+            "@type": "PostalAddress",
+            "addressCountry": "US"
+          },
+          "openingHoursSpecification": [
+            {
+              "@type": "OpeningHoursSpecification",
+              "dayOfWeek": ["Monday", "Tuesday", "Wednesday", "Thursday", "Friday"],
+              "opens": "08:00",
+              "closes": "18:00"
+            }
+          ],
+          "areaServed": [
+            "California", "Texas", "Florida", "New York", "Washington", "Illinois", "Arizona"
+          ]
+        }
+      ]
+    },
+    "service_local_seo": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Local SEO Services", "item": "https://localsurgeseo.com/local-seo" }
+          ]
+        },
+        {
+          "@type": "Service",
+          "name": "Local SEO & Google Maps Optimization",
+          "serviceType": "Search Engine Optimization",
+          "provider": {
+            "@type": "Organization",
+            "name": "Local Surge SEO",
+            "url": "https://localsurgeseo.com/"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "description": "Data-driven local SEO and Google Local 3-Pack optimization. Geo-coordinate grid expansion, review velocity, and NAP directory citation authority.",
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Local SEO Plans",
+            "itemListElement": [
+              { "@type": "Offer", "name": "Single-Page Blast", "price": "0", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Starter Boost", "price": "999", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD" }
+            ]
+          }
+        }
+      ]
+    },
+    "web_application_scanner": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Free SEO Scanner", "item": "https://localsurgeseo.com/seo-tool" }
+          ]
+        },
+        {
+          "@type": "WebApplication",
+          "name": "Local Surge SEO Diagnostic Scanner",
+          "url": "https://localsurgeseo.com/seo-tool",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires modern web browser with JavaScript enabled",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": "Scan your local business Google Maps readiness, NAP directory consistency, schema markup, and Core Web Vitals instantly."
+        }
+      ]
+    },
+    "editorial_blog_posting": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": "https://localsurgeseo.com/blog" },
+            { "@type": "ListItem", "position": 3, "name": "[Post Title]", "item": "https://localsurgeseo.com/blog/[slug]" }
+          ]
+        },
+        {
+          "@type": "BlogPosting",
+          "headline": "[Post Title]",
+          "description": "[Post Description]",
+          "image": "https://localsurgeseo.com/assets/blog_img/[image.png]",
+          "datePublished": "2026-08-29",
+          "dateModified": "2026-08-30",
+          "inLanguage": "en-US",
+          "articleSection": "[Category]",
+          "author": {
+            "@type": "Person",
+            "name": "Sarah Chen",
+            "jobTitle": "Chief SEO Architect"
+          },
+          "publisher": {
+            "@type": "Organization",
+            "name": "Local Surge SEO",
+            "logo": {
+              "@type": "ImageObject",
+              "url": "https://localsurgeseo.com/favicon.svg"
+            }
+          },
+          "mainEntityOfPage": {
+            "@type": "WebPage",
+            "@id": "https://localsurgeseo.com/blog/[slug]"
+          }
+        }
+      ]
+    },
+    "district_research_study": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Locations", "item": "https://localsurgeseo.com/locations" },
+            { "@type": "ListItem", "position": 3, "name": "[State Name]", "item": "https://localsurgeseo.com/locations/[state]/" },
+            { "@type": "ListItem", "position": 4, "name": "[District Name] Local SEO", "item": "https://localsurgeseo.com/locations/[state]/[district]" }
+          ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "[FAQ Question]",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "[FAQ Answer]"
+              }
+            }
+          ]
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": "Local Surge SEO - [District Name]",
+          "description": "[District Empirical Overview]",
+          "url": "https://localsurgeseo.com/locations/[state]/[district]",
+          "telephone": "+1-909-707-5075",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Debit Card, Invoice",
+          "openingHours": "Mo-Fr 08:00-18:00",
+          "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": "[District Name]"
+          },
+          "geo": {
+            "@type": "GeoCoordinates",
+            "latitude": 34.0522,
+            "longitude": -118.2437
+          }
+        }
+      ]
+    },
+    "regional_city_directory": {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": "https://localsurgeseo.com/site-map" },
+            { "@type": "ListItem", "position": 3, "name": "[State Name]", "item": "https://localsurgeseo.com/[state]" },
+            { "@type": "ListItem", "position": 4, "name": "[City Name]", "item": "https://localsurgeseo.com/[state]/[city-seo]" }
+          ]
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": "Local Surge SEO - [City Name]",
+          "description": "[City Blueprint Intro]",
+          "url": "https://localsurgeseo.com/[state]/[city-seo]",
+          "telephone": "+1-909-707-5075",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Debit Card, Invoice",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": "[City Name]",
+            "addressRegion": "[State Code]",
+            "addressCountry": "US"
+          },
+          "areaServed": {
+            "@type": "City",
+            "name": "[City Name]"
+          }
+        }
+      ]
+    }
+  }
+}

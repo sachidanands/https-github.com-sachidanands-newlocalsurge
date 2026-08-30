@@ -191,6 +191,14 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
               "description": districtData.heroSubheadline,
               "url": canonical,
               "telephone": "+1-909-707-5075",
+              "priceRange": "$$",
+              "currenciesAccepted": "USD",
+              "paymentAccepted": "Credit Card, Debit Card, Invoice",
+              "openingHours": "Mo-Fr 08:00-18:00",
+              "areaServed": {
+                "@type": "AdministrativeArea",
+                "name": districtData.name
+              },
               "geo": {
                 "@type": "GeoCoordinates",
                 "latitude": districtData.lat,
@@ -278,8 +286,17 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
             "headline": post.title,
             "description": post.description,
             "image": ogImage,
-            "datePublished": "2026-08-01",
+            "datePublished": (() => {
+              try {
+                const d = new Date(post.date);
+                return !isNaN(d.getTime()) ? d.toISOString().split('T')[0] : "2026-08-01";
+              } catch (e) {
+                return "2026-08-01";
+              }
+            })(),
             "dateModified": "2026-08-30",
+            "inLanguage": "en-US",
+            "articleSection": post.category,
             "author": {
               "@type": "Person",
               "name": post.author.name,
@@ -387,12 +404,23 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
 
     const schemaJson = {
       "@context": "https://schema.org",
-      "@type": "OfferCatalog",
-      "name": "Local Surge SEO Pricing Plans",
-      "itemListElement": [
-        { "@type": "Offer", "name": "Single-Page Blast", "price": "0", "priceCurrency": "USD", "description": "Professional mobile-first single page optimized instantly for local keywords." },
-        { "@type": "Offer", "name": "Starter Boost", "price": "999", "priceCurrency": "USD", "description": "GBP syncing, localized keyword mapping (10 terms), and 20 top directory citations." },
-        { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD", "description": "Full competitor domination, 4 monthly localized articles, and high-authority backlinks." }
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Pricing", "item": canonical }
+          ]
+        },
+        {
+          "@type": "OfferCatalog",
+          "name": "Local Surge SEO Pricing Plans",
+          "itemListElement": [
+            { "@type": "Offer", "name": "Single-Page Blast", "price": "0", "priceCurrency": "USD", "description": "Professional mobile-first single page optimized instantly for local keywords." },
+            { "@type": "Offer", "name": "Starter Boost", "price": "999", "priceCurrency": "USD", "description": "GBP syncing, localized keyword mapping (10 terms), and 20 top directory citations." },
+            { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD", "description": "Full competitor domination, 4 monthly localized articles, and high-authority backlinks." }
+          ]
+        }
       ]
     };
 
@@ -451,6 +479,208 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
   }
 
+  if (cleanPath === '/local-seo') {
+    const title = "Local SEO Services & Google Maps Domination - Local Surge SEO";
+    const description = "Data-driven local SEO and Google Local 3-Pack optimization. Geo-coordinate grid expansion, review velocity, and NAP directory citation authority.";
+    const canonical = "https://localsurgeseo.com/local-seo";
+    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Local SEO Services", "item": canonical }
+          ]
+        },
+        {
+          "@type": "Service",
+          "name": "Local SEO & Google Maps Optimization",
+          "serviceType": "Search Engine Optimization",
+          "provider": {
+            "@type": "Organization",
+            "name": "Local Surge SEO",
+            "url": "https://localsurgeseo.com/"
+          },
+          "areaServed": {
+            "@type": "Country",
+            "name": "United States"
+          },
+          "description": description,
+          "hasOfferCatalog": {
+            "@type": "OfferCatalog",
+            "name": "Local SEO Plans",
+            "itemListElement": [
+              { "@type": "Offer", "name": "Single-Page Blast", "price": "0", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Starter Boost", "price": "999", "priceCurrency": "USD" },
+              { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD" }
+            ]
+          }
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-localseo-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>Local SEO Services & Google Maps Domination</h1>
+        <p>${description}</p>
+        <section>
+          <h2>The Proximity Problem: Why Good Businesses Disappear</h2>
+          <p>Local businesses often lose high-intent customers simply because they lack geo-coordinate relevance and consistent NAP citations across directory ecosystems.</p>
+        </section>
+        <section>
+          <h2>The 4 Pillars of Local Search Dominance</h2>
+          <ul>
+            <li>Google Business Profile (GBP) Precision Categorization</li>
+            <li>Hyperlocal Schema & Coordinate Pinning</li>
+            <li>Review Velocity & Customer Sentiment Signals</li>
+            <li>High-Authority Local Directory Syndication</li>
+          </ul>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  if (cleanPath === '/seo-tool') {
+    const title = "Free Local SEO Diagnostic Scanner & Audit Tool - Local Surge";
+    const description = "Scan your local business Google Maps readiness, NAP directory consistency, schema markup, and Core Web Vitals instantly.";
+    const canonical = "https://localsurgeseo.com/seo-tool";
+    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Free SEO Scanner", "item": canonical }
+          ]
+        },
+        {
+          "@type": "WebApplication",
+          "name": "Local Surge SEO Diagnostic Scanner",
+          "url": canonical,
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "All",
+          "browserRequirements": "Requires modern web browser with JavaScript enabled",
+          "offers": {
+            "@type": "Offer",
+            "price": "0",
+            "priceCurrency": "USD"
+          },
+          "description": description
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-seotool-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>Free Local SEO Diagnostic Scanner & Audit Suite</h1>
+        <p>${description}</p>
+        <section>
+          <h2>Instant Search Readiness Diagnostic</h2>
+          <p>Analyze your domain for Google Map Pack compatibility, title and meta tags, Open Graph declarations, structured data schemas, and Core Web Vitals.</p>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  if (cleanPath === '/about' || cleanPath === '/why-us') {
+    const isWhyUs = cleanPath === '/why-us';
+    const title = isWhyUs
+      ? "Why Choose Local Surge SEO - Transparent Signal Engineering"
+      : "About Local Surge SEO - Mission & Search Intelligence Architecture";
+    const description = isWhyUs
+      ? "Why smart local businesses choose Local Surge: empirical search studies, zero lock-in contracts, and verified map pack rankings."
+      : "Learn about the mission, engineering team, and empirical search methodology behind Local Surge SEO's local search domination platform.";
+    const canonical = `https://localsurgeseo.com${cleanPath}`;
+    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": isWhyUs ? "Why Us" : "About", "item": canonical }
+          ]
+        },
+        {
+          "@type": "AboutPage",
+          "name": title,
+          "url": canonical,
+          "description": description,
+          "mainEntity": {
+            "@type": "Organization",
+            "name": "Local Surge SEO",
+            "url": "https://localsurgeseo.com/"
+          }
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-about-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>${title}</h1>
+        <p>${description}</p>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  if (cleanPath === '/contact') {
+    const title = "Contact Local Surge SEO - Talk to a Local Search Strategist";
+    const description = "Connect with our local search strategists for custom Google Maps rankings blueprints, citation audits, and technical SEO consultation.";
+    const canonical = "https://localsurgeseo.com/contact";
+    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Contact", "item": canonical }
+          ]
+        },
+        {
+          "@type": "ContactPage",
+          "name": "Contact Local Surge SEO",
+          "url": canonical,
+          "description": description,
+          "mainEntity": {
+            "@type": "ProfessionalService",
+            "name": "Local Surge SEO",
+            "telephone": "+1-909-707-5075",
+            "email": "contact@localsurgeseo.com",
+            "url": "https://localsurgeseo.com/"
+          }
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-contact-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>Contact Local Surge SEO</h1>
+        <p>${description}</p>
+        <p>Telephone: +1-909-707-5075</p>
+        <p>Email: contact@localsurgeseo.com</p>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
   // 5. Regional City Directory: /:stateSlug/:citySlug
   const pathParts = cleanPath.split('/').filter(Boolean);
   if (pathParts.length === 2) {
@@ -480,10 +710,18 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
             "description": cityData.intro,
             "url": canonical,
             "telephone": "+1-909-707-5075",
+            "priceRange": "$$",
+            "currenciesAccepted": "USD",
+            "paymentAccepted": "Credit Card, Debit Card, Invoice",
             "address": {
               "@type": "PostalAddress",
+              "addressLocality": cityData.name,
               "addressRegion": cityData.stateCode,
               "addressCountry": "US"
+            },
+            "areaServed": {
+              "@type": "City",
+              "name": cityData.name
             }
           }
         ]
