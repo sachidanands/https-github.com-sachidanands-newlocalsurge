@@ -29,6 +29,99 @@ export interface BlogPost {
   sections: BlogSection[];
 }
 
+export interface TopicCluster {
+  id: string;
+  name: string;
+  pillarSlug: string;
+  spokeSlugs: string[];
+  description: string;
+  crossLinkSlug: string;
+  crossLinkLabel: string;
+}
+
+export const TOPIC_CLUSTERS: Record<string, TopicCluster> = {
+  'google-map-pack': {
+    id: 'google-map-pack',
+    name: 'Google Map Pack & GBP Domination',
+    pillarSlug: 'google-map-pack-optimization-guide',
+    spokeSlugs: [
+      'mastering-google-business-profile-optimization',
+      'google-business-profile-critical-local-contractors',
+      'map-pack-vs-organic-seo-revenue',
+      'what-are-google-local-service-ads-optimization'
+    ],
+    description: 'Master spatial proximity, Google review velocity, primary categories, and coordinates that dictate Local 3-Pack placement.',
+    crossLinkSlug: 'what-is-nap-consistency-citation-guide',
+    crossLinkLabel: 'Directory Citations & NAP Consistency Guide'
+  },
+  'generative-engine-optimization': {
+    id: 'generative-engine-optimization',
+    name: 'Generative Engine Optimization (GEO) & AI Search',
+    pillarSlug: 'local-seo-vs-ai-2026-survival-guide',
+    spokeSlugs: [
+      'webmcp-ai-agent-ready-websites-guide',
+      'llmstxt-blueprint-ai-sitemap-local-business',
+      'why-your-business-needs-local-seo-now'
+    ],
+    description: 'Structure local business assets, machine-readable schemas, and agent endpoints for ChatGPT, Claude, and Gemini 3.5.',
+    crossLinkSlug: 'google-map-pack-optimization-guide',
+    crossLinkLabel: 'Google Map Pack Ranking Playbook'
+  },
+  'technical-schema': {
+    id: 'technical-schema',
+    name: 'Technical Local SEO & Structured Schema',
+    pillarSlug: 'top-on-page-seo-mistakes-local-businesses-make',
+    spokeSlugs: [
+      'why-breadcrumblist-json-ld-schema-is-essential-for-local-seo',
+      'why-open-graph-meta-tags-are-essential-for-local-seo',
+      'why-canonical-link-tag-checker-is-essential-for-local-seo',
+      'why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo',
+      '10-second-website-hack-why-meta-titles-matter',
+      'why-your-website-jumps-cls-guide'
+    ],
+    description: 'Eliminate crawl budget waste, layout shifts, and syntax errors with valid JSON-LD schemas and meta architecture.',
+    crossLinkSlug: 'single-page-blueprint-dominate-local-search',
+    crossLinkLabel: 'High-Speed Single-Page Architecture'
+  },
+  'citations-foundations': {
+    id: 'citations-foundations',
+    name: 'Citations, NAP Consistency & Market Scale',
+    pillarSlug: 'unlocking-the-power-of-local-seo-for-small-businesses',
+    spokeSlugs: [
+      'what-is-nap-consistency-citation-guide',
+      'local-seo-2026-near-me-is-dead',
+      'from-zero-to-hero-scaling-your-local-seo-strategy',
+      'does-local-seo-still-work-80-20-rule'
+    ],
+    description: 'Lock in authoritative directory distribution across Tier-1 citation networks to reinforce entity prominence.',
+    crossLinkSlug: 'google-map-pack-optimization-guide',
+    crossLinkLabel: 'Google Local 3-Pack Optimization'
+  },
+  'web-architecture': {
+    id: 'web-architecture',
+    name: 'High-Speed Web Architecture & Conversion',
+    pillarSlug: 'single-page-blueprint-dominate-local-search',
+    spokeSlugs: [
+      'best-local-business-website-builder-franchise-cost'
+    ],
+    description: 'Build sub-second, mobile-first single-page web storefronts that turn local search traffic into inbound phone calls.',
+    crossLinkSlug: 'top-on-page-seo-mistakes-local-businesses-make',
+    crossLinkLabel: 'Top On-Page SEO Mistakes'
+  }
+};
+
+export function getClusterForPost(postSlug: string): { cluster: TopicCluster; role: 'pillar' | 'spoke' } | null {
+  for (const cluster of Object.values(TOPIC_CLUSTERS)) {
+    if (cluster.pillarSlug === postSlug) {
+      return { cluster, role: 'pillar' };
+    }
+    if (cluster.spokeSlugs.includes(postSlug)) {
+      return { cluster, role: 'spoke' };
+    }
+  }
+  return null;
+}
+
 export const BLOG_POSTS: BlogPost[] = [
   {
     "slug": "why-open-graph-meta-tags-are-essential-for-local-seo",

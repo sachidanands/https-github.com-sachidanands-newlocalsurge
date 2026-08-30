@@ -1,5 +1,5 @@
 import { STATES_REGISTRY, DISTRICTS_REGISTRY, getStateBySlug, getDistrictBySlug, getAllMappedStates, getAllMappedDistricts } from "../src/data/locationsData";
-import { BLOG_POSTS } from "../src/data/blogData";
+import { BLOG_POSTS, getClusterForPost } from "../src/data/blogData";
 import { STATE_DIRECTORY, CITY_DIRECTORY } from "../src/data/directoryData";
 
 export function prerenderLocationHtml(rawHtml: string, requestPath: string): string {
@@ -339,6 +339,28 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
               ${sectionsHtml}
             </main>
             <footer>
+              ${(() => {
+                const clusterInfo = getClusterForPost(post.slug);
+                if (!clusterInfo) return '';
+                const { cluster, role } = clusterInfo;
+                const isPillar = role === 'pillar';
+                const pillarPost = BLOG_POSTS.find(p => p.slug === cluster.pillarSlug);
+                const spokePosts = cluster.spokeSlugs.map(slug => BLOG_POSTS.find(p => p.slug === slug)).filter(Boolean);
+                const crossPost = BLOG_POSTS.find(p => p.slug === cluster.crossLinkSlug);
+
+                return `
+                  <aside aria-label="Topic Cluster Series">
+                    <h3>Topic Cluster: ${cluster.name} (${isPillar ? 'Master Pillar Guide' : 'Companion Spoke Guide'})</h3>
+                    <p>${cluster.description}</p>
+                    ${!isPillar && pillarPost ? `<p><strong>Core Pillar Blueprint:</strong> <a href="/blog/${pillarPost.slug}">${pillarPost.title}</a></p>` : ''}
+                    <h4>${isPillar ? 'Spoke Guides in this Topic Cluster:' : 'Sibling Guides in this Series:'}</h4>
+                    <ul>
+                      ${(isPillar ? spokePosts : spokePosts.filter(p => p!.slug !== post.slug)).map(p => `<li><a href="/blog/${p!.slug}">${p!.title}</a> (${p!.category})</li>`).join('\n')}
+                    </ul>
+                    ${crossPost ? `<p><strong>Recommended Cross-Cluster Reading:</strong> <a href="/blog/${crossPost.slug}">${crossPost.title}</a></p>` : ''}
+                  </aside>
+                `;
+              })()}
               <section>
                 <h3>Primary Verification Sources</h3>
                 <ul>

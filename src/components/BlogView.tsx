@@ -1,5 +1,5 @@
 import React, { useState, useEffect, useRef } from 'react';
-import { BlogPost, BLOG_POSTS } from '../data/blogData';
+import { BlogPost, BLOG_POSTS, getClusterForPost, TOPIC_CLUSTERS } from '../data/blogData';
 import ClientMicroToolWidget from './ClientMicroToolWidget';
 import { 
   ArrowLeft, Search, Sparkles, Clock, Calendar, User, ArrowRight, Check, 
@@ -123,9 +123,23 @@ export default function BlogView({
   };
 
   const getRelatedPosts = (currentPost: BlogPost) => {
+    const clusterInfo = getClusterForPost(currentPost.slug);
+    if (clusterInfo) {
+      const { cluster, role } = clusterInfo;
+      const targetSlugs = role === 'pillar'
+        ? cluster.spokeSlugs
+        : [cluster.pillarSlug, ...cluster.spokeSlugs.filter(s => s !== currentPost.slug)];
+      
+      const clusterPosts = targetSlugs
+        .map(slug => allPosts.find(p => p.slug === slug))
+        .filter((p): p is BlogPost => !!p);
+      
+      if (clusterPosts.length > 0) return clusterPosts.slice(0, 4);
+    }
+
     return allPosts.filter(
       p => p.slug !== currentPost.slug && (p.category === currentPost.category)
-    ).slice(0, 2);
+    ).slice(0, 4);
   };
 
   const renderFormattedText = (text: string) => {
@@ -644,6 +658,108 @@ export default function BlogView({
                     Updated continuously for the {new Date().getFullYear()} season
                   </span>
                 </div>
+
+                {/* Topic Cluster Navigation Box */}
+                {(() => {
+                  const clusterInfo = getClusterForPost(activeArticle.slug);
+                  if (!clusterInfo) return null;
+                  const { cluster, role } = clusterInfo;
+                  const isPillar = role === 'pillar';
+                  const pillarPost = allPosts.find(p => p.slug === cluster.pillarSlug);
+                  const spokePosts = cluster.spokeSlugs
+                    .map(slug => allPosts.find(p => p.slug === slug))
+                    .filter((p): p is BlogPost => !!p);
+                  const crossPost = allPosts.find(p => p.slug === cluster.crossLinkSlug);
+
+                  return (
+                    <aside aria-label="Topic Cluster Series" className="bg-[#faf9f6] border border-[#dfded4] rounded-2xl p-6 space-y-4">
+                      <div className="flex flex-wrap items-center justify-between gap-2 border-b border-[#dfded4] pb-3">
+                        <div className="space-y-0.5">
+                          <span className="text-[9px] font-mono font-black text-[#bc5f40] uppercase tracking-widest block">
+                            Topic Cluster Series
+                          </span>
+                          <h4 className="text-sm font-extrabold text-[#151716] font-display">
+                            {cluster.name}
+                          </h4>
+                        </div>
+                        <span className={`px-2.5 py-1 text-[9px] font-mono font-black uppercase tracking-wider rounded-md border ${
+                          isPillar 
+                            ? 'bg-[#123e35]/10 text-[#123e35] border-[#123e35]/20' 
+                            : 'bg-[#bc5f40]/10 text-[#bc5f40] border-[#bc5f40]/20'
+                        }`}>
+                          {isPillar ? '★ Master Pillar Guide' : 'Companion Spoke Guide'}
+                        </span>
+                      </div>
+                      
+                      <p className="text-xs text-[#4e524f] leading-relaxed">
+                        {cluster.description}
+                      </p>
+
+                      <div className="space-y-3 pt-1">
+                        {!isPillar && pillarPost && (
+                          <div className="bg-white p-3.5 rounded-xl border border-emerald-200/80 flex items-center justify-between gap-3 shadow-2xs">
+                            <div>
+                              <span className="text-[8px] font-mono font-black text-emerald-800 uppercase tracking-widest block">Core Pillar Blueprint</span>
+                              <h5 className="text-xs font-bold text-[#151716]">{pillarPost.title}</h5>
+                            </div>
+                            <a
+                              href={`/blog/${pillarPost.slug}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleArticleClick(pillarPost.slug);
+                              }}
+                              className="bg-[#123e35] text-white text-[10px] font-bold py-1.5 px-3 rounded-lg whitespace-nowrap uppercase tracking-wider hover:bg-[#185246] transition-colors flex items-center gap-1"
+                            >
+                              <span>Read Pillar</span>
+                              <ArrowRight className="w-3 h-3" />
+                            </a>
+                          </div>
+                        )}
+
+                        <div className="space-y-2">
+                          <span className="text-[9px] font-mono font-bold text-[#4e524f] uppercase tracking-wider block">
+                            {isPillar ? 'Spoke Guides in this Topic Cluster:' : 'Sibling Guides in this Series:'}
+                          </span>
+                          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2">
+                            {(isPillar ? spokePosts : spokePosts.filter(p => p.slug !== activeArticle.slug)).map((post) => (
+                              <a
+                                key={post.slug}
+                                href={`/blog/${post.slug}`}
+                                onClick={(e) => {
+                                  e.preventDefault();
+                                  handleArticleClick(post.slug);
+                                }}
+                                className="bg-white p-3 rounded-xl border border-[#dfded4] hover:border-[#bc5f40]/40 transition-colors block group shadow-2xs"
+                              >
+                                <span className="text-[8px] text-[#bc5f40] font-bold uppercase font-mono block">{post.category}</span>
+                                <h6 className="text-[11px] font-bold text-[#151716] group-hover:text-[#bc5f40] transition-colors leading-snug line-clamp-2">
+                                  {post.title}
+                                </h6>
+                              </a>
+                            ))}
+                          </div>
+                        </div>
+
+                        {crossPost && (
+                          <div className="pt-2.5 border-t border-[#dfded4]/60 flex items-center justify-between text-[10px]">
+                            <span className="text-[#888b88] font-mono">Recommended Cross-Cluster Reading:</span>
+                            <a
+                              href={`/blog/${crossPost.slug}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                handleArticleClick(crossPost.slug);
+                              }}
+                              className="text-[#123e35] font-bold hover:text-[#bc5f40] transition-colors flex items-center gap-1"
+                            >
+                              <span>{crossPost.title.slice(0, 45)}...</span>
+                              <ArrowRight className="w-3 h-3" />
+                            </a>
+                          </div>
+                        )}
+                      </div>
+                    </aside>
+                  );
+                })()}
 
                 {/* Sub-lead CTA container at bottom of article reading */}
                 <div className="bg-[#123e35] text-[#fbfaf8] rounded-2xl p-6 relative overflow-hidden border border-[#0f342e] shadow-xs">

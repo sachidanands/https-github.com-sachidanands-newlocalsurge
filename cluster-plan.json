@@ -1,0 +1,284 @@
+{
+  "meta": {
+    "domain": "localsurgeseo.com",
+    "totalPosts": 23,
+    "totalClusters": 5,
+    "totalInternalLinks": 115,
+    "orphanPages": 0,
+    "pillarCoverage": "100%",
+    "date": "2026-08-30"
+  },
+  "masterPillar": {
+    "title": "Dominate Your Local Market with High-Performance SEO",
+    "keyword": "local seo services",
+    "url": "https://localsurgeseo.com/local-seo",
+    "template": "master-pillar"
+  },
+  "clusters": [
+    {
+      "id": "google-map-pack",
+      "name": "Google Map Pack & GBP Domination",
+      "color": "#123e35",
+      "pillar": {
+        "title": "Google Map Pack Optimization: The Complete Local Proximity and Ranking Guide",
+        "slug": "google-map-pack-optimization-guide",
+        "keyword": "google map pack optimization",
+        "volume": 2400,
+        "template": "ultimate-guide",
+        "wordCount": 1850,
+        "url": "/blog/google-map-pack-optimization-guide",
+        "status": "published"
+      },
+      "spokes": [
+        {
+          "title": "Mastering Google Business Profile: Step-by-Step Optimization Playbook",
+          "slug": "mastering-google-business-profile-optimization",
+          "keyword": "google business profile optimization",
+          "volume": 1900,
+          "template": "how-to",
+          "wordCount": 1420,
+          "url": "/blog/mastering-google-business-profile-optimization",
+          "status": "published"
+        },
+        {
+          "title": "The Local Contractor Playbook: Dominating the Google Map Pack and Local 3-Pack",
+          "slug": "google-business-profile-critical-local-contractors",
+          "keyword": "local contractor seo map pack",
+          "volume": 880,
+          "template": "explainer",
+          "wordCount": 1350,
+          "url": "/blog/google-business-profile-critical-local-contractors",
+          "status": "published"
+        },
+        {
+          "title": "Map Pack vs. Organic SEO: Which Drives More Customer Revenue for Local Businesses?",
+          "slug": "map-pack-vs-organic-seo-revenue",
+          "keyword": "map pack vs organic seo revenue",
+          "volume": 720,
+          "template": "comparison",
+          "wordCount": 1280,
+          "url": "/blog/map-pack-vs-organic-seo-revenue",
+          "status": "published"
+        },
+        {
+          "title": "Google Local Service Ads (LSA): Maximize Pay-Per-Lead ROI in 2026",
+          "slug": "what-are-google-local-service-ads-optimization",
+          "keyword": "google local service ads optimization",
+          "volume": 1100,
+          "template": "guide",
+          "wordCount": 1390,
+          "url": "/blog/what-are-google-local-service-ads-optimization",
+          "status": "published"
+        }
+      ]
+    },
+    {
+      "id": "generative-engine-optimization",
+      "name": "Generative Engine Optimization (GEO) & AI Search",
+      "color": "#bc5f40",
+      "pillar": {
+        "title": "Local SEO vs Artificial Intelligence: The 2026 Small Business Survival Guide",
+        "slug": "local-seo-vs-ai-2026-survival-guide",
+        "keyword": "local seo vs ai search 2026",
+        "volume": 1600,
+        "template": "ultimate-guide",
+        "wordCount": 1780,
+        "url": "/blog/local-seo-vs-ai-2026-survival-guide",
+        "status": "published"
+      },
+      "spokes": [
+        {
+          "title": "WebMCP: How to Make Your Local Business Website AI-Agent Ready",
+          "slug": "webmcp-ai-agent-ready-websites-guide",
+          "keyword": "webmcp ai agent websites",
+          "volume": 650,
+          "template": "technical-guide",
+          "wordCount": 1450,
+          "url": "/blog/webmcp-ai-agent-ready-websites-guide",
+          "status": "published"
+        },
+        {
+          "title": "The llms.txt Blueprint: Build a Machine-Readable AI Sitemap",
+          "slug": "llmstxt-blueprint-ai-sitemap-local-business",
+          "keyword": "llms.txt blueprint local business",
+          "volume": 850,
+          "template": "explainer",
+          "wordCount": 1390,
+          "url": "/blog/llmstxt-blueprint-ai-sitemap-local-business",
+          "status": "published"
+        },
+        {
+          "title": "Why Your Business Needs Local SEO Right Now: The AI Overviews Era",
+          "slug": "why-your-business-needs-local-seo-now",
+          "keyword": "why local seo matters ai search",
+          "volume": 1200,
+          "template": "explainer",
+          "wordCount": 1310,
+          "url": "/blog/why-your-business-needs-local-seo-now",
+          "status": "published"
+        }
+      ]
+    },
+    {
+      "id": "technical-schema",
+      "name": "Technical Local SEO & Structured Schema",
+      "color": "#2563eb",
+      "pillar": {
+        "title": "The Top On-Page SEO Mistakes Local Businesses Make (And How to Fix Them)",
+        "slug": "top-on-page-seo-mistakes-local-businesses-make",
+        "keyword": "top on-page local seo mistakes",
+        "volume": 1400,
+        "template": "ultimate-guide",
+        "wordCount": 1920,
+        "url": "/blog/top-on-page-seo-mistakes-local-businesses-make",
+        "status": "published"
+      },
+      "spokes": [
+        {
+          "title": "Why BreadcrumbList JSON-LD Schema is Essential for Local SEO",
+          "slug": "why-breadcrumblist-json-ld-schema-is-essential-for-local-seo",
+          "keyword": "breadcrumblist json-ld schema local seo",
+          "volume": 950,
+          "template": "how-to",
+          "wordCount": 1410,
+          "url": "/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo",
+          "status": "published"
+        },
+        {
+          "title": "Why Open Graph (OG) Meta Tags Are Essential for Local SEO",
+          "slug": "why-open-graph-meta-tags-are-essential-for-local-seo",
+          "keyword": "open graph meta tags local seo",
+          "volume": 1100,
+          "template": "guide",
+          "wordCount": 1730,
+          "url": "/blog/why-open-graph-meta-tags-are-essential-for-local-seo",
+          "status": "published"
+        },
+        {
+          "title": "Why a Canonical Link Tag Checker is Essential for Local SEO",
+          "slug": "why-canonical-link-tag-checker-is-essential-for-local-seo",
+          "keyword": "canonical link tag checker local seo",
+          "volume": 780,
+          "template": "guide",
+          "wordCount": 1650,
+          "url": "/blog/why-canonical-link-tag-checker-is-essential-for-local-seo",
+          "status": "published"
+        },
+        {
+          "title": "Why Image Alt Tags & Accessibility Scanners Drive Local Image Search",
+          "slug": "why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo",
+          "keyword": "image alt tags local seo accessibility",
+          "volume": 820,
+          "template": "how-to",
+          "wordCount": 1580,
+          "url": "/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo",
+          "status": "published"
+        },
+        {
+          "title": "The 10-Second Website Hack: How Meta Titles Double Local CTR",
+          "slug": "10-second-website-hack-why-meta-titles-matter",
+          "keyword": "local seo meta titles ctr hack",
+          "volume": 910,
+          "template": "listicle",
+          "wordCount": 1260,
+          "url": "/blog/10-second-website-hack-why-meta-titles-matter",
+          "status": "published"
+        },
+        {
+          "title": "Why Your Website Jumps: How Cumulative Layout Shift (CLS) Destroys Local Conversions",
+          "slug": "why-your-website-jumps-cls-guide",
+          "keyword": "cumulative layout shift local conversions",
+          "volume": 670,
+          "template": "explainer",
+          "wordCount": 1380,
+          "url": "/blog/why-your-website-jumps-cls-guide",
+          "status": "published"
+        }
+      ]
+    },
+    {
+      "id": "citations-foundations",
+      "name": "Citations, NAP Consistency & Market Scale",
+      "color": "#7c3aed",
+      "pillar": {
+        "title": "Unlocking the Power of Local SEO: The Comprehensive Foundation",
+        "slug": "unlocking-the-power-of-local-seo-for-small-businesses",
+        "keyword": "local seo for small businesses foundation",
+        "volume": 2100,
+        "template": "ultimate-guide",
+        "wordCount": 1820,
+        "url": "/blog/unlocking-the-power-of-local-seo-for-small-businesses",
+        "status": "published"
+      },
+      "spokes": [
+        {
+          "title": "What is NAP Consistency? The Definitive Local Citation Guide",
+          "slug": "what-is-nap-consistency-citation-guide",
+          "keyword": "what is nap consistency local citations",
+          "volume": 1500,
+          "template": "guide",
+          "wordCount": 1490,
+          "url": "/blog/what-is-nap-consistency-citation-guide",
+          "status": "published"
+        },
+        {
+          "title": "Why 'Near Me' Searches Are Dead in 2026: The Shift to Entity Prominence",
+          "slug": "local-seo-2026-near-me-is-dead",
+          "keyword": "near me searches dead 2026",
+          "volume": 1350,
+          "template": "thought-leadership",
+          "wordCount": 1420,
+          "url": "/blog/local-seo-2026-near-me-is-dead",
+          "status": "published"
+        },
+        {
+          "title": "From Zero to Hero: Scaling Your Local SEO Strategy Step-by-Step",
+          "slug": "from-zero-to-hero-scaling-your-local-seo-strategy",
+          "keyword": "scaling local seo strategy",
+          "volume": 790,
+          "template": "how-to",
+          "wordCount": 1330,
+          "url": "/blog/from-zero-to-hero-scaling-your-local-seo-strategy",
+          "status": "published"
+        },
+        {
+          "title": "Does Local SEO Still Work? The 80/20 Rule of Regional Search Dominance",
+          "slug": "does-local-seo-still-work-80-20-rule",
+          "keyword": "does local seo still work 80 20 rule",
+          "volume": 980,
+          "template": "explainer",
+          "wordCount": 1290,
+          "url": "/blog/does-local-seo-still-work-80-20-rule",
+          "status": "published"
+        }
+      ]
+    },
+    {
+      "id": "web-architecture",
+      "name": "High-Speed Web Architecture & Conversion",
+      "color": "#0d9488",
+      "pillar": {
+        "title": "The Single-Page Blueprint: How Lean Sites Outrank Bloated Competitors",
+        "slug": "single-page-blueprint-dominate-local-search",
+        "keyword": "single page website local seo",
+        "volume": 1200,
+        "template": "ultimate-guide",
+        "wordCount": 1690,
+        "url": "/blog/single-page-blueprint-dominate-local-search",
+        "status": "published"
+      },
+      "spokes": [
+        {
+          "title": "Local Website Builders vs Custom Lean Architecture: The True Cost Analysis",
+          "slug": "best-local-business-website-builder-franchise-cost",
+          "keyword": "local website builder cost analysis",
+          "volume": 840,
+          "template": "comparison",
+          "wordCount": 1410,
+          "url": "/blog/best-local-business-website-builder-franchise-cost",
+          "status": "published"
+        }
+      ]
+    }
+  ]
+}
