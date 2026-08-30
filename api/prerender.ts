@@ -1,5 +1,6 @@
 import { STATES_REGISTRY, DISTRICTS_REGISTRY, getStateBySlug, getDistrictBySlug, getAllMappedStates, getAllMappedDistricts } from "../src/data/locationsData";
 import { BLOG_POSTS } from "../src/data/blogData";
+import { STATE_DIRECTORY, CITY_DIRECTORY } from "../src/data/directoryData";
 
 export function prerenderLocationHtml(rawHtml: string, requestPath: string): string {
   const cleanPath = requestPath.split('?')[0].replace(/\/$/, '') || '/';
@@ -426,6 +427,141 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     `;
 
     return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  // 5. Regional City Directory: /:stateSlug/:citySlug
+  const pathParts = cleanPath.split('/').filter(Boolean);
+  if (pathParts.length === 2) {
+    const [stateSlugCandidate, citySlugCandidate] = pathParts;
+    const cityData = CITY_DIRECTORY[citySlugCandidate];
+    if (cityData && cityData.stateSlug === stateSlugCandidate) {
+      const title = `${cityData.name} Rankings & Local Maps Blueprint - Local Surge`;
+      const description = cityData.intro;
+      const canonical = `https://localsurgeseo.com/${cityData.stateSlug}/${cityData.slug}`;
+      const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+      const schemaJson = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": "https://localsurgeseo.com/site-map" },
+              { "@type": "ListItem", "position": 3, "name": cityData.stateName, "item": `https://localsurgeseo.com/${cityData.stateSlug}` },
+              { "@type": "ListItem", "position": 4, "name": cityData.name, "item": canonical }
+            ]
+          },
+          {
+            "@type": "LocalBusiness",
+            "name": `Local Surge SEO - ${cityData.name}`,
+            "description": cityData.intro,
+            "url": canonical,
+            "telephone": "+1-909-707-5075",
+            "address": {
+              "@type": "PostalAddress",
+              "addressRegion": cityData.stateCode,
+              "addressCountry": "US"
+            }
+          }
+        ]
+      };
+
+      const crawlMarkup = `
+        <div id="ssr-city-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+          <nav aria-label="Breadcrumb">
+            <a href="/">Home</a> / <a href="/site-map">Sitemap</a> / <a href="/${cityData.stateSlug}">${cityData.stateName}</a> / <span>${cityData.name}</span>
+          </nav>
+          <h1>${cityData.name} Local SEO & Maps Rankings</h1>
+          <p>${cityData.intro}</p>
+          <section>
+            <h2>${cityData.name} Economic Projections & Demographics</h2>
+            <ul>
+              <li>Population: ${cityData.population}</li>
+              <li>Small Businesses: ${cityData.businessCount}</li>
+              <li>Annual Business Revenue: ${cityData.revenue}</li>
+              <li>Digital Opportunity Score: ${cityData.digitalOpportunity}</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Key Statistics for ${cityData.name} Local Businesses</h2>
+            <ul>
+              ${cityData.keyStatsList.map(s => `<li>${s}</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Local Neighborhood Authority Nodes in ${cityData.name}</h2>
+            <ul>
+              ${cityData.neighborhoods.map(n => `<li><strong>${n.name} (${n.tag})</strong>: Focused on ${n.focus} (Schema: ${n.schema})</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Market Realities for ${cityData.name} Owners</h2>
+            <ul>
+              ${cityData.realityPoints.map(r => `<li><strong>${r.title}</strong>: ${r.desc}</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Strategic Advantages with Local Surge SEO</h2>
+            <ul>
+              ${cityData.advantagePoints.map(a => `<li><strong>${a.title}</strong>: ${a.desc}</li>`).join('\n')}
+            </ul>
+          </section>
+        </div>
+      `;
+
+      return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+    }
+  }
+
+  // 6. Regional State Directory: /:stateSlug
+  if (pathParts.length === 1) {
+    const stateSlugCandidate = pathParts[0];
+    const stateData = STATE_DIRECTORY[stateSlugCandidate];
+    if (stateData) {
+      const title = `${stateData.name} Local SEO Directory - Local Surge SEO`;
+      const description = stateData.intro;
+      const canonical = `https://localsurgeseo.com/${stateData.slug}`;
+      const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+      const schemaJson = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": "https://localsurgeseo.com/site-map" },
+              { "@type": "ListItem", "position": 3, "name": stateData.name, "item": canonical }
+            ]
+          }
+        ]
+      };
+
+      const crawlMarkup = `
+        <div id="ssr-state-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+          <nav aria-label="Breadcrumb">
+            <a href="/">Home</a> / <a href="/site-map">Sitemap</a> / <span>${stateData.name}</span>
+          </nav>
+          <h1>${stateData.name} Local SEO Directory</h1>
+          <p>${stateData.intro}</p>
+          <section>
+            <h2>${stateData.name} Enterprise Statistics</h2>
+            <ul>
+              ${stateData.keyStatsList.map(s => `<li>${s}</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Regional Hubs in ${stateData.name}</h2>
+            <ul>
+              ${stateData.hubs.map(h => `<li><strong>${h.name} (${h.tag})</strong>: Focused on ${h.focus}</li>`).join('\n')}
+            </ul>
+          </section>
+        </div>
+      `;
+
+      return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+    }
   }
 
   return rawHtml;

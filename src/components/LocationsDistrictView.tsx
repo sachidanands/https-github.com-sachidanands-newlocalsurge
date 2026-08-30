@@ -152,6 +152,15 @@ export default function LocationsDistrictView({
                 <span>Get Free {districtData.name} Strategy</span>
                 <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
               </button>
+              {districtData.slug in { 'san-jose': 1, 'oakland': 1, 'san-diego': 1, 'austin': 1, 'houston': 1, 'dallas': 1, 'miami': 1, 'new-york-city': 1 } && (
+                <a
+                  href={`/${districtData.stateSlug}/${districtData.slug}-seo`}
+                  className="bg-amber-50 hover:bg-amber-100/90 text-amber-950 border border-amber-300 font-bold py-3.5 px-6 rounded-xl text-xs flex items-center justify-center gap-2 transition-colors focus-visible:outline-2 focus-visible:outline-[#123e35]"
+                >
+                  <span>{districtData.name} Commercial SEO Rankings</span>
+                  <ExternalLink className="w-3.5 h-3.5 text-amber-700" aria-hidden="true" />
+                </a>
+              )}
               <a
                 href="#citations-section"
                 className="border border-[#dfded4] hover:bg-[#f7f6f2] text-[#151716] font-bold py-3.5 px-6 rounded-xl text-xs flex items-center justify-center transition-colors focus-visible:outline-2 focus-visible:outline-[#123e35]"

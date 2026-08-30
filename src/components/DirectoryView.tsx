@@ -96,26 +96,91 @@ export default function DirectoryView({
   const realityPoints = isCity ? cityData!.realityPoints : stateData!.realityPoints;
   const advantagePoints = isCity ? cityData!.advantagePoints : stateData!.advantagePoints;
 
+  // Mapping from commercial directory city slug to empirical research study
+  const CITY_TO_STUDY_MAP: Record<string, { url: string; label: string; stateSlug: string; districtSlug: string }> = {
+    'san-jose-seo': { url: '/locations/california/san-jose', label: 'San Jose & Silicon Valley Empirical Search Study', stateSlug: 'california', districtSlug: 'san-jose' },
+    'oakland-seo': { url: '/locations/california/oakland', label: 'Oakland & East Bay Consumer Search Study', stateSlug: 'california', districtSlug: 'oakland' },
+    'san-diego-seo': { url: '/locations/california/san-diego', label: 'San Diego Coastal SEO & Consumer Trends Study', stateSlug: 'california', districtSlug: 'san-diego' },
+    'austin-seo': { url: '/locations/texas/austin', label: 'Austin & Silicon Hills Empirical Search Study', stateSlug: 'texas', districtSlug: 'austin' },
+    'houston-seo': { url: '/locations/texas/houston', label: 'Houston 600-Square-Mile Metro Search Dynamics Study', stateSlug: 'texas', districtSlug: 'houston' },
+    'dallas-seo': { url: '/locations/texas/dallas', label: 'Dallas-Fort Worth Commercial Search Trends Study', stateSlug: 'texas', districtSlug: 'dallas' },
+    'miami-seo': { url: '/locations/florida/miami', label: 'Miami & South Florida Bilingual Search Study', stateSlug: 'florida', districtSlug: 'miami' },
+    'new-york-city-seo': { url: '/locations/new-york/new-york-city', label: 'New York City Five-Borough Micro-Targeting Study', stateSlug: 'new-york', districtSlug: 'new-york-city' }
+  };
+
+  const matchedStudy = citySlug ? CITY_TO_STUDY_MAP[citySlug] : null;
+
+  const breadcrumbSchema = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+          { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": "https://localsurgeseo.com/site-map" },
+          ...(isCity && cityData ? [
+            { "@type": "ListItem", "position": 3, "name": cityData.stateName, "item": `https://localsurgeseo.com/${cityData.stateSlug}` },
+            { "@type": "ListItem", "position": 4, "name": cityData.name, "item": `https://localsurgeseo.com/${cityData.stateSlug}/${cityData.slug}` }
+          ] : [
+            { "@type": "ListItem", "position": 3, "name": stateData?.name || "State", "item": `https://localsurgeseo.com/${stateSlug}` }
+          ])
+        ]
+      },
+      ...(isCity && cityData ? [
+        {
+          "@type": "LocalBusiness",
+          "name": `Local Surge SEO - ${cityData.name}`,
+          "description": cityData.intro,
+          "url": `https://localsurgeseo.com/${cityData.stateSlug}/${cityData.slug}`,
+          "telephone": "+1-909-707-5075",
+          "address": {
+            "@type": "PostalAddress",
+            "addressRegion": cityData.stateCode,
+            "addressCountry": "US"
+          }
+        }
+      ] : [])
+    ]
+  };
+
   return (
     <div id="directory-seo-page" className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-[#f7f6f2]">
+      {/* Inject Structured BreadcrumbList & LocalBusiness Schema */}
+      <script 
+        type="application/ld+json"
+        dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }}
+      />
+
       <div className="max-w-5xl mx-auto space-y-16">
         
-        {/* Dynamic Breadcrumbs */}
+        {/* Dynamic Semantic Breadcrumbs */}
         <nav aria-label="Breadcrumb" className="flex flex-wrap items-center gap-2 text-[10px] font-bold font-mono text-[#4e524f] uppercase tracking-wider">
-          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('home')}>Home</button>
+          <a 
+            href="/" 
+            className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" 
+            onClick={(e) => { e.preventDefault(); setCurrentPage('home'); }}
+          >
+            Home
+          </a>
           <span aria-hidden="true">/</span>
-          <button type="button" className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" onClick={() => setCurrentPage('site-map')}>Sitemap</button>
+          <a 
+            href="/site-map" 
+            className="hover:text-[#bc5f40] cursor-pointer focus:outline-none focus-visible:underline" 
+            onClick={(e) => { e.preventDefault(); setCurrentPage('site-map'); }}
+          >
+            Sitemap
+          </a>
           
           {isCity ? (
             <>
               <span aria-hidden="true">/</span>
-              <button 
-                type="button"
+              <a 
+                href={`/${cityData!.stateSlug}`}
                 className="hover:text-[#bc5f40] cursor-pointer text-[10px] font-bold font-mono uppercase focus:outline-none focus-visible:underline"
-                onClick={() => handleNavigateToState(cityData!.stateSlug)}
+                onClick={(e) => { e.preventDefault(); handleNavigateToState(cityData!.stateSlug); }}
               >
                 {cityData!.stateName}
-              </button>
+              </a>
               <span aria-hidden="true">/</span>
               <span className="text-[#123e35]" aria-current="page">{cityData!.name}</span>
             </>
@@ -126,6 +191,40 @@ export default function DirectoryView({
             </>
           )}
         </nav>
+
+        {/* Cross-Link Banner to Empirical Research Study if applicable */}
+        {matchedStudy && (
+          <aside aria-label="Empirical Market Study Cross-Reference" className="bg-emerald-50 border border-emerald-200/80 rounded-2xl p-5 flex flex-col sm:flex-row items-start sm:items-center justify-between gap-4 shadow-2xs">
+            <div className="flex items-center gap-3">
+              <span className="bg-[#123e35] text-white p-2 rounded-xl text-xs flex items-center justify-center">
+                <Compass className="w-5 h-5" aria-hidden="true" />
+              </span>
+              <div>
+                <span className="text-[9px] font-mono font-black text-emerald-800 uppercase tracking-widest block">
+                  Empirical Consumer Search Research
+                </span>
+                <h3 className="text-sm font-bold text-[#151716] font-display">
+                  {matchedStudy.label}
+                </h3>
+              </div>
+            </div>
+            <a
+              href={matchedStudy.url}
+              onClick={(e) => {
+                e.preventDefault();
+                if (setActiveStateSlug) setActiveStateSlug(matchedStudy.stateSlug);
+                if (setActiveCitySlug) setActiveCitySlug(matchedStudy.districtSlug);
+                setCurrentPage('locations-district' as any);
+                window.history.pushState({}, '', matchedStudy.url);
+                window.scrollTo({ top: 0, behavior: 'smooth' });
+              }}
+              className="bg-[#123e35] hover:bg-[#1a554a] text-white text-xs font-bold py-2.5 px-5 rounded-xl uppercase tracking-wider transition-all flex items-center gap-2 whitespace-nowrap shadow-2xs self-stretch sm:self-auto justify-center"
+            >
+              <span>View Empirical Study</span>
+              <ArrowRight className="w-3.5 h-3.5" aria-hidden="true" />
+            </a>
+          </aside>
+        )}
 
         {/* Hero Section */}
         <div className="bg-white border border-[#dfded4] rounded-3xl p-8 sm:p-12 relative overflow-hidden shadow-xs">
