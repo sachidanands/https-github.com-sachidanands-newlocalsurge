@@ -448,7 +448,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const title = "Transparent Local SEO Pricing & Plans - Local Surge SEO";
     const description = "Contract-free monthly SEO signal boosters: Single-Page Blast ($0/mo), Starter Boost ($999/mo), and Premium Surge ($1,999/mo). Complete pricing matrix.";
     const canonical = "https://localsurgeseo.com/pricing";
-    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+    const ogImage = "https://localsurgeseo.com/assets/og-pricing.png";
 
     const schemaJson = {
       "@context": "https://schema.org",
@@ -498,7 +498,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const title = "Local SEO Case Studies & Map Pack Revenue Surges - Local Surge";
     const description = "Proven results: see how contractors, dental clinics, and regional law firms doubled inbound phone calls and dominated Google Map Pack rankings.";
     const canonical = "https://localsurgeseo.com/case-studies";
-    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+    const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
 
     const schemaJson = {
       "@context": "https://schema.org",
@@ -531,7 +531,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const title = "Local SEO Services & Google Maps Domination - Local Surge SEO";
     const description = "Data-driven local SEO and Google Local 3-Pack optimization. Geo-coordinate grid expansion, review velocity, and NAP directory citation authority.";
     const canonical = "https://localsurgeseo.com/local-seo";
-    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+    const ogImage = "https://localsurgeseo.com/assets/og-local-seo.png";
 
     const schemaJson = {
       "@context": "https://schema.org",
@@ -597,7 +597,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const title = "Free Local SEO Diagnostic Scanner & Audit Tool - Local Surge";
     const description = "Scan your local business Google Maps readiness, NAP directory consistency, schema markup, and Core Web Vitals instantly.";
     const canonical = "https://localsurgeseo.com/seo-tool";
-    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+    const ogImage = "https://localsurgeseo.com/assets/og-seo-tool.png";
 
     const schemaJson = {
       "@context": "https://schema.org",
@@ -649,7 +649,9 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
       ? "Why smart local businesses choose Local Surge: empirical search studies, zero lock-in contracts, and verified map pack rankings."
       : "Learn about the mission, engineering team, and empirical search methodology behind Local Surge SEO's local search domination platform.";
     const canonical = `https://localsurgeseo.com${cleanPath}`;
-    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+    const ogImage = isWhyUs
+      ? "https://localsurgeseo.com/assets/og-why-us.png"
+      : "https://localsurgeseo.com/assets/og-about.png";
 
     const schemaJson = {
       "@context": "https://schema.org",
@@ -689,7 +691,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const title = "Contact Local Surge SEO - Talk to a Local Search Strategist";
     const description = "Connect with our local search strategists for custom Google Maps rankings blueprints, citation audits, and technical SEO consultation.";
     const canonical = "https://localsurgeseo.com/contact";
-    const ogImage = "https://localsurgeseo.com/assets/og-image.jpg";
+    const ogImage = "https://localsurgeseo.com/assets/og-contact.png";
 
     const schemaJson = {
       "@context": "https://schema.org",

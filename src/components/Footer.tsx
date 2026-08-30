@@ -230,7 +230,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
         </div>
 
         {/* Bottom Bar */}
-        <div className="border-t border-[#dfded4] mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#888b88] font-semibold">
+        <div className="border-t border-[#dfded4] mt-12 pt-8 flex flex-col sm:flex-row justify-between items-center gap-4 text-xs text-[#545754] font-semibold">
           <div>
             © {new Date().getFullYear()} Local Surge SEO. All rights reserved. Billed monthly, cancel anytime.
           </div>

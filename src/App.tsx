@@ -1,32 +1,34 @@
-import React, { useState, useEffect, useRef } from 'react';
+import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Page, Plan, Lead, SEOAuditResult } from './types';
 import Header from './components/Header';
 import Footer from './components/Footer';
 import OnboardingWizard from './components/OnboardingWizard';
-import LeadDashboard from './components/LeadDashboard';
 import BlogView from './components/BlogView';
 import SitemapView from './components/SitemapView';
 import SeoHomeTool from './components/SeoHomeTool';
-import AdminLoginForm from './components/AdminLoginForm';
 import LocalSeoView from './components/LocalSeoView';
 import LocalDirectoryTool from './components/LocalDirectoryTool';
-import CaliforniaView from './components/CaliforniaView';
-import LosAngelesSeoView from './components/LosAngelesSeoView';
-import DirectoryView from './components/DirectoryView';
-import LocationsIndexView from './components/LocationsIndexView';
-import LocationsStateView from './components/LocationsStateView';
-import LocationsDistrictView from './components/LocationsDistrictView';
 import { getStateBySlug, getDistrictBySlug } from './data/locationsData';
-import CaseStudiesView from './components/CaseStudiesView';
 import SchemaMarkup from './components/SchemaMarkup';
-import PrivacyPolicy from './components/PrivacyPolicy';
-import TermsOfService from './components/TermsOfService';
 import FaqSection from './components/FaqSection';
-import DemoView from './components/DemoView';
 import WebMcpConsentModal from './components/WebMcpConsentModal';
 import AiCitationReadinessWidget from './components/AiCitationReadinessWidget';
 import { initWebMcpRuntime, executeWebMcpTool, WebMcpTool } from './utils/webmcp';
 import { BLOG_POSTS } from './data/blogData';
+
+// Code-split secondary views for high performance & minimal Total Blocking Time (TBT)
+const LeadDashboard = React.lazy(() => import('./components/LeadDashboard'));
+const AdminLoginForm = React.lazy(() => import('./components/AdminLoginForm'));
+const CaseStudiesView = React.lazy(() => import('./components/CaseStudiesView'));
+const DemoView = React.lazy(() => import('./components/DemoView'));
+const LocationsIndexView = React.lazy(() => import('./components/LocationsIndexView'));
+const LocationsStateView = React.lazy(() => import('./components/LocationsStateView'));
+const LocationsDistrictView = React.lazy(() => import('./components/LocationsDistrictView'));
+const DirectoryView = React.lazy(() => import('./components/DirectoryView'));
+const CaliforniaView = React.lazy(() => import('./components/CaliforniaView'));
+const LosAngelesSeoView = React.lazy(() => import('./components/LosAngelesSeoView'));
+const PrivacyPolicy = React.lazy(() => import('./components/PrivacyPolicy'));
+const TermsOfService = React.lazy(() => import('./components/TermsOfService'));
 
 // Toggle flag to enable or disable the AI Citation Readiness Scanner component
 const ENABLE_AI_CITATION_WIDGET = true;
@@ -1067,7 +1069,12 @@ export default function App() {
 
       {/* Main viewport */}
       <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
-        <AnimatePresence mode="wait">
+        <Suspense fallback={
+          <div className="min-h-[50vh] flex items-center justify-center">
+            <div className="w-8 h-8 border-2 border-[#123e35] border-t-transparent rounded-full animate-spin"></div>
+          </div>
+        }>
+          <AnimatePresence mode="wait">
 
           {/* HOME SCREEN */}
           {currentPage === 'home' && (
@@ -2462,6 +2469,7 @@ export default function App() {
           )}
 
         </AnimatePresence>
+        </Suspense>
       </main>
 
       {/* Persistent Footer */}
