@@ -33,6 +33,8 @@ Allow: /contact
 Allow: /seo-tool
 Allow: /blog
 Allow: /site-map
+Allow: /sitemap
+Allow: /sitemap.html
 Allow: /locations
 Allow: /case-studies
 Allow: /california

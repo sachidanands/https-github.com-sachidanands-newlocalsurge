@@ -515,6 +515,11 @@ function getDynamicSitemapPages(): string[] {
   return Array.from(new Set(pages));
 }
 
+// Redirect alternate sitemap URLs to canonical human-readable /site-map
+app.get(["/sitemap", "/sitemap.html", "/site-map.html"], (req, res) => {
+  res.redirect(301, "/site-map");
+});
+
 app.get("/sitemap_index.xml", (req, res) => {
   res.type("application/xml");
   const sitemapIndexPath = path.join(process.cwd(), "public", "sitemap_index.xml");

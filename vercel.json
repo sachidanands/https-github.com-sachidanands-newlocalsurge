@@ -41,6 +41,21 @@
       "dest": "/api/index.ts"
     },
     {
+      "src": "^/sitemap/?$",
+      "status": 301,
+      "headers": { "Location": "/site-map" }
+    },
+    {
+      "src": "^/sitemap\\.html/?$",
+      "status": 301,
+      "headers": { "Location": "/site-map" }
+    },
+    {
+      "src": "^/site-map\\.html/?$",
+      "status": 301,
+      "headers": { "Location": "/site-map" }
+    },
+    {
       "handle": "filesystem"
     },
     {

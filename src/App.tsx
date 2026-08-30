@@ -106,7 +106,9 @@ function getPageFromPath(pathname: string): {
   if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/site-map') return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (['/site-map', '/sitemap', '/sitemap.html', '/site-map.html'].includes(cleanPath)) {
+    return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  }
   if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
   if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
@@ -134,7 +136,8 @@ function getPageFromPath(pathname: string): {
     return { page: 'demo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: slug };
   }
 
-  // Check dynamic state or city paths
+  // Parse path segments for dynamic state or city paths
+  const parts = cleanPath.split('/').filter(Boolean);
   const allCityStateSlugs = Array.from(new Set(Object.values(CITY_DIRECTORY).map(c => c.stateSlug)));
   const knownStates = Array.from(new Set(['california', ...Object.keys(STATE_DIRECTORY), ...allCityStateSlugs]));
 

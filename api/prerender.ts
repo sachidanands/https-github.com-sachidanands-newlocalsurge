@@ -74,6 +74,54 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
   }
 
+  // 1b. HTML Sitemap: /site-map (and aliases /sitemap, /sitemap.html, /site-map.html)
+  if (['/site-map', '/sitemap', '/sitemap.html', '/site-map.html'].includes(cleanPath)) {
+    const title = "Directory Sitemap & Complete Page Architecture - Local Surge SEO";
+    const description = "Comprehensive index of all 91 live pages, location guides, city directories, tools, and blog posts published on Local Surge SEO.";
+    const canonical = "https://localsurgeseo.com/site-map";
+    const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": canonical }
+          ]
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-sitemap-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <nav aria-label="Breadcrumb">
+          <a href="/">Home</a> / <span>Sitemap</span>
+        </nav>
+        <h1>Local Surge SEO - Complete Website Architecture & Sitemap</h1>
+        <p>${description}</p>
+        <section>
+          <h2>Core Pages</h2>
+          <ul>
+            <li><a href="/">Home</a></li>
+            <li><a href="/about">About</a></li>
+            <li><a href="/why-us">Why Choose Us</a></li>
+            <li><a href="/local-seo">Local SEO Services</a></li>
+            <li><a href="/pricing">Pricing & Packages</a></li>
+            <li><a href="/seo-tool">Free Local SEO Audit Tool</a></li>
+            <li><a href="/contact">Contact & Strategy Consultation</a></li>
+            <li><a href="/case-studies">Real Client Case Studies</a></li>
+            <li><a href="/locations">United States Locations Index</a></li>
+            <li><a href="/blog">Local SEO Editorial & Growth Blog</a></li>
+          </ul>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
   // 2. State or District Path: /locations/:state or /locations/:state/:district
   if (cleanPath.startsWith('/locations/')) {
     const parts = cleanPath.slice('/locations/'.length).split('/').filter(Boolean);
