@@ -29,6 +29,7 @@ const CaliforniaView = React.lazy(() => import('./components/CaliforniaView'));
 const LosAngelesSeoView = React.lazy(() => import('./components/LosAngelesSeoView'));
 const PrivacyPolicy = React.lazy(() => import('./components/PrivacyPolicy'));
 const TermsOfService = React.lazy(() => import('./components/TermsOfService'));
+const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
 
 // Toggle flag to enable or disable the AI Citation Readiness Scanner component
 const ENABLE_AI_CITATION_WIDGET = true;
@@ -157,7 +158,7 @@ function getPageFromPath(pathname: string): {
     return { page: 'city-seo', stateSlug: parts[0], citySlug: parts[1], blogSlug: null, demoSlug: null };
   }
 
-  return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  return { page: '404', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
 }
 
 export default function App() {
@@ -194,6 +195,10 @@ export default function App() {
 
   // Sync state updates back to address bar path
   useEffect(() => {
+    if (currentPage === '404') {
+      return; // Preserve the current path so the user sees the URL that was not found
+    }
+
     let path = '/';
     if (currentPage === 'about') path = '/about';
     else if (currentPage === 'why-us') path = '/why-us';
@@ -223,7 +228,6 @@ export default function App() {
       path = activeDemoSlug ? `/demo/${activeDemoSlug}` : '/pricing';
     }
 
-
     if (window.location.pathname !== path) {
       window.history.pushState(null, '', path);
     }
@@ -239,16 +243,16 @@ export default function App() {
     return sessionStorage.getItem('isAdminLoggedIn') === 'true';
   });
 
-  // Dynamic Noindex Metadata to deny robots crawl indexing and tracking on /admin/dashboard
+  // Dynamic Noindex Metadata to deny robots crawl indexing on /admin/dashboard and 404 pages
   useEffect(() => {
     let robotsMeta = document.querySelector('meta[name="robots"]');
-    if (currentPage === 'admin') {
+    if (currentPage === 'admin' || currentPage === '404') {
       if (!robotsMeta) {
         robotsMeta = document.createElement('meta');
         robotsMeta.setAttribute('name', 'robots');
         document.head.appendChild(robotsMeta);
       }
-      robotsMeta.setAttribute('content', 'noindex, nofollow');
+      robotsMeta.setAttribute('content', currentPage === 'admin' ? 'noindex, nofollow' : 'noindex, follow');
     } else {
       if (robotsMeta) {
         robotsMeta.remove();
@@ -365,6 +369,10 @@ export default function App() {
       };
       title = `${info.title} - Local Surge SEO`;
       description = info.desc;
+      ogImage = 'https://localsurgeseo.com/assets/og-home.png';
+    } else if (currentPage === '404') {
+      title = '404 - Page Not Found | Local Surge SEO';
+      description = 'The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. Explore our popular local SEO tools, pricing packages, and location guides.';
       ogImage = 'https://localsurgeseo.com/assets/og-home.png';
     }
 
@@ -2497,6 +2505,39 @@ export default function App() {
               transition={{ duration: 0.3 }}
             >
               <TermsOfService setCurrentPage={setCurrentPage} />
+            </motion.div>
+          )}
+
+          {/* 404 NOT FOUND ERROR VIEW */}
+          {currentPage === '404' && (
+            <motion.div
+              key="404"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <NotFoundView
+                setCurrentPage={setCurrentPage}
+                onOpenOnboarding={handleGetFreeStrategy}
+                onNavigateToLocation={(path) => {
+                  const parts = path.replace(/^\/locations\/?/, '').split('/').filter(Boolean);
+                  if (parts.length === 0) {
+                    setCurrentPage('locations-index');
+                  } else if (parts.length === 1) {
+                    setActiveStateSlug(parts[0]);
+                    setCurrentPage('locations-state');
+                  } else if (parts.length >= 2) {
+                    setActiveStateSlug(parts[0]);
+                    setActiveCitySlug(parts[1]);
+                    setCurrentPage('locations-district');
+                  }
+                  if (typeof window !== 'undefined') {
+                    window.history.pushState(null, '', path);
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }
+                }}
+              />
             </motion.div>
           )}
 

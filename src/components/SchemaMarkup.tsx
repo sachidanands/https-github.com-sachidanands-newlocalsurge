@@ -135,6 +135,8 @@ export default function SchemaMarkup({
       addBreadcrumb('About Us', '/about');
     } else if (currentPage === 'why-us') {
       addBreadcrumb('Why Us', '/why-us');
+    } else if (currentPage === '404') {
+      addBreadcrumb('404 Page Not Found', '/404');
     } else if (currentPage === 'local-seo') {
       addBreadcrumb('SEO Services', '/local-seo');
     } else if (currentPage === 'pricing') {

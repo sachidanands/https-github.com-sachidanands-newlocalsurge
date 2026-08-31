@@ -308,7 +308,52 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     }
   }
 
-  // 3. Blog Article SSR: /blog/:slug
+  // 3a. Blog Index SSR: /blog
+  if (cleanPath === '/blog') {
+    const title = "Local Marketing Insights Blog - Local Surge SEO";
+    const description = "Read expert guides and actionable strategies on local search, generative engine optimization (GEO), and ranking in the AI search era.";
+    const canonical = "https://localsurgeseo.com/blog";
+    const ogImage = "https://localsurgeseo.com/assets/og-blog.png";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Blog", "item": canonical }
+          ]
+        },
+        {
+          "@type": "Blog",
+          "name": title,
+          "description": description,
+          "url": canonical
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-blog-index-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <nav aria-label="Breadcrumb">
+          <a href="/">Home</a> / <span>Blog</span>
+        </nav>
+        <h1>Local Marketing Insights & Search Domination Guides</h1>
+        <p>${description}</p>
+        <section>
+          <h2>All Strategy Guides (${BLOG_POSTS.length})</h2>
+          <ul>
+            ${BLOG_POSTS.map(p => `<li><a href="/blog/${p.slug}">${p.title}</a> (${p.category})</li>`).join('\n')}
+          </ul>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  // 3b. Blog Article SSR: /blog/:slug
   if (cleanPath.startsWith('/blog/')) {
     const slug = cleanPath.slice('/blog/'.length).trim().toLowerCase();
     const post = BLOG_POSTS.find(p => p.slug.toLowerCase() === slug);
@@ -1055,7 +1100,91 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
   }
 
-  return rawHtml;
+  // 12. Fallback 404 SSR Page for Unmatched URLs
+  const title = "404 - Page Not Found | Local Surge SEO";
+  const description = "The page you are looking for might have been removed, had its name changed, or is temporarily unavailable. Browse our popular local SEO tools, pricing packages, and location guides.";
+  const canonical = `https://localsurgeseo.com${cleanPath}`;
+  const ogImage = "https://localsurgeseo.com/assets/og-home.png";
+
+  const schemaJson = {
+    "@context": "https://schema.org",
+    "@graph": [
+      {
+        "@type": "BreadcrumbList",
+        "itemListElement": [
+          { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+          { "@type": "ListItem", "position": 2, "name": "404 Not Found", "item": canonical }
+        ]
+      },
+      {
+        "@type": "WebPage",
+        "@id": "https://localsurgeseo.com/404#webpage",
+        "name": title,
+        "description": description,
+        "url": canonical
+      }
+    ]
+  };
+
+  const crawlMarkup = `
+    <div id="ssr-404-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+      <nav aria-label="Breadcrumb">
+        <a href="/">Home</a> / <span>404 Not Found</span>
+      </nav>
+      <h1>404 - Page Not Found</h1>
+      <p>${description}</p>
+      <section>
+        <h2>Popular Destinations & Helpful Links</h2>
+        <ul>
+          <li><a href="/">Local Surge SEO Homepage</a></li>
+          <li><a href="/seo-tool">Free Local SEO Audit & Scan Tool</a></li>
+          <li><a href="/pricing">Local SEO Pricing & Monthly Packages</a></li>
+          <li><a href="/local-seo">Local SEO Optimization Services</a></li>
+          <li><a href="/case-studies">Client Case Studies & Verified Results</a></li>
+          <li><a href="/locations">U.S. Local Search Markets Directory</a></li>
+          <li><a href="/blog">Local Marketing Insights & GEO Blog</a></li>
+          <li><a href="/contact">Contact Our Strategists</a></li>
+        </ul>
+      </section>
+    </div>
+  `;
+
+  let html404 = injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  // Deny robots indexing on 404 error pages
+  html404 = html404.replace('</head>', `  <meta name="robots" content="noindex, follow" />\n  </head>`);
+
+  return html404;
+}
+
+export interface PrerenderResult {
+  html: string;
+  status: number;
+  is404: boolean;
+}
+
+export function prerenderLocationHtmlWithStatus(rawHtml: string, requestPath: string): PrerenderResult {
+  const cleanPath = requestPath.split('?')[0].replace(/\/$/, '') || '/';
+
+  // Home route
+  if (cleanPath === '' || cleanPath === '/') {
+    return { html: rawHtml, status: 200, is404: false };
+  }
+
+  // Admin route (noindex)
+  if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') {
+    let result = rawHtml;
+    result = result.replace(/<title>[\s\S]*?<\/title>/i, `<title>Admin Lead Dashboard - Local Surge SEO</title>`);
+    result = result.replace('</head>', `  <meta name="robots" content="noindex, nofollow" />\n</head>`);
+    return { html: result, status: 200, is404: false };
+  }
+
+  const renderedHtml = prerenderLocationHtml(rawHtml, requestPath);
+
+  if (renderedHtml.includes('id="ssr-404-content"')) {
+    return { html: renderedHtml, status: 404, is404: true };
+  }
+
+  return { html: renderedHtml, status: 200, is404: false };
 }
 
 function injectMetadataAndFallback(
