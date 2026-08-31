@@ -450,6 +450,60 @@ export default function BlogView({
                   />
                 </div>
 
+                {/* GEO & AI Citations Executive Summary Quick Answer */}
+                <div className="p-5 bg-[#123e35]/5 border border-[#123e35]/20 rounded-2xl space-y-2">
+                  <div className="flex items-center gap-2 text-xs font-black font-mono uppercase tracking-wider text-[#123e35]">
+                    <Sparkles className="w-4 h-4 text-[#bc5f40]" />
+                    <span>Executive Summary & Key Takeaways</span>
+                  </div>
+                  <p className="text-xs sm:text-sm font-semibold text-[#151716] leading-relaxed">
+                    {activeArticle.description}
+                  </p>
+                </div>
+
+                {/* Table of Contents for Long-form Content & Rich Sitelinks */}
+                {(() => {
+                  const headings = activeArticle.sections
+                    .map((s: any, idx: number) => ({ content: s.content, idx, type: s.type }))
+                    .filter((s: any) => s.type === 'heading' && s.content);
+                  
+                  if (headings.length < 2) return null;
+                  
+                  return (
+                    <nav aria-label="Table of Contents" className="p-5 bg-white border border-[#dfded4] rounded-2xl space-y-3 shadow-2xs">
+                      <div className="flex items-center justify-between border-b border-[#dfded4] pb-2">
+                        <span className="text-xs font-black font-mono uppercase tracking-wider text-[#151716] flex items-center gap-2">
+                          <BookOpen className="w-4 h-4 text-[#bc5f40]" />
+                          <span>Table of Contents</span>
+                        </span>
+                        <span className="text-[10px] font-mono text-[#888b88] font-bold">
+                          {headings.length} Sections
+                        </span>
+                      </div>
+                      <ul className="grid grid-cols-1 sm:grid-cols-2 gap-2 text-xs font-semibold text-[#4e524f]">
+                        {headings.map((h: any) => (
+                          <li key={h.idx}>
+                            <a
+                              href={`#art-heading-${h.idx}`}
+                              onClick={(e) => {
+                                e.preventDefault();
+                                const el = document.getElementById(`art-heading-${h.idx}`);
+                                if (el) {
+                                  el.scrollIntoView({ behavior: 'smooth', block: 'start' });
+                                }
+                              }}
+                              className="hover:text-[#123e35] hover:underline flex items-start gap-1.5 py-1 text-left transition-colors"
+                            >
+                              <span className="text-[#bc5f40] font-mono text-[10px] shrink-0 mt-0.5">§</span>
+                              <span className="line-clamp-2">{h.content}</span>
+                            </a>
+                          </li>
+                        ))}
+                      </ul>
+                    </nav>
+                  );
+                })()}
+
                 {/* Structured Sections */}
                 <div className="space-y-6 pt-2 text-[#1a1c1a]">
                   {activeArticle.sections.map((section, idx) => {

@@ -227,12 +227,12 @@ export default function App() {
     if (window.location.pathname !== path) {
       window.history.pushState(null, '', path);
     }
-  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug]);
 
   // Scroll to top on page navigation
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug]);
 
   // Private Admin access credentials management
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
@@ -265,7 +265,7 @@ export default function App() {
     } catch (err) {
       console.error('Failed to track Facebook PageView:', err);
     }
-  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug]);
 
   // Dynamic Page Title & Meta Description Handler
   useEffect(() => {
@@ -344,6 +344,28 @@ export default function App() {
       title = `${cityName}, ${stateName} Local SEO Rankings - Local Surge`;
       description = `Local maps optimization, search volumes, and competitor density listings in ${cityName}, ${stateName} for neighborhood contractors and practices.`;
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
+    } else if (currentPage === 'demo') {
+      const demoTitles: Record<string, { title: string; desc: string }> = {
+        'contractor-surge': {
+          title: 'Apex Pro Contractor Services - Single-Page SEO Demo',
+          desc: 'High-performance single-page contractor website blueprint designed for Google Local 3-Pack domination and emergency call conversions.'
+        },
+        'dental-surge': {
+          title: 'Harbor View Dental Care - Single-Page Practice Demo',
+          desc: 'Interactive local SEO blueprint for dental clinics and healthcare practices. Optimized for high-intent patient appointments.'
+        },
+        'legal-surge': {
+          title: 'Vanguard Regional Legal Group - Law Practice SEO Demo',
+          desc: 'Interactive local SEO showcase for regional law firms and attorneys. Built for premium client intake and top search rankings.'
+        }
+      };
+      const info = (activeDemoSlug && demoTitles[activeDemoSlug]) || {
+        title: `${(activeDemoSlug || 'Local Business').split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')} - Single-Page Demo`,
+        desc: 'Explore our high-converting, mobile-first single page website demo built for local service businesses.'
+      };
+      title = `${info.title} - Local Surge SEO`;
+      description = info.desc;
+      ogImage = 'https://localsurgeseo.com/assets/og-home.png';
     }
 
     if (currentPage === 'blog' && activeArticleSlug) {
@@ -1057,6 +1079,7 @@ export default function App() {
         activeArticleSlug={activeArticleSlug}
         activeStateSlug={activeStateSlug}
         activeCitySlug={activeCitySlug}
+        activeDemoSlug={activeDemoSlug}
         plans={PLANS}
       />
 
@@ -2287,6 +2310,7 @@ export default function App() {
                 }}
                 setActiveStateSlug={setActiveStateSlug}
                 setActiveCitySlug={setActiveCitySlug}
+                setActiveDemoSlug={setActiveDemoSlug}
               />
             </motion.div>
           )}

@@ -808,13 +808,13 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
           <section>
             <h2>Market Realities for ${cityData.name} Owners</h2>
             <ul>
-              ${cityData.realityPoints.map(r => `<li><strong>${r.title}</strong>: ${r.desc}</li>`).join('\n')}
+              ${cityData.realityPoints.map(r => `<li>${r}</li>`).join('\n')}
             </ul>
           </section>
           <section>
             <h2>Strategic Advantages with Local Surge SEO</h2>
             <ul>
-              ${cityData.advantagePoints.map(a => `<li><strong>${a.title}</strong>: ${a.desc}</li>`).join('\n')}
+              ${cityData.advantagePoints.map(a => `<li>${a}</li>`).join('\n')}
             </ul>
           </section>
         </div>
@@ -872,6 +872,187 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
 
       return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
     }
+  }
+
+  // 7. Interactive Showcase Demos: /demo/:demoSlug
+  if (cleanPath.startsWith('/demo/')) {
+    const demoSlug = cleanPath.slice('/demo/'.length).trim().toLowerCase();
+    
+    const DEMO_PREVIEWS: Record<string, {
+      businessName: string;
+      niche: string;
+      location: string;
+      heroHeadline: string;
+      heroSubheadline: string;
+      services: { title: string; desc: string }[];
+    }> = {
+      'contractor-surge': {
+        businessName: 'Apex Pro Trade & Contractor Services',
+        niche: 'HVAC, Plumbing & Roofing Contractors',
+        location: 'Dallas-Fort Worth, TX',
+        heroHeadline: 'Fast, Trusted Local Contractor Services & Emergency Repairs',
+        heroSubheadline: 'Interactive showcase of a high-performance local contractor single-page website. Optimized for Google 3-Pack rankings, emergency calls, and zero-click AI citations.',
+        services: [
+          { title: '24/7 Emergency Repairs', desc: 'Rapid response dispatch for urgent home and commercial heating, plumbing, and roofing needs.' },
+          { title: 'Complete Diagnostic Inspection', desc: 'Precision diagnostics utilizing thermal scanners and modern inspection equipment.' },
+          { title: 'System Replacement & Installation', desc: 'High-efficiency installations backed by 10-year comprehensive warranties.' },
+          { title: 'Preventative Maintenance Plans', desc: 'Scheduled seasonal tune-ups to avoid costly unexpected breakdowns.' }
+        ]
+      },
+      'dental-surge': {
+        businessName: 'Harbor View Family & Cosmetic Dentistry',
+        niche: 'Dental & Orthodontic Practice',
+        location: 'Miami, FL',
+        heroHeadline: 'Modern, Gentle Dental Care & Emergency Practice',
+        heroSubheadline: 'Interactive local SEO demo for dental clinics and medical practices. Engineered for high-intent patient acquisition, local schema, and Google Maps prominence.',
+        services: [
+          { title: 'Same-Day Emergency Care', desc: 'Immediate relief for toothaches, chipped teeth, and urgent dental needs.' },
+          { title: 'Preventative & Family Hygiene', desc: 'Comprehensive exams, digital low-radiation X-rays, and ultrasonic cleanings.' },
+          { title: 'Cosmetic Veneers & Whitening', desc: 'Custom porcelain veneers and professional in-office smile transformations.' },
+          { title: 'Dental Implants & Restorations', desc: 'State-of-the-art restorative implants with permanent lifetime durability.' }
+        ]
+      },
+      'legal-surge': {
+        businessName: 'Vanguard Regional Legal Group & Attorneys',
+        niche: 'Personal Injury, Business & Family Law',
+        location: 'San Jose, CA',
+        heroHeadline: 'Aggressive Local Legal Representation with Proven Results',
+        heroSubheadline: 'Interactive local SEO demo for regional law firms and legal practices. Designed for ultra-high conversion rates, client intake, and local search dominance.',
+        services: [
+          { title: 'Personal Injury Litigation', desc: 'No fee unless we win. Maximum financial compensation for auto accidents and injuries.' },
+          { title: 'Business Formation & Contracts', desc: 'Corporate structuring, contract negotiations, and trademark dispute protection.' },
+          { title: 'Estate Planning & Trusts', desc: 'Comprehensive asset protection, revocable living trusts, and probate administration.' },
+          { title: 'Family Law & Mediation', desc: 'Compassionate guidance through child custody, divorce, and settlement mediation.' }
+        ]
+      }
+    };
+
+    const demoInfo = DEMO_PREVIEWS[demoSlug] || {
+      businessName: demoSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Services',
+      niche: 'Local Trade Services',
+      location: 'San Jose, CA',
+      heroHeadline: `Fast, Trusted Local Services in ${demoSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ')}`,
+      heroSubheadline: 'High-performance single-page local website blueprint built by Local Surge SEO.',
+      services: [
+        { title: 'Emergency Dispatch', desc: '24/7 rapid response for urgent local service calls.' },
+        { title: 'Full Inspection', desc: 'Complete diagnostic review with upfront transparent pricing.' }
+      ]
+    };
+
+    const title = `${demoInfo.businessName} - Local SEO & Single-Page Blueprint Demo`;
+    const description = demoInfo.heroSubheadline;
+    const canonical = `https://localsurgeseo.com/demo/${demoSlug}`;
+    const ogImage = "https://localsurgeseo.com/assets/og-home.png";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Demos", "item": "https://localsurgeseo.com/pricing" },
+            { "@type": "ListItem", "position": 3, "name": demoInfo.businessName, "item": canonical }
+          ]
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": demoInfo.businessName,
+          "description": demoInfo.heroSubheadline,
+          "url": canonical,
+          "telephone": "+1-909-707-5075",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Debit Card, Invoice",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": demoInfo.location.split(',')[0].trim(),
+            "addressRegion": demoInfo.location.split(',')[1]?.trim() || "CA",
+            "addressCountry": "US"
+          },
+          "areaServed": {
+            "@type": "AdministrativeArea",
+            "name": demoInfo.location
+          }
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-demo-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <nav aria-label="Breadcrumb">
+          <a href="/">Home</a> / <a href="/pricing">Pricing</a> / <span>${demoInfo.businessName}</span>
+        </nav>
+        <h1>${demoInfo.heroHeadline}</h1>
+        <p>${demoInfo.heroSubheadline}</p>
+        <section>
+          <h2>Core Services</h2>
+          <ul>
+            ${demoInfo.services.map(s => `<li><strong>${s.title}</strong>: ${s.desc}</li>`).join('\n')}
+          </ul>
+        </section>
+        <section>
+          <h2>About This Single-Page Demo</h2>
+          <p>This high-converting landing page is engineered by Local Surge SEO to demonstrate how local service providers capture Google Local 3-Pack prominence with mobile-first architecture and schema markup.</p>
+          <p><a href="/pricing">Claim Your Free Single-Page Website</a> or call +1 (909) 707-5075.</p>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  // 8. Legal Pages: /privacy-policy & /terms-of-service
+  if (cleanPath === '/privacy-policy' || cleanPath === '/terms-of-service') {
+    const isPrivacy = cleanPath === '/privacy-policy';
+    const title = isPrivacy
+      ? "Privacy Policy - Local Surge SEO Data Protection & Privacy Notice"
+      : "Terms of Service & Client Engagement Agreement - Local Surge SEO";
+    const description = isPrivacy
+      ? "Our statutory privacy policy detailing data collection, CCPA/CPRA, PIPEDA alignment, analytics tracking, and consumer privacy rights."
+      : "Governing terms of service, billing guidelines, cancel-anytime policy, and professional client engagement standards for Local Surge SEO.";
+    const canonical = `https://localsurgeseo.com${cleanPath}`;
+    const ogImage = "https://localsurgeseo.com/assets/og-home.png";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": isPrivacy ? "Privacy Policy" : "Terms of Service", "item": canonical }
+          ]
+        },
+        {
+          "@type": "WebPage",
+          "name": title,
+          "url": canonical,
+          "description": description,
+          "publisher": {
+            "@type": "Organization",
+            "name": "Local Surge SEO",
+            "url": "https://localsurgeseo.com/"
+          }
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-legal-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <nav aria-label="Breadcrumb">
+          <a href="/">Home</a> / <span>${isPrivacy ? "Privacy Policy" : "Terms of Service"}</span>
+        </nav>
+        <h1>${title}</h1>
+        <p>${description}</p>
+        <section>
+          <h2>Company Information</h2>
+          <p>Local Surge SEO operates as a Service Area Business (SAB) headquartered virtually in San Jose, CA 95112. Contact: contact@localsurgeseo.com | Telephone: +1-909-707-5075.</p>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
   }
 
   return rawHtml;

@@ -13,13 +13,15 @@ interface SitemapViewProps {
   onNavigateToArticle: (slug: string | null) => void;
   setActiveStateSlug?: (slug: string | null) => void;
   setActiveCitySlug?: (slug: string | null) => void;
+  setActiveDemoSlug?: (slug: string | null) => void;
 }
 
 export default function SitemapView({ 
   setCurrentPage, 
   onNavigateToArticle,
   setActiveStateSlug,
-  setActiveCitySlug
+  setActiveCitySlug,
+  setActiveDemoSlug
 }: SitemapViewProps) {
   
   const handleNavPage = (e: React.MouseEvent, pageName: Page, path: string) => {
@@ -198,6 +200,8 @@ export default function SitemapView({
                     href={demo.path}
                     onClick={(e) => {
                       e.preventDefault();
+                      const slug = demo.path.replace('/demo/', '');
+                      if (setActiveDemoSlug) setActiveDemoSlug(slug);
                       setCurrentPage('demo');
                       if (typeof window !== 'undefined') {
                         window.history.pushState({}, '', demo.path);

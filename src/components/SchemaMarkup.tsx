@@ -2,12 +2,14 @@ import React from 'react';
 import { Page, Plan } from '../types';
 import { BLOG_POSTS, BlogPost } from '../data/blogData';
 import { STATE_DIRECTORY, CITY_DIRECTORY, StateData, CityData } from '../data/directoryData';
+import { getStateBySlug, getDistrictBySlug } from '../data/locationsData';
 
 interface SchemaMarkupProps {
   currentPage: Page;
   activeArticleSlug: string | null;
   activeStateSlug: string | null;
   activeCitySlug: string | null;
+  activeDemoSlug?: string | null;
   plans: Plan[];
 }
 
@@ -16,6 +18,7 @@ export default function SchemaMarkup({
   activeArticleSlug,
   activeStateSlug,
   activeCitySlug,
+  activeDemoSlug,
   plans
 }: SchemaMarkupProps) {
 
@@ -144,11 +147,34 @@ export default function SchemaMarkup({
       addBreadcrumb('Directory Sitemap', '/site-map');
     } else if (currentPage === 'case-studies') {
       addBreadcrumb('Local SEO Case Studies & Success Stories', '/case-studies');
-    } else if (currentPage === 'california') {
-      addBreadcrumb('California SEO Directory', '/california');
-    } else if (currentPage === 'los-angeles-seo') {
-      addBreadcrumb('California SEO', '/california');
-      addBreadcrumb('Los Angeles SEO Services', '/los-angeles-seo');
+    } else if (currentPage === 'privacy-policy') {
+      addBreadcrumb('Privacy Policy', '/privacy-policy');
+    } else if (currentPage === 'terms-of-service') {
+      addBreadcrumb('Terms of Service', '/terms-of-service');
+    } else if (currentPage === 'locations-index') {
+      addBreadcrumb('Locations & Market Studies', '/locations');
+    } else if (currentPage === 'locations-state' || currentPage === 'california') {
+      addBreadcrumb('Locations & Market Studies', '/locations');
+      const stSlug = activeStateSlug || 'california';
+      const stateObj = getStateBySlug(stSlug);
+      addBreadcrumb(stateObj ? stateObj.name : stSlug.charAt(0).toUpperCase() + stSlug.slice(1), `/locations/${stSlug}/`);
+    } else if (currentPage === 'locations-district' || currentPage === 'los-angeles-seo') {
+      addBreadcrumb('Locations & Market Studies', '/locations');
+      const stSlug = activeStateSlug || 'california';
+      const cSlug = activeCitySlug || 'los-angeles';
+      const stateObj = getStateBySlug(stSlug);
+      const distObj = getDistrictBySlug(cSlug);
+      addBreadcrumb(stateObj ? stateObj.name : stSlug.charAt(0).toUpperCase() + stSlug.slice(1), `/locations/${stSlug}/`);
+      addBreadcrumb(distObj ? `${distObj.name} Local SEO` : cSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), `/locations/${stSlug}/${cSlug}`);
+    } else if (currentPage === 'demo') {
+      addBreadcrumb('Solutions & Demos', '/pricing');
+      const demoNames: Record<string, string> = {
+        'contractor-surge': 'Contractor Single-Page Demo',
+        'dental-surge': 'Dental Practice Single-Page Demo',
+        'legal-surge': 'Legal Practice Single-Page Demo'
+      };
+      const dLabel = (activeDemoSlug && demoNames[activeDemoSlug]) || 'Single-Page Showcase';
+      addBreadcrumb(dLabel, activeDemoSlug ? `/demo/${activeDemoSlug}` : '/pricing');
     } else if (currentPage === 'blog') {
       addBreadcrumb('Local Marketing Insights Blog', '/blog');
       if (activeArticleSlug) {
@@ -389,7 +415,16 @@ export default function SchemaMarkup({
       'author': {
         '@type': 'Person',
         'name': post.author.name,
-        'jobTitle': post.author.role
+        'jobTitle': post.author.role,
+        'worksFor': {
+          '@type': 'Organization',
+          'name': orgName,
+          'url': siteUrl
+        },
+        'sameAs': [
+          'https://x.com/localsurgeseo',
+          'https://www.youtube.com/@LocalSurgeSEO'
+        ]
       },
       'publisher': {
         '@type': 'Organization',
@@ -531,6 +566,67 @@ export default function SchemaMarkup({
 
     if (currentPage === 'local-seo') {
       schemas.push(getLocalSeoFAQSchema());
+    }
+
+    if (currentPage === 'case-studies') {
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'Product',
+        'name': 'Local Surge SEO Acceleration Services',
+        'description': 'Verified client revenue and Google Local 3-Pack rank acceleration results for local service businesses.',
+        'aggregateRating': {
+          '@type': 'AggregateRating',
+          'ratingValue': '4.95',
+          'bestRating': '5',
+          'ratingCount': '48',
+          'reviewCount': '48'
+        },
+        'review': [
+          {
+            '@type': 'Review',
+            'author': { '@type': 'Person', 'name': 'Robert Martinez' },
+            'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' },
+            'reviewBody': '+312% organic Map Pack impressions and 44 new commercial roofing inbound leads per month within 90 days.'
+          },
+          {
+            '@type': 'Review',
+            'author': { '@type': 'Person', 'name': 'Dr. Elena Rostova' },
+            'reviewRating': { '@type': 'Rating', 'ratingValue': '5', 'bestRating': '5' },
+            'reviewBody': 'Rank #1 in Local 3-Pack for emergency dentist near me with +185% patient appointment requests.'
+          }
+        ]
+      });
+    }
+
+    if (currentPage === 'demo') {
+      const demoSlug = activeDemoSlug || 'contractor-surge';
+      const demoNames: Record<string, { name: string; loc: string }> = {
+        'contractor-surge': { name: 'Apex Pro Contractor Services', loc: 'Dallas-Fort Worth, TX' },
+        'dental-surge': { name: 'Harbor View Dental Care', loc: 'Miami, FL' },
+        'legal-surge': { name: 'Vanguard Regional Legal Group', loc: 'San Jose, CA' }
+      };
+      const info = demoNames[demoSlug] || {
+        name: demoSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' ') + ' Services',
+        loc: 'San Jose, CA'
+      };
+
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'LocalBusiness',
+        'name': info.name,
+        'description': 'High-performance local business single-page website demo built by Local Surge SEO.',
+        'url': `${siteUrl}/demo/${demoSlug}`,
+        'telephone': '+1-909-707-5075',
+        'priceRange': '$$',
+        'currenciesAccepted': 'USD',
+        'paymentAccepted': 'Credit Card, Debit Card, Invoice',
+        'address': {
+          '@type': 'PostalAddress',
+          'addressLocality': info.loc.split(',')[0].trim(),
+          'addressRegion': info.loc.split(',')[1]?.trim() || "CA",
+          'addressCountry': 'US'
+        }
+      });
     }
 
     if (currentPage === 'blog' && activeArticleSlug) {

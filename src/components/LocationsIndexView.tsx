@@ -1,9 +1,9 @@
-import React, { useState } from 'react';
+import React, { useState, useMemo } from 'react';
 import { Page } from '../types';
 import { 
   Rocket, MapPin, Globe, Star, Mail, CheckCircle, ShieldCheck, 
   ArrowRight, Landmark, Zap, Compass, Users, TrendingUp, HelpCircle,
-  AlertCircle, BarChart3, ExternalLink, ChevronRight
+  AlertCircle, BarChart3, ExternalLink, ChevronRight, Search, X
 } from 'lucide-react';
 import InteractiveLocationsMap from './InteractiveLocationsMap';
 import { getAllMappedStates, getAllMappedDistricts, DISTRICTS_REGISTRY } from '../data/locationsData';
@@ -24,7 +24,30 @@ export default function LocationsIndexView({
   const states = getAllMappedStates();
   const districts = getAllMappedDistricts();
   const [selectedStateSlug, setSelectedStateSlug] = useState<string | null>('california');
+  const [searchQuery, setSearchQuery] = useState('');
   const selectedState = selectedStateSlug ? states.find(s => s.slug === selectedStateSlug) : null;
+
+  // Filtered districts matching search query
+  const matchingDistricts = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const q = searchQuery.toLowerCase().trim();
+    return districts.filter(d => 
+      d.name.toLowerCase().includes(q) ||
+      d.stateName.toLowerCase().includes(q) ||
+      d.stateCode.toLowerCase().includes(q) ||
+      d.municipalCities.some(c => c.toLowerCase().includes(q))
+    );
+  }, [districts, searchQuery]);
+
+  // Filtered states matching search query
+  const matchingStates = useMemo(() => {
+    if (!searchQuery.trim()) return [];
+    const q = searchQuery.toLowerCase().trim();
+    return states.filter(s => 
+      s.name.toLowerCase().includes(q) ||
+      s.slug.toLowerCase().includes(q)
+    );
+  }, [states, searchQuery]);
 
   // Structured Data (Schema.org) for Directory Index & FAQ
   const jsonLdData = {
@@ -194,9 +217,97 @@ export default function LocationsIndexView({
               Browse Search Markets by State & District
             </h2>
             <p className="text-xs text-[#4e524f] font-semibold">
-              Click any state below to view its active district studies. States without individual district studies will navigate directly to their comprehensive statewide guide.
+              Search by city, district, or state name, or select any state below to view its active district studies.
             </p>
           </div>
+
+          {/* Instant Search Bar */}
+          <div className="relative max-w-lg">
+            <Search className="w-4 h-4 text-[#8c918d] absolute left-3.5 top-1/2 -translate-y-1/2 pointer-events-none" aria-hidden="true" />
+            <input
+              type="text"
+              value={searchQuery}
+              onChange={(e) => setSearchQuery(e.target.value)}
+              placeholder="Search by city (e.g. Austin, Miami, San Jose, Dallas)..."
+              className="w-full pl-10 pr-10 py-3 rounded-xl border border-[#dfded4] bg-[#fcfbf9] text-xs font-semibold text-[#151716] placeholder:text-[#8c918d] focus:outline-none focus:ring-2 focus:ring-[#123e35] focus:bg-white transition-all shadow-2xs"
+              aria-label="Filter locations by state, district, or city"
+            />
+            {searchQuery && (
+              <button
+                type="button"
+                onClick={() => setSearchQuery('')}
+                className="absolute right-3 top-1/2 -translate-y-1/2 p-1 text-[#8c918d] hover:text-[#151716] transition-colors"
+                aria-label="Clear search"
+              >
+                <X className="w-4 h-4" />
+              </button>
+            )}
+          </div>
+
+          {/* Instant Search Results when user is typing */}
+          {searchQuery.trim() && (
+            <div className="bg-[#faf9f6] border border-[#dfded4] rounded-2xl p-5 space-y-3 animate-in fade-in duration-150">
+              <div className="flex justify-between items-center pb-2 border-b border-[#dfded4]">
+                <span className="text-xs font-bold text-[#151716]">
+                  Matching Search Results ({matchingDistricts.length + matchingStates.length})
+                </span>
+                <span className="text-[10px] font-mono text-[#bc5f40]">
+                  Press Esc or clear to reset
+                </span>
+              </div>
+
+              {matchingDistricts.length === 0 && matchingStates.length === 0 ? (
+                <p className="text-xs text-[#8c918d] py-3 text-center font-medium">
+                  No location studies matched "{searchQuery}". Try searching for a major state or metro area.
+                </p>
+              ) : (
+                <div className="grid grid-cols-1 sm:grid-cols-2 md:grid-cols-3 gap-3">
+                  {matchingDistricts.map((dist) => (
+                    <a
+                      key={`search-${dist.slug}`}
+                      href={`/locations/${dist.stateSlug}/${dist.slug}`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigateToLocation(`/locations/${dist.stateSlug}/${dist.slug}`);
+                      }}
+                      className="bg-white border border-[#dfded4] hover:border-[#123e35] p-3 rounded-xl flex items-center justify-between text-xs font-bold text-[#151716] group transition-all shadow-2xs hover:shadow-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <span className="group-hover:text-[#123e35] transition-colors block">
+                          {dist.name}, {dist.stateCode}
+                        </span>
+                        <span className="block text-[10px] font-mono text-[#bc5f40]">
+                          District Study ({dist.webUtilizationRate} Web)
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[#8c918d] group-hover:text-[#123e35]" aria-hidden="true" />
+                    </a>
+                  ))}
+                  {matchingStates.map((st) => (
+                    <a
+                      key={`search-st-${st.slug}`}
+                      href={`/locations/${st.slug}/`}
+                      onClick={(e) => {
+                        e.preventDefault();
+                        onNavigateToLocation(`/locations/${st.slug}/`);
+                      }}
+                      className="bg-white border border-[#dfded4] hover:border-[#bc5f40] p-3 rounded-xl flex items-center justify-between text-xs font-bold text-[#151716] group transition-all shadow-2xs hover:shadow-xs"
+                    >
+                      <div className="space-y-0.5">
+                        <span className="group-hover:text-[#bc5f40] transition-colors block">
+                          {st.name} Statewide Guide
+                        </span>
+                        <span className="block text-[10px] font-mono text-[#123e35]">
+                          Statewide SEO Blueprint →
+                        </span>
+                      </div>
+                      <ChevronRight className="w-4 h-4 text-[#8c918d] group-hover:text-[#bc5f40]" aria-hidden="true" />
+                    </a>
+                  ))}
+                </div>
+              )}
+            </div>
+          )}
 
           {/* Clean Clickable State Names */}
           <div className="flex flex-wrap gap-2.5" role="tablist" aria-label="States directory">
