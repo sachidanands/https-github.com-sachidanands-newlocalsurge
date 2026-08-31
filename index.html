@@ -1,22 +1,6 @@
 <!doctype html>
 <html lang="en-US">
   <head>
-    <!-- Google Tag Manager -->
-    <script>(function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
-    new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
-    j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
-    'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
-    })(window,document,'script','dataLayer','GTM-WNMN4KWZ');</script>
-    <!-- End Google Tag Manager -->
-    <!-- Google tag (gtag.js) -->
-    <script async src="https://www.googletagmanager.com/gtag/js?id=G-FDD0ZMHBQ7"></script>
-    <script>
-      window.dataLayer = window.dataLayer || [];
-      function gtag(){dataLayer.push(arguments);}
-      gtag('js', new Date());
-
-      gtag('config', 'G-FDD0ZMHBQ7');
-    </script>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
     <meta name="msvalidate.01" content="AE3F1E01C27824CDCEA93C2C421A6095" />
@@ -118,13 +102,31 @@
       ]
     }
     </script>
-    <!-- Defer Clarity & Facebook Pixel to requestIdleCallback / post-load to minimize TBT -->
+    <!-- Defer all tracking & analytics (GTM, GA4, Clarity, Meta Pixel) to requestIdleCallback / post-load to protect Mobile FCP/LCP -->
     <script>
       (function() {
         var loaded = false;
         function loadAnalytics() {
           if (loaded) return;
           loaded = true;
+
+          // Google Tag Manager
+          (function(w,d,s,l,i){w[l]=w[l]||[];w[l].push({'gtm.start':
+          new Date().getTime(),event:'gtm.js'});var f=d.getElementsByTagName(s)[0],
+          j=d.createElement(s),dl=l!='dataLayer'?'&l='+l:'';j.async=true;j.src=
+          'https://www.googletagmanager.com/gtm.js?id='+i+dl;f.parentNode.insertBefore(j,f);
+          })(window,document,'script','dataLayer','GTM-WNMN4KWZ');
+
+          // Google tag (gtag.js)
+          var gtagScript = document.createElement('script');
+          gtagScript.async = true;
+          gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-FDD0ZMHBQ7';
+          document.head.appendChild(gtagScript);
+
+          window.dataLayer = window.dataLayer || [];
+          function gtag(){dataLayer.push(arguments);}
+          gtag('js', new Date());
+          gtag('config', 'G-FDD0ZMHBQ7');
 
           // Microsoft Clarity
           (function(c,l,a,r,i,t,y){
@@ -144,10 +146,10 @@
 
         // Trigger on first user interaction or when browser is idle
         if ('requestIdleCallback' in window) {
-          window.requestIdleCallback(loadAnalytics, { timeout: 3000 });
+          window.requestIdleCallback(loadAnalytics, { timeout: 3500 });
         } else {
           window.addEventListener('load', function() {
-            setTimeout(loadAnalytics, 1500);
+            setTimeout(loadAnalytics, 2000);
           }, { once: true });
         }
 

@@ -15,6 +15,11 @@ export default defineConfig(() => {
       minify: 'esbuild',
       cssMinify: true,
       sourcemap: false,
+      modulePreload: {
+        resolveDependencies(filename, deps, { hostId, hostType }) {
+          return deps.filter(dep => !dep.includes('vendor-pdf') && !dep.includes('data-directory') && !dep.includes('vendor-leaflet'));
+        },
+      },
       rollupOptions: {
         output: {
           manualChunks(id) {
