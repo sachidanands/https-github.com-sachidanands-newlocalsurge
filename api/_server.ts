@@ -12,7 +12,10 @@ const app = express();
 app.use((req, res, next) => {
   res.setHeader("X-Content-Type-Options", "nosniff");
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
-  res.setHeader("Content-Security-Policy", "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com; img-src 'self' data: https://images.unsplash.com https://localsurgeseo.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org; connect-src 'self' https://www.clarity.ms https://*.clarity.ms; frame-src 'self';");
+  res.setHeader(
+    "Content-Security-Policy",
+    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms https://scripts.clarity.ms https://*.clarity.ms https://static.cloudflareinsights.com https://www.googletagmanager.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://images.unsplash.com https://localsurgeseo.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://www.facebook.com https://www.google-analytics.com https://shield.sitelock.com https://*.sitelock.com https://c.bing.com; connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://api.allorigins.win; frame-src 'self' https://www.googletagmanager.com;"
+  );
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
 });
