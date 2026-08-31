@@ -2,21 +2,21 @@ import React, { useState, useEffect, useRef, Suspense } from 'react';
 import { Page, Plan, Lead, SEOAuditResult } from './types';
 import Header from './components/Header';
 import Footer from './components/Footer';
-import OnboardingWizard from './components/OnboardingWizard';
-import BlogView from './components/BlogView';
-import SitemapView from './components/SitemapView';
-import SeoHomeTool from './components/SeoHomeTool';
-import LocalSeoView from './components/LocalSeoView';
-import LocalDirectoryTool from './components/LocalDirectoryTool';
 import { getStateBySlug, getDistrictBySlug } from './data/locationsData';
 import SchemaMarkup from './components/SchemaMarkup';
 import FaqSection from './components/FaqSection';
 import WebMcpConsentModal from './components/WebMcpConsentModal';
-import AiCitationReadinessWidget from './components/AiCitationReadinessWidget';
 import { initWebMcpRuntime, executeWebMcpTool, WebMcpTool } from './utils/webmcp';
 import { BLOG_POSTS } from './data/blogData';
 
-// Code-split secondary views for high performance & minimal Total Blocking Time (TBT)
+// Code-split secondary views & heavy interactive widgets for maximum Core Web Vitals & minimum TBT
+const SeoHomeTool = React.lazy(() => import('./components/SeoHomeTool'));
+const BlogView = React.lazy(() => import('./components/BlogView'));
+const SitemapView = React.lazy(() => import('./components/SitemapView'));
+const LocalSeoView = React.lazy(() => import('./components/LocalSeoView'));
+const LocalDirectoryTool = React.lazy(() => import('./components/LocalDirectoryTool'));
+const AiCitationReadinessWidget = React.lazy(() => import('./components/AiCitationReadinessWidget'));
+const OnboardingWizard = React.lazy(() => import('./components/OnboardingWizard'));
 const LeadDashboard = React.lazy(() => import('./components/LeadDashboard'));
 const AdminLoginForm = React.lazy(() => import('./components/AdminLoginForm'));
 const CaseStudiesView = React.lazy(() => import('./components/CaseStudiesView'));
@@ -1132,12 +1132,20 @@ export default function App() {
 
                     {/* Hero Right Widget Preview */}
                     <div className="lg:col-span-5 relative">
-                      <SeoHomeTool
-                        onOpenOnboarding={() => setCurrentPage('contact')}
-                        hideTitle={true}
-                        isHomePage={true}
-                        onAnalyzeFromHome={handleAnalyzeFromHome}
-                      />
+                      <Suspense fallback={
+                        <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-8 shadow-xs animate-pulse">
+                          <div className="h-4 w-32 bg-[#dfded4] rounded mb-4"></div>
+                          <div className="h-10 bg-[#f4f3ef] rounded-xl mb-4"></div>
+                          <div className="h-12 bg-[#123e35]/20 rounded-xl"></div>
+                        </div>
+                      }>
+                        <SeoHomeTool
+                          onOpenOnboarding={() => setCurrentPage('contact')}
+                          hideTitle={true}
+                          isHomePage={true}
+                          onAnalyzeFromHome={handleAnalyzeFromHome}
+                        />
+                      </Suspense>
                     </div>
 
                   </div>
@@ -2475,13 +2483,17 @@ export default function App() {
       {/* Persistent Footer */}
       <Footer setCurrentPage={setCurrentPage} />
 
-      {/* Shared Onboarding Wizard Modal */}
-      <OnboardingWizard
-        isOpen={isWizardOpen}
-        onClose={() => setIsWizardOpen(false)}
-        preselectedPlan={preselectedPlan}
-        onLeadSubmitted={handleLeadSubmitted}
-      />
+      {/* Shared Onboarding Wizard Modal - Only loaded when triggered */}
+      {isWizardOpen && (
+        <Suspense fallback={null}>
+          <OnboardingWizard
+            isOpen={isWizardOpen}
+            onClose={() => setIsWizardOpen(false)}
+            preselectedPlan={preselectedPlan}
+            onLeadSubmitted={handleLeadSubmitted}
+          />
+        </Suspense>
+      )}
 
       {/* WebMCP (Web Model Context Protocol) AI Agent Consent Modal */}
       <WebMcpConsentModal

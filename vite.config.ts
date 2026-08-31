@@ -35,6 +35,9 @@ export default defineConfig(() => {
                 return 'vendor-pdf';
               }
             }
+            if (id.includes('/src/data/blogData') || id.includes('/src/data/directoryData') || id.includes('/src/data/locationsData')) {
+              return 'data-directory';
+            }
           },
         },
       },

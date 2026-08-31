@@ -1,6 +1,7 @@
 import React, { useState, useEffect, useRef } from 'react';
 import { BlogPost, BLOG_POSTS, getClusterForPost, TOPIC_CLUSTERS } from '../data/blogData';
-import ClientMicroToolWidget from './ClientMicroToolWidget';
+
+const ClientMicroToolWidget = React.lazy(() => import('./ClientMicroToolWidget'));
 import { 
   ArrowLeft, Search, Sparkles, Clock, Calendar, User, ArrowRight, Check, 
   Share2, BookOpen, ExternalLink, MapPin, CheckSquare, RefreshCw, ChevronDown
@@ -530,7 +531,13 @@ export default function BlogView({
                     if (section.type === 'micro-tool' && (section as any).toolConfig) {
                       return (
                         <div key={idx} className="my-6">
-                          <ClientMicroToolWidget config={(section as any).toolConfig} />
+                          <React.Suspense fallback={
+                            <div className="p-8 text-center text-xs font-mono text-[#888b88] bg-[#faf9f6] rounded-xl border border-[#dfded4]">
+                              Loading interactive audit widget...
+                            </div>
+                          }>
+                            <ClientMicroToolWidget config={(section as any).toolConfig} />
+                          </React.Suspense>
                         </div>
                       );
                     }
