@@ -122,6 +122,175 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
   }
 
+  // 1c. Legacy / Dedicated California & Los Angeles SEO Hub Routes: /california & /los-angeles-seo
+  if (cleanPath === '/california') {
+    const stateData = getStateBySlug('california');
+    if (stateData) {
+      const title = `${stateData.name} Local Search Behavior & Small Business SEO Guide - Local Surge`;
+      const description = "Explore California consumer search behavior, Google Map Pack ranking factors, and statewide local SEO playbooks for Golden State small businesses.";
+      const canonical = "https://localsurgeseo.com/california";
+      const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+      const schemaJson = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+              { "@type": "ListItem", "position": 2, "name": "California Local SEO", "item": canonical }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": stateData.faqs.map(f => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+          }
+        ]
+      };
+
+      const stateDistricts = stateData.districts.map(slug => DISTRICTS_REGISTRY[slug]).filter(Boolean);
+
+      const crawlMarkup = `
+        <div id="ssr-california-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+          <nav aria-label="Breadcrumb">
+            <a href="/">Home</a> / <span>California Local SEO</span>
+          </nav>
+          <h1>${stateData.heroHeadline}</h1>
+          <p>${description}</p>
+          <section>
+            <h2>Statewide Consumer Search Trends</h2>
+            <p>${stateData.consumerBehavior.overview}</p>
+            <ul>
+              ${stateData.consumerBehavior.keyFindings.map(kf => `<li>${kf}</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Local Business Owner Strategy Blueprint</h2>
+            <p>${stateData.businessStrategy.overview}</p>
+            <ol>
+              ${stateData.businessStrategy.actionSteps.map(step => `<li><strong>${step.title}</strong>: ${step.detail}</li>`).join('\n')}
+            </ol>
+          </section>
+          <section>
+            <h2>Verified Research Data Citations & External Backlinks</h2>
+            <ul>
+              ${stateData.citations.map(c => `<li><a href="${c.url}" target="_blank" rel="noopener noreferrer">${c.anchorText}</a> - ${c.sourceName}: ${c.finding}</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Mapped Districts in California</h2>
+            <ul>
+              ${stateDistricts.map(d => `<li><a href="/locations/${d.stateSlug}/${d.slug}">${d.name} Local SEO Study</a></li>`).join('\n')}
+            </ul>
+          </section>
+        </div>
+      `;
+
+      return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+    }
+  }
+
+  if (cleanPath === '/los-angeles-seo') {
+    const districtData = getDistrictBySlug('los-angeles');
+    if (districtData) {
+      const title = `${districtData.name}, ${districtData.stateCode} Local SEO Strategy & Consumer Search Study - Local Surge`;
+      const description = "Discover Los Angeles County local consumer search patterns, Google Maps 3-Pack ranking triggers, and hyper-local SEO playbooks for LA businesses.";
+      const canonical = "https://localsurgeseo.com/los-angeles-seo";
+      const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+      const schemaJson = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+              { "@type": "ListItem", "position": 2, "name": "California", "item": "https://localsurgeseo.com/california" },
+              { "@type": "ListItem", "position": 3, "name": "Los Angeles Local SEO", "item": canonical }
+            ]
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": districtData.faqs.map(f => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+            }))
+          },
+          {
+            "@type": "LocalBusiness",
+            "name": `Local Surge SEO - ${districtData.name}`,
+            "description": districtData.heroSubheadline,
+            "url": canonical,
+            "telephone": "+1-909-707-5075",
+            "priceRange": "$$",
+            "currenciesAccepted": "USD",
+            "paymentAccepted": "Credit Card, Debit Card, Invoice",
+            "openingHours": "Mo-Fr 08:00-18:00",
+            "areaServed": {
+              "@type": "AdministrativeArea",
+              "name": districtData.name
+            },
+            "geo": {
+              "@type": "GeoCoordinates",
+              "latitude": districtData.lat,
+              "longitude": districtData.lng
+            }
+          }
+        ]
+      };
+
+      const crawlMarkup = `
+        <div id="ssr-losangeles-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+          <nav aria-label="Breadcrumb">
+            <a href="/">Home</a> / <a href="/california">California</a> / <span>Los Angeles Local SEO</span>
+          </nav>
+          <h1>${districtData.heroHeadline}</h1>
+          <p>${description}</p>
+          <section>
+            <h2>Key Consumer Metrics: ${districtData.name}</h2>
+            <ul>
+              <li>Local Consumer Web Utilization Rate: ${districtData.webUtilizationRate}</li>
+              <li>Mobile Search Query Share: ${districtData.mobileSearchShare}</li>
+              <li>Google Local 3-Pack Click Share: ${districtData.mapPackClickShare}</li>
+              <li>Active Small Businesses: ${districtData.smallBusinesses}</li>
+            </ul>
+          </section>
+          <section>
+            <h2>Empirical Study: Local Customer Behavior in ${districtData.name}</h2>
+            <p>${districtData.consumerBehavior.overview}</p>
+            <ul>
+              ${districtData.consumerBehavior.keyFindings.map(kf => `<li>${kf}</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Local Business Owner SEO Strategy & Action Blueprint</h2>
+            <p>${districtData.businessStrategy.overview}</p>
+            <ol>
+              ${districtData.businessStrategy.actionSteps.map(step => `<li><strong>${step.title} (${step.step})</strong>: ${step.detail}</li>`).join('\n')}
+            </ol>
+          </section>
+          <section>
+            <h2>Authoritative Research Citations & Source Backlinks</h2>
+            <ul>
+              ${districtData.citations.map(c => `<li><a href="${c.url}" target="_blank" rel="noopener noreferrer">${c.anchorText}</a> - ${c.sourceName}: ${c.finding} (${c.title})</li>`).join('\n')}
+            </ul>
+          </section>
+          <section>
+            <h2>Frequently Asked Questions: Los Angeles SEO</h2>
+            ${districtData.faqs.map(f => `<h3>${f.question}</h3><p>${f.answer}</p>`).join('\n')}
+          </section>
+        </div>
+      `;
+
+      return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+    }
+  }
+
   // 2. State or District Path: /locations/:state or /locations/:state/:district
   if (cleanPath.startsWith('/locations/')) {
     const parts = cleanPath.slice('/locations/'.length).split('/').filter(Boolean);
@@ -1187,6 +1356,17 @@ export function prerenderLocationHtmlWithStatus(rawHtml: string, requestPath: st
   return { html: renderedHtml, status: 200, is404: false };
 }
 
+function formatMetaDescription(desc: string, maxChars: number = 158): string {
+  const clean = desc.replace(/\s+/g, ' ').trim();
+  if (clean.length <= maxChars) return clean;
+  const truncated = clean.slice(0, maxChars - 3);
+  const lastSpace = truncated.lastIndexOf(' ');
+  if (lastSpace > 110) {
+    return truncated.slice(0, lastSpace) + '...';
+  }
+  return truncated + '...';
+}
+
 function injectMetadataAndFallback(
   html: string,
   title: string,
@@ -1198,11 +1378,13 @@ function injectMetadataAndFallback(
 ): string {
   let result = html;
 
+  const optimizedDescription = formatMetaDescription(description, 158);
+
   // Replace Title
   result = result.replace(/<title>[\s\S]*?<\/title>/i, `<title>${title}</title>`);
 
-  // Replace Meta Description
-  result = result.replace(/<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="description" content="${description}" />`);
+  // Replace Meta Description (optimized for SERP snippet length)
+  result = result.replace(/<meta\s+name=["']description["']\s+content=["'][^"']*["']\s*\/?>/i, `<meta name="description" content="${optimizedDescription}" />`);
 
   // Ensure lang="en-US"
   result = result.replace(/<html(\s+[^>]*)?lang=["'][^"']*["']/i, '<html$1lang="en-US"');
