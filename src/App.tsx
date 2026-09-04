@@ -30,6 +30,8 @@ const LosAngelesSeoView = React.lazy(() => import('./components/LosAngelesSeoVie
 const PrivacyPolicy = React.lazy(() => import('./components/PrivacyPolicy'));
 const TermsOfService = React.lazy(() => import('./components/TermsOfService'));
 const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
+const CompetitorIndexView = React.lazy(() => import('./components/CompetitorIndexView'));
+const CompetitorComparisonView = React.lazy(() => import('./components/CompetitorComparisonView'));
 
 // Toggle flag to enable or disable the AI Citation Readiness Scanner component
 const ENABLE_AI_CITATION_WIDGET = true;
@@ -99,44 +101,52 @@ function getPageFromPath(pathname: string): {
   citySlug: string | null;
   blogSlug: string | null;
   demoSlug: string | null;
+  compareSlug: string | null;
 } {
   const cleanPath = pathname.replace(/\/+$/, '');
-  if (cleanPath === '' || cleanPath === '/') return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/about') return { page: 'about', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/why-us') return { page: 'why-us', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '' || cleanPath === '/') return { page: 'home', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/about') return { page: 'about', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/why-us') return { page: 'why-us', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (['/site-map', '/sitemap', '/sitemap.html', '/site-map.html'].includes(cleanPath)) {
-    return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+    return { page: 'site-map', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   }
-  if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/california') return { page: 'locations-state', stateSlug: 'california', citySlug: null, blogSlug: null, demoSlug: null };
-  if (cleanPath === '/los-angeles-seo') return { page: 'locations-district', stateSlug: 'california', citySlug: 'los-angeles', blogSlug: null, demoSlug: null };
+  if (cleanPath === '/case-studies') return { page: 'case-studies', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/privacy-policy') return { page: 'privacy-policy', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/terms-of-service') return { page: 'terms-of-service', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/california') return { page: 'locations-state', stateSlug: 'california', citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/los-angeles-seo') return { page: 'locations-district', stateSlug: 'california', citySlug: 'los-angeles', blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/locations' || cleanPath === '/locations/') {
-    return { page: 'locations-index', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+    return { page: 'locations-index', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   }
   if (cleanPath.startsWith('/locations/')) {
     const locParts = cleanPath.slice('/locations/'.length).split('/').filter(Boolean);
     if (locParts.length === 1) {
-      return { page: 'locations-state', stateSlug: locParts[0], citySlug: null, blogSlug: null, demoSlug: null };
+      return { page: 'locations-state', stateSlug: locParts[0], citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
     }
     if (locParts.length >= 2) {
-      return { page: 'locations-district', stateSlug: locParts[0], citySlug: locParts[1], blogSlug: null, demoSlug: null };
+      return { page: 'locations-district', stateSlug: locParts[0], citySlug: locParts[1], blogSlug: null, demoSlug: null, compareSlug: null };
     }
   }
-  if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  if (cleanPath === '/blog') return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath.startsWith('/blog/')) {
     const slug = cleanPath.slice(6);
-    return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: slug, demoSlug: null };
+    return { page: 'blog', stateSlug: null, citySlug: null, blogSlug: slug, demoSlug: null, compareSlug: null };
   }
   if (cleanPath.startsWith('/demo/')) {
     const slug = cleanPath.slice(6);
-    return { page: 'demo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: slug };
+    return { page: 'demo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: slug, compareSlug: null };
+  }
+  if (cleanPath === '/compare' || cleanPath === '/compare/') {
+    return { page: 'compare-index', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  }
+  if (cleanPath.startsWith('/compare/')) {
+    const slug = cleanPath.slice(9);
+    return { page: 'compare-detail', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: slug };
   }
 
   // Parse path segments for dynamic state or city paths
@@ -146,31 +156,32 @@ function getPageFromPath(pathname: string): {
 
   if (parts.length === 1 && knownStates.includes(parts[0])) {
     if (parts[0] === 'california') {
-      return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+      return { page: 'california', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
     }
-    return { page: 'state-seo', stateSlug: parts[0], citySlug: null, blogSlug: null, demoSlug: null };
+    return { page: 'state-seo', stateSlug: parts[0], citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   }
 
   if (parts.length === 2 && knownStates.includes(parts[0])) {
     if (parts[1] === 'los-angeles-seo') {
-      return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+      return { page: 'los-angeles-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
     }
-    return { page: 'city-seo', stateSlug: parts[0], citySlug: parts[1], blogSlug: null, demoSlug: null };
+    return { page: 'city-seo', stateSlug: parts[0], citySlug: parts[1], blogSlug: null, demoSlug: null, compareSlug: null };
   }
 
-  return { page: '404', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+  return { page: '404', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
 }
 
 export default function App() {
   const initialRoute = typeof window !== 'undefined' 
     ? getPageFromPath(window.location.pathname) 
-    : { page: 'home' as Page, stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null };
+    : { page: 'home' as Page, stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
 
   const [currentPage, setCurrentPage] = useState<Page>(() => initialRoute.page);
   const [activeArticleSlug, setActiveArticleSlug] = useState<string | null>(() => initialRoute.blogSlug);
   const [activeStateSlug, setActiveStateSlug] = useState<string | null>(() => initialRoute.stateSlug);
   const [activeCitySlug, setActiveCitySlug] = useState<string | null>(() => initialRoute.citySlug);
   const [activeDemoSlug, setActiveDemoSlug] = useState<string | null>(() => initialRoute.demoSlug);
+  const [activeCompareSlug, setActiveCompareSlug] = useState<string | null>(() => initialRoute.compareSlug);
   const [billingPeriod, setBillingPeriod] = useState<'monthly' | 'yearly'>('monthly');
   const [leads, setLeads] = useState<Lead[]>([]);
   const [loadingLeads, setLoadingLeads] = useState(false);
@@ -179,12 +190,13 @@ export default function App() {
   useEffect(() => {
     // Track Back/Forward
     const handlePopState = () => {
-      const { page, stateSlug, citySlug, blogSlug, demoSlug } = getPageFromPath(window.location.pathname);
+      const { page, stateSlug, citySlug, blogSlug, demoSlug, compareSlug } = getPageFromPath(window.location.pathname);
       setCurrentPage(page);
       setActiveStateSlug(stateSlug);
       setActiveCitySlug(citySlug);
       setActiveArticleSlug(blogSlug);
       setActiveDemoSlug(demoSlug);
+      setActiveCompareSlug(compareSlug);
     };
 
     window.addEventListener('popstate', handlePopState);
@@ -226,17 +238,21 @@ export default function App() {
       path = (activeStateSlug && activeCitySlug) ? `/${activeStateSlug}/${activeCitySlug}` : '/site-map';
     } else if (currentPage === 'demo') {
       path = activeDemoSlug ? `/demo/${activeDemoSlug}` : '/pricing';
+    } else if (currentPage === 'compare-index') {
+      path = '/compare';
+    } else if (currentPage === 'compare-detail') {
+      path = activeCompareSlug ? `/compare/${activeCompareSlug}` : '/compare';
     }
 
     if (window.location.pathname !== path) {
       window.history.pushState(null, '', path);
     }
-  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug]);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug, activeCompareSlug]);
 
   // Scroll to top on page navigation
   useEffect(() => {
     window.scrollTo({ top: 0, behavior: 'instant' });
-  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug]);
+  }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug, activeDemoSlug, activeCompareSlug]);
 
   // Private Admin access credentials management
   const [isAdminLoggedIn, setIsAdminLoggedIn] = useState(() => {
@@ -2505,6 +2521,41 @@ export default function App() {
               transition={{ duration: 0.3 }}
             >
               <TermsOfService setCurrentPage={setCurrentPage} />
+            </motion.div>
+          )}
+
+          {/* COMPETITOR COMPARISONS INDEX HUB */}
+          {currentPage === 'compare-index' && (
+            <motion.div
+              key="compare-index"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <CompetitorIndexView
+                setCurrentPage={setCurrentPage}
+                setActiveCompareSlug={setActiveCompareSlug}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+              />
+            </motion.div>
+          )}
+
+          {/* COMPETITOR COMPARISON DETAIL VIEW */}
+          {currentPage === 'compare-detail' && activeCompareSlug && (
+            <motion.div
+              key={`compare-${activeCompareSlug}`}
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <CompetitorComparisonView
+                comparisonSlug={activeCompareSlug}
+                setCurrentPage={setCurrentPage}
+                setActiveCompareSlug={setActiveCompareSlug}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+              />
             </motion.div>
           )}
 

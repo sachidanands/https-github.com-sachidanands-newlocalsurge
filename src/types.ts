@@ -8,7 +8,64 @@ declare namespace React {
   }
 }
 
-export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'admin' | 'blog' | 'site-map' | 'local-seo' | 'california' | 'los-angeles-seo' | 'state-seo' | 'city-seo' | 'privacy-policy' | 'terms-of-service' | 'case-studies' | 'demo' | 'locations-index' | 'locations-state' | 'locations-district' | '404';
+export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'admin' | 'blog' | 'site-map' | 'local-seo' | 'california' | 'los-angeles-seo' | 'state-seo' | 'city-seo' | 'privacy-policy' | 'terms-of-service' | 'case-studies' | 'demo' | 'locations-index' | 'locations-state' | 'locations-district' | 'compare-index' | 'compare-detail' | '404';
+
+export interface CompetitorFeatureRow {
+  feature: string;
+  category: string;
+  localSurge: string | boolean;
+  competitor: string | boolean;
+  note?: string;
+}
+
+export interface CompetitorSection {
+  title: string;
+  subtitle: string;
+  content: string;
+  keyTakeaway: string;
+}
+
+export interface CompetitorComparison {
+  slug: string;
+  competitorName: string;
+  category: 'free-website' | 'local-seo' | 'premium-services';
+  categoryLabel: string;
+  targetKeyword: string;
+  pageType: 'vs' | 'alternative' | 'roundup';
+  title: string;
+  metaDescription: string;
+  h1: string;
+  subtitle: string;
+  badge: string;
+  verdict: string;
+  lastUpdated: string;
+  competitorProfile: {
+    name: string;
+    pricingSummary: string;
+    bestFor: string;
+    pros: string[];
+    cons: string[];
+  };
+  localSurgeProfile: {
+    planName: string;
+    price: string;
+    bestFor: string;
+    pros: string[];
+    cons: string[];
+  };
+  featureMatrix: CompetitorFeatureRow[];
+  detailedSections: CompetitorSection[];
+  faqs: {
+    question: string;
+    answer: string;
+  }[];
+  cta: {
+    title: string;
+    description: string;
+    buttonText: string;
+    buttonAction: 'onboarding' | 'seo-tool' | 'pricing';
+  };
+}
 
 export interface DemoConfig {
   slug: string;

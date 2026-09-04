@@ -1,6 +1,7 @@
 import { STATES_REGISTRY, DISTRICTS_REGISTRY, getStateBySlug, getDistrictBySlug, getAllMappedStates, getAllMappedDistricts } from "../src/data/locationsData";
 import { BLOG_POSTS, getClusterForPost } from "../src/data/blogData";
 import { STATE_DIRECTORY, CITY_DIRECTORY } from "../src/data/directoryData";
+import { COMPETITOR_COMPARISONS, getAllComparisons, getComparisonBySlug } from "../src/data/competitorData";
 
 export function prerenderLocationHtml(rawHtml: string, requestPath: string): string {
   const cleanPath = requestPath.split('?')[0].replace(/\/$/, '') || '/';
@@ -739,6 +740,202 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     `;
 
     return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  // 4b. Competitor Comparisons Directory Index: /compare
+  if (cleanPath === '/compare') {
+    const comparisons = getAllComparisons();
+    const title = "Objective Local SEO & Website Builder Comparisons - Local Surge";
+    const description = "Compare Wix, Squarespace, BrightLocal, Yext, and WebFX against Local Surge. Objective feature matrices, pricing breakdowns, and local search ROI analysis.";
+    const canonical = "https://localsurgeseo.com/compare";
+    const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Comparisons", "item": canonical }
+          ]
+        },
+        {
+          "@type": "ItemList",
+          "name": "Local SEO & Website Builder Comparisons",
+          "itemListOrder": "https://schema.org/ItemListOrderDescending",
+          "numberOfItems": comparisons.length,
+          "itemListElement": comparisons.map((comp, idx) => ({
+            "@type": "ListItem",
+            "position": idx + 1,
+            "name": `${comp.competitorName} vs Local Surge`,
+            "url": `https://localsurgeseo.com/compare/${comp.slug}`
+          }))
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-compare-index-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <nav aria-label="Breadcrumb">
+          <a href="/">Home</a> / <span>Competitor Comparisons</span>
+        </nav>
+        <h1>Objective Local SEO, Website Builder & Digital Agency Comparisons</h1>
+        <p>${description}</p>
+        <section>
+          <h2>All Head-to-Head Comparison Studies</h2>
+          <ul>
+            ${comparisons.map(c => `
+              <li>
+                <a href="/compare/${c.slug}">${c.competitorName} vs Local Surge: ${c.subtitle}</a>
+                <p>${c.verdict}</p>
+                <p>Category: ${c.categoryLabel} | Target Intent: ${c.targetKeyword}</p>
+              </li>
+            `).join('\n')}
+          </ul>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
+  // 4c. Individual Comparison Studies: /compare/:slug
+  if (cleanPath.startsWith('/compare/')) {
+    const compSlug = cleanPath.slice('/compare/'.length).replace(/\/$/, '');
+    const comp = getComparisonBySlug(compSlug);
+
+    if (comp) {
+      const title = comp.title;
+      const description = comp.metaDescription;
+      const canonical = `https://localsurgeseo.com/compare/${comp.slug}`;
+      const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
+
+      const schemaJson = {
+        "@context": "https://schema.org",
+        "@graph": [
+          {
+            "@type": "BreadcrumbList",
+            "itemListElement": [
+              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+              { "@type": "ListItem", "position": 2, "name": "Comparisons", "item": "https://localsurgeseo.com/compare" },
+              { "@type": "ListItem", "position": 3, "name": `${comp.competitorName} vs Local Surge`, "item": canonical }
+            ]
+          },
+          {
+            "@type": "Product",
+            "name": `Local Surge ${comp.localSurgeProfile.planName}`,
+            "description": comp.metaDescription,
+            "brand": {
+              "@type": "Brand",
+              "name": "Local Surge"
+            },
+            "offers": {
+              "@type": "AggregateOffer",
+              "priceCurrency": "USD",
+              "lowPrice": "0",
+              "highPrice": "1999",
+              "offerCount": "3"
+            },
+            "aggregateRating": {
+              "@type": "AggregateRating",
+              "ratingValue": "4.9",
+              "reviewCount": "128",
+              "bestRating": "5",
+              "worstRating": "1"
+            }
+          },
+          {
+            "@type": "FAQPage",
+            "mainEntity": comp.faqs.map(f => ({
+              "@type": "Question",
+              "name": f.question,
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": f.answer
+              }
+            }))
+          }
+        ]
+      };
+
+      const crawlMarkup = `
+        <div id="ssr-compare-detail-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+          <nav aria-label="Breadcrumb">
+            <a href="/">Home</a> / <a href="/compare">Comparisons</a> / <span>${comp.competitorName} vs Local Surge</span>
+          </nav>
+          <h1>${comp.h1}</h1>
+          <p>${comp.subtitle}</p>
+          <section>
+            <h2>Executive Summary & Verdict</h2>
+            <p>${comp.verdict}</p>
+          </section>
+          <section>
+            <h2>Platform Comparison</h2>
+            <div>
+              <h3>${comp.competitorProfile.name}</h3>
+              <p>Pricing: ${comp.competitorProfile.pricingSummary}</p>
+              <p>Best for: ${comp.competitorProfile.bestFor}</p>
+              <h4>Strengths</h4>
+              <ul>${comp.competitorProfile.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+              <h4>Drawbacks</h4>
+              <ul>${comp.competitorProfile.cons.map(c => `<li>${c}</li>`).join('')}</ul>
+            </div>
+            <div>
+              <h3>Local Surge ${comp.localSurgeProfile.planName}</h3>
+              <p>Pricing: ${comp.localSurgeProfile.price}</p>
+              <p>Best for: ${comp.localSurgeProfile.bestFor}</p>
+              <h4>Advantages</h4>
+              <ul>${comp.localSurgeProfile.pros.map(p => `<li>${p}</li>`).join('')}</ul>
+            </div>
+          </section>
+          <section>
+            <h2>Feature Comparison Matrix</h2>
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Local Surge</th>
+                  <th>${comp.competitorName}</th>
+                  <th>Notes</th>
+                </tr>
+              </thead>
+              <tbody>
+                ${comp.featureMatrix.map(f => `
+                  <tr>
+                    <td>${f.feature}</td>
+                    <td>${f.localSurge}</td>
+                    <td>${f.competitor}</td>
+                    <td>${f.note || ''}</td>
+                  </tr>
+                `).join('')}
+              </tbody>
+            </table>
+          </section>
+          <section>
+            <h2>Detailed Analysis</h2>
+            ${comp.detailedSections.map(s => `
+              <article>
+                <h3>${s.title}</h3>
+                <p>${s.content}</p>
+                <p><strong>Key Takeaway:</strong> ${s.keyTakeaway}</p>
+              </article>
+            `).join('')}
+          </section>
+          <section>
+            <h2>Frequently Asked Questions</h2>
+            ${comp.faqs.map(f => `
+              <div>
+                <h3>${f.question}</h3>
+                <p>${f.answer}</p>
+              </div>
+            `).join('')}
+          </section>
+        </div>
+      `;
+
+      return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+    }
   }
 
   if (cleanPath === '/local-seo') {

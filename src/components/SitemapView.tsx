@@ -3,9 +3,10 @@ import { Page } from '../types';
 import { BLOG_POSTS } from '../data/blogData';
 import { STATE_DIRECTORY, CITY_DIRECTORY } from '../data/directoryData';
 import { STATES_REGISTRY, DISTRICTS_REGISTRY } from '../data/locationsData';
+import { COMPETITOR_COMPARISONS } from '../data/competitorData';
 import { 
   Rocket, MapPin, Globe, Star, Mail, Briefcase, FileCode, CheckSquare, 
-  Sparkles, ExternalLink, ShieldAlert, ArrowRight, ShieldCheck, ListCollapse, Compass
+  Sparkles, ExternalLink, ShieldAlert, ArrowRight, ShieldCheck, ListCollapse, Compass, Scale
 } from 'lucide-react';
 
 interface SitemapViewProps {
@@ -94,6 +95,7 @@ export default function SitemapView({
     { id: 'about' as Page, path: '/about', label: 'Our Mission & About Us', desc: 'Understanding our background, local verification systems, and team standards.' },
     { id: 'why-us' as Page, path: '/why-us', label: 'Why Choose Local Surge', desc: 'Comparison metrics proving how lightweight structures defeat bloated multi-page payloads.' },
     { id: 'local-seo' as Page, path: '/local-seo', label: 'Local SEO Optimization', desc: 'Comprehensive blueprint detailing Google Business Profile setup, NAP citation audits, and directories synchronization.' },
+    { id: 'compare-index' as Page, path: '/compare', label: 'Competitor Comparisons Hub', desc: 'Objective breakdowns comparing Wix, BrightLocal, Yext, WebFX, and Squarespace to Local Surge.' },
     { id: 'case-studies' as Page, path: '/case-studies', label: 'Case Studies & Results', desc: 'Proven organic surges and map pack success stories detailing problem, strategy, and metrics.' },
     { id: 'pricing' as Page, path: '/pricing', label: 'Transparent Pricing Model', desc: 'Detailed options regarding Single-Page Blast, Starter Boost, and Premium Surge.' },
     { id: 'seo-tool' as Page, path: '/seo-tool', label: 'Free Search Signal Scanner', desc: 'Real-time analysis comparing websites to regional Local 3-Pack leaders.' },
@@ -240,6 +242,40 @@ export default function SitemapView({
                     <span className="text-xs font-black text-[#1a1c1a] block">{pkg.label}</span>
                     <p className="text-[11px] text-[#4e524f] font-semibold mt-1 leading-relaxed">
                       {pkg.desc}
+                    </p>
+                  </a>
+                ))}
+              </div>
+            </div>
+
+            {/* Competitor Comparisons Section */}
+            <div className="space-y-4 bg-white p-6 rounded-3xl border border-[#dfded4] shadow-xs">
+              <h3 className="text-sm font-bold text-[#bc5f40] font-mono uppercase tracking-wider flex items-center gap-2 pb-2 border-b border-[#dfded4]">
+                <Scale className="w-4 h-4 text-[#bc5f40]" />
+                Competitor Comparisons & Platform Reviews
+              </h3>
+              
+              <div className="space-y-3">
+                {Object.values(COMPETITOR_COMPARISONS).map((comp) => (
+                  <a 
+                    key={comp.slug}
+                    href={`/compare/${comp.slug}`}
+                    onClick={(e) => {
+                      e.preventDefault();
+                      setCurrentPage('compare-detail');
+                      if (typeof window !== 'undefined') {
+                        window.history.pushState({}, '', `/compare/${comp.slug}`);
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }
+                    }}
+                    className="p-3 rounded-xl hover:bg-[#faf9f6]/95 border border-transparent hover:border-[#dfded4] transition-all cursor-pointer block focus-visible:outline-2 focus-visible:outline-[#123e35]"
+                  >
+                    <div className="flex justify-between items-center">
+                      <span className="text-xs font-black text-[#1a1c1a] block">{comp.competitorName} vs. Local Surge</span>
+                      <span className="text-[10px] font-mono text-[#bc5f40] font-bold">/compare/{comp.slug}</span>
+                    </div>
+                    <p className="text-[11px] text-[#4e524f] font-semibold mt-1 leading-relaxed">
+                      {comp.subtitle}
                     </p>
                   </a>
                 ))}

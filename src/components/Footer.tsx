@@ -183,6 +183,15 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   <span>🗺️ U.S. Locations & Maps</span>
                 </a>
               </li>
+              <li>
+                <a
+                  href="/compare"
+                  onClick={(e) => handleFooterNav(e, 'compare-index', '/compare')}
+                  className="hover:text-[#123e35] transition-colors cursor-pointer text-left block"
+                >
+                  Competitor Comparisons
+                </a>
+              </li>
             </ul>
           </div>
 
