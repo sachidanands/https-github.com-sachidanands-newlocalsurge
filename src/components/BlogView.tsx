@@ -856,13 +856,19 @@ export default function BlogView({
                     >
                       Get My Local Strategy
                     </button>
-                    <button
-                      onClick={() => onNavigateToPage('seo-tool')}
+                    <a
+                      href="/seo-tool"
+                      onClick={(e) => {
+                        e.preventDefault();
+                        window.history.pushState(null, '', '/seo-tool');
+                        onNavigateToPage('seo-tool');
+                        window.scrollTo({ top: 0, behavior: 'smooth' });
+                      }}
                       className="bg-white/10 hover:bg-white/15 text-white border border-white/20 text-xs font-bold py-2.5 px-4.5 rounded-xl cursor-pointer transition-all flex items-center gap-1.5"
                     >
                       Run Instant Website Scan
                       <ExternalLink className="w-3.5 h-3.5" />
-                    </button>
+                    </a>
                   </div>
                 </div>
 
@@ -882,13 +888,19 @@ export default function BlogView({
                       Run our real-time website audit tool with built-in competitor neighborhood listings scanning. See exact score parameters and deficiencies instantly!
                     </p>
                   </div>
-                  <button
-                    onClick={() => onNavigateToPage('seo-tool')}
+                  <a
+                    href="/seo-tool"
+                    onClick={(e) => {
+                      e.preventDefault();
+                      window.history.pushState(null, '', '/seo-tool');
+                      onNavigateToPage('seo-tool');
+                      window.scrollTo({ top: 0, behavior: 'smooth' });
+                    }}
                     className="w-full bg-[#123e35] hover:bg-[#185246] text-white flex items-center justify-center gap-2 text-xs font-bold py-2.5 rounded-xl transition-all h-10 shadow-xs cursor-pointer"
                   >
                     Launch SEO Scan
                     <ArrowRight className="w-3.5 h-3.5" />
-                  </button>
+                  </a>
                 </div>
 
                 {/* Popular posts */}
@@ -994,6 +1006,39 @@ export default function BlogView({
                     </button>
                   ))}
                 </div>
+              </div>
+
+              {/* Free SEO Audit Banner Callout on Blog */}
+              <div className="bg-gradient-to-r from-[#123e35] to-[#185246] text-white rounded-3xl p-6 sm:p-7 shadow-sm border border-[#123e35] flex flex-col md:flex-row items-center justify-between gap-5">
+                <div className="flex items-start gap-4">
+                  <div className="w-12 h-12 rounded-2xl bg-white/10 flex items-center justify-center shrink-0 border border-white/15">
+                    <Sparkles className="w-6 h-6 text-[#bc5f40]" />
+                  </div>
+                  <div className="space-y-1">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-white/10 text-[10px] font-mono font-bold uppercase tracking-wider text-white/90">
+                      Free Live Diagnostic Scanner
+                    </div>
+                    <h3 className="text-lg sm:text-xl font-black font-display tracking-tight text-white">
+                      Want to see where your business stands in Google Search?
+                    </h3>
+                    <p className="text-xs sm:text-sm text-white/80 font-medium max-w-2xl leading-relaxed">
+                      Benchmark your website's meta tags, Google Map Pack signals, schema markup, and speed against top-ranking local competitors in 60 seconds.
+                    </p>
+                  </div>
+                </div>
+                <a
+                  href="/seo-tool"
+                  onClick={(e) => {
+                    e.preventDefault();
+                    window.history.pushState(null, '', '/seo-tool');
+                    onNavigateToPage('seo-tool');
+                    window.scrollTo({ top: 0, behavior: 'smooth' });
+                  }}
+                  className="bg-[#bc5f40] hover:bg-[#cf6d4e] text-white font-bold text-xs sm:text-sm px-6 py-3.5 rounded-xl transition-all shadow-sm active:scale-95 duration-200 shrink-0 flex items-center gap-2 cursor-pointer"
+                >
+                  <span>Launch Free Audit</span>
+                  <ArrowRight className="w-4 h-4" />
+                </a>
               </div>
 
               {/* FEATURED HERO POST (ONLY visible when searching/filters are empty) */}

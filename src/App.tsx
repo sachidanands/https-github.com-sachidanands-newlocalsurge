@@ -1175,6 +1175,19 @@ export default function App() {
                           Get Free Strategy
                           <ArrowRight className="w-4 h-4 text-white" />
                         </button>
+                        <a
+                          href="/seo-tool"
+                          onClick={(e) => {
+                            e.preventDefault();
+                            window.history.pushState(null, '', '/seo-tool');
+                            setCurrentPage('seo-tool');
+                            window.scrollTo({ top: 0, behavior: 'smooth' });
+                          }}
+                          className="bg-[#f4f3ef] hover:bg-[#e9e8e2] border border-[#dfded4] text-[#151716] text-sm font-bold px-7 py-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 duration-200 shadow-xs"
+                        >
+                          <Sparkles className="w-4 h-4 text-[#bc5f40]" />
+                          Run Free SEO Audit
+                        </a>
                       </div>
                     </div>
 
@@ -1237,7 +1250,20 @@ export default function App() {
                       Technical & On-Page Keyword Injectors
                     </h4>
                     <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed mt-3 font-medium">
-                      Boost website speed, clean up title tags, and improve headers. We install simple local schemas so Google's crawl bots reward you with top ranking spots.
+                      Boost website speed, clean up title tags, and improve headers. Test your site with our{' '}
+                      <a
+                        href="/seo-tool"
+                        onClick={(e) => {
+                          e.preventDefault();
+                          window.history.pushState(null, '', '/seo-tool');
+                          setCurrentPage('seo-tool');
+                          window.scrollTo({ top: 0, behavior: 'smooth' });
+                        }}
+                        className="text-[#123e35] font-bold underline decoration-[#123e35]/30 hover:text-[#bc5f40] transition-colors"
+                      >
+                        free local SEO audit tool
+                      </a>{' '}
+                      to inspect Core Web Vitals and structured data schema.
                     </p>
                   </div>
 

@@ -1,7 +1,6 @@
 import React, { useState } from 'react';
 import { Page, CompetitorComparison } from '../types';
 import { getComparisonBySlug, getAllComparisons } from '../data/competitorData';
-import SchemaMarkup from './SchemaMarkup';
 import { 
   ArrowRight, ShieldCheck, Check, X, AlertTriangle, Scale, Clock, 
   Sparkles, CheckCircle2, XCircle, HelpCircle, ChevronDown, ChevronUp,
@@ -114,9 +113,9 @@ export default function CompetitorComparisonView({
 
   return (
     <article id={`comparison-${comparison.slug}`} className="min-h-screen py-16 px-4 sm:px-6 lg:px-8 bg-[#f7f6f2]">
-      <SchemaMarkup customSchema={productSchema} />
-      <SchemaMarkup customSchema={faqSchema} />
-      <SchemaMarkup customSchema={breadcrumbSchema} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(productSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(faqSchema) }} />
+      <script type="application/ld+json" dangerouslySetInnerHTML={{ __html: JSON.stringify(breadcrumbSchema) }} />
 
       <div className="max-w-5xl mx-auto space-y-16">
         

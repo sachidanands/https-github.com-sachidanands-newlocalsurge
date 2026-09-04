@@ -1,0 +1,93 @@
+[
+  {
+    "id": "camp_1",
+    "createdAt": "2026-08-25T13:33:33.970Z",
+    "name": "Denver Plumbing Leads Search",
+    "status": "active",
+    "budget": 50,
+    "location": "Denver, CO",
+    "website": "https://eliteplumbingdenver.com",
+    "keywords": "emergency plumber denver, leak repair denver, water heater setup",
+    "headlines": [
+      "Emergency Plumber Denver",
+      "Elite Plumbing & Drain",
+      "24/7 Leak Repair Denver",
+      "Water Heater Setup Denver",
+      "Denver Top Rated Plumbing"
+    ],
+    "longHeadlines": [
+      "Uncompromising Local SEO Execution & Maps Dominance",
+      "Dynamic Onboarding & Regional Search Dominance",
+      "Stop Losing Customers to Competitors Nearby"
+    ],
+    "descriptions": [
+      "Need a reliable plumber in Denver? Elite Plumbing provides 24/7 emergency service, leak repair, and professional installations.",
+      "Fast response times, transparent pricing, and fully licensed technicians. Call Kevin at Elite Plumbing Denver now!"
+    ],
+    "sitelinks": [
+      {
+        "title": "Pricing Plans",
+        "desc1": "Affordable growth tiers",
+        "desc2": "Flat rate monthly pricing",
+        "path": "/pricing"
+      },
+      {
+        "title": "SEO Tool",
+        "desc1": "Run free local SEO scan",
+        "desc2": "Check maps pack rankings",
+        "path": "/seo-tool"
+      }
+    ],
+    "metrics": {
+      "clicks": 342,
+      "impressions": 4890,
+      "ctr": 7,
+      "cost": 684
+    }
+  },
+  {
+    "id": "camp_2",
+    "createdAt": "2026-08-30T13:33:33.970Z",
+    "name": "San Mateo Dental Implants",
+    "status": "paused",
+    "budget": 35,
+    "location": "San Mateo, CA",
+    "website": "https://luminatedental.com",
+    "keywords": "dentist san mateo, teeth whitening, clear aligners nearby",
+    "headlines": [
+      "Top Dentist San Mateo",
+      "Luminate Dental General Care",
+      "Teeth Whitening San Mateo",
+      "Clear Aligners Nearby",
+      "Best Cosmetic Dentist Clinic"
+    ],
+    "longHeadlines": [
+      "Cosmetic & General Dentistry in San Mateo",
+      "Luminate Dental General Care & Teeth Whitening"
+    ],
+    "descriptions": [
+      "General and cosmetic dental care in San Mateo. Schedule teeth whitening or aligner consults online.",
+      "Comfortable environment and state of the art equipment. Dr. Sarah Kim is accepting new patients today."
+    ],
+    "sitelinks": [
+      {
+        "title": "Pricing Plans",
+        "desc1": "Affordable growth tiers",
+        "desc2": "Flat rate monthly pricing",
+        "path": "/pricing"
+      },
+      {
+        "title": "SEO Tool",
+        "desc1": "Run free local SEO scan",
+        "desc2": "Check maps pack rankings",
+        "path": "/seo-tool"
+      }
+    ],
+    "metrics": {
+      "clicks": 118,
+      "impressions": 2120,
+      "ctr": 5.56,
+      "cost": 236
+    }
+  }
+]

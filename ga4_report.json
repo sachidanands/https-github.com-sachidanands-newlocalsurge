@@ -1,0 +1,207 @@
+{
+  "propertyId": "545134404",
+  "propertyName": "Local Surge SEO",
+  "generatedAt": "2026-09-04T14:27:14.415Z",
+  "dateRange": "Last 28 days",
+  "overview": {
+    "activeUsers": 74,
+    "newUsers": 71,
+    "sessions": 81,
+    "screenPageViews": 127,
+    "averageSessionDuration": 94.78499054320987,
+    "bounceRate": 71.60493827160494
+  },
+  "channels": [
+    {
+      "channel": "Direct",
+      "sessions": 64,
+      "activeUsers": 63,
+      "engagementRate": 15.625
+    },
+    {
+      "channel": "Organic Search",
+      "sessions": 10,
+      "activeUsers": 5,
+      "engagementRate": 70
+    },
+    {
+      "channel": "Organic Social",
+      "sessions": 5,
+      "activeUsers": 5,
+      "engagementRate": 80
+    },
+    {
+      "channel": "Referral",
+      "sessions": 2,
+      "activeUsers": 1,
+      "engagementRate": 100
+    }
+  ],
+  "topPages": [
+    {
+      "path": "/",
+      "pageViews": 68,
+      "activeUsers": 47,
+      "avgDuration": 62.666680250000006
+    },
+    {
+      "path": "/pricing",
+      "pageViews": 6,
+      "activeUsers": 3,
+      "avgDuration": 333.642496
+    },
+    {
+      "path": "/about",
+      "pageViews": 4,
+      "activeUsers": 4,
+      "avgDuration": 28.8379445
+    },
+    {
+      "path": "/admin/dashboard",
+      "pageViews": 4,
+      "activeUsers": 1,
+      "avgDuration": 17.875209
+    },
+    {
+      "path": "/blog",
+      "pageViews": 4,
+      "activeUsers": 3,
+      "avgDuration": 33.22947833333333
+    },
+    {
+      "path": "/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo",
+      "pageViews": 4,
+      "activeUsers": 3,
+      "avgDuration": 29.331221666666664
+    },
+    {
+      "path": "/seo-tool",
+      "pageViews": 4,
+      "activeUsers": 3,
+      "avgDuration": 111.548945
+    },
+    {
+      "path": "/blog/why-your-website-jumps-cls-guide",
+      "pageViews": 2,
+      "activeUsers": 2,
+      "avgDuration": 0.187597
+    },
+    {
+      "path": "/contact",
+      "pageViews": 2,
+      "activeUsers": 2,
+      "avgDuration": 3.9807513333333335
+    },
+    {
+      "path": "/locations",
+      "pageViews": 2,
+      "activeUsers": 2,
+      "avgDuration": 56.055541
+    },
+    {
+      "path": "/why-us",
+      "pageViews": 2,
+      "activeUsers": 2,
+      "avgDuration": 697.4094385
+    },
+    {
+      "path": "/assets/og-image.jpg",
+      "pageViews": 1,
+      "activeUsers": 1,
+      "avgDuration": 5.801629
+    },
+    {
+      "path": "/blog/best-local-business-website-builder-franchise-cost",
+      "pageViews": 1,
+      "activeUsers": 1,
+      "avgDuration": 0
+    },
+    {
+      "path": "/blog/from-zero-to-hero-scaling-your-local-seo-strategy",
+      "pageViews": 1,
+      "activeUsers": 1,
+      "avgDuration": 0
+    },
+    {
+      "path": "/blog/google-business-profile-critical-local-contractors",
+      "pageViews": 1,
+      "activeUsers": 1,
+      "avgDuration": 0
+    }
+  ],
+  "devices": [
+    {
+      "category": "desktop",
+      "sessions": 65,
+      "users": 62
+    },
+    {
+      "category": "mobile",
+      "sessions": 18,
+      "users": 14
+    }
+  ],
+  "geo": [
+    {
+      "country": "United States",
+      "region": "Colorado",
+      "city": "",
+      "users": 12
+    },
+    {
+      "country": "India",
+      "region": "Karnataka",
+      "city": "Bengaluru",
+      "users": 11
+    },
+    {
+      "country": "United States",
+      "region": "New York",
+      "city": "New York",
+      "users": 7
+    },
+    {
+      "country": "Singapore",
+      "region": "(not set)",
+      "city": "Singapore",
+      "users": 6
+    },
+    {
+      "country": "United States",
+      "region": "Virginia",
+      "city": "Ashburn",
+      "users": 3
+    },
+    {
+      "country": "China",
+      "region": "Guangxi",
+      "city": "Guilin",
+      "users": 2
+    },
+    {
+      "country": "India",
+      "region": "(not set)",
+      "city": "(not set)",
+      "users": 2
+    },
+    {
+      "country": "United States",
+      "region": "(not set)",
+      "city": "(not set)",
+      "users": 2
+    },
+    {
+      "country": "United States",
+      "region": "Oregon",
+      "city": "Prineville",
+      "users": 2
+    },
+    {
+      "country": "(not set)",
+      "region": "(not set)",
+      "city": "(not set)",
+      "users": 1
+    }
+  ],
+  "realtimeUsers": 0
+}

@@ -10,7 +10,11 @@
     "clean": "rm -rf dist server.js",
     "generate-reel": "tsx scripts/generate-reel.ts",
     "lint": "tsc --noEmit",
-    "lint:a11y": "tsx .agents/skills/accessibility/scripts/audit_a11y.ts"
+    "lint:a11y": "tsx .agents/skills/accessibility/scripts/audit_a11y.ts",
+    "gsc:report": "tsx scripts/gsc_report.ts",
+    "gsc:inspect": "tsx scripts/gsc_inspect.ts",
+    "gsc:sitemaps": "tsx scripts/gsc_sitemaps.ts",
+    "ga:report": "tsx scripts/ga4_report.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",

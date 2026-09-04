@@ -1,0 +1,156 @@
+{
+  "generatedAt": "2026-09-04T14:04:48.073Z",
+  "isMock": false,
+  "propertyUrl": "https://localsurgeseo.com/",
+  "summary": {
+    "totalClicks": 1,
+    "totalImpressions": 62,
+    "avgCtr": 1.61,
+    "avgPosition": 45.6,
+    "totalKeywordsTracked": 14
+  },
+  "quickWins": [],
+  "ctrOpportunities": [],
+  "topQueries": [
+    {
+      "keys": [
+        "localsurge",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 1,
+      "impressions": 2,
+      "ctr": 0.5,
+      "position": 3
+    },
+    {
+      "keys": [
+        "local map seo service",
+        "https://localsurgeseo.com/local-seo"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 83.5
+    },
+    {
+      "keys": [
+        "local maps seo services",
+        "https://localsurgeseo.com/local-seo"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 78.33333333333333
+    },
+    {
+      "keys": [
+        "local seo aurora",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 53
+    },
+    {
+      "keys": [
+        "local seo battle creek",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 91
+    },
+    {
+      "keys": [
+        "local seo cumming",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 70
+    },
+    {
+      "keys": [
+        "local seo georgia login",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 91
+    },
+    {
+      "keys": [
+        "local seo guru",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 16,
+      "ctr": 0,
+      "position": 64.9375
+    },
+    {
+      "keys": [
+        "local seo plans",
+        "https://localsurgeseo.com/pricing"
+      ],
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 63.5
+    },
+    {
+      "keys": [
+        "local seo stuart",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 60
+    },
+    {
+      "keys": [
+        "local seo suwanee",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 64
+    },
+    {
+      "keys": [
+        "local seo truro",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 3,
+      "ctr": 0,
+      "position": 80
+    },
+    {
+      "keys": [
+        "ranking surge",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 1,
+      "ctr": 0,
+      "position": 20
+    },
+    {
+      "keys": [
+        "surge seo",
+        "https://localsurgeseo.com/"
+      ],
+      "clicks": 0,
+      "impressions": 25,
+      "ctr": 0,
+      "position": 18.32
+    }
+  ]
+}

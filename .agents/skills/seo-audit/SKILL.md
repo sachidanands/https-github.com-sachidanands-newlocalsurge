@@ -49,11 +49,58 @@ Many CMS plugins (AIOSEO, Yoast, RankMath) inject JSON-LD via client-side JavaSc
 Reporting "no schema found" based solely on `web_fetch` or `curl` leads to false audit findings — these tools can't see JS-injected schema.
 
 ### Priority Order
-1. **Crawlability & Indexation** (can Google find and index it?)
-2. **Technical Foundations** (is the site fast and functional?)
-3. **On-Page Optimization** (is content optimized?)
-4. **Content Quality** (does it deserve to rank?)
-5. **Authority & Links** (does it have credibility?)
+1. **Google Search Console Field Data** (what is Google actually seeing, indexing, and rewarding?)
+2. **Crawlability & Indexation** (can Google find and index it?)
+3. **Technical Foundations** (is the site fast and functional?)
+4. **On-Page Optimization** (is content optimized?)
+5. **Content Quality** (does it deserve to rank?)
+6. **Authority & Links** (does it have credibility?)
+
+---
+
+## Phase 0: Google Search Console (GSC) Automated Field Audit
+
+Before doing manual crawl-based checks, always pull real field data and indexation diagnostics using the built-in GSC script suite:
+
+### 1. Pull Search Performance & Quick-Win Opportunities
+```bash
+npm run gsc:report
+```
+- Queries the Google Search Console API for the last 28 days of search analytics.
+- Surfaces overall clicks, impressions, CTR, and average positions.
+- Automatically isolates **Quick-Win Keywords** (queries in positions 4.0–10.9 with high impressions) that can be pushed into the top 3 with minor on-page optimizations.
+- Generates `gsc_report.json` and updates `GSC-AUDIT-REPORT.md`.
+
+### 2. Inspect Live Indexation Status for Primary Pages
+```bash
+npm run gsc:inspect
+```
+- Calls Google's official URL Inspection API to verify real Googlebot indexation verdict (`PASS`/`FAIL`), coverage state, robots.txt status, and detected JSON-LD schemas.
+- Saves findings to `gsc_inspection_results.json`.
+
+### 3. Inspect a Specific Target URL
+```bash
+npx tsx scripts/gsc_inspect.ts https://localsurgeseo.com/locations/california/los-angeles
+```
+- Used for single-page deep dives to check canonical alignment, mobile usability, and indexation blockers.
+
+### 4. View and Submit Sitemap to Search Console
+```bash
+npm run gsc:sitemaps
+```
+- Checks submitted sitemaps, error warnings, and discovered URL counts directly from Google.
+- To resubmit an updated sitemap:
+  ```bash
+  npx tsx scripts/gsc_sitemaps.ts submit https://localsurgeseo.com/sitemap.xml
+  ```
+
+### 5. Pull GA4 Organic Traffic & Engagement Metrics
+```bash
+npm run ga:report
+```
+- Queries the Google Analytics 4 (GA4) Data API for rolling 28-day performance.
+- Surfaces active users, sessions, screen page views, bounce rate, top acquisition channels, top landing pages, device categories, and real-time active users.
+- Generates `ga4_report.json` and updates `GA4-ANALYTICS-REPORT.md`.
 
 ---
 
@@ -426,6 +473,11 @@ Three equivalent placement methods: HTML `<link>` in `<head>`, HTTP `Link` heade
 - Overall health assessment
 - Top 3-5 priority issues
 - Quick wins identified
+
+**Google Search Console Field Intelligence**
+- Overall organic performance (clicks, impressions, average CTR, average position)
+- Quick-Win keyword opportunity table (positions 4–10)
+- Live URL Inspection status (indexed pages vs. unindexed / canonical mismatches)
 
 **Technical SEO Findings**
 For each issue:

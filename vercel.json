@@ -37,6 +37,17 @@
   ],
   "redirects": [
     {
+      "source": "/:path*",
+      "has": [
+        {
+          "type": "host",
+          "value": "www.localsurgeseo.com"
+        }
+      ],
+      "destination": "https://localsurgeseo.com/:path*",
+      "permanent": true
+    },
+    {
       "source": "/sitemap",
       "destination": "/site-map",
       "permanent": true

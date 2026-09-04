@@ -1,0 +1,20 @@
+[
+  {
+    "inspectionUrl": "https://localsurgeseo.com/seo-tool",
+    "verdict": "NEUTRAL",
+    "coverageState": "Crawled - currently not indexed",
+    "robotsTxtState": "ALLOWED",
+    "indexingState": "INDEXING_ALLOWED",
+    "pageFetchState": "SUCCESSFUL",
+    "lastCrawlTime": "2026-06-23T03:17:26Z",
+    "googleCanonical": "https://localsurgeseo.com/seo-tool",
+    "userCanonical": "https://localsurgeseo.com/seo-tool",
+    "crawledAs": "MOBILE",
+    "richResults": [
+      "LocalBusiness",
+      "Breadcrumbs",
+      "FAQPage"
+    ],
+    "issues": []
+  }
+]
