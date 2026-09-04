@@ -74,8 +74,19 @@ export default function BlogView({
       const match = allPosts.find(post => post.slug === initialSlug);
       if (match) {
         setActiveArticle(match);
-        // Scroll to top of article viewport
-        window.scrollTo({ top: 0, behavior: 'smooth' });
+        // Scroll to hash anchor if present, otherwise scroll to top
+        if (typeof window !== 'undefined' && window.location.hash) {
+          setTimeout(() => {
+            const el = document.querySelector(window.location.hash);
+            if (el) {
+              el.scrollIntoView({ behavior: 'smooth' });
+            } else {
+              window.scrollTo({ top: 0, behavior: 'smooth' });
+            }
+          }, 350);
+        } else {
+          window.scrollTo({ top: 0, behavior: 'smooth' });
+        }
       } else {
         setActiveArticle(null);
       }
@@ -584,7 +595,7 @@ export default function BlogView({
                     }
                     if (section.type === 'micro-tool' && (section as any).toolConfig) {
                       return (
-                        <div key={idx} className="my-6">
+                        <div key={idx} id="interactive-tool" className="my-6 scroll-mt-28">
                           <React.Suspense fallback={
                             <div className="p-8 text-center text-xs font-mono text-[#888b88] bg-[#faf9f6] rounded-xl border border-[#dfded4]">
                               Loading interactive audit widget...

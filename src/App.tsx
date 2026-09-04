@@ -32,6 +32,7 @@ const TermsOfService = React.lazy(() => import('./components/TermsOfService'));
 const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
 const CompetitorIndexView = React.lazy(() => import('./components/CompetitorIndexView'));
 const CompetitorComparisonView = React.lazy(() => import('./components/CompetitorComparisonView'));
+const ExploreOtherTools = React.lazy(() => import('./components/ExploreOtherTools'));
 
 // Toggle flag to enable or disable the AI Citation Readiness Scanner component
 const ENABLE_AI_CITATION_WIDGET = true;
@@ -2242,6 +2243,18 @@ export default function App() {
                   <AiCitationReadinessWidget onOpenOnboarding={() => setCurrentPage('contact')} />
                 </div>
               )}
+              <div className="border-t border-[#dfded4] pt-12">
+                <ExploreOtherTools
+                  onNavigateToBlogArticle={(slug) => {
+                    setActiveArticleSlug(slug);
+                    setCurrentPage('blog');
+                    if (typeof window !== 'undefined') {
+                      window.history.pushState({}, '', `/blog/${slug}#interactive-tool`);
+                      window.location.hash = '#interactive-tool';
+                    }
+                  }}
+                />
+              </div>
               <div className="border-t border-[#dfded4] pt-12">
                 <LocalDirectoryTool onOpenOnboarding={() => handleOpenOnboarding(null)} />
               </div>

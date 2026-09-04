@@ -1045,6 +1045,20 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
           <h2>Instant Search Readiness Diagnostic</h2>
           <p>Analyze your domain for Google Map Pack compatibility, title and meta tags, Open Graph declarations, structured data schemas, and Core Web Vitals.</p>
         </section>
+        <section>
+          <h2>Explore Specialized SEO & Audit Tools</h2>
+          <ul>
+            <li><a href="/blog/why-open-graph-meta-tags-are-essential-for-local-seo#interactive-tool">Scan OG Tags (Live Open Graph & Social Preview Inspector)</a>: Audit link previews for iMessage, WhatsApp, Facebook, and Twitter/X with 1200x630 pixel validation.</li>
+            <li><a href="/blog/why-canonical-link-tag-checker-is-essential-for-local-seo#interactive-tool">Canonical URL Validator</a>: Verify self-referencing canonical links and prevent duplicate content penalties.</li>
+            <li><a href="/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo#interactive-tool">Image Alt Tag & ADA Accessibility Scanner</a>: Optimize image filenames, alt text, and Google Image discovery.</li>
+            <li><a href="/blog/why-your-website-jumps-cls-guide#interactive-tool">Cumulative Layout Shift (CLS) Simulator</a>: Simulate visual layout jumps and mobile viewport stability.</li>
+            <li><a href="/blog/10-second-website-hack-why-meta-titles-matter#interactive-tool">Meta Title & SERP Snippet Tester</a>: Calculate pixel widths and character boundaries for Google snippets.</li>
+            <li><a href="/blog/what-is-nap-consistency-citation-guide#interactive-tool">Local NAP Consistency Formatter</a>: Standardize business Name, Address, and Phone into exact Google standards.</li>
+            <li><a href="/blog/llmstxt-blueprint-ai-sitemap-local-business#interactive-tool">LLMs.txt & AI Search Feed Generator</a>: Create knowledge feeds for ChatGPT, Perplexity, and Claude.</li>
+            <li><a href="/blog/what-are-google-local-service-ads-optimization#interactive-tool">Google LSA Budget & ROI Calculator</a>: Estimate lead volumes and costs across US trade categories.</li>
+            <li><a href="/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo#interactive-tool">BreadcrumbList Schema Generator</a>: Generate copy-paste Schema.org BreadcrumbList JSON-LD.</li>
+          </ul>
+        </section>
       </div>
     `;
 
