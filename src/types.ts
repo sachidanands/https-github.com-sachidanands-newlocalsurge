@@ -174,7 +174,7 @@ export interface OutreachPitchItem {
 }
 
 export interface MicroToolConfig {
-  toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator' | 'llms-generator' | 'nap-formatter' | 'lsa-calculator';
+  toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator' | 'llms-generator' | 'nap-formatter' | 'lsa-calculator' | 'pagespeed-scanner';
   toolTitle: string;
   toolDescription: string;
   placeholderUrl: string;

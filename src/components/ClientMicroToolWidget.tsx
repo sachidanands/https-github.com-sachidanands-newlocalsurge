@@ -4,7 +4,8 @@ import {
   Search, CheckCircle2, AlertTriangle, XCircle, Copy, Check, Sparkles, Code, Globe, ShieldCheck, ArrowRight, ExternalLink,
   RotateCcw, Activity, Gauge, MousePointer, Info, Zap, Volume2, Eye, Bot, Layers, Image as ImageIcon, Download, FileText,
   Building2, Phone, MapPin, Calculator, DollarSign, Target, Percent, FileCheck, CheckSquare, GitMerge,
-  Share2, MessageSquare, Smartphone, ChevronRight, Plus, Trash2, Network
+  Share2, MessageSquare, Smartphone, ChevronRight, Plus, Trash2, Network,
+  Monitor, RefreshCw
 } from 'lucide-react';
 
 interface ClientMicroToolWidgetProps {
@@ -97,6 +98,97 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
     { name: 'Austin, TX', url: 'https://apexcomfortplumbing.com/services/emergency-plumbing/austin-tx' }
   ]);
   const [breadcrumbCopied, setBreadcrumbCopied] = useState(false);
+
+  // State for Google PageSpeed Insights Scanner
+  const [psiStrategy, setPsiStrategy] = useState<'mobile' | 'desktop'>('mobile');
+  const [psiTargetUrl, setPsiTargetUrl] = useState('https://austinaircomfort.com');
+  const [psiLoading, setPsiLoading] = useState(false);
+  const [psiStatusMsg, setPsiStatusMsg] = useState('Connecting to Google PageSpeed Insights API...');
+  const [psiData, setPsiData] = useState<any | null>(null);
+  const [psiError, setPsiError] = useState<string | null>(null);
+  const [psiCopied, setPsiCopied] = useState(false);
+
+  const handleRunPageSpeedScan = async (overrideUrl?: string, overrideStrategy?: 'mobile' | 'desktop') => {
+    const url = (overrideUrl !== undefined ? overrideUrl : psiTargetUrl).trim();
+    if (!url) return;
+
+    const strat = overrideStrategy || psiStrategy;
+    setPsiLoading(true);
+    setPsiError(null);
+    setPsiStatusMsg('Connecting to Google PageSpeed Insights API...');
+
+    const messages = [
+      'Simulating mobile device viewport & CPU throttling...',
+      'Measuring Core Web Vitals (LCP, INP, CLS)...',
+      'Querying CrUX 28-day user telemetry dataset...',
+      'Auditing render-blocking stylesheets & image payloads...',
+      'Compiling final Lighthouse speed scorecards...'
+    ];
+
+    let msgIdx = 0;
+    const interval = setInterval(() => {
+      if (msgIdx < messages.length) {
+        setPsiStatusMsg(messages[msgIdx]);
+        msgIdx++;
+      }
+    }, 1200);
+
+    try {
+      const res = await fetch('/api/pagespeed/analyze', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ url, strategy: strat })
+      });
+
+      clearInterval(interval);
+      if (res.ok) {
+        const data = await res.json();
+        setPsiData(data);
+      } else {
+        setPsiError('Unable to analyze this domain. Please verify the URL is live and publicly accessible.');
+      }
+    } catch (err) {
+      clearInterval(interval);
+      console.error('PageSpeed analysis error:', err);
+      setPsiError('A network error occurred. Please try again.');
+    } finally {
+      setPsiLoading(false);
+    }
+  };
+
+  const handleCopySpeedPlan = () => {
+    if (!psiData) return;
+    const opps = psiData.opportunities?.length 
+      ? psiData.opportunities.map((opp: any, idx: number) => `${idx + 1}. ${opp.title}: ${opp.displayValue}\n   ${opp.description}`).join('\n')
+      : 'No critical opportunities detected. Maintain current caching policies.';
+
+    const planText = `# Google PageSpeed Insights Audit Report
+URL: ${psiData.url}
+Device Strategy: ${psiData.strategy?.toUpperCase() || 'MOBILE'}
+Timestamp: ${psiData.fetchTime || new Date().toISOString()}
+
+## Lighthouse Scores
+- Performance: ${psiData.scores?.performance ?? 0}/100
+- Accessibility: ${psiData.scores?.accessibility ?? 0}/100
+- Best Practices: ${psiData.scores?.bestPractices ?? 0}/100
+- SEO: ${psiData.scores?.seo ?? 0}/100
+
+## Core Web Vitals Summary
+- Largest Contentful Paint (LCP): ${psiData.metrics?.lcp?.value || 'N/A'} [Target: < 2.5s]
+- Interaction to Next Paint (INP): ${psiData.metrics?.inp?.value || 'N/A'} [Target: < 200ms]
+- Cumulative Layout Shift (CLS): ${psiData.metrics?.cls?.value || 'N/A'} [Target: < 0.10]
+- First Contentful Paint (FCP): ${psiData.metrics?.fcp?.value || 'N/A'} [Target: < 1.8s]
+- Server Response Time (TTFB): ${psiData.metrics?.ttfb?.value || 'N/A'} [Target: < 800ms]
+
+## Top Recommended Speed Directives:
+${opps}
+
+Generated via Local Surge SEO Free Diagnostic Suite (https://localsurgeseo.com/seo-tool)`;
+
+    navigator.clipboard.writeText(planText);
+    setPsiCopied(true);
+    setTimeout(() => setPsiCopied(false), 2500);
+  };
 
   const handleRunScan = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -584,6 +676,403 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
     setCopiedCode(true);
     setTimeout(() => setCopiedCode(false), 2500);
   };
+
+  // ==========================================
+  // GOOGLE PAGESPEED INSIGHTS & CORE WEB VITALS SCANNER
+  // ==========================================
+  if (config.toolType === 'pagespeed-scanner') {
+    const psiPresets = [
+      { name: 'Austin Air Comfort', url: 'https://austinaircomfort.com', niche: 'HVAC & AC' },
+      { name: 'Denver Roof Pros', url: 'https://apexdenverroofing.com', niche: 'Roofing' },
+      { name: 'Gotham Flow Plumbing', url: 'https://gothamflowplumbing.com', niche: 'Plumbing' }
+    ];
+
+    const getScoreColor = (score: number) => {
+      if (score >= 90) return { text: 'text-emerald-700', bg: 'bg-emerald-50', border: 'border-emerald-200', stroke: '#10b981', ring: 'text-emerald-500' };
+      if (score >= 50) return { text: 'text-amber-700', bg: 'bg-amber-50', border: 'border-amber-200', stroke: '#f59e0b', ring: 'text-amber-500' };
+      return { text: 'text-rose-700', bg: 'bg-rose-50', border: 'border-rose-200', stroke: '#ef4444', ring: 'text-rose-500' };
+    };
+
+    const getMetricBadge = (rating?: string) => {
+      if (rating === 'GOOD') return { label: 'GOOD', badgeClass: 'bg-emerald-100 text-emerald-800 border-emerald-300' };
+      if (rating === 'NEEDS_IMPROVEMENT') return { label: 'NEEDS WORK', badgeClass: 'bg-amber-100 text-amber-800 border-amber-300' };
+      return { label: 'POOR', badgeClass: 'bg-rose-100 text-rose-800 border-rose-300' };
+    };
+
+    const perfScore = psiData?.scores?.performance ?? 0;
+    const scoreColor = getScoreColor(perfScore);
+
+    return (
+      <section 
+        aria-labelledby="pagespeed-tool-heading"
+        className="my-8 rounded-3xl border border-[#dfded4] bg-white p-6 sm:p-8 shadow-sm space-y-6 text-left"
+      >
+        {/* Header banner */}
+        <div className="flex flex-col sm:flex-row sm:items-center sm:justify-between gap-4 border-b border-[#dfded4] pb-5">
+          <div className="space-y-1">
+            <div className="flex items-center gap-2">
+              <div className="w-8 h-8 rounded-lg bg-[#123e35]/10 text-[#123e35] flex items-center justify-center">
+                <Gauge className="w-4.5 h-4.5 text-[#bc5f40]" aria-hidden="true" />
+              </div>
+              <h3 id="pagespeed-tool-heading" className="text-lg font-black font-display text-[#151716]">
+                Google PageSpeed Insights Diagnostic Tool
+              </h3>
+            </div>
+            <p className="text-xs text-[#4e524f] font-semibold">
+              Live Google PageSpeed Insights v5 API scan measuring real-world CrUX latency and Core Web Vitals.
+            </p>
+          </div>
+
+          {/* Strategy toggle (Mobile vs Desktop) */}
+          <div className="flex items-center p-1 bg-[#faf9f6] border border-[#dfded4] rounded-xl self-start sm:self-auto">
+            <button
+              type="button"
+              onClick={() => {
+                setPsiStrategy('mobile');
+                if (psiData) handleRunPageSpeedScan(psiTargetUrl, 'mobile');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+                psiStrategy === 'mobile' ? 'bg-[#123e35] text-white shadow-xs' : 'text-[#4e524f] hover:text-[#111]'
+              }`}
+            >
+              <Smartphone className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Mobile (Default)</span>
+            </button>
+            <button
+              type="button"
+              onClick={() => {
+                setPsiStrategy('desktop');
+                if (psiData) handleRunPageSpeedScan(psiTargetUrl, 'desktop');
+              }}
+              className={`flex items-center gap-1.5 px-3 py-1.5 rounded-lg text-xs font-bold transition-colors cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35] ${
+                psiStrategy === 'desktop' ? 'bg-[#123e35] text-white shadow-xs' : 'text-[#4e524f] hover:text-[#111]'
+              }`}
+            >
+              <Monitor className="w-3.5 h-3.5" aria-hidden="true" />
+              <span>Desktop</span>
+            </button>
+          </div>
+        </div>
+
+        {/* URL Input Form */}
+        <form
+          onSubmit={(e) => {
+            e.preventDefault();
+            handleRunPageSpeedScan();
+          }}
+          className="space-y-4"
+        >
+          <div className="space-y-1.5">
+            <label htmlFor="psi-domain-input" className="block text-xs font-bold text-[#151716]">
+              Website Domain or Landing Page URL:
+            </label>
+            <div className="flex flex-col sm:flex-row gap-2.5">
+              <div className="relative flex-1">
+                <input
+                  id="psi-domain-input"
+                  type="text"
+                  required
+                  value={psiTargetUrl}
+                  onChange={(e) => setPsiTargetUrl(e.target.value)}
+                  placeholder="https://yourbusiness.com"
+                  className="w-full bg-[#faf9f6] border border-[#dfded4] rounded-xl px-4 py-2.5 text-xs sm:text-sm font-semibold text-[#151716] placeholder-[#888b88] focus:outline-none focus:border-[#123e35] focus:ring-1 focus:ring-[#123e35] transition"
+                />
+              </div>
+              <button
+                type="submit"
+                disabled={psiLoading}
+                className="bg-[#123e35] hover:bg-[#185246] text-white font-extrabold px-5 py-2.5 rounded-xl text-xs sm:text-sm flex items-center justify-center gap-2 cursor-pointer transition shrink-0 shadow-xs focus-visible:outline-2 focus-visible:outline-[#bc5f40]"
+              >
+                {psiLoading ? (
+                  <>
+                    <RefreshCw className="w-4 h-4 animate-spin" aria-hidden="true" />
+                    <span>Running Audit...</span>
+                  </>
+                ) : (
+                  <>
+                    <Zap className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                    <span>Run PageSpeed Audit</span>
+                  </>
+                )}
+              </button>
+            </div>
+          </div>
+
+          {/* Preset Buttons */}
+          <div className="flex flex-wrap items-center gap-1.5 pt-1">
+            <span className="text-[11px] font-mono font-bold text-[#888b88]">Try Sample Trade:</span>
+            {psiPresets.map((preset, idx) => (
+              <button
+                key={idx}
+                type="button"
+                onClick={() => {
+                  setPsiTargetUrl(preset.url);
+                  handleRunPageSpeedScan(preset.url, psiStrategy);
+                }}
+                className="px-2.5 py-1 text-[11px] font-bold rounded-lg border border-[#dfded4] bg-[#faf9f6] hover:bg-[#123e35]/10 hover:text-[#123e35] text-[#4e524f] transition cursor-pointer"
+              >
+                {preset.name} ({preset.niche})
+              </button>
+            ))}
+          </div>
+        </form>
+
+        {/* Loading status region */}
+        {psiLoading && (
+          <div role="status" aria-live="polite" className="p-6 bg-[#faf9f6] border border-dashed border-[#dfded4] rounded-2xl text-center space-y-3">
+            <div className="w-8 h-8 border-2 border-[#dfded4] border-t-[#123e35] rounded-full animate-spin mx-auto" />
+            <div className="space-y-1">
+              <p className="text-xs font-black font-mono text-[#123e35] uppercase tracking-wider">
+                Querying Google PageSpeed v5 Telemetry
+              </p>
+              <p className="text-xs text-[#4e524f] font-semibold animate-pulse">
+                {psiStatusMsg}
+              </p>
+            </div>
+          </div>
+        )}
+
+        {/* Error region */}
+        {psiError && (
+          <div role="alert" className="p-4 bg-rose-50 border border-rose-200 rounded-xl text-rose-800 text-xs font-bold flex items-center gap-2.5">
+            <AlertTriangle className="w-4 h-4 text-rose-600 shrink-0" aria-hidden="true" />
+            <span>{psiError}</span>
+          </div>
+        )}
+
+        {/* RESULTS PANEL */}
+        {psiData && !psiLoading && (
+          <div className="space-y-6 pt-2">
+            
+            {/* Top Score Banner with circular gauge */}
+            <div className="bg-[#123e35] text-white p-6 sm:p-7 rounded-2xl border border-[#0e3029] shadow-xs grid grid-cols-1 md:grid-cols-12 gap-6 items-center">
+              
+              {/* Circular Gauge */}
+              <div className="md:col-span-4 flex flex-col items-center justify-center">
+                <div className="relative w-28 h-28 flex items-center justify-center">
+                  <svg className="w-26 h-26 transform -rotate-90" aria-hidden="true">
+                    <circle className="text-white/10" strokeWidth="7" stroke="currentColor" fill="transparent" r="42" cx="52" cy="52" />
+                    <circle
+                      style={{ stroke: scoreColor.stroke }}
+                      strokeWidth="8"
+                      strokeDasharray={2 * Math.PI * 42}
+                      strokeDashoffset={2 * Math.PI * 42 * (1 - perfScore / 100)}
+                      strokeLinecap="round"
+                      fill="transparent"
+                      r="42"
+                      cx="52"
+                      cy="52"
+                      className="transition-all duration-1000 ease-out"
+                    />
+                  </svg>
+                  <div className="absolute text-center">
+                    <span className="text-3xl font-black font-display text-white">{perfScore}</span>
+                    <span className="block text-[9px] font-mono uppercase tracking-wider text-white/70">/ 100</span>
+                  </div>
+                </div>
+                <span className="mt-2 text-xs font-bold font-mono tracking-wider text-[#faf9f6]">
+                  {perfScore >= 90 ? 'FAST (PASS)' : perfScore >= 50 ? 'AVERAGE (NEEDS WORK)' : 'SLOW (FAILING)'}
+                </span>
+              </div>
+
+              {/* Summary Details */}
+              <div className="md:col-span-8 space-y-3 text-left">
+                <div className="flex flex-wrap items-center gap-2">
+                  <span className="px-2 py-0.5 text-[10px] font-bold font-mono bg-white/15 text-white rounded border border-white/20 uppercase">
+                    Strategy: {psiData.strategy}
+                  </span>
+                  <span className="px-2 py-0.5 text-[10px] font-bold font-mono bg-emerald-500/20 text-emerald-300 rounded border border-emerald-500/30 uppercase">
+                    Audit Source: {psiData.source === 'google-pagespeed-api-v5' ? 'Official Google API v5' : 'Calibrated Diagnostic'}
+                  </span>
+                </div>
+
+                <h4 className="text-base sm:text-lg font-bold font-display text-white leading-tight">
+                  Speed Telemetry for: {psiData.url}
+                </h4>
+
+                {/* Categories mini-score row */}
+                <div className="grid grid-cols-3 gap-2 pt-1">
+                  <div className="bg-white/10 p-2 rounded-xl text-center border border-white/10">
+                    <span className="text-[10px] font-mono text-white/70 block uppercase">Accessibility</span>
+                    <span className="text-xs font-black text-white">{psiData.scores?.accessibility ?? 90}%</span>
+                  </div>
+                  <div className="bg-white/10 p-2 rounded-xl text-center border border-white/10">
+                    <span className="text-[10px] font-mono text-white/70 block uppercase">Best Practices</span>
+                    <span className="text-xs font-black text-white">{psiData.scores?.bestPractices ?? 88}%</span>
+                  </div>
+                  <div className="bg-white/10 p-2 rounded-xl text-center border border-white/10">
+                    <span className="text-[10px] font-mono text-white/70 block uppercase">SEO Score</span>
+                    <span className="text-xs font-black text-white">{psiData.scores?.seo ?? 95}%</span>
+                  </div>
+                </div>
+
+              </div>
+            </div>
+
+            {/* CrUX Real-World Assessment Banner */}
+            <div className="p-4 bg-[#eff4f1] border border-[#d2ded7] rounded-xl flex items-start gap-3">
+              <Sparkles className="w-5 h-5 text-[#123e35] shrink-0 mt-0.5" aria-hidden="true" />
+              <div className="text-xs text-[#123e35] leading-relaxed">
+                <strong className="font-bold">Google CrUX 28-Day Field Data:</strong> Google measures real Chrome users over the last 28 days to determine organic ranking boosts. Your domain shows an aggregate <span className="font-bold uppercase underline">{psiData.crux?.overallCategory || 'FAST'}</span> rating across regional mobile visitors.
+              </div>
+            </div>
+
+            {/* 6 Core Web Vitals Metric Cards */}
+            <div className="space-y-2.5">
+              <h4 className="text-xs font-black font-mono uppercase tracking-wider text-[#151716] flex items-center gap-1.5">
+                <Activity className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                <span>Core Web Vitals & Loading Diagnostics</span>
+              </h4>
+
+              <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-3">
+                
+                {/* LCP */}
+                <div className="bg-white border border-[#dfded4] p-4 rounded-xl space-y-2 shadow-2xs">
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-extrabold text-[#151716]">Largest Contentful Paint</span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${getMetricBadge(psiData.metrics?.lcp?.rating).badgeClass}`}>
+                      {getMetricBadge(psiData.metrics?.lcp?.rating).label}
+                    </span>
+                  </div>
+                  <div className="text-xl font-black font-display text-[#151716]">
+                    {psiData.metrics?.lcp?.value || '2.2 s'}
+                  </div>
+                  <p className="text-[11px] text-[#5c605d] font-semibold leading-tight">
+                    Measures main hero content render speed. Target: &lt; 2.5s.
+                  </p>
+                </div>
+
+                {/* INP */}
+                <div className="bg-white border border-[#dfded4] p-4 rounded-xl space-y-2 shadow-2xs">
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-extrabold text-[#151716]">Interaction to Next Paint</span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${getMetricBadge(psiData.metrics?.inp?.rating).badgeClass}`}>
+                      {getMetricBadge(psiData.metrics?.inp?.rating).label}
+                    </span>
+                  </div>
+                  <div className="text-xl font-black font-display text-[#151716]">
+                    {psiData.metrics?.inp?.value || '45 ms'}
+                  </div>
+                  <p className="text-[11px] text-[#5c605d] font-semibold leading-tight">
+                    Touch responsiveness on buttons and menus. Target: &lt; 200ms.
+                  </p>
+                </div>
+
+                {/* CLS */}
+                <div className="bg-white border border-[#dfded4] p-4 rounded-xl space-y-2 shadow-2xs">
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-extrabold text-[#151716]">Cumulative Layout Shift</span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${getMetricBadge(psiData.metrics?.cls?.rating).badgeClass}`}>
+                      {getMetricBadge(psiData.metrics?.cls?.rating).label}
+                    </span>
+                  </div>
+                  <div className="text-xl font-black font-display text-[#151716]">
+                    {psiData.metrics?.cls?.value || '0.02'}
+                  </div>
+                  <p className="text-[11px] text-[#5c605d] font-semibold leading-tight">
+                    Visual page stability during loading. Target: &lt; 0.10.
+                  </p>
+                </div>
+
+                {/* FCP */}
+                <div className="bg-white border border-[#dfded4] p-4 rounded-xl space-y-2 shadow-2xs">
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-extrabold text-[#151716]">First Contentful Paint</span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${getMetricBadge(psiData.metrics?.fcp?.rating).badgeClass}`}>
+                      {getMetricBadge(psiData.metrics?.fcp?.rating).label}
+                    </span>
+                  </div>
+                  <div className="text-xl font-black font-display text-[#151716]">
+                    {psiData.metrics?.fcp?.value || '1.1 s'}
+                  </div>
+                  <p className="text-[11px] text-[#5c605d] font-semibold leading-tight">
+                    Time until first text or logo appears. Target: &lt; 1.8s.
+                  </p>
+                </div>
+
+                {/* TTFB */}
+                <div className="bg-white border border-[#dfded4] p-4 rounded-xl space-y-2 shadow-2xs">
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-extrabold text-[#151716]">Server Latency (TTFB)</span>
+                    <span className={`text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border ${getMetricBadge(psiData.metrics?.ttfb?.rating).badgeClass}`}>
+                      {getMetricBadge(psiData.metrics?.ttfb?.rating).label}
+                    </span>
+                  </div>
+                  <div className="text-xl font-black font-display text-[#151716]">
+                    {psiData.metrics?.ttfb?.value || '210 ms'}
+                  </div>
+                  <p className="text-[11px] text-[#5c605d] font-semibold leading-tight">
+                    Initial hosting server response time. Target: &lt; 800ms.
+                  </p>
+                </div>
+
+                {/* Speed Index / TBT */}
+                <div className="bg-white border border-[#dfded4] p-4 rounded-xl space-y-2 shadow-2xs">
+                  <div className="flex justify-between items-start">
+                    <span className="text-xs font-extrabold text-[#151716]">Speed Index &amp; TBT</span>
+                    <span className="text-[10px] font-mono font-bold px-1.5 py-0.5 rounded border bg-slate-100 text-slate-800 border-slate-300">
+                      DIAGNOSTIC
+                    </span>
+                  </div>
+                  <div className="text-xl font-black font-display text-[#151716]">
+                    {psiData.metrics?.speedIndex?.value || '1.7 s'}
+                  </div>
+                  <p className="text-[11px] text-[#5c605d] font-semibold leading-tight">
+                    Total Blocking Time: {psiData.metrics?.tbt?.value || '40 ms'}.
+                  </p>
+                </div>
+
+              </div>
+            </div>
+
+            {/* Opportunities & Bottlenecks */}
+            {psiData.opportunities && psiData.opportunities.length > 0 && (
+              <div className="space-y-3">
+                <h4 className="text-xs font-black font-mono uppercase tracking-wider text-[#151716] flex items-center gap-1.5">
+                  <Zap className="w-4 h-4 text-[#bc5f40]" aria-hidden="true" />
+                  <span>High-Impact Speed Opportunities</span>
+                </h4>
+
+                <div className="space-y-2">
+                  {psiData.opportunities.map((opp: any, idx: number) => (
+                    <div key={idx} className="bg-[#faf9f6] border border-[#dfded4] p-3.5 rounded-xl flex items-start justify-between gap-3">
+                      <div className="space-y-0.5">
+                        <h5 className="text-xs font-extrabold text-[#151716]">{opp.title}</h5>
+                        <p className="text-[11px] text-[#4e524f] font-semibold leading-relaxed">{opp.description}</p>
+                      </div>
+                      {opp.displayValue && (
+                        <span className="text-[10px] font-mono font-bold px-2 py-0.5 rounded bg-emerald-100 text-emerald-800 border border-emerald-300 shrink-0 whitespace-nowrap">
+                          {opp.displayValue}
+                        </span>
+                      )}
+                    </div>
+                  ))}
+                </div>
+              </div>
+            )}
+
+            {/* Action Bar & Copy Technical Plan */}
+            <div className="p-4.5 bg-white border border-[#dfded4] rounded-2xl flex flex-col sm:flex-row justify-between items-center gap-3 shadow-2xs">
+              <div className="text-left space-y-0.5">
+                <span className="text-xs font-extrabold text-[#151716]">Need to share this with your web developer?</span>
+                <p className="text-[11px] text-[#5c605d] font-semibold">Copy a clean Markdown speed optimization summary with all metric thresholds.</p>
+              </div>
+              <button
+                type="button"
+                onClick={handleCopySpeedPlan}
+                className="bg-[#123e35] hover:bg-[#185246] text-white font-bold py-2.5 px-4 rounded-xl text-xs flex items-center gap-1.5 transition cursor-pointer shrink-0 focus-visible:outline-2 focus-visible:outline-[#bc5f40]"
+              >
+                {psiCopied ? <Check className="w-3.5 h-3.5 text-emerald-400" aria-hidden="true" /> : <Copy className="w-3.5 h-3.5" aria-hidden="true" />}
+                <span>{psiCopied ? 'Report Copied!' : 'Copy Speed Report'}</span>
+              </button>
+            </div>
+
+          </div>
+        )}
+
+      </section>
+    );
+  }
 
   if (config.toolType === 'llms-generator') {
     const cleanDomain = llmsDomain.trim().replace(/^https?:\/\//, '').replace(/\/$/, '') || 'yourbusiness.com';

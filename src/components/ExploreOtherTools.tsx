@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { Page } from '../types';
 import { 
   Sparkles, ArrowRight, Share2, Link2, Image, Activity, FileText, 
-  MapPin, Bot, Calculator, Layers, ExternalLink, CheckCircle2, ShieldCheck
+  MapPin, Bot, Calculator, Layers, ExternalLink, CheckCircle2, ShieldCheck, Gauge
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 
@@ -24,6 +24,18 @@ interface ExploreOtherToolsProps {
 }
 
 export const SPECIALIZED_TOOLS: ToolItem[] = [
+  {
+    id: 'pagespeed-scanner',
+    title: 'Google PageSpeed Insights Scanner',
+    badge: 'Core Web Vitals & Real CrUX Speeds',
+    category: 'technical',
+    categoryLabel: 'Technical & Speed',
+    description: 'Run an instant Google PageSpeed Insights audit measuring mobile LCP, INP, and CLS scores with actionable server latency fixes.',
+    blogSlug: 'why-google-pagespeed-insights-matters-for-local-seo',
+    image: '/assets/tools/pagespeed-scanner-preview.jpg',
+    icon: Gauge,
+    featured: true
+  },
   {
     id: 'og-scanner',
     title: 'Scan OG Tags',
