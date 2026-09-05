@@ -14,7 +14,8 @@
     "gsc:report": "tsx scripts/gsc_report.ts",
     "gsc:inspect": "tsx scripts/gsc_inspect.ts",
     "gsc:sitemaps": "tsx scripts/gsc_sitemaps.ts",
-    "ga:report": "tsx scripts/ga4_report.ts"
+    "ga:report": "tsx scripts/ga4_report.ts",
+    "audit:cwv": "tsx scripts/cwv_scan.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
