@@ -25,18 +25,6 @@ interface ExploreOtherToolsProps {
 
 export const SPECIALIZED_TOOLS: ToolItem[] = [
   {
-    id: 'gbp-inspector',
-    title: 'Google Business Profile & Map Pack Inspector',
-    badge: 'Official Google Places API (New)',
-    category: 'local',
-    categoryLabel: 'Local & Citations',
-    description: 'Audit your official Google Place ID, star ratings, review velocity, and category signals with a 5-step Local 3-Pack ranking roadmap.',
-    blogSlug: 'mastering-google-business-profile-optimization',
-    image: '/assets/tools/pagespeed-scanner-preview.jpg',
-    icon: MapPin,
-    featured: true
-  },
-  {
     id: 'pagespeed-scanner',
     title: 'Google PageSpeed Insights Scanner',
     badge: 'Core Web Vitals & Real CrUX Speeds',
@@ -49,6 +37,16 @@ export const SPECIALIZED_TOOLS: ToolItem[] = [
     featured: true
   },
   {
+    id: 'gbp-inspector',
+    title: 'Google Business Profile & Map Pack Inspector',
+    badge: 'Official Google Places API (New)',
+    category: 'local',
+    categoryLabel: 'Local & Citations',
+    description: 'Audit your official Google Place ID, star ratings, review velocity, and category signals with a 5-step Local 3-Pack ranking roadmap.',
+    blogSlug: 'mastering-google-business-profile-optimization',
+    icon: MapPin
+  },
+  {
     id: 'og-scanner',
     title: 'Scan OG Tags',
     badge: 'Social & Referral Previews',
@@ -56,9 +54,7 @@ export const SPECIALIZED_TOOLS: ToolItem[] = [
     categoryLabel: 'Metadata & Social',
     description: 'Audit any page for missing or broken Open Graph & Twitter Card tags, test how your link previews render in iMessage, WhatsApp & Facebook, and generate standardized code.',
     blogSlug: 'why-open-graph-meta-tags-are-essential-for-local-seo',
-    image: '/assets/tools/og-scanner-preview.jpg',
-    icon: Share2,
-    featured: true
+    icon: Share2
   },
   {
     id: 'canonical-checker',
@@ -203,7 +199,7 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
         <AnimatePresence mode="popLayout">
           {filteredTools.map((tool, idx) => {
             const Icon = tool.icon;
-            const isOgFeatured = tool.id === 'og-scanner';
+            const isFeatured = tool.id === 'pagespeed-scanner';
 
             return (
               <motion.div
@@ -214,7 +210,7 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
                 exit={{ opacity: 0, scale: 0.95 }}
                 transition={{ duration: 0.2, delay: idx * 0.04 }}
                 className={`bg-white rounded-3xl border ${
-                  isOgFeatured 
+                  isFeatured 
                     ? 'border-[#123e35]/60 shadow-md ring-2 ring-[#123e35]/15 md:col-span-2 lg:col-span-3' 
                     : 'border-[#dfded4] shadow-xs hover:border-[#123e35]/40 hover:shadow-md'
                 } p-6 sm:p-7 flex flex-col justify-between transition-all duration-300 group`}
@@ -232,8 +228,8 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
                     </span>
                   </div>
 
-                  {/* If OG Featured Tile, render side-by-side with generated image */}
-                  {isOgFeatured && tool.image ? (
+                  {/* If PageSpeed Featured Tile, render side-by-side with preview visual */}
+                  {isFeatured && tool.image ? (
                     <div className="grid grid-cols-1 lg:grid-cols-12 gap-6 items-center pt-1">
                       <div className="lg:col-span-7 space-y-3">
                         <div className="flex items-center gap-2.5">
@@ -245,7 +241,7 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
                               {tool.title}
                             </h3>
                             <span className="text-[11px] font-mono text-[#888b88] font-bold">
-                              1200x630p Social Preview & Card Simulator
+                              Google Lighthouse v5 &amp; 28-Day CrUX Field Telemetry
                             </span>
                           </div>
                         </div>
@@ -255,8 +251,8 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
                         </p>
 
                         <div className="p-3 bg-[#faf9f6] rounded-xl border border-[#e6e4dc] text-[11px] text-[#123e35] font-semibold flex items-center gap-2">
-                          <ShieldCheck className="w-4 h-4 text-[#bc5f40] shrink-0" />
-                          <span>Includes real-time preview renderers for iMessage, WhatsApp, Facebook &amp; Twitter / X.</span>
+                          <Gauge className="w-4 h-4 text-[#bc5f40] shrink-0" />
+                          <span>Measures Mobile vs Desktop LCP (&lt;2.5s), INP (&lt;200ms), CLS (&lt;0.10) with server latency diagnostics.</span>
                         </div>
                       </div>
 
@@ -264,7 +260,7 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
                         <div className="rounded-2xl overflow-hidden border border-[#dfded4] shadow-xs group-hover:shadow-md transition-shadow relative bg-[#faf9f6]">
                           <img
                             src={tool.image}
-                            alt="Scan OG Tags - Open Graph Social Preview Inspector Tool"
+                            alt="Google PageSpeed Insights Scanner - Core Web Vitals & Real-Time Performance Audit Tool"
                             className="w-full h-auto object-cover group-hover:scale-102 transition-transform duration-500"
                             width={640}
                             height={360}
@@ -272,7 +268,7 @@ export default function ExploreOtherTools({ onNavigateToBlogArticle }: ExploreOt
                             decoding="async"
                           />
                           <div className="absolute bottom-2 right-2 bg-[#123e35]/90 text-white text-[9px] font-mono font-bold px-2 py-0.5 rounded backdrop-blur-xs">
-                            Live Inspector
+                            Google v5 API
                           </div>
                         </div>
                       </div>
