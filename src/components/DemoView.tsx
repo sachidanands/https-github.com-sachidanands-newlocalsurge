@@ -3,6 +3,7 @@ import { DemoConfig } from '../types';
 import {
   Phone, Mail, MapPin, CheckCircle2, Star, ShieldCheck, Clock, Award, ChevronRight, Sparkles, X, Send, Globe
 } from 'lucide-react';
+import { trackLeadGeneration } from '../utils/analytics';
 
 interface DemoViewProps {
   demoSlug: string;
@@ -93,6 +94,21 @@ export default function DemoView({ demoSlug, onNavigateHome }: DemoViewProps) {
 
       if (res.ok) {
         setClaimSubmitted(true);
+
+        // Track Demo Claim Lead in Google Analytics
+        try {
+          trackLeadGeneration({
+            planId: claimTier === 'free' ? 'single-page' : 'starter',
+            planName: claimTier === 'free' ? 'Single-Page Blast (Free)' : 'Starter Boost ($999/mo)',
+            industry: demo.niche,
+            location: demo.location,
+            hasWebsite: false,
+            hasGBP: false,
+            source: 'demo_site_claim'
+          });
+        } catch (e) {
+          console.warn('GA4 demo claim tracking error:', e);
+        }
       }
     } catch (err) {
       console.error('Error claiming site:', err);

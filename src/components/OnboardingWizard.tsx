@@ -1,5 +1,6 @@
 import React, { useState, useEffect } from 'react';
 import { Plan, LeadInput, SEOAuditResult, Lead } from '../types';
+import { trackLeadGeneration } from '../utils/analytics';
 import {
   X, Check, AlertCircle, RefreshCw, BarChart2, ShieldCheck, Mail, Phone, Globe, MapPin,
   Search, Shield, ChevronLeft, ChevronRight, FileText, CheckSquare, Sparkles, Building2, Star, Bot
@@ -168,6 +169,23 @@ export default function OnboardingWizard({ isOpen, onClose, preselectedPlan, onL
         if (onLeadSubmitted) {
           onLeadSubmitted(result.lead);
         }
+
+        // Dispatch GA4 lead conversion event with strict PII sanitization
+        try {
+          trackLeadGeneration({
+            planId: preselectedPlan?.id || 'custom',
+            planName: preselectedPlan?.name || 'Local Strategy Onboarding',
+            industry,
+            location,
+            hasWebsite,
+            hasGBP,
+            score: result.lead?.aiAudit?.overallScore,
+            source: 'onboarding_wizard'
+          });
+        } catch (e) {
+          console.warn('GA4 onboarding tracking error:', e);
+        }
+
         setStep(4); // Advance to results!
       } else {
         throw new Error(result.error || 'Unknown server error.');

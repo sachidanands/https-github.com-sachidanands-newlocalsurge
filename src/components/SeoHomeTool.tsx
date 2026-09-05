@@ -3,6 +3,7 @@ import {
   Bot, RefreshCw, Star, CheckCircle, AlertCircle, Sparkles, ArrowRight, ShieldCheck, HelpCircle
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { trackToolAudit } from '../utils/analytics';
 
 interface SeoPillar {
   title: string;
@@ -84,6 +85,18 @@ export default function SeoHomeTool({
       if (response.ok) {
         const data = await response.json();
         setResult(data);
+
+        // Track SEO audit event in Google Analytics
+        try {
+          trackToolAudit({
+            toolType: 'ai-seo-audit',
+            targetDomain: urlToUse,
+            score: data.overallScore,
+            cached: data.cached
+          });
+        } catch (e) {
+          console.warn('GA4 SEO tool tracking error:', e);
+        }
       } else {
         setError('Unable to analyze this URL. Please verify the domain and try again.');
       }

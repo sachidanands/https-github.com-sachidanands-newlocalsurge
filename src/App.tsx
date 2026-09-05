@@ -8,6 +8,13 @@ import FaqSection from './components/FaqSection';
 import WebMcpConsentModal from './components/WebMcpConsentModal';
 import { initWebMcpRuntime, executeWebMcpTool, WebMcpTool } from './utils/webmcp';
 import { BLOG_POSTS } from './data/blogData';
+import { 
+  trackPageView, 
+  trackPlanSelection, 
+  trackContactInquiry, 
+  trackPdfDownload, 
+  trackLeadGeneration 
+} from './utils/analytics';
 
 // Code-split secondary views & heavy interactive widgets for maximum Core Web Vitals & minimum TBT
 const SeoHomeTool = React.lazy(() => import('./components/SeoHomeTool'));
@@ -486,6 +493,9 @@ export default function App() {
     setTwitterTag('twitter:description', description);
     setTwitterTag('twitter:image', ogImage);
     setTwitterTag('twitter:image:alt', imageAlt);
+
+    // Google Analytics 4 (GA4) Virtual SPA Pageview Tracking
+    trackPageView(cleanPath, title);
   }, [currentPage, activeArticleSlug, activeStateSlug, activeCitySlug]);
 
   // Onboarding Wizard controls
@@ -970,6 +980,12 @@ export default function App() {
     // Save filename
     doc.save(`Local_Surge_SEO_${planTitle.replace(/[^a-zA-Z0-9]/g, '_')}_Strategy.pdf`);
 
+    // Track PDF Strategy Brief Download in Google Analytics
+    trackPdfDownload({
+      planName: planTitle,
+      reportType: 'onboarding_strategy_brief'
+    });
+
     // Output base64 dataURI string and return the raw base64 segment
     const dataUri = doc.output('datauristring');
     return dataUri.split(',')[1] || '';
@@ -994,6 +1010,14 @@ export default function App() {
       setCntSubject('Inquiry: Custom Configuration');
       setCntMessage('Hello Local Surge Team, I am interested in building a tailored enterprise or multi-city local SEO package.');
     }
+
+    // Track Pricing Plan Selection in GA4
+    const selectedPlan = PLANS.find(p => p.id === planId);
+    trackPlanSelection(
+      planId, 
+      selectedPlan?.name || (planId === 'custom' ? 'Custom Enterprise' : planId), 
+      selectedPlan ? `$${selectedPlan.price}/mo` : undefined
+    );
 
     setTimeout(() => {
       const element = document.getElementById('manual-inquiry-container');
@@ -1038,6 +1062,22 @@ export default function App() {
     await handleGeneratePDF(selectedPlanId, cntName, cntEmail);
 
     setContactSuccess(true);
+
+    // Google Analytics 4 (GA4) Lead and Contact Inquiry Tracking
+    try {
+      const plan = PLANS.find(p => p.id === selectedPlanId);
+      trackContactInquiry({
+        planId: selectedPlanId,
+        subject: cntSubject
+      });
+      trackLeadGeneration({
+        planId: selectedPlanId,
+        planName: plan?.name || 'Contact Form Inquiry',
+        source: 'contact_form'
+      });
+    } catch (err) {
+      console.warn('GA4 lead tracking error:', err);
+    }
 
     // Facebook Meta Pixel Lead Tracking
     try {

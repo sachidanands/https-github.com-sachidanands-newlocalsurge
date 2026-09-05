@@ -7,6 +7,7 @@ import {
   Share2, MessageSquare, Smartphone, ChevronRight, Plus, Trash2, Network,
   Monitor, RefreshCw
 } from 'lucide-react';
+import { trackToolAudit, trackPdfDownload } from '../utils/analytics';
 
 interface ClientMicroToolWidgetProps {
   config: MicroToolConfig;
@@ -144,6 +145,19 @@ export default function ClientMicroToolWidget({ config }: ClientMicroToolWidgetP
       if (res.ok) {
         const data = await res.json();
         setPsiData(data);
+
+        // Track PageSpeed Scanner event in GA4
+        try {
+          trackToolAudit({
+            toolType: 'pagespeed-scanner',
+            targetDomain: url,
+            score: data.scores?.performance,
+            strategy: strat,
+            cached: data.cached
+          });
+        } catch (e) {
+          console.warn('GA4 PageSpeed tracking error:', e);
+        }
       } else {
         setPsiError('Unable to analyze this domain. Please verify the URL is live and publicly accessible.');
       }
@@ -187,6 +201,17 @@ Generated via Local Surge SEO Free Diagnostic Suite (https://localsurgeseo.com/s
 
     navigator.clipboard.writeText(planText);
     setPsiCopied(true);
+
+    // Track Speed Plan Export in GA4
+    try {
+      trackPdfDownload({
+        reportType: 'pagespeed_speed_directive_plan',
+        planName: 'Google PageSpeed Insights'
+      });
+    } catch (e) {
+      console.warn('GA4 export tracking error:', e);
+    }
+
     setTimeout(() => setPsiCopied(false), 2500);
   };
 
