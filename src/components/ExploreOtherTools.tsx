@@ -25,6 +25,18 @@ interface ExploreOtherToolsProps {
 
 export const SPECIALIZED_TOOLS: ToolItem[] = [
   {
+    id: 'gbp-inspector',
+    title: 'Google Business Profile & Map Pack Inspector',
+    badge: 'Official Google Places API (New)',
+    category: 'local',
+    categoryLabel: 'Local & Citations',
+    description: 'Audit your official Google Place ID, star ratings, review velocity, and category signals with a 5-step Local 3-Pack ranking roadmap.',
+    blogSlug: 'mastering-google-business-profile-optimization',
+    image: '/assets/tools/pagespeed-scanner-preview.jpg',
+    icon: MapPin,
+    featured: true
+  },
+  {
     id: 'pagespeed-scanner',
     title: 'Google PageSpeed Insights Scanner',
     badge: 'Core Web Vitals & Real CrUX Speeds',

@@ -173,8 +173,28 @@ export interface OutreachPitchItem {
   notes?: string;
 }
 
+export interface GbpAuditResult {
+  placeId: string;
+  businessName: string;
+  formattedAddress: string;
+  phoneNumber?: string;
+  websiteUri?: string;
+  googleMapsUri: string;
+  rating: number;
+  userRatingCount: number;
+  primaryCategory?: string;
+  categories: string[];
+  isOpenNow?: boolean;
+  mapPackScore: number;
+  napScore: number;
+  reviewScore: number;
+  operationalScore: number;
+  recommendations: string[];
+  cached?: boolean;
+}
+
 export interface MicroToolConfig {
-  toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator' | 'llms-generator' | 'nap-formatter' | 'lsa-calculator' | 'pagespeed-scanner';
+  toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator' | 'llms-generator' | 'nap-formatter' | 'lsa-calculator' | 'pagespeed-scanner' | 'gbp-inspector';
   toolTitle: string;
   toolDescription: string;
   placeholderUrl: string;

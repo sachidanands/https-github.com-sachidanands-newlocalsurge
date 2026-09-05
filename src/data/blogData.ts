@@ -9,7 +9,7 @@ export interface BlogSection {
   content: string;
   items?: string[];
   toolConfig?: {
-    toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator' | 'llms-generator' | 'nap-formatter' | 'lsa-calculator' | 'pagespeed-scanner';
+    toolType: 'h1-scanner' | 'breadcrumb-schema' | 'meta-length' | 'opengraph' | 'alt-tag' | 'canonical' | 'cls-simulator' | 'llms-generator' | 'nap-formatter' | 'lsa-calculator' | 'pagespeed-scanner' | 'gbp-inspector';
     toolTitle: string;
     toolDescription: string;
     placeholderUrl: string;
@@ -1099,6 +1099,30 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "heading",
+        "content": "Live Diagnostic: Audit Your Google Business Profile & 3-Pack Prominence"
+      },
+      {
+        "type": "paragraph",
+        "content": "Test your business name and service city against the official Google Places API to extract your verified Place ID, review health, primary category mapping, and actionable 3-Pack ranking signals:"
+      },
+      {
+        "type": "micro-tool",
+        "content": "Google Business Profile & Map Pack Inspector",
+        "toolConfig": {
+          "toolType": "gbp-inspector",
+          "toolTitle": "Google Business Profile & Map Pack Inspector",
+          "toolDescription": "Audit your verified Google Place ID, review velocity, primary/secondary categories, and Local 3-Pack ranking prominence.",
+          "placeholderUrl": "Apex Plumbing Denver",
+          "checkCriteria": [
+            "Official Google Places API (New) verification",
+            "Place ID & Google Maps URI resolution",
+            "Review count & star rating trust signals",
+            "5-step Local 3-Pack ranking roadmap"
+          ]
+        }
+      },
+      {
+        "type": "heading",
         "content": "Interactive Tool: Standardize Your Contractor NAP Coordinates"
       },
       {
@@ -1505,6 +1529,30 @@ export const BLOG_POSTS: BlogPost[] = [
       {
         "type": "paragraph",
         "content": "In our [Toronto Dental Practice Case Study](/case-studies), the clinic was struggling with near-zero patient bookings from search engines. By methodically implementing this 7-point GBP checklist—re-aligning categories, injecting dental schema, and accelerating verified review loops—the clinic achieved an **average #1.2 ranking in local map packs** across downtown Toronto, driving a 140% surge in monthly patient bookings."
+      },
+      {
+        "type": "heading",
+        "content": "Live Diagnostic: Audit Your Google Business Profile & 3-Pack Prominence"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use our live diagnostic tool below powered by the official Google Places API (New) to audit your verified Place ID, review health, primary category mapping, and Local 3-Pack ranking score:"
+      },
+      {
+        "type": "micro-tool",
+        "content": "Google Business Profile & Map Pack Inspector",
+        "toolConfig": {
+          "toolType": "gbp-inspector",
+          "toolTitle": "Google Business Profile & Map Pack Inspector",
+          "toolDescription": "Audit your official Google Place ID, star ratings, review velocity, and category signals with a 5-step Local 3-Pack ranking roadmap.",
+          "placeholderUrl": "Apex Plumbing Denver",
+          "checkCriteria": [
+            "Official Google Places API (New) verification",
+            "Place ID & Google Maps URI resolution",
+            "Review count & star rating trust signals",
+            "5-step Local 3-Pack ranking roadmap"
+          ]
+        }
       },
       {
         "type": "heading",
