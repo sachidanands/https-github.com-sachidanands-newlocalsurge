@@ -69,6 +69,103 @@ function isRateLimited(ip: string): boolean {
   return false;
 }
 
+// =========================================================================
+// SECURITY & CACHE HELPERS (SSRF DEFENSE, RATE LIMITING, 1-HR IN-MEMORY CACHE)
+// =========================================================================
+
+// SSRF Prevention: Validate that the target URL is a safe, publicly resolvable web domain
+function isSafePublicUrl(inputUrl: string): boolean {
+  try {
+    const parsed = new URL(inputUrl);
+    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
+      return false;
+    }
+    const hostname = parsed.hostname.toLowerCase();
+
+    // Block loopback, localhost, and unspecified addresses
+    if (
+      hostname === "localhost" ||
+      hostname === "127.0.0.1" ||
+      hostname === "0.0.0.0" ||
+      hostname === "::1" ||
+      hostname.endsWith(".localhost") ||
+      hostname.endsWith(".local") ||
+      hostname.endsWith(".internal") ||
+      hostname.endsWith(".lan")
+    ) {
+      return false;
+    }
+
+    // Block private IPv4 ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16
+    if (
+      /^10\./.test(hostname) ||
+      /^192\.168\./.test(hostname) ||
+      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
+      /^169\.254\./.test(hostname)
+    ) {
+      return false;
+    }
+
+    // Require valid top-level or sub-domain structure
+    if (!hostname.includes(".") && hostname !== "localhost") {
+      return false;
+    }
+
+    return true;
+  } catch (err) {
+    return false;
+  }
+}
+
+// In-Memory 1-Hour LRU Cache for PageSpeed & SEO analysis results
+const analysisCache = new Map<string, { data: any; expiresAt: number }>();
+const CACHE_TTL_MS = 60 * 60 * 1000; // 60 minutes
+const MAX_CACHE_ITEMS = 500;
+
+function getCachedAnalysis(key: string): any | null {
+  const entry = analysisCache.get(key);
+  if (!entry) return null;
+  if (Date.now() > entry.expiresAt) {
+    analysisCache.delete(key);
+    return null;
+  }
+  return entry.data;
+}
+
+function setCachedAnalysis(key: string, data: any) {
+  if (analysisCache.size >= MAX_CACHE_ITEMS) {
+    const oldestKey = analysisCache.keys().next().value;
+    if (oldestKey) analysisCache.delete(oldestKey);
+  }
+  analysisCache.set(key, {
+    data,
+    expiresAt: Date.now() + CACHE_TTL_MS
+  });
+}
+
+// Tool-specific rate limiter (10 audit requests per 10 mins per IP)
+const toolRateLimits = new Map<string, { count: number; resetTime: number }>();
+const TOOL_RATE_WINDOW = 10 * 60 * 1000; // 10 minutes
+const MAX_TOOL_REQUESTS_PER_WINDOW = 10;
+
+function isToolRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const limit = toolRateLimits.get(ip);
+  if (!limit) {
+    toolRateLimits.set(ip, { count: 1, resetTime: now + TOOL_RATE_WINDOW });
+    return false;
+  }
+  if (now > limit.resetTime) {
+    toolRateLimits.set(ip, { count: 1, resetTime: now + TOOL_RATE_WINDOW });
+    return false;
+  }
+  if (limit.count >= MAX_TOOL_REQUESTS_PER_WINDOW) {
+    return true;
+  }
+  limit.count++;
+  return false;
+}
+
 // Admin authorization middleware verifying secure static token
 function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
   const authHeader = req.headers.authorization;
@@ -1479,9 +1576,29 @@ app.delete("/api/leads/:id", requireAdmin, async (req, res) => {
 });
 
 app.post("/api/seo-tool/analyze", async (req, res) => {
+  const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "127.0.0.1";
+  if (isToolRateLimited(ip)) {
+    return res.status(429).json({ error: "Too many audit requests from this IP. Please wait a few minutes and try again." });
+  }
+
   const { url, niche, location } = req.body;
   if (!url) {
     return res.status(400).json({ error: "Website URL is required for analysis." });
+  }
+
+  let targetUrl = String(url).trim();
+  if (!/^https?:\/\//i.test(targetUrl)) {
+    targetUrl = `https://${targetUrl}`;
+  }
+
+  if (!isSafePublicUrl(targetUrl)) {
+    return res.status(400).json({ error: "Invalid or restricted domain. Please enter a valid public website URL." });
+  }
+
+  const cacheKey = `seo:${targetUrl.toLowerCase()}:${(niche || '').toLowerCase()}:${(location || '').toLowerCase()}`;
+  const cached = getCachedAnalysis(cacheKey);
+  if (cached) {
+    return res.json({ ...cached, cached: true });
   }
 
   const { ai, Type } = await getGemini();
@@ -1489,7 +1606,7 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
     try {
       const prompt = `
         Perform a comprehensive, realistic mock Local SEO analysis for:
-        Website: ${url}
+        Website: ${targetUrl}
         Niche: ${niche || 'General Local Business'}
         Target Location: ${location || 'Local Area'}
         
@@ -1534,7 +1651,9 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
 
       const responseText = result.text;
       if (responseText) {
-        return res.json(JSON.parse(responseText.trim()));
+        const parsed = JSON.parse(responseText.trim());
+        setCachedAnalysis(cacheKey, parsed);
+        return res.json(parsed);
       }
     } catch (error) {
       console.error("Gemini tool audit failed, falling back:", error);
@@ -1543,18 +1662,24 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
 
   // Fallback audit
   const fallback = createFallbackAudit({
-    website: url,
+    website: targetUrl,
     industry: niche || 'General Service',
     location: location || 'Metro Area',
     keywords: 'local rankings',
     hasGBP: true,
     planName: "Free Analysis Tool"
   });
+  setCachedAnalysis(cacheKey, fallback);
   res.json(fallback);
 });
 
 // Google PageSpeed Insights v5 API Analysis Endpoint
 app.post("/api/pagespeed/analyze", async (req, res) => {
+  const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "127.0.0.1";
+  if (isToolRateLimited(ip)) {
+    return res.status(429).json({ error: "Too many PageSpeed requests from this IP. Please wait a few minutes and try again." });
+  }
+
   const { url, strategy = "mobile" } = req.body;
   if (!url) {
     return res.status(400).json({ error: "Website URL is required for PageSpeed analysis." });
@@ -1566,8 +1691,18 @@ app.post("/api/pagespeed/analyze", async (req, res) => {
     targetUrl = `https://${targetUrl}`;
   }
 
-  const apiKey = process.env.PAGESPEED_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
+  if (!isSafePublicUrl(targetUrl)) {
+    return res.status(400).json({ error: "Invalid or restricted domain. Please enter a valid public website URL." });
+  }
+
   const psiStrategy = strategy === "desktop" ? "desktop" : "mobile";
+  const cacheKey = `psi:${psiStrategy}:${targetUrl.toLowerCase()}`;
+  const cached = getCachedAnalysis(cacheKey);
+  if (cached) {
+    return res.json({ ...cached, cached: true });
+  }
+
+  const apiKey = process.env.PAGESPEED_API_KEY || process.env.GOOGLE_API_KEY || process.env.GEMINI_API_KEY;
 
   try {
     const psiApiUrl = `https://pagespeedonline.googleapis.com/pagespeedonline/v5/runPagespeed?url=${encodeURIComponent(targetUrl)}&strategy=${psiStrategy}&category=performance&category=accessibility&category=best-practices&category=seo${apiKey && apiKey !== 'MY_GEMINI_API_KEY' ? `&key=${apiKey}` : ''}`;
@@ -1641,7 +1776,7 @@ app.post("/api/pagespeed/analyze", async (req, res) => {
         }
       }
 
-      return res.json({
+      const responsePayload = {
         success: true,
         source: 'google-pagespeed-api-v5',
         url: targetUrl,
@@ -1667,7 +1802,10 @@ app.post("/api/pagespeed/analyze", async (req, res) => {
           hasFieldData: Boolean(crux.metrics)
         },
         opportunities: opportunities.slice(0, 5)
-      });
+      };
+
+      setCachedAnalysis(cacheKey, responsePayload);
+      return res.json(responsePayload);
     } else {
       console.warn(`PSI API returned ${response.status}. Falling back to simulation.`);
     }
@@ -1677,6 +1815,7 @@ app.post("/api/pagespeed/analyze", async (req, res) => {
 
   // Intelligent fallback generator
   const simulated = generateSimulatedPageSpeed(targetUrl, psiStrategy);
+  setCachedAnalysis(cacheKey, simulated);
   res.json(simulated);
 });
 
