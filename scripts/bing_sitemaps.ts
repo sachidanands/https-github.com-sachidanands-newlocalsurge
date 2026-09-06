@@ -3,14 +3,12 @@ import path from 'path';
 import { getBingCredentials, printBingSetupInstructions } from './bing_auth';
 
 async function listFeeds(apiKey: string, siteUrl: string) {
-  const url = `https://ssl.bing.com/webmaster/api.json/GetFeeds?apikey=${encodeURIComponent(apiKey)}`;
+  const url = `https://ssl.bing.com/webmaster/api.svc/json/GetFeeds?siteUrl=${encodeURIComponent(siteUrl)}&apikey=${encodeURIComponent(apiKey)}`;
   const res = await fetch(url, {
-    method: 'POST',
+    method: 'GET',
     headers: {
-      'Content-Type': 'application/json',
       'Accept': 'application/json'
-    },
-    body: JSON.stringify({ siteUrl })
+    }
   });
 
   if (!res.ok) {
@@ -22,7 +20,7 @@ async function listFeeds(apiKey: string, siteUrl: string) {
 }
 
 async function submitFeed(apiKey: string, siteUrl: string, feedUrl: string) {
-  const url = `https://ssl.bing.com/webmaster/api.json/SubmitFeed?apikey=${encodeURIComponent(apiKey)}`;
+  const url = `https://ssl.bing.com/webmaster/api.svc/json/SubmitFeed?apikey=${encodeURIComponent(apiKey)}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -71,10 +69,10 @@ async function run() {
         console.log(`\x1b[32m✔ Registered Sitemaps in Bing:\x1b[0m\n`);
         feeds.forEach((f: any) => {
           console.log(`  • \x1b[1m${f.Url || f.feedUrl}\x1b[0m`);
-          console.log(`    Status: \x1b[32m${f.Status || 'Active'}\x1b[0m | URLs: \x1b[36m${f.UrlCount || f.CompressedUrlCount || 'N/A'}\x1b[0m | Last Crawled: ${f.LastCrawled || 'Recent'}\n`);
+          console.log(`    Status: \x1b[32m${f.Status || 'Active'}\x1b[0m | URLs: \x1b[36m${f.UrlCount || f.CompressedUrlCount || 'Auto'}\x1b[0m | Last Crawled: ${f.LastCrawled || 'Recent'}\n`);
         });
       } else {
-        console.log(`\x1b[33mℹ️ No sitemaps found yet in Bing Webmaster Tools.\x1b[0m`);
+        console.log(`\x1b[33mℹ️ No sitemaps registered yet in Bing Webmaster Tools.\x1b[0m`);
         console.log(`Submitting master sitemap '${targetFeed}' automatically...`);
         await submitFeed(creds.apiKey, creds.siteUrl, targetFeed);
         console.log(`\x1b[32m✔ Master sitemap submitted to Bing!\x1b[0m\n`);

@@ -21,11 +21,10 @@ const CORE_URLS = [
 
 async function checkQuota(apiKey: string, siteUrl: string) {
   try {
-    const url = `https://ssl.bing.com/webmaster/api.json/GetUrlSubmissionQuota?apikey=${encodeURIComponent(apiKey)}`;
+    const url = `https://ssl.bing.com/webmaster/api.svc/json/GetUrlSubmissionQuota?siteUrl=${encodeURIComponent(siteUrl)}&apikey=${encodeURIComponent(apiKey)}`;
     const res = await fetch(url, {
-      method: 'POST',
-      headers: { 'Content-Type': 'application/json', 'Accept': 'application/json' },
-      body: JSON.stringify({ siteUrl })
+      method: 'GET',
+      headers: { 'Accept': 'application/json' }
     });
     if (res.ok) {
       const data = await res.json();
@@ -37,7 +36,7 @@ async function checkQuota(apiKey: string, siteUrl: string) {
 }
 
 async function submitToBingApiBatch(apiKey: string, siteUrl: string, urlList: string[]) {
-  const url = `https://ssl.bing.com/webmaster/api.json/SubmitUrlBatch?apikey=${encodeURIComponent(apiKey)}`;
+  const url = `https://ssl.bing.com/webmaster/api.svc/json/SubmitUrlBatch?apikey=${encodeURIComponent(apiKey)}`;
   const res = await fetch(url, {
     method: 'POST',
     headers: {
@@ -52,7 +51,6 @@ async function submitToBingApiBatch(apiKey: string, siteUrl: string, urlList: st
 
   if (!res.ok) {
     const text = await res.text();
-    // If batch fails, try individual submission
     throw new Error(`SubmitUrlBatch error (${res.status}): ${text}`);
   }
 
@@ -125,7 +123,7 @@ async function run() {
     console.log(`  \x1b[90mMonthly Quota Remaining:\x1b[0m \x1b[32m${quota.MonthlyQuota ?? 'Unlimited'}\x1b[0m URLs\n`);
   }
 
-  console.log(`\x1b[1mSubmitting ${targetUrls.length} URLs to Bing Webmaster Tools API...\x1b[0m`);
+  console.log(`\x1b[1mSubmitting ${targetUrls.length} URLs directly to Bing Webmaster Tools API...\x1b[0m`);
   targetUrls.slice(0, 8).forEach(u => console.log(`  • \x1b[36m${u}\x1b[0m`));
   if (targetUrls.length > 8) {
     console.log(`  \x1b[90m... and ${targetUrls.length - 8} more URLs\x1b[0m`);
@@ -136,7 +134,7 @@ async function run() {
   try {
     console.log(`\x1b[34m⏳ Pushing to Bingbot submission queue (SubmitUrlBatch)...\x1b[0m`);
     await submitToBingApiBatch(creds.apiKey, creds.siteUrl, targetUrls);
-    console.log(`\x1b[32m✔ Successfully submitted ${targetUrls.length} URLs to Bing Webmaster API!\x1b[0m`);
+    console.log(`\x1b[32m✔ Successfully submitted ${targetUrls.length} URLs directly to Bing Webmaster API!\x1b[0m`);
   } catch (err: any) {
     console.warn(`\x1b[33m⚠ Notice on Bing Webmaster Batch:\x1b[0m ${err.message}`);
   }

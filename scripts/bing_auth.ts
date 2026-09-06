@@ -47,7 +47,7 @@ export function getBingCredentials(): BingCredentials | null {
  */
 export async function testBingConnection(apiKey: string): Promise<{ success: boolean; sites: BingSite[]; error?: string }> {
   try {
-    const url = `https://ssl.bing.com/webmaster/api.json/GetUserSites?apikey=${encodeURIComponent(apiKey)}`;
+    const url = `https://ssl.bing.com/webmaster/api.svc/json/GetUserSites?apikey=${encodeURIComponent(apiKey)}`;
     const res = await fetch(url, {
       method: 'GET',
       headers: {
