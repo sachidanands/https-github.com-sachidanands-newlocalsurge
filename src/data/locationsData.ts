@@ -120,7 +120,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     districts: ['los-angeles', 'san-jose', 'oakland', 'san-diego'],
     consumerBehavior: {
       title: 'Statewide Consumer Search Trends & Web Utilization in California',
-      overview: 'Over 88% of California consumers utilize search engines, mobile maps, and directory listings to research a local service business prior to placing a call or visiting a storefront. The expectation for real-time accuracy, authentic local reviews, and mobile responsiveness in the Golden State is higher than any other U.S. market.',
+      overview: 'Over 88% of California consumers utilize mobile search engines, digital maps, and online reviews to research local businesses prior to calling. High local expectations for rapid mobile performance and authentic ratings make Google Local 3-Pack prominence essential statewide.',
       keyFindings: [
         '88% of California residents research service trades, healthcare, and dining online before engaging.',
         '84% of all local queries in the state are executed on mobile smartphones with immediate "near me" intent.',
@@ -142,7 +142,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     },
     businessStrategy: {
       title: 'Local Business Owner Strategy Blueprint for California',
-      overview: 'Because of California’s dense municipal layouts and hyper-competitive advertising costs, standard national SEO models fail. Local business owners must adopt a coordinate-anchored, citation-verified SEO strategy that establishes geographic authority.',
+      overview: 'Capturing California\'s massive local consumer market requires deploying localized schema markup, synchronizing tier-1 directory citations across major metropolitan corridors, and maintaining coordinate-accurate Google Business Profiles that overcome intense regional competition across both Northern and Southern California commercial trade areas.',
       actionSteps: [
         {
           title: 'Establish Coordinate-Accurate Google Business Profiles',
@@ -239,7 +239,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     districts: ['houston', 'dallas', 'austin'],
     consumerBehavior: {
       title: 'Consumer Search Dynamics & Web Utilization in Texas',
-      overview: 'With major population migration into Texas metro corridors, consumer reliance on digital search for home services, medical care, and contracting has reached record levels.',
+      overview: 'Over 87% of Texas consumers use mobile search and Google Maps to evaluate local contractors, medical clinics, and professional services before calling. Rapid suburban sprawl across the Texas Triangle creates heavy dependence on verified proximity and review trust.',
       keyFindings: [
         '85% of Texas consumers search online for local contractors and home services before requesting quotes.',
         'Over 79% of local mobile queries result in an offline store visit or phone call within 24 hours.',
@@ -256,7 +256,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     },
     businessStrategy: {
       title: 'Texas Local Business Search Playbook',
-      overview: 'Focus on multi-hub suburban visibility and bilingual Spanish/English localized listing optimization.',
+      overview: 'Capturing high-intent customer demand across Texas requires establishing coordinate-pinned Google Business Profiles, deploying bilingual Spanish and English Schema markup, and building dedicated multi-hub destination pages targeting rapidly expanding suburban corridors like Katy, Plano, Round Rock, and Frisco.',
       actionSteps: [
         { title: 'Coordinate Pinning', step: 'Step 1', detail: 'Lock in GPS anchor coordinates for regional operating zones.' },
         { title: 'Local Citations', step: 'Step 2', detail: 'Submit uniform NAP records to Texas regional trade directories.' }
@@ -300,7 +300,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     districts: ['miami'],
     consumerBehavior: {
       title: 'Florida Local Consumer & Visitor Search Behaviors',
-      overview: 'Florida features a dual-audience market of permanent residents and year-round seasonal visitors, requiring dual-intent local search optimization.',
+      overview: 'Over 89% of Florida residents and seasonal visitors rely on smartphone searches to discover local services, contractors, and hospitality venues. The combination of year-round tourism and booming retiree demographics makes verified digital presence the primary local buying filter.',
       keyFindings: [
         '86% of consumers rely on mobile maps to locate immediate service providers.',
         'Voice search usage is 18% higher in Florida than the national average among senior residents.'
@@ -312,7 +312,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     },
     businessStrategy: {
       title: 'Florida Small Business Search Blueprint',
-      overview: 'Optimize for localized "near me" intent and emergency dispatch keywords.',
+      overview: 'Winning local search market share in Florida requires capturing dual-intent customer demand across permanent residents and seasonal tourists. Businesses must maintain real-time operational hours, deploy localized GeoCoordinates schema, and establish high-velocity review funnels across major metropolitan and coastal corridors.',
       actionSteps: [
         { title: 'Real-Time Hours & GBP Sync', step: 'Step 1', detail: 'Keep holiday and seasonal operational hours synchronized.' }
       ]
@@ -355,7 +355,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     districts: ['new-york-city'],
     consumerBehavior: {
       title: 'New York Consumer Search Habits & Local Density Patterns',
-      overview: 'New York consumers demand rapid, block-by-block proximity. Search radius thresholds are narrower in NYC than any other U.S. metropolitan area.',
+      overview: 'Over 88% of New York consumers research local service businesses on mobile devices before visiting or calling. Extreme urban density and pedestrian transit patterns create hyper-localized search intent that demands precise, neighborhood-level entity accuracy across all five boroughs.',
       keyFindings: [
         '89% of urban New York consumers will not travel more than 1.5 miles for a service business.',
         'Subway mobile connectivity has boosted real-time transit local queries by 32%.'
@@ -367,7 +367,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     },
     businessStrategy: {
       title: 'New York Hyper-Local SEO Architecture',
-      overview: 'Construct borough-specific and neighborhood-anchored landing pages with micro-data.',
+      overview: 'Dominating search in New York requires a micro-neighborhood architecture anchored to pedestrian walking radiuses and subway lines. Local businesses must deploy transit landmark schemas, optimize for strict 15-minute travel radiuses, and maintain 100% verified directory citations across all boroughs.',
       actionSteps: [
         { title: 'Micro-Neighborhood Schemas', step: 'Step 1', detail: 'Tag specific transit stops and neighborhood landmarks.' }
       ]
@@ -410,7 +410,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     districts: [],
     consumerBehavior: {
       title: 'Illinois Consumer Search Patterns & Digital Adoption',
-      overview: 'Over 86% of Illinois residents research local businesses online prior to calling or booking appointments, with heavy mobile map engagement across Chicago and regional transit zones.',
+      overview: 'Over 86% of Illinois consumers utilize search engines and mobile maps to research local trades, healthcare providers, and storefronts prior to calling. Heavy transit-oriented commuting across Cook County and regional suburbs drives intense reliance on verified Google Map Pack listings.',
       keyFindings: [
         '86% of Illinois consumers search online before selecting home services, healthcare, or legal counsel.',
         'High mobile query volume across transit corridors and dense suburban trade centers.'
@@ -422,7 +422,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     },
     businessStrategy: {
       title: 'Illinois Local Business Search Playbook',
-      overview: 'Secure top-3 Google Map Pack positions with verified NAP citations and regional business schema.',
+      overview: 'Securing top-3 Google Map Pack prominence across Illinois demands synchronized NAP citations across regional commercial directories, coordinate-accurate Google Business Profiles, and structured LocalBusiness schema tailored to Chicago transit hubs, Cook County suburbs, and central Illinois commercial trade corridors.',
       actionSteps: [
         { title: 'Midwest Citation Alignment', step: 'Step 1', detail: 'Synchronize citations across Illinois chambers and directories.' }
       ]
@@ -465,7 +465,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     districts: [],
     consumerBehavior: {
       title: 'Pacific Northwest Consumer Digital Search Behavior',
-      overview: 'Washington consumers exhibit high digital expectations with 90% conducting online research before engaging with local businesses.',
+      overview: 'Over 90% of Washington consumers conduct mobile online research prior to engaging with local service providers. High digital fluency across the Puget Sound region creates strict customer expectations for sub-second page speeds, verified coordinates, and authentic recent reviews.',
       keyFindings: [
         '90% of Washington residents research local contractors and services online.',
         'High demand for online instant booking and transparent pricing.'
@@ -477,7 +477,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     },
     businessStrategy: {
       title: 'Washington State Local SEO Strategy',
-      overview: 'Implement schema markup and coordinate-targeted Google Business Profile optimization.',
+      overview: 'Capturing tech-savvy consumer demand across Washington State requires sub-2-second mobile load speeds, structured LocalBusiness and FAQPage JSON-LD schemas, coordinate-accurate Google Business Profile pinning, and seamless online appointment booking integration across the Puget Sound, Seattle, and Spokane metro corridors.',
       actionSteps: [
         { title: 'Local Schema Deployment', step: 'Step 1', detail: 'Deploy structured LocalBusiness metadata.' }
       ]
@@ -535,7 +535,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'Empirical Study: How Los Angeles Consumers Search and Choose Local Businesses',
-      overview: 'With over 500 square miles of dense geography spanning Downtown LA, Silicon Beach, the San Fernando Valley, and South Bay, consumer search behavior in Los Angeles is fiercely fragmented. Our data reveals that 89% of LA consumers consult Google Search or Maps prior to booking home services, dining, healthcare, or legal counsel. Because traffic congestion limits travel willingness, Angelenos rely heavily on hyper-local proximity and verified customer sentiment.',
+      overview: 'Over 89% of Los Angeles consumers consult Google Maps and mobile search prior to booking home services, dining, or healthcare. Severe traffic congestion limits travel willingness, making Angelenos fiercely reliant on hyper-local proximity and verified customer review sentiment.',
       keyFindings: [
         '89% of Los Angeles residents use search engines and Google Maps to evaluate local businesses before calling or visiting.',
         '84% of all local business inquiries in LA originate on mobile smartphones, with 68% clicking the direct "Call" or "Directions" button.',
@@ -671,7 +671,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'Consumer Search Trends in the Capital of Silicon Valley',
-      overview: 'San Jose tech-savvy consumers have zero tolerance for broken websites or inconsistent business information. Over 92% research local providers online before making contact, placing extreme scrutiny on reviews, verified coordinates, and mobile load speed.',
+      overview: 'Over 92% of San Jose and Silicon Valley consumers research local service providers online before making contact. Tech-literate residents place extreme scrutiny on mobile site speed, structured entity data, and verified 5-star Google review velocity.',
       keyFindings: [
         '92% of San Jose residents research service providers online before making contact.',
         'Sub-2-second mobile load speed is required to prevent customer drop-off among tech workers.',
@@ -692,7 +692,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'Silicon Valley Local Business Growth Blueprint',
-      overview: 'Dominating search in San Jose requires combining advanced technical JSON-LD schema with hyper-local coordinate citations across Santa Clara County.',
+      overview: 'Dominating local search in San Jose and Silicon Valley requires combining advanced technical JSON-LD schemas with sub-2-second Core Web Vitals performance, hyper-local coordinate citations, and active Google Business Profile optimization across Downtown, Willow Glen, Santana Row, and North San Jose.',
       actionSteps: [
         {
           title: 'Deploy Technical LocalBusiness Schema',
@@ -805,7 +805,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'East Bay Consumer Search Patterns in Oakland',
-      overview: 'Oakland consumers strongly favor community-rooted businesses and prioritize authentic customer feedback, verified physical addresses, and clear East Bay service perimeter boundaries.',
+      overview: 'Over 87% of Oakland and East Bay residents research neighborhood contractors, dining, and healthcare online before engaging. Local consumers strongly favor community-rooted businesses with verified physical addresses, authentic customer reviews, and clear regional service area perimeters.',
       keyFindings: [
         '87% of Oakland consumers turn to search engines for local home trades, medical care, and legal help.',
         'High mobile query volume during BART and highway commute windows along Highway 24 and I-880.',
@@ -826,7 +826,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'Oakland & East Bay Local SEO Playbook',
-      overview: 'Establish indisputable East Bay authority through localized schema markup, synchronized municipal citations, and proactive review generation.',
+      overview: 'Establishing indisputable search dominance across Oakland and the East Bay requires localized LocalBusiness schema markup, synchronized municipal citations spanning Berkeley and Alameda, coordinate-pinned Google Business Profiles, and steady neighborhood review velocity that overcomes cross-bay San Francisco competitor dilution.',
       actionSteps: [
         {
           title: 'Establish East Bay Geographic Authority',
@@ -939,7 +939,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'Coastal Search Dynamics in San Diego',
-      overview: 'San Diego combines high permanent residential service needs with vibrant military and coastal tourism economies. Mobile search dominance is pronounced across coastal beach communities and North County corridors.',
+      overview: 'Over 88% of San Diego consumers use mobile search and Google Maps to evaluate local businesses before calling. Distinct lifestyle corridors across coastal, inland, and North County communities make geo-targeted proximity signals decisive for customer acquisition.',
       keyFindings: [
         '88% of San Diego residents consult Google Maps before calling local contractors or medical practices.',
         'High mobile query volume across North County (Carlsbad, Encinitas) and coastal residential corridors.',
@@ -960,7 +960,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'San Diego County SEO Blueprint',
-      overview: 'Target distinct coastal, inland, and North County sub-markets with coordinate-anchored location pages and consistent directory signals.',
+      overview: 'Winning local search market share across San Diego County requires segmenting targeting across distinct coastal, inland, and North County sub-markets. Businesses must combine coordinate-anchored location pages, structured LocalBusiness schemas, and high-velocity photo-verified reviews to capture 77% of mobile Map Pack clicks.',
       actionSteps: [
         {
           title: 'Establish Coastal & Inland Coordinate Hubs',
@@ -1073,7 +1073,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'Consumer Search Patterns in Silicon Hills',
-      overview: 'Austin has one of the highest digital literacy rates in the southern United States. High population influx and heavy tech employment make Google Maps and mobile reviews the absolute authority for local purchasing decisions.',
+      overview: 'Over 90% of Austin consumers use mobile search and Google Maps to research local businesses before booking services. Rapid population influx and high tech literacy make digital reviews and sub-second website speed the primary local conversion factors.',
       keyFindings: [
         '91% of Austin residents use online search to select local trade contractors, healthcare, and legal services.',
         '85% of commercial service queries are conducted on mobile smartphones.',
@@ -1094,7 +1094,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'Austin High-Velocity Market Growth Playbook',
-      overview: 'Capitalize on Austin’s massive commercial expansion by establishing verified coordinate authority across distinct metro clusters.',
+      overview: 'Capitalizing on Austin’s rapid commercial expansion requires establishing verified coordinate authority across distinct North, Central, and South Austin clusters. Businesses must deploy structured LocalBusiness schemas, sync regional NAP citations, and maintain sub-2-second mobile load speeds to dominate competitive Silicon Hills queries.',
       actionSteps: [
         {
           title: 'Establish North & South Austin Service Corridors',
@@ -1207,7 +1207,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'Search Dynamics in the Nation’s Most Expansive Metro',
-      overview: 'Houston covers over 600 square miles, making physical proximity the #1 decisive signal for local consumers. Residents refuse to travel across loops (610, Beltway 8, Grand Parkway) without verified geographic confidence.',
+      overview: 'Over 88% of Houston consumers rely on mobile maps to locate verified local services within their specific highway loop. Spanning over 600 square miles, Houston search behavior demands strict geographic proximity to overcome cross-metro highway commute resistance.',
       keyFindings: [
         '88% of Houston consumers research local service businesses on search engines before booking.',
         'Severe highway traffic and loop geography dictate narrow 5-to-10 mile search radii for trade services.',
@@ -1228,7 +1228,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'Houston 600-Square-Mile Dominance Playbook',
-      overview: 'Conquer Houston’s sprawling geography by deploying hyper-local coordinate hubs tailored to specific loop quadrants and suburban centers.',
+      overview: 'Conquering Houston’s 600-square-mile metropolitan geography requires deploying hyper-local coordinate hubs tailored to specific loop quadrants and suburban centers. Local businesses must combine bilingual schemas, precise GPS polygon boundaries, and synchronized Tier-1 citations to overcome cross-loop highway commute resistance.',
       actionSteps: [
         {
           title: 'Anchor Specific Geographic Quadrants',
@@ -1341,7 +1341,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'DFW Metroplex Corporate & Consumer Search Behaviors',
-      overview: 'The Dallas-Fort Worth Metroplex is the 4th largest metropolitan economy in the nation. High corporate density, booming northern suburbs, and severe tollway commuting patterns make Google Maps the dominant customer acquisition channel.',
+      overview: 'Over 89% of Dallas and DFW consumers utilize Google Maps and mobile search to discover neighborhood contractors and professional services. Booming northern suburban expansion and tollway travel patterns make coordinate-accurate Map Pack placement the primary driver of customer calls.',
       keyFindings: [
         '89% of DFW consumers use Google Search and Maps to locate trade, healthcare, and professional services.',
         'Explosive northern growth (Frisco, Plano, McKinney) creates high-volume search clusters outside the Dallas city core.',
@@ -1362,7 +1362,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'DFW Metroplex Multi-Location SEO Playbook',
-      overview: 'Capture multi-billion dollar commercial search demand across Dallas and northern suburban corridors through structured schema and coordinate pinning.',
+      overview: 'Capturing high-value commercial and residential search demand across Dallas and the DFW Metroplex requires separating Dallas urban core targeting from northern suburban hubs like Plano and Frisco, deploying structured LocalBusiness JSON-LD schemas, and maintaining high review velocity on Google and Apple Maps.',
       actionSteps: [
         {
           title: 'Segment Dallas Core from Northern Suburbs',
@@ -1496,7 +1496,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'Miami & South Florida Growth Playbook',
-      overview: 'Build localized search dominance across Miami-Dade County by implementing bilingual schemas, urban coordinate pinning, and high-velocity visual reviews.',
+      overview: 'Building localized search dominance across Miami and South Florida requires implementing bilingual English and Spanish metadata, urban coordinate pinning across Brickell and Coral Gables, structured LocalBusiness schemas, and high-velocity photo review funnels tailored to fast-moving luxury and residential consumer demand.',
       actionSteps: [
         {
           title: 'Implement Bilingual Google Business Profile Signals',
@@ -1609,7 +1609,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     consumerBehavior: {
       title: 'NYC Micro-Neighborhood & Transit-Centric Search Behaviors',
-      overview: 'New York City represents the most concentrated urban local search market in the Western Hemisphere. New Yorkers search strictly within walking distance (10-to-15 minute walk) or immediate subway line stops, demanding pinpoint local precision.',
+      overview: 'Over 91% of New York City consumers search for local services within an immediate 10-to-15 minute walking radius or subway transit corridor. Pedestrian-driven mobile search behavior demands hyper-accurate micro-neighborhood signals and verified local directory citations across all boroughs.',
       keyFindings: [
         '91% of New Yorkers search on mobile devices while walking or in transit on subway platforms.',
         'Strict walking radius: 84% of consumers refuse to walk more than 15 minutes for standard trade or clinic visits.',
@@ -1630,7 +1630,7 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     },
     businessStrategy: {
       title: 'NYC Five-Borough Micro-Targeting Playbook',
-      overview: 'Dominate NYC’s ultra-dense commercial market through borough-specific landing pages, transit landmark schemas, and hyper-local citation rings.',
+      overview: 'Dominating New York City’s ultra-dense commercial search market requires building borough-specific landing pages anchored to subway transit lines, deploying structured LocalBusiness micro-coordinate schemas, and maintaining over 100+ verified customer reviews to capture 81% of high-intent pedestrian and transit mobile search clicks.',
       actionSteps: [
         {
           title: 'Anchor Specific Micro-Neighborhood Coordinates',
