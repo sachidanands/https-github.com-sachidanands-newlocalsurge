@@ -14,7 +14,11 @@
     "gsc:report": "tsx scripts/gsc_report.ts",
     "gsc:inspect": "tsx scripts/gsc_inspect.ts",
     "gsc:sitemaps": "tsx scripts/gsc_sitemaps.ts",
+    "bing:report": "tsx scripts/bing_report.ts",
+    "bing:submit": "tsx scripts/bing_submit.ts",
+    "bing:sitemaps": "tsx scripts/bing_sitemaps.ts",
     "ga:report": "tsx scripts/ga4_report.ts",
+    "youtube:report": "tsx scripts/youtube_report.ts",
     "audit:cwv": "tsx scripts/cwv_scan.ts"
   },
   "dependencies": {

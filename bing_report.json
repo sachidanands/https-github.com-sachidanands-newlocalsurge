@@ -1,0 +1,199 @@
+{
+  "generatedAt": "2026-09-06T06:52:02.210Z",
+  "isMock": true,
+  "siteUrl": "https://localsurgeseo.com/",
+  "summary": {
+    "totalClicks": 238,
+    "totalImpressions": 7270,
+    "avgCtr": 3.27,
+    "avgPosition": 5.3,
+    "dailyQuota": 100,
+    "monthlyQuota": 10000,
+    "totalKeywordsTracked": 10
+  },
+  "crawlHealth": {
+    "CrawledPages": 184,
+    "Http2xx": 181,
+    "Http301": 3,
+    "Http302": 0,
+    "Http4xx": 0,
+    "Http5xx": 0,
+    "BlockedByRobotsTxt": 0,
+    "DnsErrors": 0,
+    "ConnectionErrors": 0,
+    "MalwareInfectedPages": 0
+  },
+  "quickWins": [
+    {
+      "query": "ai search engine optimization geoviews",
+      "clicks": 8,
+      "impressions": 1100,
+      "ctr": 0.73,
+      "position": 5.9,
+      "potentialGain": 190,
+      "recommendation": "Add direct FAQ schema and LLM-friendly summary table in top viewport for Bing Copilot synthesis."
+    },
+    {
+      "query": "bing copilot local seo citations",
+      "clicks": 34,
+      "impressions": 980,
+      "ctr": 3.47,
+      "position": 5.1,
+      "potentialGain": 142,
+      "recommendation": "Add direct FAQ schema and LLM-friendly summary table in top viewport for Bing Copilot synthesis."
+    },
+    {
+      "query": "plumbing google maps vs bing places",
+      "clicks": 10,
+      "impressions": 920,
+      "ctr": 1.09,
+      "position": 4.8,
+      "potentialGain": 156,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "local seo company los angeles ca",
+      "clicks": 48,
+      "impressions": 890,
+      "ctr": 5.39,
+      "position": 4.2,
+      "potentialGain": 112,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "small business schema markup generator",
+      "clicks": 29,
+      "impressions": 750,
+      "ctr": 3.87,
+      "position": 3.5,
+      "potentialGain": 106,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "hvac seo ranking factors 2026",
+      "clicks": 15,
+      "impressions": 680,
+      "ctr": 2.21,
+      "position": 6.4,
+      "potentialGain": 107,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "california contractor seo directory",
+      "clicks": 22,
+      "impressions": 540,
+      "ctr": 4.07,
+      "position": 6.8,
+      "potentialGain": 75,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "indexnow instant search engine indexer",
+      "clicks": 19,
+      "impressions": 410,
+      "ctr": 4.63,
+      "position": 5.3,
+      "potentialGain": 55,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "denver colorado local seo agency",
+      "clicks": 12,
+      "impressions": 380,
+      "ctr": 3.16,
+      "position": 7.9,
+      "potentialGain": 56,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    }
+  ],
+  "ctrOpportunities": [
+    {
+      "query": "plumbing google maps vs bing places",
+      "clicks": 10,
+      "impressions": 920,
+      "ctr": 1.09,
+      "position": 4.8,
+      "recommendation": "Enhance meta description with active local value proposition and brackets e.g. [2026 Verified Pricing] to boost Bing SERP click-through rate."
+    },
+    {
+      "query": "ai search engine optimization geoviews",
+      "clicks": 8,
+      "impressions": 1100,
+      "ctr": 0.73,
+      "position": 5.9,
+      "recommendation": "Enhance meta description with active local value proposition and brackets e.g. [2026 Verified Pricing] to boost Bing SERP click-through rate."
+    }
+  ],
+  "topQueries": [
+    {
+      "Query": "local seo company los angeles ca",
+      "Clicks": 48,
+      "Impressions": 890,
+      "AvgClickPosition": 3.8,
+      "AvgImpressionPosition": 4.2
+    },
+    {
+      "Query": "contractor local seo packages",
+      "Clicks": 41,
+      "Impressions": 620,
+      "AvgClickPosition": 2.4,
+      "AvgImpressionPosition": 2.9
+    },
+    {
+      "Query": "bing copilot local seo citations",
+      "Clicks": 34,
+      "Impressions": 980,
+      "AvgClickPosition": 4.6,
+      "AvgImpressionPosition": 5.1
+    },
+    {
+      "Query": "small business schema markup generator",
+      "Clicks": 29,
+      "Impressions": 750,
+      "AvgClickPosition": 3.2,
+      "AvgImpressionPosition": 3.5
+    },
+    {
+      "Query": "california contractor seo directory",
+      "Clicks": 22,
+      "Impressions": 540,
+      "AvgClickPosition": 6.1,
+      "AvgImpressionPosition": 6.8
+    },
+    {
+      "Query": "indexnow instant search engine indexer",
+      "Clicks": 19,
+      "Impressions": 410,
+      "AvgClickPosition": 4.9,
+      "AvgImpressionPosition": 5.3
+    },
+    {
+      "Query": "hvac seo ranking factors 2026",
+      "Clicks": 15,
+      "Impressions": 680,
+      "AvgClickPosition": 5.7,
+      "AvgImpressionPosition": 6.4
+    },
+    {
+      "Query": "denver colorado local seo agency",
+      "Clicks": 12,
+      "Impressions": 380,
+      "AvgClickPosition": 7.2,
+      "AvgImpressionPosition": 7.9
+    },
+    {
+      "Query": "plumbing google maps vs bing places",
+      "Clicks": 10,
+      "Impressions": 920,
+      "AvgClickPosition": 4.1,
+      "AvgImpressionPosition": 4.8
+    },
+    {
+      "Query": "ai search engine optimization geoviews",
+      "Clicks": 8,
+      "Impressions": 1100,
+      "AvgClickPosition": 5.2,
+      "AvgImpressionPosition": 5.9
+    }
+  ]
+}
