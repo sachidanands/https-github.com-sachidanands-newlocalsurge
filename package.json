@@ -19,6 +19,7 @@
     "bing:sitemaps": "tsx scripts/bing_sitemaps.ts",
     "ga:report": "tsx scripts/ga4_report.ts",
     "youtube:report": "tsx scripts/youtube_report.ts",
+    "brave:audit": "tsx scripts/brave_audit.ts",
     "audit:cwv": "tsx scripts/cwv_scan.ts"
   },
   "dependencies": {

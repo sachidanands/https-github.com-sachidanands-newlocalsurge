@@ -24,6 +24,13 @@ Allow: /
 User-agent: Google-Extended
 Allow: /
 
+# Brave Search Crawler & AI Assistant
+User-agent: Bravebot
+Allow: /
+
+# LLMs.txt Semantic Protocol for Brave & AI Search
+LLMs-Txt: https://localsurgeseo.com/llms.txt
+
 User-agent: *
 Allow: /
 Allow: /about
