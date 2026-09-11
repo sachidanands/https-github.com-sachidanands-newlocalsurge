@@ -5,7 +5,7 @@ import { exec, execSync } from 'child_process';
 
 const PORT = 4500;
 const CLONED_DIR = path.resolve(process.cwd(), 'videos', 'free-website-explainer', 'assets', 'audio', 'cloned_voice');
-const HTML_FILE = path.resolve(process.cwd(), 'public', 'voice-studio.html');
+const HTML_FILE = path.resolve(process.cwd(), 'scripts', 'voice-studio.html');
 
 if (!fs.existsSync(CLONED_DIR)) {
   fs.mkdirSync(CLONED_DIR, { recursive: true });
@@ -71,9 +71,13 @@ const server = http.createServer(async (req, res) => {
   }
 
   // Serve Studio UI
-  if (req.method === 'GET' && (req.url === '/' || req.url === '/voice-studio.html')) {
+  if ((req.method === 'GET' || req.method === 'HEAD') && (req.url === '/' || req.url === '/voice-studio.html')) {
     if (fs.existsSync(HTML_FILE)) {
       res.writeHead(200, { 'Content-Type': 'text/html' });
+      if (req.method === 'HEAD') {
+        res.end();
+        return;
+      }
       fs.createReadStream(HTML_FILE).pipe(res);
     } else {
       res.writeHead(404, { 'Content-Type': 'text/plain' });

@@ -43,7 +43,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
             <p className="text-xs text-[#5c605d] max-w-sm leading-relaxed">
               We empower local businesses to thrive in the digital landscape. Bridging the gap between you and your neighborhood customers through expert, transparent, and results-oriented SEO strategies.
             </p>
-              <div className="pt-2 space-y-3">
+            <div className="pt-2 space-y-3">
               <div className="flex items-center gap-2 text-xs text-[#2d2f2d] font-semibold">
                 <Mail className="w-4 h-4 text-[#123e35] shrink-0" aria-hidden="true" />
                 <a href="mailto:contact@localsurgeseo.com" className="hover:text-[#bc5f40] transition-colors">
@@ -107,11 +107,11 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                     className="inline-block hover:opacity-85 transition-opacity"
                     aria-label="Verify SiteLock security certification"
                   >
-                    <img 
-                      className="h-8 w-auto img-fluid" 
-                      alt="SiteLock verified website security seal" 
-                      title="SiteLock" 
-                      src="https://shield.sitelock.com/shield/localsurgeseo.com" 
+                    <img
+                      className="h-8 w-auto img-fluid"
+                      alt="SiteLock verified website security seal"
+                      title="SiteLock"
+                      src="https://shield.sitelock.com/shield/localsurgeseo.com"
                       loading="lazy"
                       decoding="async"
                       width={100}
@@ -180,7 +180,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   onClick={(e) => handleFooterNav(e, 'locations-index', '/locations')}
                   className="text-[#123e35] font-bold hover:text-[#bc5f40] transition-colors cursor-pointer text-left inline-flex items-center gap-1.5"
                 >
-                  <span>🗺️ U.S. Locations & Maps</span>
+                  <span>U.S. Locations & Maps</span>
                 </a>
               </li>
               <li>
@@ -225,7 +225,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   onClick={(e) => handleFooterNav(e, 'blog', '/blog')}
                   className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1"
                 >
-                  📚 Blog
+                  Blog
                 </a>
               </li>
               <li>
@@ -234,7 +234,7 @@ export default function Footer({ setCurrentPage }: FooterProps) {
                   onClick={(e) => handleFooterNav(e, 'admin', '/admin')}
                   className="text-[#123e35] hover:text-[#185246] transition-colors cursor-pointer text-left font-bold flex items-center gap-1"
                 >
-                  🏆 Admin Board
+                  Admin Board
                 </a>
               </li>
               <li className="text-xs text-[#888b88] pt-1">

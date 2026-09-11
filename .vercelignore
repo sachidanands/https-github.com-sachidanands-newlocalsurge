@@ -1,6 +1,39 @@
-# Prevent .agents and skill files from being uploaded, built, or hosted on Vercel
+# ==============================================================================
+# VERCEL DEPLOYMENT EXCLUSION RULES
+# ==============================================================================
+# Ensure all internal video rendering, voicebox models, audio assets, and dev tools
+# remain fully tracked in GitHub while strictly excluded from Vercel hosting/bundles.
+
+# 1. Video compositions, HyperFrames frames, and MP4 renders
+videos/
+videos/**
+
+# 2. Local scripts, voice studio server, and audio synthesizers
+scripts/
+scripts/**
+
+# 3. Agent skills, python virtual environment, and AI dependencies
 .agents/
 .agents/**
 .venv/
+.venv/**
 skills-lock.json
 
+# 4. Audio & Video binary media formats
+*.mp4
+*.wav
+*.mp3
+*.aac
+*.m4a
+
+# 5. Local SEO & Performance Audit raw dumps (not used by client frontend)
+lighthouse-*.json
+lighthouse_live.json
+cwv_audit_results.json
+ga4_report.json
+gsc_report.json
+bing_report.json
+youtube_report.json
+cluster-plan.json
+cluster-map.html
+*-REPORT.md
