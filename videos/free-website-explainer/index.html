@@ -1,0 +1,942 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>LocalSurge Free Website Explainer</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #07090e;
+        color: #ffffff;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.18) 0%, rgba(7, 9, 14, 0.95) 70%),
+                    radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.12) 0%, transparent 60%),
+                    #07090e;
+        overflow: hidden;
+      }
+
+      /* Ambient Glow & Grid */
+      .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-size: 60px 60px;
+        background-image: 
+          linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .ambient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 1;
+      }
+      .orb-1 {
+        top: 200px;
+        left: 200px;
+        width: 500px;
+        height: 500px;
+        background: rgba(16, 185, 129, 0.25);
+      }
+      .orb-2 {
+        bottom: 300px;
+        right: 150px;
+        width: 450px;
+        height: 450px;
+        background: rgba(245, 158, 11, 0.15);
+      }
+
+      /* Top Header Bar */
+      .header-bar {
+        position: absolute;
+        top: 80px;
+        left: 80px;
+        right: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 20;
+      }
+      .brand-badge {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 28px;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1.5px solid rgba(16, 185, 129, 0.4);
+        border-radius: 100px;
+        backdrop-filter: blur(16px);
+      }
+      .brand-dot {
+        width: 16px;
+        height: 16px;
+        border-radius: 50%;
+        background: #10b981;
+        box-shadow: 0 0 16px #10b981;
+      }
+      .brand-name {
+        font-family: 'Outfit', sans-serif;
+        font-size: 26px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        color: #ffffff;
+      }
+      .tag-pill {
+        padding: 12px 24px;
+        background: rgba(255, 255, 255, 0.06);
+        border: 1px solid rgba(255, 255, 255, 0.15);
+        border-radius: 100px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #f59e0b;
+        letter-spacing: 0.05em;
+      }
+
+      /* Main Stage for Scenes */
+      .scene-stage {
+        position: absolute;
+        top: 220px;
+        bottom: 320px;
+        left: 60px;
+        right: 60px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+      }
+
+      .scene-frame {
+        position: absolute;
+        width: 100%;
+        height: 100%;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        opacity: 0;
+        visibility: hidden;
+      }
+
+      /* Common Typography */
+      .scene-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 12px 28px;
+        border-radius: 100px;
+        font-size: 24px;
+        font-weight: 700;
+        letter-spacing: 0.08em;
+        text-transform: uppercase;
+        margin-bottom: 28px;
+      }
+      .kicker-red {
+        background: rgba(239, 68, 68, 0.18);
+        border: 1.5px solid rgba(239, 68, 68, 0.5);
+        color: #f87171;
+      }
+      .kicker-green {
+        background: rgba(16, 185, 129, 0.18);
+        border: 1.5px solid rgba(16, 185, 129, 0.5);
+        color: #34d399;
+      }
+      .kicker-amber {
+        background: rgba(245, 158, 11, 0.18);
+        border: 1.5px solid rgba(245, 158, 11, 0.5);
+        color: #fbbf24;
+      }
+
+      .scene-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 68px;
+        font-weight: 900;
+        line-height: 1.15;
+        text-align: center;
+        margin-bottom: 36px;
+        color: #ffffff;
+      }
+      .highlight-green {
+        color: #10b981;
+        text-shadow: 0 0 30px rgba(16, 185, 129, 0.4);
+      }
+      .highlight-red {
+        color: #ef4444;
+        text-shadow: 0 0 30px rgba(239, 68, 68, 0.4);
+      }
+      .highlight-amber {
+        color: #f59e0b;
+        text-shadow: 0 0 30px rgba(245, 158, 11, 0.4);
+      }
+
+      /* Card Styles */
+      .glass-card {
+        width: 100%;
+        background: rgba(17, 24, 39, 0.7);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 36px;
+        padding: 48px;
+        backdrop-filter: blur(24px);
+        box-shadow: 0 30px 60px -15px rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        gap: 28px;
+      }
+
+      /* Scene 1: The Problem */
+      .price-strike-box {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        position: relative;
+        padding: 40px;
+        background: rgba(239, 68, 68, 0.08);
+        border: 2px dashed rgba(239, 68, 68, 0.35);
+        border-radius: 28px;
+        margin-bottom: 30px;
+      }
+      .big-strike-price {
+        font-family: 'Outfit', sans-serif;
+        font-size: 110px;
+        font-weight: 900;
+        color: #f87171;
+        position: relative;
+      }
+      .strike-line {
+        position: absolute;
+        top: 50%;
+        left: -15px;
+        right: -15px;
+        height: 10px;
+        background: #ef4444;
+        border-radius: 6px;
+        transform: rotate(-10deg) scaleX(0);
+        transform-origin: left center;
+        box-shadow: 0 0 20px #ef4444;
+      }
+      .strike-badge {
+        position: absolute;
+        top: -24px;
+        right: 40px;
+        background: #ef4444;
+        color: #ffffff;
+        font-size: 22px;
+        font-weight: 800;
+        padding: 8px 24px;
+        border-radius: 100px;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .problem-list {
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+        width: 100%;
+      }
+      .problem-item {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 24px 30px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 20px;
+        font-size: 28px;
+        font-weight: 600;
+        color: #e5e7eb;
+      }
+      .problem-icon {
+        font-size: 36px;
+      }
+
+      /* Scene 2: The Solution */
+      .hero-offer-card {
+        background: linear-gradient(145deg, rgba(16, 185, 129, 0.15), rgba(6, 78, 59, 0.4));
+        border: 2.5px solid rgba(16, 185, 129, 0.5);
+        box-shadow: 0 0 60px rgba(16, 185, 129, 0.25);
+        text-align: center;
+      }
+      .plan-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 52px;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.02em;
+      }
+      .free-price-tag {
+        display: flex;
+        align-items: baseline;
+        justify-content: center;
+        gap: 12px;
+        margin: 20px 0;
+      }
+      .free-currency {
+        font-size: 70px;
+        font-weight: 800;
+        color: #10b981;
+      }
+      .free-num {
+        font-family: 'Outfit', sans-serif;
+        font-size: 150px;
+        font-weight: 900;
+        color: #10b981;
+        line-height: 1;
+        text-shadow: 0 0 50px rgba(16, 185, 129, 0.6);
+      }
+      .free-period {
+        font-size: 32px;
+        font-weight: 800;
+        color: #a7f3d0;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+      }
+      .perks-grid {
+        display: grid;
+        grid-template-columns: 1fr 1fr;
+        gap: 18px;
+        width: 100%;
+        margin-top: 10px;
+      }
+      .perk-pill {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        padding: 20px 24px;
+        background: rgba(0, 0, 0, 0.4);
+        border: 1.5px solid rgba(16, 185, 129, 0.3);
+        border-radius: 20px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #ffffff;
+      }
+
+      /* Scene 3: Speed Advantage */
+      .speed-comparison {
+        display: flex;
+        flex-direction: column;
+        gap: 32px;
+        width: 100%;
+      }
+      .speed-row {
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+        padding: 32px;
+        background: rgba(255, 255, 255, 0.04);
+        border-radius: 24px;
+        border: 1.5px solid rgba(255, 255, 255, 0.08);
+      }
+      .speed-row.winner {
+        background: rgba(16, 185, 129, 0.1);
+        border: 2px solid rgba(16, 185, 129, 0.5);
+        box-shadow: 0 0 35px rgba(16, 185, 129, 0.2);
+      }
+      .speed-meta {
+        display: flex;
+        justify-content: space-between;
+        align-items: center;
+      }
+      .speed-label {
+        font-size: 30px;
+        font-weight: 800;
+      }
+      .speed-time {
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 40px;
+        font-weight: 800;
+      }
+      .bar-track {
+        height: 20px;
+        background: rgba(255, 255, 255, 0.1);
+        border-radius: 10px;
+        overflow: hidden;
+        position: relative;
+      }
+      .bar-fill {
+        height: 100%;
+        border-radius: 10px;
+        width: 0%;
+      }
+      .bar-fill.red {
+        background: #ef4444;
+      }
+      .bar-fill.green {
+        background: linear-gradient(90deg, #10b981, #34d399);
+        box-shadow: 0 0 20px #10b981;
+      }
+      .cwv-badge {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 16px;
+        padding: 24px;
+        background: rgba(16, 185, 129, 0.15);
+        border-radius: 20px;
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        font-size: 26px;
+        font-weight: 700;
+        color: #34d399;
+      }
+
+      /* Scene 4: Local SEO Google Pack */
+      .search-mockup {
+        width: 100%;
+        display: flex;
+        flex-direction: column;
+        gap: 24px;
+      }
+      .search-input-box {
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        padding: 24px 32px;
+        background: #1f2937;
+        border: 2px solid #374151;
+        border-radius: 100px;
+        font-size: 28px;
+        font-weight: 600;
+        color: #9ca3af;
+      }
+      .search-typed {
+        color: #ffffff;
+        font-weight: 700;
+      }
+      .pack-result-card {
+        padding: 36px;
+        background: linear-gradient(135deg, rgba(31, 41, 55, 0.9), rgba(17, 24, 39, 0.95));
+        border: 2.5px solid #10b981;
+        border-radius: 28px;
+        box-shadow: 0 0 40px rgba(16, 185, 129, 0.3);
+        display: flex;
+        flex-direction: column;
+        gap: 18px;
+      }
+      .rank-crown {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        background: #f59e0b;
+        color: #000;
+        padding: 6px 18px;
+        border-radius: 100px;
+        font-size: 20px;
+        font-weight: 800;
+        width: fit-content;
+      }
+      .business-title {
+        font-size: 38px;
+        font-weight: 800;
+        color: #ffffff;
+      }
+      .reviews-row {
+        display: flex;
+        align-items: center;
+        gap: 14px;
+        font-size: 26px;
+        font-weight: 700;
+        color: #fbbf24;
+      }
+      .schema-tags {
+        display: flex;
+        flex-wrap: wrap;
+        gap: 12px;
+        margin-top: 10px;
+      }
+      .schema-tag {
+        padding: 10px 20px;
+        background: rgba(16, 185, 129, 0.15);
+        border: 1px solid rgba(16, 185, 129, 0.3);
+        border-radius: 100px;
+        font-size: 20px;
+        font-weight: 700;
+        color: #34d399;
+      }
+
+      /* Scene 5: Lead Engine Phone */
+      .phone-mockup {
+        width: 100%;
+        max-width: 800px;
+        background: #111827;
+        border: 4px solid #374151;
+        border-radius: 40px;
+        padding: 36px;
+        display: flex;
+        flex-direction: column;
+        gap: 22px;
+        box-shadow: 0 40px 80px rgba(0, 0, 0, 0.8);
+      }
+      .lead-button {
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        gap: 18px;
+        padding: 26px;
+        background: linear-gradient(90deg, #10b981, #059669);
+        border-radius: 20px;
+        font-size: 32px;
+        font-weight: 800;
+        color: #ffffff;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.4);
+      }
+      .lead-feature-row {
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        padding: 22px 28px;
+        background: rgba(255, 255, 255, 0.05);
+        border: 1px solid rgba(255, 255, 255, 0.1);
+        border-radius: 18px;
+        font-size: 26px;
+        font-weight: 700;
+      }
+
+      /* Scene 6: CTA */
+      .cta-box {
+        text-align: center;
+        width: 100%;
+      }
+      .cta-url-card {
+        padding: 48px 40px;
+        background: linear-gradient(135deg, rgba(16, 185, 129, 0.2), rgba(245, 158, 11, 0.15));
+        border: 3px solid #10b981;
+        border-radius: 36px;
+        box-shadow: 0 0 80px rgba(16, 185, 129, 0.35);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 32px;
+        margin-bottom: 30px;
+      }
+      .url-text {
+        font-family: 'Outfit', sans-serif;
+        font-size: 58px;
+        font-weight: 900;
+        color: #ffffff;
+        letter-spacing: -0.01em;
+        text-shadow: 0 0 30px rgba(255, 255, 255, 0.3);
+      }
+      .big-cta-btn {
+        width: 100%;
+        padding: 34px;
+        background: linear-gradient(90deg, #10b981, #34d399);
+        border: none;
+        border-radius: 24px;
+        font-family: 'Outfit', sans-serif;
+        font-size: 38px;
+        font-weight: 900;
+        color: #064e3b;
+        text-transform: uppercase;
+        letter-spacing: 0.05em;
+        box-shadow: 0 15px 40px rgba(16, 185, 129, 0.5);
+      }
+      .guarantee-pill {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 32px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 100px;
+        font-size: 24px;
+        font-weight: 700;
+        color: #fbbf24;
+      }
+
+      /* Bottom Captions Bar */
+      .captions-container {
+        position: absolute;
+        bottom: 80px;
+        left: 80px;
+        right: 80px;
+        background: rgba(0, 0, 0, 0.75);
+        border: 1.5px solid rgba(255, 255, 255, 0.12);
+        border-radius: 28px;
+        padding: 28px 36px;
+        backdrop-filter: blur(20px);
+        text-align: center;
+        z-index: 30;
+      }
+      .caption-text {
+        font-size: 32px;
+        font-weight: 700;
+        line-height: 1.4;
+        color: #ffffff;
+      }
+      .caption-text span.active {
+        color: #10b981;
+        text-shadow: 0 0 15px #10b981;
+      }
+
+      /* Progress Bar at very top */
+      .video-progress-bar {
+        position: absolute;
+        top: 0;
+        left: 0;
+        height: 10px;
+        background: linear-gradient(90deg, #10b981, #f59e0b);
+        width: 0%;
+        z-index: 100;
+        box-shadow: 0 0 15px #10b981;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="40"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="video-progress-bar" id="progressBar"></div>
+
+      <!-- Audio Tracks & Voiceover Submix Bus with Carve Ducking -->
+      <hf-audio-group id="voiceover" data-label="Voiceover" data-volume="1.0"></hf-audio-group>
+      <audio id="vo-1" class="clip" data-audio-group="voiceover" data-start="0.0" data-duration="6.0" src="assets/audio/vo_scene_1.mp3"></audio>
+      <audio id="vo-2" class="clip" data-audio-group="voiceover" data-start="6.5" data-duration="6.0" src="assets/audio/vo_scene_2.mp3"></audio>
+      <audio id="vo-3" class="clip" data-audio-group="voiceover" data-start="13.0" data-duration="6.5" src="assets/audio/vo_scene_3.mp3"></audio>
+      <audio id="vo-4" class="clip" data-audio-group="voiceover" data-start="20.0" data-duration="6.5" src="assets/audio/vo_scene_4.mp3"></audio>
+      <audio id="vo-5" class="clip" data-audio-group="voiceover" data-start="27.0" data-duration="6.0" src="assets/audio/vo_scene_5.mp3"></audio>
+      <audio id="vo-6" class="clip" data-audio-group="voiceover" data-start="33.5" data-duration="6.0" src="assets/audio/vo_scene_6.mp3"></audio>
+      <audio id="bgm" class="clip" src="assets/audio/bgm.mp3" data-start="0.0" data-duration="40.0" data-volume="0.30" data-fx-carve='{"enabled":true,"sources":["voiceover"],"strength":0.25}'></audio>
+
+      <div class="grid-bg"></div>
+      <div class="ambient-orb orb-1" id="orb1"></div>
+      <div class="ambient-orb orb-2" id="orb2"></div>
+
+      <!-- Header -->
+      <div class="header-bar">
+        <div class="brand-badge">
+          <div class="brand-dot"></div>
+          <div class="brand-name">LocalSurge SEO</div>
+        </div>
+        <div class="tag-pill">100% FREE PLAN</div>
+      </div>
+
+      <!-- Scenes Stage -->
+      <div class="scene-stage">
+        <!-- SCENE 1: Problem (0s - 5s) -->
+        <div class="scene-frame" id="scene1">
+          <div class="scene-kicker kicker-red">⚠️ The Problem</div>
+          <h1 class="scene-title">
+            Stop Paying <span class="highlight-red">$30/Month</span> For Slow Websites
+          </h1>
+          <div class="glass-card">
+            <div class="price-strike-box">
+              <div class="strike-badge">Wasted Spend</div>
+              <div class="big-strike-price">
+                $360<span style="font-size: 48px; font-weight: 600;">/yr</span>
+                <div class="strike-line" id="strikeLine"></div>
+              </div>
+            </div>
+            <div class="problem-list">
+              <div class="problem-item" id="pItem1">
+                <span class="problem-icon">🐌</span>
+                <span>Bloated 5.2s Mobile Load Time</span>
+              </div>
+              <div class="problem-item" id="pItem2">
+                <span class="problem-icon">📉</span>
+                <span>Zero Google Map Pack Rankings</span>
+              </div>
+              <div class="problem-item" id="pItem3">
+                <span class="problem-icon">🔒</span>
+                <span>Domain Hostage Lock-In & Ads</span>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENE 2: Solution (5s - 10s) -->
+        <div class="scene-frame" id="scene2">
+          <div class="scene-kicker kicker-green">⚡ The Free Blueprint</div>
+          <h1 class="scene-title">
+            Introducing <span class="highlight-green">Single-Page Blast</span>
+          </h1>
+          <div class="glass-card hero-offer-card">
+            <div class="plan-title">High-Converting Local Storefront</div>
+            <div class="free-price-tag">
+              <div class="free-currency">$</div>
+              <div class="free-num">0</div>
+              <div class="free-period">/ Forever</div>
+            </div>
+            <div class="perks-grid">
+              <div class="perk-pill">✅ 100% Free Setup</div>
+              <div class="perk-pill">✅ Zero Monthly Fees</div>
+              <div class="perk-pill">✅ No Ad Banners</div>
+              <div class="perk-pill">✅ Keep Your Domain</div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENE 3: Speed (10s - 15s) -->
+        <div class="scene-frame" id="scene3">
+          <div class="scene-kicker kicker-green">🚀 Sub-Second Performance</div>
+          <h1 class="scene-title">
+            Loads in <span class="highlight-green">0.4s Flat</span>
+          </h1>
+          <div class="glass-card">
+            <div class="speed-comparison">
+              <div class="speed-row">
+                <div class="speed-meta">
+                  <div class="speed-label" style="color: #9ca3af;">DIY Website Builders</div>
+                  <div class="speed-time" style="color: #ef4444;">4.8s</div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill red" id="barRed"></div>
+                </div>
+                <div style="font-size: 22px; color: #ef4444; font-weight: 600;">⚠️ 72% High Bounce Rate</div>
+              </div>
+
+              <div class="speed-row winner">
+                <div class="speed-meta">
+                  <div class="speed-label" style="color: #ffffff;">LocalSurge Single-Page</div>
+                  <div class="speed-time" style="color: #10b981;">0.4s</div>
+                </div>
+                <div class="bar-track">
+                  <div class="bar-fill green" id="barGreen"></div>
+                </div>
+                <div style="font-size: 22px; color: #34d399; font-weight: 700;">⚡ Instant Sub-Second Delivery</div>
+              </div>
+            </div>
+            <div class="cwv-badge">
+              <span>🏆</span>
+              <span>99/100 Core Web Vitals Mobile Score</span>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENE 4: Local SEO (15s - 20s) -->
+        <div class="scene-frame" id="scene4">
+          <div class="scene-kicker kicker-amber">📍 Google 3-Pack SEO</div>
+          <h1 class="scene-title">
+            Engineered to <span class="highlight-amber">Rank #1 Locally</span>
+          </h1>
+          <div class="search-mockup">
+            <div class="search-input-box">
+              <span>🔍</span>
+              <span class="search-typed">"emergency plumber near me"</span>
+            </div>
+            <div class="pack-result-card" id="packCard">
+              <div class="rank-crown">👑 #1 Top Result on Google</div>
+              <div class="business-title">Your Local Business Storefront</div>
+              <div class="reviews-row">
+                <span>⭐⭐⭐⭐⭐</span>
+                <span>4.9 Rating (120+ Reviews)</span>
+              </div>
+              <div class="schema-tags">
+                <div class="schema-tag">📍 LocalBusiness Schema</div>
+                <div class="schema-tag">🎯 Geo-Targeted Keywords</div>
+                <div class="schema-tag">🗺️ Map Pack Synced</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENE 5: Conversions (20s - 25s) -->
+        <div class="scene-frame" id="scene5">
+          <div class="scene-kicker kicker-green">💰 High-Converting Features</div>
+          <h1 class="scene-title">
+            Built to Generate <span class="highlight-green">Phone Calls</span>
+          </h1>
+          <div class="phone-mockup">
+            <div class="lead-button" id="callBtn">
+              <span>📞</span>
+              <span>1-Tap Direct Call Now</span>
+            </div>
+            <div class="lead-feature-row" id="lfRow1">
+              <span style="font-size: 32px;">📝</span>
+              <div>
+                <div style="color: #ffffff;">Instant Free Quote Form</div>
+                <div style="font-size: 20px; color: #9ca3af; font-weight: 500;">Direct SMS & email lead notifications</div>
+              </div>
+            </div>
+            <div class="lead-feature-row" id="lfRow2">
+              <span style="font-size: 32px;">🛡️</span>
+              <div>
+                <div style="color: #ffffff;">Verified Review Trust Badges</div>
+                <div style="font-size: 20px; color: #9ca3af; font-weight: 500;">Instantly builds buyer confidence</div>
+              </div>
+            </div>
+          </div>
+        </div>
+
+        <!-- SCENE 6: CTA (25s - 30s) -->
+        <div class="scene-frame" id="scene6">
+          <div class="scene-kicker kicker-green">🚀 Claim It Today</div>
+          <div class="cta-box">
+            <h1 class="scene-title" style="margin-bottom: 24px;">
+              Get Your <span class="highlight-green">Free Website</span> Now
+            </h1>
+            <div class="cta-url-card" id="ctaCard">
+              <div style="font-size: 28px; font-weight: 700; color: #9ca3af; text-transform: uppercase; letter-spacing: 0.1em;">Visit Official Site</div>
+              <div class="url-text">localsurgeseo.com</div>
+              <div class="big-cta-btn" id="ctaBtn">Claim Free Storefront ⚡</div>
+            </div>
+            <div class="guarantee-pill">
+              <span>⏱️</span>
+              <span>Takes Under 60 Seconds · $0 Forever</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- Captions Rail -->
+      <div class="captions-container">
+        <div class="caption-text" id="captionText">
+          Still paying $30/mo for slow website builders?
+        </div>
+      </div>
+    </div>
+
+    <!-- GSAP Script -->
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Progress bar (0 to 40s)
+      tl.to("#progressBar", { width: "100%", duration: 40, ease: "none" }, 0);
+
+      // Ambient Orbs Subtle Movement
+      tl.to("#orb1", { x: 80, y: 60, scale: 1.15, duration: 20, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0);
+      tl.to("#orb2", { x: -60, y: -40, scale: 1.2, duration: 20, yoyo: true, repeat: 1, ease: "sine.inOut" }, 0);
+
+      // ==========================================
+      // SCENE 1 (0.0s - 6.5s): Problem
+      // ==========================================
+      tl.set("#scene1", { autoAlpha: 1 }, 0);
+      tl.fromTo("#scene1 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 0.2);
+      tl.fromTo("#scene1 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.5);
+      tl.fromTo("#scene1 .glass-card", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "power3.out" }, 0.9);
+      tl.to("#strikeLine", { scaleX: 1, duration: 0.6, ease: "power2.out" }, 1.8);
+      tl.fromTo("#pItem1", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 2.5);
+      tl.fromTo("#pItem2", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 3.3);
+      tl.fromTo("#pItem3", { x: -50, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 4.1);
+      tl.to("#scene1", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 6.1);
+      tl.set("#scene1", { autoAlpha: 0 }, 6.5);
+
+      // Caption 1
+      tl.call(() => {
+        document.getElementById("captionText").innerHTML = "Still paying <span class='active'>$30/mo</span> for slow, bloated website builders that never rank?";
+      }, null, 0);
+
+      // ==========================================
+      // SCENE 2 (6.5s - 13.0s): Solution
+      // ==========================================
+      tl.set("#scene2", { autoAlpha: 1 }, 6.5);
+      tl.fromTo("#scene2 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 6.7);
+      tl.fromTo("#scene2 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 7.0);
+      tl.fromTo("#scene2 .hero-offer-card", { scale: 0.85, opacity: 0, rotationY: 15 }, { scale: 1, opacity: 1, rotationY: 0, duration: 0.9, ease: "back.out(1.5)" }, 7.4);
+      tl.fromTo(".free-num", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "elastic.out(1, 0.5)" }, 8.2);
+      tl.fromTo(".perk-pill", { y: 30, opacity: 0 }, { y: 0, opacity: 1, stagger: 0.18, duration: 0.5, ease: "power2.out" }, 9.2);
+      tl.to("#scene2", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 12.6);
+      tl.set("#scene2", { autoAlpha: 0 }, 13.0);
+
+      // Caption 2
+      tl.call(() => {
+        document.getElementById("captionText").innerHTML = "LocalSurge gives every local business a <span class='active'>100% Free Storefront</span> with zero fees.";
+      }, null, 6.5);
+
+      // ==========================================
+      // SCENE 3 (13.0s - 20.0s): Speed
+      // ==========================================
+      tl.set("#scene3", { autoAlpha: 1 }, 13.0);
+      tl.fromTo("#scene3 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 13.2);
+      tl.fromTo("#scene3 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 13.5);
+      tl.fromTo("#scene3 .glass-card", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.7, ease: "power3.out" }, 13.8);
+      tl.to("#barRed", { width: "30%", duration: 3.0, ease: "power1.inOut" }, 14.3);
+      tl.to("#barGreen", { width: "100%", duration: 0.5, ease: "power4.out" }, 14.6);
+      tl.fromTo(".cwv-badge", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 16.2);
+      tl.to("#scene3", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 19.6);
+      tl.set("#scene3", { autoAlpha: 0 }, 20.0);
+
+      // Caption 3
+      tl.call(() => {
+        document.getElementById("captionText").innerHTML = "Loads in under <span class='active'>0.4 seconds</span> flat—destroying bounce rates.";
+      }, null, 13.0);
+
+      // ==========================================
+      // SCENE 4 (20.0s - 27.0s): SEO & 3-Pack
+      // ==========================================
+      tl.set("#scene4", { autoAlpha: 1 }, 20.0);
+      tl.fromTo("#scene4 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 20.2);
+      tl.fromTo("#scene4 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 20.5);
+      tl.fromTo(".search-input-box", { y: -20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 20.8);
+      tl.fromTo("#packCard", { y: 60, opacity: 0, scale: 0.9 }, { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.5)" }, 21.5);
+      tl.fromTo(".schema-tag", { scale: 0.5, opacity: 0 }, { scale: 1, opacity: 1, stagger: 0.2, duration: 0.5, ease: "back.out(1.7)" }, 22.8);
+      tl.to("#scene4", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 26.6);
+      tl.set("#scene4", { autoAlpha: 0 }, 27.0);
+
+      // Caption 4
+      tl.call(() => {
+        document.getElementById("captionText").innerHTML = "Pre-structured with <span class='active'>LocalBusiness Schema</span> to dominate the Google 3-Pack.";
+      }, null, 20.0);
+
+      // ==========================================
+      // SCENE 5 (27.0s - 33.5s): Conversions
+      // ==========================================
+      tl.set("#scene5", { autoAlpha: 1 }, 27.0);
+      tl.fromTo("#scene5 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 27.2);
+      tl.fromTo("#scene5 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 27.5);
+      tl.fromTo(".phone-mockup", { y: 70, opacity: 0, scale: 0.92 }, { y: 0, opacity: 1, scale: 1, duration: 0.8, ease: "back.out(1.4)" }, 27.8);
+      tl.fromTo("#callBtn", { scale: 0.8, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.6, ease: "elastic.out(1, 0.6)" }, 28.5);
+      tl.fromTo("#lfRow1", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 29.3);
+      tl.fromTo("#lfRow2", { x: -40, opacity: 0 }, { x: 0, opacity: 1, duration: 0.5, ease: "power2.out" }, 30.1);
+      tl.to("#scene5", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 33.1);
+      tl.set("#scene5", { autoAlpha: 0 }, 33.5);
+
+      // Caption 5
+      tl.call(() => {
+        document.getElementById("captionText").innerHTML = "Equipped with <span class='active'>1-Tap Calling</span> and quote forms to turn searchers into clients.";
+      }, null, 27.0);
+
+      // ==========================================
+      // SCENE 6 (33.5s - 40.0s): CTA
+      // ==========================================
+      tl.set("#scene6", { autoAlpha: 1 }, 33.5);
+      tl.fromTo("#scene6 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 33.7);
+      tl.fromTo("#scene6 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 34.0);
+      tl.fromTo("#ctaCard", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.5)" }, 34.4);
+      tl.fromTo("#ctaBtn", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.5, ease: "elastic.out(1, 0.6)" }, 35.2);
+      tl.fromTo(".guarantee-pill", { y: 20, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 36.0);
+
+      // CTA Button Pulse Loop
+      tl.to("#ctaBtn", { scale: 1.04, duration: 0.8, yoyo: true, repeat: 4, ease: "sine.inOut" }, 35.8);
+
+      // Caption 6
+      tl.call(() => {
+        document.getElementById("captionText").innerHTML = "Visit <span class='active'>localsurgeseo.com</span> and claim your free storefront today!";
+      }, null, 33.5);
+
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>
