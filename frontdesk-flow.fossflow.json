@@ -1,0 +1,329 @@
+{
+  "title": "LocalSurge AI Frontdesk & WebMCP Architecture Flow",
+  "icons": [],
+  "colors": [
+    {
+      "id": "color1",
+      "value": "#10b981"
+    },
+    {
+      "id": "color2",
+      "value": "#0284c7"
+    },
+    {
+      "id": "color3",
+      "value": "#f59e0b"
+    },
+    {
+      "id": "color4",
+      "value": "#8b5cf6"
+    },
+    {
+      "id": "color5",
+      "value": "#123e35"
+    },
+    {
+      "id": "color6",
+      "value": "#dc2626"
+    },
+    {
+      "id": "color7",
+      "value": "#475569"
+    }
+  ],
+  "items": [
+    {
+      "id": "item-visitor",
+      "name": "Website Visitor",
+      "icon": "user",
+      "description": "<p>Prospective client visiting localsurgeseo.com.</p>"
+    },
+    {
+      "id": "item-widget",
+      "name": "AI Frontdesk Widget",
+      "icon": "desktop",
+      "description": "<p>Glassmorphic chat drawer with proactive greeting chips.</p>"
+    },
+    {
+      "id": "item-webmcp",
+      "name": "WebMCP Engine",
+      "icon": "function-module",
+      "description": "<p>In-browser client engine for DOM discovery & native setter autofill.</p>"
+    },
+    {
+      "id": "item-form",
+      "name": "On-Page HTML Form",
+      "icon": "document",
+      "description": "<p>Audit & quote form (#audit-form) on the webpage.</p>"
+    },
+    {
+      "id": "item-server",
+      "name": "Express Gateway",
+      "icon": "server",
+      "description": "<p>Node.js backend handling SSE chat & /api/leads/submit.</p>"
+    },
+    {
+      "id": "item-gemini",
+      "name": "Gemini 2.5 Flash",
+      "icon": "cloud",
+      "description": "<p>Google AI streaming model for conversation & WebMCP tool calls.</p>"
+    },
+    {
+      "id": "item-supabase",
+      "name": "Supabase Postgres",
+      "icon": "storage",
+      "description": "<p>Database storing leads table & conversational transcripts.</p>"
+    },
+    {
+      "id": "item-resend",
+      "name": "Resend Alerts",
+      "icon": "mail",
+      "description": "<p>Instant email notification dispatch service.</p>"
+    }
+  ],
+  "views": [
+    {
+      "id": "view-main",
+      "name": "Architecture Overview",
+      "items": [
+        {
+          "id": "item-visitor",
+          "tile": {
+            "x": -8,
+            "y": 0
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-widget",
+          "tile": {
+            "x": -4,
+            "y": 0
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-webmcp",
+          "tile": {
+            "x": 0,
+            "y": -4
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-form",
+          "tile": {
+            "x": 0,
+            "y": 4
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-server",
+          "tile": {
+            "x": 4,
+            "y": 0
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-gemini",
+          "tile": {
+            "x": 9,
+            "y": -4
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-supabase",
+          "tile": {
+            "x": 9,
+            "y": 4
+          },
+          "labelHeight": 80
+        },
+        {
+          "id": "item-resend",
+          "tile": {
+            "x": 9,
+            "y": 0
+          },
+          "labelHeight": 80
+        }
+      ],
+      "connectors": [
+        {
+          "id": "conn-1",
+          "color": "color1",
+          "anchors": [
+            {
+              "id": "a1-1",
+              "ref": {
+                "item": "item-visitor"
+              }
+            },
+            {
+              "id": "a1-2",
+              "ref": {
+                "item": "item-widget"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "1. Chats & asks for audit",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-2",
+          "color": "color2",
+          "anchors": [
+            {
+              "id": "a2-1",
+              "ref": {
+                "item": "item-widget"
+              }
+            },
+            {
+              "id": "a2-2",
+              "ref": {
+                "item": "item-server"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "2. Stream SSE request",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-3",
+          "color": "color4",
+          "anchors": [
+            {
+              "id": "a3-1",
+              "ref": {
+                "item": "item-server"
+              }
+            },
+            {
+              "id": "a3-2",
+              "ref": {
+                "item": "item-gemini"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "3. Prompt & tool call reasoning",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-4",
+          "color": "color2",
+          "anchors": [
+            {
+              "id": "a4-1",
+              "ref": {
+                "item": "item-widget"
+              }
+            },
+            {
+              "id": "a4-2",
+              "ref": {
+                "item": "item-webmcp"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "4. Execute WebMCP in-browser",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-5",
+          "color": "color3",
+          "anchors": [
+            {
+              "id": "a5-1",
+              "ref": {
+                "item": "item-webmcp"
+              }
+            },
+            {
+              "id": "a5-2",
+              "ref": {
+                "item": "item-form"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "5. Native setter autofill & glow",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-6",
+          "color": "color5",
+          "anchors": [
+            {
+              "id": "a6-1",
+              "ref": {
+                "item": "item-form"
+              }
+            },
+            {
+              "id": "a6-2",
+              "ref": {
+                "item": "item-server"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "6. Submit lead /api/leads/submit",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-7",
+          "color": "color5",
+          "anchors": [
+            {
+              "id": "a7-1",
+              "ref": {
+                "item": "item-server"
+              }
+            },
+            {
+              "id": "a7-2",
+              "ref": {
+                "item": "item-supabase"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "7. Store lead & transcript",
+          "style": "SOLID"
+        },
+        {
+          "id": "conn-8",
+          "color": "color1",
+          "anchors": [
+            {
+              "id": "a8-1",
+              "ref": {
+                "item": "item-server"
+              }
+            },
+            {
+              "id": "a8-2",
+              "ref": {
+                "item": "item-resend"
+              }
+            }
+          ],
+          "width": 10,
+          "description": "8. Dispatch email notification",
+          "style": "SOLID"
+        }
+      ],
+      "rectangles": [],
+      "textBoxes": []
+    }
+  ],
+  "fitToScreen": true
+}

@@ -150,7 +150,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 5, 2026",
     "readTime": "7 min read",
-    "image": "/assets/blog/pagespeed-insights-hero.webp",
+    "image": "/assets/blog_img/pagespeed-insights-hero.webp",
     "description": "Is your website secretly losing local customers before the page even finishes loading? Here is how Google PageSpeed Insights evaluates your mobile speed, what Core Web Vitals mean for Map Pack rankings, and how to test your domain with our live Google PSI v5 scanner.",
     "sections": [
       {
@@ -2857,7 +2857,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 12, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog/ai-overviews-chatgpt-optimization.webp",
+    "image": "/assets/blog_img/ai-overviews-chatgpt-optimization.webp",
     "description": "Wondering how your local service business can get cited in Google AI Overviews and ChatGPT Search? Here is the unvarnished truth on how AI search engines pick local recommendations, the 134-word passage rule, and how to outrank competitors who are still playing by 2020 rules.",
     "sections": [
       {
@@ -3002,7 +3002,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 11, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog/entity-seo-knowledge-graph.webp",
+    "image": "/assets/blog_img/entity-seo-knowledge-graph.webp",
     "description": "Search engines stopped indexing simple keywords years ago; they now map real-world 'Entities' in massive Knowledge Graphs. Here is how Google connects your licenses, reviews, coordinates, and brand mentions to build the algorithmic trust that unlocks top local rankings.",
     "sections": [
       {
@@ -3131,7 +3131,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 10, 2026",
     "readTime": "7 min read",
-    "image": "/assets/blog/conversational-search-local-service.webp",
+    "image": "/assets/blog_img/conversational-search-local-service.webp",
     "description": "Homeowners don't search 'plumber dallas' into ChatGPT or Siri—they ask complex, multi-clause questions. Discover how conversational search is transforming local lead generation and how to architect your site for voice assistants and AI buying agents.",
     "sections": [
       {
@@ -3252,7 +3252,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 12, 2026",
     "readTime": "9 min read",
-    "image": "/assets/blog/localbusiness-schema-nested-service-guide.webp",
+    "image": "/assets/blog_img/localbusiness-schema-nested-service-guide.webp",
     "description": "Stop pasting flimsy 5-line schema generators. Here is how to construct a bulletproof, multi-nested Schema.org LocalBusiness JSON-LD architecture with OfferCatalogs, GeoCoordinates, compliant review arrays, and @id graph linking.",
     "sections": [
       {
@@ -3383,7 +3383,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 11, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog/fixing-cannibalization-multi-location-sab-guide.webp",
+    "image": "/assets/blog_img/fixing-cannibalization-multi-location-sab-guide.webp",
     "description": "Are your city landing pages secretly cannibalizing each other in Google search? Learn how to distinguish physical brick-and-mortar locations from Service-Area Business (SAB) pages, fix duplicate content penalties, and consolidate ranking authority.",
     "sections": [
       {
@@ -3512,7 +3512,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 10, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog/core-web-vitals-lead-gen-checklist.webp",
+    "image": "/assets/blog_img/core-web-vitals-lead-gen-checklist.webp",
     "description": "Lead generation landing pages have unique speed killers: dynamic call-tracking scripts, review widgets, and booking modals that destroy Core Web Vitals. Here is our field-tested checklist to pass LCP, INP, and CLS on mobile.",
     "sections": [
       {
@@ -3647,7 +3647,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 12, 2026",
     "readTime": "9 min read",
-    "image": "/assets/blog/franchise-seo-architecture-guide.webp",
+    "image": "/assets/blog_img/franchise-seo-architecture-guide.webp",
     "description": "Scaling a franchise to 25, 50, or 100+ locations creates massive SEO friction. Here is the enterprise blueprint for subdirectory URL routing, the 50/50 content governance rule, store locator UX, and parentOrganization schema.",
     "sections": [
       {
@@ -3770,7 +3770,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 11, 2026",
     "readTime": "8 min read",
-    "image": "/assets/blog/multi-fleet-sab-playbook-guide.webp",
+    "image": "/assets/blog_img/multi-fleet-sab-playbook-guide.webp",
     "description": "How do mobile trades with 5 to 50 service vans rank in the Google Map Pack across multiple counties without getting suspended? Here is the multi-fleet SAB expansion playbook for verified dispatch yards, radius optimization, and video audits.",
     "sections": [
       {
@@ -3884,7 +3884,7 @@ export const BLOG_POSTS: BlogPost[] = [
     },
     "date": "September 10, 2026",
     "readTime": "9 min read",
-    "image": "/assets/blog/managing-multiple-google-business-profiles-guide.webp",
+    "image": "/assets/blog_img/managing-multiple-google-business-profiles-guide.webp",
     "description": "Managing 10, 25, or 50+ Google Business Profiles under one corporate brand requires enterprise systems. Here is the field guide to Google Bulk Verification, centralized review operations, and localized UTM analytics.",
     "sections": [
       {
@@ -4009,7 +4009,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
-  "image": "https://images.unsplash.com/photo-1507238691740-187a5b1d37b8?auto=format&fit=crop&w=1200&q=80",
+  "image": "/assets/blog_img/service-area-conversion-wireframes.webp",
   "description": "Stop wasting traffic on 800-word walls of text. Learn the exact mobile wireframe anatomy, click-to-call mechanics, zip code validators, and trust proof grids that turn service-area visitors into booked jobs.",
   "sections": [
     {
@@ -4148,7 +4148,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
-  "image": "https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&w=1200&q=80",
+  "image": "/assets/blog_img/bofu-local-seo-cost-guides.webp",
   "description": "Stop obsessing over top-of-funnel vanity keywords. Discover how bottom-of-funnel (BOFU) local cost guides, brand comparison matrices, and municipal case studies capture high-intent buyers ready to sign five-figure contracts.",
   "sections": [
     {
@@ -4283,7 +4283,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
-  "image": "https://images.unsplash.com/photo-1557804506-669a67965ba0?auto=format&fit=crop&w=1200&q=80",
+  "image": "/assets/blog_img/real-local-backlinks-playbook.webp",
   "description": "Ditch worthless Fiverr links and generic guest posts. Master the legitimate playbook for earning high-authority local backlinks through community sponsorships, Chamber of Commerce partnerships, and local digital PR hooks.",
   "sections": [
     {
@@ -4412,7 +4412,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   "date": "September 12, 2026",
   "readTime": "10 min read",
-  "image": "https://images.unsplash.com/photo-1584438784894-089d6a62b8fa?auto=format&fit=crop&w=1200&q=80",
+  "image": "/assets/blog_img/gbp-suspended-reinstatement-guide.webp",
   "description": "Woke up to a suspended Google Business Profile? Do not panic and do not submit a blind appeal. Follow our battle-tested evidence audit, reinstatement filing workflow, and video verification checklist to get your listing restored fast.",
   "sections": [
     {
@@ -4554,7 +4554,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
-  "image": "https://images.unsplash.com/photo-1516321318423-f06f85e504b3?auto=format&fit=crop&w=1200&q=80",
+  "image": "/assets/blog_img/remove-fake-negative-google-reviews.webp",
   "description": "Targeted by a 1-star review attack or disgruntled competitor? Discover how to legally and algorithmically remove fake Google reviews using Google's Review Management Tool, fraud reporting workflows, and review velocity defense.",
   "sections": [
     {
@@ -4698,7 +4698,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   "date": "September 12, 2026",
   "readTime": "10 min read",
-  "image": "https://images.unsplash.com/photo-1551288049-bebda4e38f71?auto=format&fit=crop&w=1200&q=80",
+  "image": "/assets/blog_img/ranking-drop-algorithm-update-audit.webp",
   "description": "Did your local rankings and website traffic suddenly plummet following a Google Core or Local algorithm update? Follow our 4-phase forensic diagnostic checklist to isolate the cause, repair your technical foundation, and regain your search visibility.",
   "sections": [
     {

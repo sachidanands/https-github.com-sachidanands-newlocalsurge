@@ -1,11 +1,11 @@
 {
-  "auditedAt": "2026-09-11T18:58:43.415Z",
+  "auditedAt": "2026-09-12T17:06:38.225Z",
   "propertyUrl": "https://localsurgeseo.com/",
-  "totalUniqueUrlsInSitemaps": 91,
+  "totalUniqueUrlsInSitemaps": 107,
   "sitemapsParsed": [
     {
       "filename": "sitemap.xml",
-      "count": 91,
+      "count": 107,
       "deprecated": false
     },
     {
@@ -15,7 +15,7 @@
     },
     {
       "filename": "sitemap-blog.xml",
-      "count": 23,
+      "count": 39,
       "deprecated": false
     },
     {
@@ -70,8 +70,8 @@
       "Submitted and indexed": 4,
       "Duplicate, Google chose different canonical than user": 2,
       "Crawled - currently not indexed": 1,
-      "Discovered - currently not indexed": 10,
-      "URL is unknown to Google": 7
+      "Discovered - currently not indexed": 8,
+      "URL is unknown to Google": 9
     },
     "records": [
       {
@@ -176,13 +176,13 @@
         "url": "https://localsurgeseo.com/blog/google-map-pack-optimization-guide",
         "category": "Blog Article",
         "verdict": "NEUTRAL",
-        "coverageState": "Discovered - currently not indexed",
+        "coverageState": "URL is unknown to Google",
         "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
         "indexingState": "INDEXING_STATE_UNSPECIFIED",
         "googleCanonical": "https://localsurgeseo.com/blog/google-map-pack-optimization-guide",
         "userCanonical": "https://localsurgeseo.com/blog/google-map-pack-optimization-guide",
         "issues": [
-          "Coverage: Discovered - currently not indexed"
+          "Coverage: URL is unknown to Google"
         ]
       },
       {
@@ -280,26 +280,26 @@
         "url": "https://localsurgeseo.com/locations/florida/miami",
         "category": "Location Empirical Study",
         "verdict": "NEUTRAL",
-        "coverageState": "Discovered - currently not indexed",
+        "coverageState": "URL is unknown to Google",
         "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
         "indexingState": "INDEXING_STATE_UNSPECIFIED",
         "googleCanonical": "https://localsurgeseo.com/locations/florida/miami",
         "userCanonical": "https://localsurgeseo.com/locations/florida/miami",
         "issues": [
-          "Coverage: Discovered - currently not indexed"
+          "Coverage: URL is unknown to Google"
         ]
       },
       {
         "url": "https://localsurgeseo.com/locations/new-york/new-york-city",
         "category": "Location Empirical Study",
         "verdict": "NEUTRAL",
-        "coverageState": "Discovered - currently not indexed",
+        "coverageState": "URL is unknown to Google",
         "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
         "indexingState": "INDEXING_STATE_UNSPECIFIED",
         "googleCanonical": "https://localsurgeseo.com/locations/new-york/new-york-city",
         "userCanonical": "https://localsurgeseo.com/locations/new-york/new-york-city",
         "issues": [
-          "Coverage: Discovered - currently not indexed"
+          "Coverage: URL is unknown to Google"
         ]
       },
       {
@@ -358,13 +358,13 @@
         "url": "https://localsurgeseo.com/demo/contractor-surge",
         "category": "Live Demo",
         "verdict": "NEUTRAL",
-        "coverageState": "URL is unknown to Google",
+        "coverageState": "Discovered - currently not indexed",
         "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
         "indexingState": "INDEXING_STATE_UNSPECIFIED",
         "googleCanonical": "https://localsurgeseo.com/demo/contractor-surge",
         "userCanonical": "https://localsurgeseo.com/demo/contractor-surge",
         "issues": [
-          "Coverage: URL is unknown to Google"
+          "Coverage: Discovered - currently not indexed"
         ]
       },
       {
