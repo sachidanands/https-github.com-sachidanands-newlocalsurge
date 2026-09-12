@@ -4005,7 +4005,7 @@ export const BLOG_POSTS: BlogPost[] = [
   "author": {
     "name": "Alex Rivera",
     "role": "Lead SEO Strategist",
-    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80"
+    "avatar": "AR"
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
@@ -4144,7 +4144,7 @@ export const BLOG_POSTS: BlogPost[] = [
   "author": {
     "name": "David Sterling",
     "role": "Senior Technical Director",
-    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80"
+    "avatar": "DS"
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
@@ -4279,7 +4279,7 @@ export const BLOG_POSTS: BlogPost[] = [
   "author": {
     "name": "Alex Rivera",
     "role": "Lead SEO Strategist",
-    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80"
+    "avatar": "AR"
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
@@ -4408,7 +4408,7 @@ export const BLOG_POSTS: BlogPost[] = [
   "author": {
     "name": "Alex Rivera",
     "role": "Lead SEO Strategist",
-    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80"
+    "avatar": "AR"
   },
   "date": "September 12, 2026",
   "readTime": "10 min read",
@@ -4550,7 +4550,7 @@ export const BLOG_POSTS: BlogPost[] = [
   "author": {
     "name": "David Sterling",
     "role": "Senior Technical Director",
-    "avatar": "https://images.unsplash.com/photo-1507003211169-0a1dd7228f2d?auto=format&fit=crop&w=256&q=80"
+    "avatar": "DS"
   },
   "date": "September 12, 2026",
   "readTime": "9 min read",
@@ -4694,7 +4694,7 @@ export const BLOG_POSTS: BlogPost[] = [
   "author": {
     "name": "Alex Rivera",
     "role": "Lead SEO Strategist",
-    "avatar": "https://images.unsplash.com/photo-1534528741775-53994a69daeb?auto=format&fit=crop&w=256&q=80"
+    "avatar": "AR"
   },
   "date": "September 12, 2026",
   "readTime": "10 min read",

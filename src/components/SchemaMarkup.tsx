@@ -25,7 +25,7 @@ export default function SchemaMarkup({
   // Base site metadata definitions
   const siteUrl = 'https://localsurgeseo.com';
   const orgName = 'Local Surge SEO';
-  const orgLogo = 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800';
+  const orgLogo = 'https://localsurgeseo.com/assets/og-home.webp';
 
   // 1. Core Organization & ProfessionalService Business Schema
   const businessSchema = {
@@ -35,7 +35,7 @@ export default function SchemaMarkup({
     'name': orgName,
     'url': siteUrl,
     'logo': orgLogo,
-    'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+    'image': 'https://localsurgeseo.com/assets/og-home.webp',
     'telephone': '+19097075075',
     'priceRange': '$$',
     'knowsAbout': [
@@ -502,7 +502,7 @@ export default function SchemaMarkup({
       'name': `${orgName} - ${state.name} Regional Division`,
       'url': `${siteUrl}/${state.slug}`,
       'logo': orgLogo,
-      'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+      'image': 'https://localsurgeseo.com/assets/og-home.webp',
       'telephone': '+19097075075',
       'priceRange': '$$',
       'knowsAbout': [
@@ -533,7 +533,7 @@ export default function SchemaMarkup({
       'name': `${orgName} - ${cityNameOnly} Office`,
       'url': `${siteUrl}/${city.stateSlug}/${city.slug}`,
       'logo': orgLogo,
-      'image': 'https://images.unsplash.com/photo-1460925895917-afdab827c52f?auto=format&fit=crop&q=80&w=800',
+      'image': 'https://localsurgeseo.com/assets/og-home.webp',
       'telephone': '+19097075075',
       'priceRange': '$$',
       'knowsAbout': [

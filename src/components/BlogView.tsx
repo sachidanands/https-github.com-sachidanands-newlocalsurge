@@ -430,8 +430,10 @@ export default function BlogView({
 
                   {/* Author Box */}
                   <div className="flex items-center gap-4.5 p-4.5 bg-[#faf9f6] rounded-2xl border border-[#e5e3da]/70">
-                    <div className="w-10 h-10 rounded-full bg-[#123e35] text-[#fbfaf8] flex items-center justify-center font-bold font-display shadow-xs text-xs">
-                      {activeArticle.author.avatar}
+                    <div className="w-10 h-10 rounded-full bg-[#123e35] text-[#fbfaf8] flex items-center justify-center font-bold font-display shadow-xs text-xs overflow-hidden">
+                      {typeof activeArticle.author.avatar === 'string' && activeArticle.author.avatar.length <= 3
+                        ? activeArticle.author.avatar
+                        : (activeArticle.author.name ? activeArticle.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
                     </div>
                     <div className="flex-grow">
                       <p className="text-xs font-extrabold text-[#1a1c1a]">{activeArticle.author.name}</p>
@@ -1088,8 +1090,10 @@ export default function BlogView({
 
                     <div className="border-t border-[#dfded4] pt-5 flex items-center justify-between">
                       <div className="flex items-center gap-3">
-                        <div className="w-8 h-8 rounded-full bg-[#123e35] text-white flex items-center justify-center font-bold text-xs">
-                          {featuredPost.author.avatar}
+                        <div className="w-8 h-8 rounded-full bg-[#123e35] text-white flex items-center justify-center font-bold text-xs overflow-hidden">
+                          {typeof featuredPost.author.avatar === 'string' && featuredPost.author.avatar.length <= 3
+                            ? featuredPost.author.avatar
+                            : (featuredPost.author.name ? featuredPost.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
                         </div>
                         <div>
                           <p className="text-xs font-black text-[#1a1c1a]">{featuredPost.author.name}</p>
@@ -1169,8 +1173,10 @@ export default function BlogView({
                         {/* Footer details */}
                         <div className="p-5.5 pt-0 border-t border-[#dfded4]/60 mt-4 flex items-center justify-between">
                           <div className="flex items-center gap-2.5">
-                            <div className="w-7 h-7 rounded-full bg-[#123e35]/10 text-[#123e35] flex items-center justify-center font-black text-[10px] font-display">
-                              {post.author.avatar}
+                            <div className="w-7 h-7 rounded-full bg-[#123e35]/10 text-[#123e35] flex items-center justify-center font-black text-[10px] font-display overflow-hidden">
+                              {typeof post.author.avatar === 'string' && post.author.avatar.length <= 3
+                                ? post.author.avatar
+                                : (post.author.name ? post.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
                             </div>
                             <div>
                               <p className="text-[10px] font-black text-[#1a1c1a]">{post.author.name}</p>
