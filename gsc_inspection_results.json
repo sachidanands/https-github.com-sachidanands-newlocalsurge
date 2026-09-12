@@ -1,5 +1,57 @@
 [
   {
+    "inspectionUrl": "https://localsurgeseo.com/",
+    "verdict": "PASS",
+    "coverageState": "Submitted and indexed",
+    "robotsTxtState": "ALLOWED",
+    "indexingState": "INDEXING_ALLOWED",
+    "pageFetchState": "SUCCESSFUL",
+    "lastCrawlTime": "2026-09-05T11:17:39Z",
+    "googleCanonical": "https://localsurgeseo.com/",
+    "userCanonical": "https://localsurgeseo.com/",
+    "crawledAs": "MOBILE",
+    "richResults": [
+      "Breadcrumbs"
+    ],
+    "issues": []
+  },
+  {
+    "inspectionUrl": "https://localsurgeseo.com/pricing",
+    "verdict": "PASS",
+    "coverageState": "Submitted and indexed",
+    "robotsTxtState": "ALLOWED",
+    "indexingState": "INDEXING_ALLOWED",
+    "pageFetchState": "SUCCESSFUL",
+    "lastCrawlTime": "2026-09-01T01:37:35Z",
+    "googleCanonical": "https://localsurgeseo.com/pricing",
+    "userCanonical": "https://localsurgeseo.com/pricing",
+    "crawledAs": "MOBILE",
+    "richResults": [
+      "Breadcrumbs"
+    ],
+    "issues": []
+  },
+  {
+    "inspectionUrl": "https://localsurgeseo.com/locations/california/los-angeles",
+    "verdict": "NEUTRAL",
+    "coverageState": "Discovered - currently not indexed",
+    "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+    "indexingState": "INDEXING_STATE_UNSPECIFIED",
+    "pageFetchState": "PAGE_FETCH_STATE_UNSPECIFIED",
+    "lastCrawlTime": "2026-09-11T18:54:35.987Z",
+    "googleCanonical": "https://localsurgeseo.com/locations/california/los-angeles",
+    "userCanonical": "https://localsurgeseo.com/locations/california/los-angeles",
+    "crawledAs": "CRAWLING_USER_AGENT_UNSPECIFIED",
+    "richResults": [
+      "LocalBusiness",
+      "Breadcrumbs",
+      "FAQPage"
+    ],
+    "issues": [
+      "Indexing blocked: INDEXING_STATE_UNSPECIFIED"
+    ]
+  },
+  {
     "inspectionUrl": "https://localsurgeseo.com/seo-tool",
     "verdict": "NEUTRAL",
     "coverageState": "Crawled - currently not indexed",
@@ -16,5 +68,25 @@
       "FAQPage"
     ],
     "issues": []
+  },
+  {
+    "inspectionUrl": "https://localsurgeseo.com/blog",
+    "verdict": "NEUTRAL",
+    "coverageState": "Duplicate, Google chose different canonical than user",
+    "robotsTxtState": "ALLOWED",
+    "indexingState": "INDEXING_ALLOWED",
+    "pageFetchState": "SUCCESSFUL",
+    "lastCrawlTime": "2026-08-12T02:32:59Z",
+    "googleCanonical": "https://www.localsurgeseo.com/blog",
+    "userCanonical": "https://localsurgeseo.com/blog",
+    "crawledAs": "MOBILE",
+    "richResults": [
+      "LocalBusiness",
+      "Breadcrumbs",
+      "FAQPage"
+    ],
+    "issues": [
+      "Canonical mismatch: User declared 'https://localsurgeseo.com/blog' but Google selected 'https://www.localsurgeseo.com/blog'"
+    ]
   }
 ]

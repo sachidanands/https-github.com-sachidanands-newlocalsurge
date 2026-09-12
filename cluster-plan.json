@@ -1,12 +1,12 @@
 {
   "meta": {
     "domain": "localsurgeseo.com",
-    "totalPosts": 23,
+    "totalPosts": 39,
     "totalClusters": 5,
-    "totalInternalLinks": 115,
+    "totalInternalLinks": 195,
     "orphanPages": 0,
     "pillarCoverage": "100%",
-    "date": "2026-08-30"
+    "date": "2026-09-12"
   },
   "masterPillar": {
     "title": "Dominate Your Local Market with High-Performance SEO",
@@ -61,13 +61,33 @@
           "status": "published"
         },
         {
-          "title": "Google Local Service Ads (LSA): Maximize Pay-Per-Lead ROI in 2026",
+          "title": "Google Local Service Ads (LSA): Maximize Pay-Per-Lead ROI",
           "slug": "what-are-google-local-service-ads-optimization",
           "keyword": "google local service ads optimization",
           "volume": 1100,
           "template": "guide",
           "wordCount": 1390,
           "url": "/blog/what-are-google-local-service-ads-optimization",
+          "status": "published"
+        },
+        {
+          "title": "Google Business Profile Suspended? The Emergency Reinstatement and Appeal Playbook (2026)",
+          "slug": "google-business-profile-suspended-reinstatement-appeal-guide",
+          "keyword": "google business profile suspended reinstatement appeal",
+          "volume": 2100,
+          "template": "emergency-guide",
+          "wordCount": 1950,
+          "url": "/blog/google-business-profile-suspended-reinstatement-appeal-guide",
+          "status": "published"
+        },
+        {
+          "title": "How to Remove Fake Negative Google Reviews: The Legal and Algorithmic Defense Guide",
+          "slug": "how-to-remove-fake-negative-google-reviews-guide",
+          "keyword": "remove fake negative google reviews review bombing",
+          "volume": 1850,
+          "template": "legal-guide",
+          "wordCount": 1900,
+          "url": "/blog/how-to-remove-fake-negative-google-reviews-guide",
           "status": "published"
         }
       ]
@@ -115,6 +135,36 @@
           "template": "explainer",
           "wordCount": 1310,
           "url": "/blog/why-your-business-needs-local-seo-now",
+          "status": "published"
+        },
+        {
+          "title": "How to Optimize Your Local Business for Google AI Overviews and ChatGPT Search",
+          "slug": "optimize-local-business-google-ai-overviews-chatgpt-search",
+          "keyword": "optimize local business google ai overviews chatgpt search",
+          "volume": 1600,
+          "template": "ultimate-guide",
+          "wordCount": 1850,
+          "url": "/blog/optimize-local-business-google-ai-overviews-chatgpt-search",
+          "status": "published"
+        },
+        {
+          "title": "Entity SEO: How Knowledge Graphs Help Search Engines Trust Your Business",
+          "slug": "entity-seo-knowledge-graphs-local-business-trust",
+          "keyword": "entity seo knowledge graphs local business",
+          "volume": 1150,
+          "template": "technical-guide",
+          "wordCount": 1800,
+          "url": "/blog/entity-seo-knowledge-graphs-local-business-trust",
+          "status": "published"
+        },
+        {
+          "title": "Why Traditional Keywords Aren’t Enough: Conversational Search for Local Service Providers",
+          "slug": "conversational-search-local-service-providers-seo",
+          "keyword": "conversational search local service providers seo",
+          "volume": 950,
+          "template": "explainer",
+          "wordCount": 1750,
+          "url": "/blog/conversational-search-local-service-providers-seo",
           "status": "published"
         }
       ]
@@ -193,6 +243,46 @@
           "wordCount": 1380,
           "url": "/blog/why-your-website-jumps-cls-guide",
           "status": "published"
+        },
+        {
+          "title": "Complete Guide to LocalBusiness Schema: Nested Service, GeoCoordinates, and Reviews JSON-LD",
+          "slug": "localbusiness-schema-nested-service-geocoordinates-reviews-guide",
+          "keyword": "localbusiness schema nested service geocoordinates reviews",
+          "volume": 1950,
+          "template": "ultimate-guide",
+          "wordCount": 1950,
+          "url": "/blog/localbusiness-schema-nested-service-geocoordinates-reviews-guide",
+          "status": "published"
+        },
+        {
+          "title": "Fixing Cannibalization: Managing Multi-Location vs. Service-Area Business (SAB) Pages",
+          "slug": "fixing-keyword-cannibalization-multi-location-vs-sab-pages",
+          "keyword": "fixing keyword cannibalization multi location sab",
+          "volume": 1400,
+          "template": "technical-guide",
+          "wordCount": 1850,
+          "url": "/blog/fixing-keyword-cannibalization-multi-location-vs-sab-pages",
+          "status": "published"
+        },
+        {
+          "title": "Core Web Vitals Checklist for Lead Generation & Local Service Landing Pages",
+          "slug": "core-web-vitals-checklist-local-service-landing-pages",
+          "keyword": "core web vitals checklist local service landing pages",
+          "volume": 1250,
+          "template": "checklist",
+          "wordCount": 1800,
+          "url": "/blog/core-web-vitals-checklist-local-service-landing-pages",
+          "status": "published"
+        },
+        {
+          "title": "Local Search Ranking Drop? Step-by-Step Recovery Audit After Google Algorithm Updates",
+          "slug": "local-search-ranking-drops-algorithm-update-audit-guide",
+          "keyword": "local search ranking drop algorithm update recovery audit",
+          "volume": 1700,
+          "template": "technical-guide",
+          "wordCount": 1950,
+          "url": "/blog/local-search-ranking-drops-algorithm-update-audit-guide",
+          "status": "published"
         }
       ]
     },
@@ -250,6 +340,46 @@
           "wordCount": 1290,
           "url": "/blog/does-local-seo-still-work-80-20-rule",
           "status": "published"
+        },
+        {
+          "title": "Franchise SEO Architecture: How to Structure 25+ Location Pages Without Duplicate Penalties",
+          "slug": "franchise-seo-architecture-multi-location-pages",
+          "keyword": "franchise seo architecture multi location pages",
+          "volume": 1400,
+          "template": "ultimate-guide",
+          "wordCount": 1900,
+          "url": "/blog/franchise-seo-architecture-multi-location-pages",
+          "status": "published"
+        },
+        {
+          "title": "The Multi-Fleet SAB Playbook: How Regional Service Businesses Dominate Google Maps Across Multiple Counties",
+          "slug": "multi-fleet-sab-local-seo-counties-guide",
+          "keyword": "multi location sab service area business seo",
+          "volume": 1150,
+          "template": "technical-guide",
+          "wordCount": 1850,
+          "url": "/blog/multi-fleet-sab-local-seo-counties-guide",
+          "status": "published"
+        },
+        {
+          "title": "Managing 10+ Google Business Profiles: Bulk Verification, Review Ops, and Geo-Pages",
+          "slug": "managing-multiple-google-business-profiles-bulk-verification",
+          "keyword": "managing multiple google business profiles bulk verification",
+          "volume": 1850,
+          "template": "enterprise-guide",
+          "wordCount": 1950,
+          "url": "/blog/managing-multiple-google-business-profiles-bulk-verification",
+          "status": "published"
+        },
+        {
+          "title": "How to Earn Real Local Backlinks: Sponsorships, Chambers of Commerce, and Digital PR Playbook",
+          "slug": "how-to-earn-real-local-backlinks-sponsorships-pr-playbook",
+          "keyword": "how to earn real local backlinks local link building",
+          "volume": 1600,
+          "template": "how-to",
+          "wordCount": 1950,
+          "url": "/blog/how-to-earn-real-local-backlinks-sponsorships-pr-playbook",
+          "status": "published"
         }
       ]
     },
@@ -276,6 +406,26 @@
           "template": "comparison",
           "wordCount": 1410,
           "url": "/blog/best-local-business-website-builder-franchise-cost",
+          "status": "published"
+        },
+        {
+          "title": "Service-Area Landing Pages That Actually Convert: The High-Intent Local Wireframe Blueprint",
+          "slug": "service-area-pages-conversion-wireframes-blueprint",
+          "keyword": "service area landing pages conversion wireframe",
+          "volume": 1450,
+          "template": "technical-guide",
+          "wordCount": 1900,
+          "url": "/blog/service-area-pages-conversion-wireframes-blueprint",
+          "status": "published"
+        },
+        {
+          "title": "Bottom-of-Funnel (BOFU) Local SEO: How Cost Guides, Comparisons, and Case Studies Turn Clicks into Signed Contracts",
+          "slug": "bofu-local-seo-cost-guides-comparisons-case-studies",
+          "keyword": "bofu bottom of funnel local seo content",
+          "volume": 1200,
+          "template": "ultimate-guide",
+          "wordCount": 1950,
+          "url": "/blog/bofu-local-seo-cost-guides-comparisons-case-studies",
           "status": "published"
         }
       ]

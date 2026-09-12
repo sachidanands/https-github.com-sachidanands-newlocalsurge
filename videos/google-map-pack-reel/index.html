@@ -1,0 +1,545 @@
+<!doctype html>
+<html lang="en" data-resolution="portrait">
+  <head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=1080, height=1920" />
+    <title>Google Map Pack Domination — LocalSurge SEO</title>
+    <!-- Fonts -->
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Outfit:wght@400;600;700;800;900&family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@500;700&display=swap"
+      rel="stylesheet"
+    />
+    <script src="https://cdn.jsdelivr.net/npm/gsap@3.14.2/dist/gsap.min.js"></script>
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+        box-sizing: border-box;
+      }
+      html,
+      body {
+        margin: 0;
+        width: 1080px;
+        height: 1920px;
+        overflow: hidden;
+        background: #07090e;
+        color: #ffffff;
+        font-family: 'Plus Jakarta Sans', sans-serif;
+        -webkit-font-smoothing: antialiased;
+      }
+
+      #root {
+        position: relative;
+        width: 1080px;
+        height: 1920px;
+        background: radial-gradient(circle at 50% 15%, rgba(16, 185, 129, 0.18) 0%, rgba(7, 9, 14, 0.95) 70%),
+                    radial-gradient(circle at 80% 80%, rgba(245, 158, 11, 0.12) 0%, transparent 60%),
+                    #07090e;
+        overflow: hidden;
+      }
+
+      /* Ambient Glow & Grid */
+      .grid-bg {
+        position: absolute;
+        inset: 0;
+        background-size: 60px 60px;
+        background-image: 
+          linear-gradient(to right, rgba(255, 255, 255, 0.03) 1px, transparent 1px),
+          linear-gradient(to bottom, rgba(255, 255, 255, 0.03) 1px, transparent 1px);
+        pointer-events: none;
+        z-index: 1;
+      }
+
+      .ambient-orb {
+        position: absolute;
+        border-radius: 50%;
+        filter: blur(120px);
+        pointer-events: none;
+        z-index: 1;
+      }
+      .orb-1 {
+        top: 200px;
+        left: 200px;
+        width: 500px;
+        height: 500px;
+        background: rgba(16, 185, 129, 0.25);
+      }
+      .orb-2 {
+        bottom: 300px;
+        right: 150px;
+        width: 450px;
+        height: 450px;
+        background: rgba(245, 158, 11, 0.15);
+      }
+
+      /* Top Header Bar */
+      .header-bar {
+        position: absolute;
+        top: 80px;
+        left: 80px;
+        right: 80px;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        z-index: 20;
+      }
+      .brand-badge {
+        display: flex;
+        align-items: center;
+        gap: 16px;
+        padding: 14px 28px;
+        background: rgba(16, 185, 129, 0.12);
+        border: 1.5px solid rgba(16, 185, 129, 0.4);
+        border-radius: 100px;
+        backdrop-filter: blur(16px);
+      }
+      .brand-dot {
+        width: 16px;
+        height: 16px;
+        background: #10b981;
+        border-radius: 50%;
+        box-shadow: 0 0 16px #10b981;
+      }
+      .brand-name {
+        font-family: 'Outfit', sans-serif;
+        font-size: 24px;
+        font-weight: 800;
+        letter-spacing: 0.08em;
+        color: #ffffff;
+        text-transform: uppercase;
+      }
+
+      /* Progress Bar */
+      .video-progress-bar {
+        position: absolute;
+        bottom: 0;
+        left: 0;
+        height: 8px;
+        width: 0%;
+        background: linear-gradient(90deg, #10b981, #38bdf8);
+        z-index: 100;
+      }
+
+      /* Scene Layouts */
+      .scene {
+        position: absolute;
+        inset: 0;
+        padding: 180px 80px 180px;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        justify-content: center;
+        z-index: 10;
+        visibility: hidden;
+        opacity: 0;
+      }
+
+      .scene-kicker {
+        display: inline-flex;
+        align-items: center;
+        gap: 10px;
+        padding: 10px 24px;
+        border-radius: 100px;
+        font-size: 20px;
+        font-weight: 800;
+        text-transform: uppercase;
+        letter-spacing: 0.08em;
+        margin-bottom: 24px;
+      }
+      .kicker-red {
+        background: rgba(239, 68, 68, 0.16);
+        border: 1.5px solid rgba(239, 68, 68, 0.5);
+        color: #f87171;
+      }
+      .kicker-yellow {
+        background: rgba(245, 158, 11, 0.16);
+        border: 1.5px solid rgba(245, 158, 11, 0.5);
+        color: #fbbf24;
+      }
+      .kicker-green {
+        background: rgba(16, 185, 129, 0.16);
+        border: 1.5px solid rgba(16, 185, 129, 0.5);
+        color: #34d399;
+      }
+
+      .scene-title {
+        font-family: 'Outfit', sans-serif;
+        font-size: 58px;
+        font-weight: 900;
+        line-height: 1.15;
+        text-align: center;
+        margin-bottom: 40px;
+        letter-spacing: -0.02em;
+      }
+
+      .glass-card {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.75);
+        border: 2px solid rgba(255, 255, 255, 0.1);
+        border-radius: 36px;
+        padding: 44px;
+        backdrop-filter: blur(25px);
+        box-shadow: 0 25px 60px rgba(0, 0, 0, 0.6);
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        gap: 28px;
+      }
+
+      /* Scene 1: 70% Call Loss */
+      .radar-box {
+        width: 300px;
+        height: 300px;
+        border: 3px dashed rgba(239, 68, 68, 0.6);
+        border-radius: 50%;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+        background: radial-gradient(circle, rgba(239, 68, 68, 0.15) 0%, transparent 70%);
+        box-shadow: 0 0 50px rgba(239, 68, 68, 0.25);
+      }
+      .stat-number {
+        font-family: 'Outfit', sans-serif;
+        font-size: 80px;
+        font-weight: 900;
+        color: #ef4444;
+        text-shadow: 0 0 30px rgba(239, 68, 68, 0.6);
+      }
+
+      /* Scene 2: Category Trap */
+      .trap-card {
+        width: 100%;
+        background: rgba(239, 68, 68, 0.12);
+        border: 2px solid rgba(239, 68, 68, 0.4);
+        border-radius: 24px;
+        padding: 24px 32px;
+        display: flex;
+        align-items: center;
+        gap: 20px;
+        font-size: 28px;
+        font-weight: 700;
+        color: #fca5a5;
+      }
+
+      /* Scene 3: Secondary Categories */
+      .category-pill {
+        width: 100%;
+        background: rgba(16, 185, 129, 0.15);
+        border: 2px solid rgba(16, 185, 129, 0.5);
+        border-radius: 20px;
+        padding: 20px 28px;
+        display: flex;
+        align-items: center;
+        gap: 18px;
+        font-size: 26px;
+        font-weight: 800;
+        color: #6ee7b7;
+        box-shadow: 0 10px 25px rgba(16, 185, 129, 0.15);
+      }
+
+      /* Scene 4: Coordinates Terminal */
+      .terminal-box {
+        width: 100%;
+        background: #030712;
+        border: 2px solid rgba(16, 185, 129, 0.35);
+        border-radius: 24px;
+        padding: 30px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 22px;
+        color: #34d399;
+        display: flex;
+        flex-direction: column;
+        gap: 14px;
+      }
+
+      /* Scene 5: Review Velocity */
+      .review-card {
+        width: 100%;
+        background: rgba(15, 23, 42, 0.9);
+        border: 2px solid rgba(245, 158, 11, 0.4);
+        border-radius: 28px;
+        padding: 36px;
+        display: flex;
+        flex-direction: column;
+        gap: 20px;
+      }
+      .keyword-badge {
+        background: rgba(245, 158, 11, 0.2);
+        border: 1px solid rgba(245, 158, 11, 0.6);
+        padding: 4px 10px;
+        border-radius: 8px;
+        color: #fef08a;
+        font-weight: 800;
+      }
+
+      /* Scene 6: Live Blog Preview */
+      .blog-card {
+        width: 100%;
+        background: #0f172a;
+        border: 2px solid rgba(16, 185, 129, 0.45);
+        border-radius: 28px;
+        overflow: hidden;
+      }
+      .blog-topbar {
+        background: #1e293b;
+        padding: 16px 24px;
+        font-size: 18px;
+        color: #94a3b8;
+      }
+      .blog-body {
+        padding: 32px;
+        display: flex;
+        flex-direction: column;
+        gap: 16px;
+      }
+
+      /* Scene 7: CTA */
+      .cta-button {
+        width: 100%;
+        background: linear-gradient(135deg, #10b981 0%, #059669 100%);
+        color: #ffffff;
+        font-family: 'Outfit', sans-serif;
+        font-size: 34px;
+        font-weight: 900;
+        padding: 30px 36px;
+        border-radius: 28px;
+        text-align: center;
+        box-shadow: 0 20px 50px rgba(16, 185, 129, 0.4);
+      }
+      .url-box {
+        display: inline-flex;
+        align-items: center;
+        gap: 12px;
+        padding: 16px 36px;
+        background: rgba(255, 255, 255, 0.08);
+        border: 1.5px solid rgba(255, 255, 255, 0.2);
+        border-radius: 100px;
+        font-family: 'JetBrains Mono', monospace;
+        font-size: 26px;
+        font-weight: 700;
+        color: #38bdf8;
+      }
+    </style>
+  </head>
+  <body>
+    <div
+      id="root"
+      data-composition-id="main"
+      data-start="0"
+      data-duration="55"
+      data-width="1080"
+      data-height="1920"
+    >
+      <div class="grid-bg"></div>
+      <div class="ambient-orb orb-1"></div>
+      <div class="ambient-orb orb-2"></div>
+      <div class="video-progress-bar" id="progressBar"></div>
+
+      <!-- Top Header -->
+      <div class="header-bar">
+        <div class="brand-badge">
+          <div class="brand-dot"></div>
+          <span class="brand-name">LocalSurge SEO</span>
+        </div>
+        <div style="font-size: 20px; color: #94a3b8; font-weight: 700; text-transform: uppercase;">
+          Local 3-Pack Guide
+        </div>
+      </div>
+
+      <!-- Audio Tracks (Synthesized 55-Second Mix) -->
+      <hf-audio-group id="voiceover" data-label="Voiceover" data-volume="1.0"></hf-audio-group>
+      <audio id="vo-1" class="clip" data-audio-group="voiceover" data-start="0.0" data-duration="6.8" src="assets/audio/vo_scene_1.mp3"></audio>
+      <audio id="vo-2" class="clip" data-audio-group="voiceover" data-start="7.0" data-duration="7.2" src="assets/audio/vo_scene_2.mp3"></audio>
+      <audio id="vo-3" class="clip" data-audio-group="voiceover" data-start="14.5" data-duration="7.2" src="assets/audio/vo_scene_3.mp3"></audio>
+      <audio id="vo-4" class="clip" data-audio-group="voiceover" data-start="22.0" data-duration="7.5" src="assets/audio/vo_scene_4.mp3"></audio>
+      <audio id="vo-5" class="clip" data-audio-group="voiceover" data-start="30.0" data-duration="7.5" src="assets/audio/vo_scene_5.mp3"></audio>
+      <audio id="vo-6" class="clip" data-audio-group="voiceover" data-start="38.0" data-duration="8.0" src="assets/audio/vo_scene_6.mp3"></audio>
+      <audio id="vo-7" class="clip" data-audio-group="voiceover" data-start="46.5" data-duration="8.0" src="assets/audio/vo_scene_7.mp3"></audio>
+
+      <!-- SCENE 1: The 70% Call Loss (0.0s - 7.0s) -->
+      <div class="scene" id="scene1">
+        <div class="scene-kicker kicker-red">⚠️ CRITICAL GOOGLE STAT</div>
+        <h1 class="scene-title">Not in the Local 3-Pack?</h1>
+        <div class="glass-card">
+          <div class="radar-box">
+            <div class="stat-number">-70%</div>
+          </div>
+          <p style="font-size: 28px; text-align: center; color: #cbd5e1; font-weight: 600; line-height: 1.4;">
+            You are literally handing <span style="color: #ef4444; font-weight: 800;">70% of inbound calls</span> to your competitors across the street!
+          </p>
+        </div>
+      </div>
+
+      <!-- SCENE 2: The Category Trap (7.0s - 14.5s) -->
+      <div class="scene" id="scene2">
+        <div class="scene-kicker kicker-yellow">🚫 THE #1 GBP MISTAKE</div>
+        <h1 class="scene-title">The "Generic Category" Trap</h1>
+        <div class="glass-card">
+          <div class="trap-card">
+            <span style="font-size: 36px;">❌</span>
+            <div>
+              <div style="font-size: 18px; color: #94a3b8; text-transform: uppercase;">Default Setup</div>
+              <div>"General Contractor"</div>
+            </div>
+          </div>
+          <div style="width: 100%; height: 2px; background: rgba(255, 255, 255, 0.1);"></div>
+          <p style="font-size: 26px; text-align: center; color: #e2e8f0; line-height: 1.4;">
+            Google matches search intent with <span style="color: #38bdf8; font-weight: 800;">pinpoint specificity</span>, not broad labels!
+          </p>
+        </div>
+      </div>
+
+      <!-- SCENE 3: Fix #1 - Secondary Categories (14.5s - 22.0s) -->
+      <div class="scene" id="scene3">
+        <div class="scene-kicker kicker-green">✅ ACTIONABLE FIX #1</div>
+        <h1 class="scene-title">Add 3 Secondary Categories</h1>
+        <div class="glass-card" style="gap: 18px;">
+          <div class="category-pill" id="pill1">
+            <span>⚡</span> Emergency Drain Cleaning
+          </div>
+          <div class="category-pill" id="pill2">
+            <span>🔥</span> Water Heater Installation
+          </div>
+          <div class="category-pill" id="pill3">
+            <span>🔍</span> Leak Detection Specialist
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 4: Fix #2 - Place ID & Proximity Radius (22.0s - 30.0s) -->
+      <div class="scene" id="scene4">
+        <div class="scene-kicker kicker-green">📍 ACTIONABLE FIX #2</div>
+        <h1 class="scene-title">Lock Place ID & Coordinates</h1>
+        <div class="glass-card">
+          <div class="terminal-box">
+            <div>> GOOGLE_PLACE_ID: <span style="color: #6ee7b7;">ChIJ_98XzkbVwoAR...</span></div>
+            <div>> LAT_LNG: <span style="color: #38bdf8;">[34.0522° N, 118.2437° W]</span></div>
+            <div>> SERVICE_RADIUS: <span style="color: #f59e0b;">25 MILE GEO-FENCE</span></div>
+            <div style="color: #4ade80;">✔ Schema Coordinates Validated</div>
+          </div>
+          <p style="font-size: 26px; text-align: center; color: #cbd5e1; font-weight: 600;">
+            Match your Schema markup to your service radius to the exact mile.
+          </p>
+        </div>
+      </div>
+
+      <!-- SCENE 5: Fix #3 - Review Velocity & Keywords (30.0s - 38.0s) -->
+      <div class="scene" id="scene5">
+        <div class="scene-kicker kicker-green">⭐ ACTIONABLE FIX #3</div>
+        <h1 class="scene-title">Review Velocity + Keywords</h1>
+        <div class="review-card">
+          <div style="font-size: 32px; color: #f59e0b;">★★★★★</div>
+          <p style="font-size: 28px; line-height: 1.4; color: #f8fafc;">
+            "Best <span class="keyword-badge">emergency water heater repair</span> in Austin! Arrived in 45 minutes."
+          </p>
+          <div style="display: flex; justify-content: space-between; align-items: center; border-top: 1px solid rgba(255,255,255,0.1); padding-top: 16px;">
+            <span style="color: #94a3b8; font-size: 20px;">Google Verified Review</span>
+            <span style="color: #34d399; font-weight: 800; font-size: 22px;">+30% Map Rank Boost</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 6: Live Blog Preview (38.0s - 46.5s) -->
+      <div class="scene" id="scene6">
+        <div class="scene-kicker kicker-green">📚 READ THE FULL BLUEPRINT</div>
+        <h1 class="scene-title">Free Complete Guide</h1>
+        <div class="blog-card">
+          <div class="blog-topbar">🌐 localsurgeseo.com/blog/google-map-pack-optimization-guide</div>
+          <div class="blog-body">
+            <div style="font-size: 18px; color: #34d399; font-weight: 700; text-transform: uppercase;">Google Map Pack Pillar Guide</div>
+            <div style="font-family: 'Outfit', sans-serif; font-size: 32px; font-weight: 800; line-height: 1.2;">
+              Google Map Pack & Local 3-Pack Ranking Playbook (2026 Edition)
+            </div>
+            <div style="display: flex; gap: 12px; margin-top: 8px;">
+              <span style="background: rgba(16,185,129,0.2); color: #34d399; padding: 6px 14px; border-radius: 8px; font-size: 16px; font-weight: 700;">Includes Free Place ID Scanner</span>
+            </div>
+          </div>
+        </div>
+      </div>
+
+      <!-- SCENE 7: CTA (46.5s - 55.0s) -->
+      <div class="scene" id="scene7">
+        <div class="scene-kicker kicker-green">🚀 CLAIM YOUR FREE AUDIT</div>
+        <h1 class="scene-title">Dominate Your Local Map Pack</h1>
+        <div class="glass-card" style="gap: 32px;">
+          <div class="cta-button">READ GUIDE & AUDIT NOW</div>
+          <div class="url-box"><span>👉</span> localsurgeseo.com/blog</div>
+          <p style="font-size: 26px; color: #94a3b8; text-align: center;">
+            Direct link in YouTube Shorts description!
+          </p>
+        </div>
+      </div>
+    </div>
+
+    <!-- GSAP Master Timeline Hook -->
+    <script>
+      window.__timelines = window.__timelines || {};
+      const tl = gsap.timeline({ paused: true });
+
+      // Progress bar (55 seconds total)
+      tl.to("#progressBar", { width: "100%", duration: 55.0, ease: "none" }, 0);
+
+      // SCENE 1 (0.0s - 7.0s)
+      tl.set("#scene1", { autoAlpha: 1 }, 0.0);
+      tl.fromTo("#scene1 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 0.2);
+      tl.fromTo("#scene1 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 0.5);
+      tl.fromTo("#scene1 .radar-box", { scale: 0.7, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.5)" }, 0.8);
+      tl.to("#scene1", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 6.6);
+      tl.set("#scene1", { autoAlpha: 0 }, 7.0);
+
+      // SCENE 2 (7.0s - 14.5s)
+      tl.set("#scene2", { autoAlpha: 1 }, 7.0);
+      tl.fromTo("#scene2 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 7.2);
+      tl.fromTo("#scene2 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 7.5);
+      tl.fromTo("#scene2 .trap-card", { x: -60, opacity: 0 }, { x: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 7.8);
+      tl.to("#scene2", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 14.1);
+      tl.set("#scene2", { autoAlpha: 0 }, 14.5);
+
+      // SCENE 3 (14.5s - 22.0s)
+      tl.set("#scene3", { autoAlpha: 1 }, 14.5);
+      tl.fromTo("#scene3 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 14.7);
+      tl.fromTo("#scene3 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 15.0);
+      tl.fromTo("#pill1", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 15.5);
+      tl.fromTo("#pill2", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 16.5);
+      tl.fromTo("#pill3", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.5)" }, 17.5);
+      tl.to("#scene3", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 21.6);
+      tl.set("#scene3", { autoAlpha: 0 }, 22.0);
+
+      // SCENE 4 (22.0s - 30.0s)
+      tl.set("#scene4", { autoAlpha: 1 }, 22.0);
+      tl.fromTo("#scene4 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 22.2);
+      tl.fromTo("#scene4 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 22.5);
+      tl.fromTo("#scene4 .terminal-box", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "power2.out" }, 23.0);
+      tl.to("#scene4", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 29.6);
+      tl.set("#scene4", { autoAlpha: 0 }, 30.0);
+
+      // SCENE 5 (30.0s - 38.0s)
+      tl.set("#scene5", { autoAlpha: 1 }, 30.0);
+      tl.fromTo("#scene5 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 30.2);
+      tl.fromTo("#scene5 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 30.5);
+      tl.fromTo("#scene5 .review-card", { y: 50, opacity: 0 }, { y: 0, opacity: 1, duration: 0.8, ease: "power3.out" }, 31.0);
+      tl.to("#scene5", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 37.6);
+      tl.set("#scene5", { autoAlpha: 0 }, 38.0);
+
+      // SCENE 6 (38.0s - 46.5s)
+      tl.set("#scene6", { autoAlpha: 1 }, 38.0);
+      tl.fromTo("#scene6 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 38.2);
+      tl.fromTo("#scene6 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 38.5);
+      tl.fromTo("#scene6 .blog-card", { scale: 0.9, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.4)" }, 39.0);
+      tl.to("#scene6", { autoAlpha: 0, scale: 0.95, duration: 0.4, ease: "power2.in" }, 46.1);
+      tl.set("#scene6", { autoAlpha: 0 }, 46.5);
+
+      // SCENE 7 (46.5s - 55.0s)
+      tl.set("#scene7", { autoAlpha: 1 }, 46.5);
+      tl.fromTo("#scene7 .scene-kicker", { y: -30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "back.out(1.7)" }, 46.7);
+      tl.fromTo("#scene7 .scene-title", { y: 40, opacity: 0 }, { y: 0, opacity: 1, duration: 0.7, ease: "power3.out" }, 47.0);
+      tl.fromTo("#scene7 .cta-button", { scale: 0.85, opacity: 0 }, { scale: 1, opacity: 1, duration: 0.8, ease: "back.out(1.8)" }, 47.4);
+      tl.fromTo("#scene7 .url-box", { y: 30, opacity: 0 }, { y: 0, opacity: 1, duration: 0.6, ease: "power2.out" }, 48.0);
+
+      // Register timeline for HyperFrames
+      window.__timelines["main"] = tl;
+    </script>
+  </body>
+</html>

@@ -41,7 +41,11 @@ function findLatestRenderedVideo(): string | null {
   return files.length > 0 ? path.join(rendersDir, files[0].name) : null;
 }
 
-async function generateYouTubeCopy(videoTopic: string = "Free Local Website Storefront by LocalSurge SEO"): Promise<YouTubeCopy> {
+async function generateYouTubeCopy(
+  videoTopic: string = "Free Local Website Storefront by LocalSurge SEO",
+  blogUrl: string = "https://localsurgeseo.com"
+): Promise<YouTubeCopy> {
+  const isMapPack = videoTopic.toLowerCase().includes('map') || videoTopic.toLowerCase().includes('3-pack');
   const geminiApiKey = process.env.GEMINI_API_KEY;
 
   if (geminiApiKey && !geminiApiKey.includes('MY_GEMINI_API_KEY')) {
@@ -49,21 +53,20 @@ async function generateYouTubeCopy(videoTopic: string = "Free Local Website Stor
       console.log('\x1b[33m[*] Generating viral YouTube Shorts SEO copy via Gemini AI...\x1b[0m');
       const ai = new GoogleGenAI({ apiKey: geminiApiKey });
       const prompt = `You are a high-performing YouTube Shorts growth strategist and local SEO marketing expert.
-Generate viral YouTube Shorts metadata for a 40-second vertical video for LocalSurge SEO promoting:
+Generate viral YouTube Shorts metadata for a vertical video for LocalSurge SEO promoting:
 "${videoTopic}".
+Featured Live Blog Guide URL: ${blogUrl}
 
-Key value props:
-- 100% Free Storefront for local businesses ($0 forever, zero hidden fees)
-- Loads in under 0.4s (destroys bounce rates)
-- Built-in LocalBusiness Schema to dominate the Google 3-Pack
-- 1-tap direct calling and quote inquiry lead forms
-- Website CTA: https://localsurgeseo.com
+Key elements to include:
+- Punchy hook title ending with #Shorts
+- High-converting description with bullet points of actionable tips and clickable link to: ${blogUrl}
+- Relevant tags for local business growth, Google 3-Pack, and local SEO
 
 Respond ONLY in valid JSON with this exact structure:
 {
   "title": "Punchy hook title under 70 characters ending with #Shorts",
-  "description": "Engaging description with emojis, clear bullet points of benefits, CTA link to https://localsurgeseo.com, and relevant search hashtags",
-  "tags": ["Shorts", "LocalSEO", "SmallBusiness", "WebDesign", "Google3Pack", "LocalSurgeSEO", "Marketing2026"]
+  "description": "Engaging description with emojis, bullet points, CTA link to ${blogUrl}, and relevant search hashtags",
+  "tags": ["Shorts", "LocalSEO", "GoogleMaps", "Google3Pack", "LocalSurgeSEO"]
 }`;
 
       const response = await ai.models.generateContent({
@@ -78,7 +81,7 @@ Respond ONLY in valid JSON with this exact structure:
         return {
           title: parsed.title.includes('#Shorts') ? parsed.title : `${parsed.title} #Shorts`,
           description: parsed.description,
-          tags: parsed.tags || ["Shorts", "LocalSEO", "SmallBusiness", "WebDesign", "Google3Pack", "LocalSurgeSEO"]
+          tags: parsed.tags || ["Shorts", "LocalSEO", "GoogleMaps", "Google3Pack", "LocalSurgeSEO"]
         };
       }
     } catch (e: any) {
@@ -86,7 +89,26 @@ Respond ONLY in valid JSON with this exact structure:
     }
   }
 
-  // Curated High-Converting Fallback Copy
+  // Curated Fallback Copy for Map Pack
+  if (isMapPack) {
+    return {
+      title: "The 3-Second Google Map Pack Hack Most Local Businesses Miss 📍 #Shorts",
+      description: `If your business isn't ranking in Google's Local 3-Pack, you're literally handing 70% of inbound phone calls to your competitors across the street!
+
+Here is the 3-step fix to rank in Google Maps:
+⚡ Add 3 hyper-specific secondary categories in your Google Business Profile
+📍 Lock in your exact Place ID coordinates and geo-fence radius
+⭐ Boost review velocity with specific service keywords in 5-star reviews
+
+📖 Read our complete Google Map Pack Domination Guide with free audit tools on our blog:
+👉 ${blogUrl}
+
+#Shorts #GoogleMaps #LocalSEO #GoogleBusinessProfile #Local3Pack #LocalBusinessGrowth #LocalSurgeSEO`,
+      tags: ["Shorts", "GoogleMaps", "LocalSEO", "GoogleBusinessProfile", "Local3Pack", "LocalSurgeSEO", "ContractorMarketing"]
+    };
+  }
+
+  // Curated Fallback Copy for Free Website Storefront
   return {
     title: "Stop Paying $30/mo for Slow Websites! Free Storefront for Local Businesses 🚀 #Shorts",
     description: `Still paying $30/month for slow, bloated website builders that never rank on Google? 
@@ -236,7 +258,15 @@ async function main() {
   }
 
   // 2. Generate Copy & Tags
-  const copy = await generateYouTubeCopy("Free Local Website Storefront by LocalSurge SEO");
+  const isMapPackVideo = videoFile.toLowerCase().includes('map') || videoFile.toLowerCase().includes('3-pack');
+  const videoTopic = isMapPackVideo 
+    ? "Google Map Pack & Local 3-Pack Ranking Playbook (2026 Edition)" 
+    : "Free Local Website Storefront by LocalSurge SEO";
+  const blogUrl = isMapPackVideo 
+    ? "https://localsurgeseo.com/blog/google-map-pack-optimization-guide" 
+    : "https://localsurgeseo.com";
+
+  const copy = await generateYouTubeCopy(videoTopic, blogUrl);
 
   console.log('\x1b[32m═══════════════════════════════════════════════════════════════════\x1b[0m');
   console.log('\x1b[1m\x1b[33m📋 GENERATED YOUTUBE SHORTS METADATA PREVIEW \x1b[0m');

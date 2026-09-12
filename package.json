@@ -11,6 +11,8 @@
     "record-voice": "tsx scripts/voice-studio-server.ts",
     "video:audio": "tsx scripts/generate-video-audio.ts",
     "video:render": "tsx scripts/render-explainer-video.ts",
+    "video:mappack:render": "tsx scripts/render-mappack-video.ts",
+    "video:mappack:audio": "tsx scripts/synthesize_mappack_audio.py",
     "video:publish": "tsx scripts/publish_social_video.ts",
     "social:auth": "tsx scripts/social_auth_helper.ts",
     "generate-reel": "tsx scripts/generate-reel.ts",

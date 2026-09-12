@@ -633,15 +633,36 @@ app.get(["/sitemap", "/sitemap.html", "/site-map.html"], (req, res) => {
 
 app.get("/sitemap_index.xml", (req, res) => {
   res.type("application/xml");
+  res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
   const sitemapIndexPath = path.join(process.cwd(), "public", "sitemap_index.xml");
   if (fs.existsSync(sitemapIndexPath)) {
     return res.send(fs.readFileSync(sitemapIndexPath, "utf-8"));
   }
+  const distIndexPath = path.join(process.cwd(), "dist", "sitemap_index.xml");
+  if (fs.existsSync(distIndexPath)) {
+    return res.send(fs.readFileSync(distIndexPath, "utf-8"));
+  }
   res.status(404).send("Sitemap index not found");
+});
+
+app.get("/sitemap-:section.xml", (req, res) => {
+  res.type("application/xml");
+  res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
+  const fileName = `sitemap-${req.params.section}.xml`;
+  const sitemapPath = path.join(process.cwd(), "public", fileName);
+  if (fs.existsSync(sitemapPath)) {
+    return res.send(fs.readFileSync(sitemapPath, "utf-8"));
+  }
+  const distPath = path.join(process.cwd(), "dist", fileName);
+  if (fs.existsSync(distPath)) {
+    return res.send(fs.readFileSync(distPath, "utf-8"));
+  }
+  res.status(404).send(`Sitemap ${fileName} not found`);
 });
 
 app.get("/sitemap.xml", (req, res) => {
   res.type("application/xml");
+  res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
   const sitemapPath = path.join(process.cwd(), "public", "sitemap.xml");
   if (fs.existsSync(sitemapPath)) {
     return res.send(fs.readFileSync(sitemapPath, "utf-8"));

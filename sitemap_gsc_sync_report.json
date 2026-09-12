@@ -1,0 +1,385 @@
+{
+  "auditedAt": "2026-09-11T18:58:43.415Z",
+  "propertyUrl": "https://localsurgeseo.com/",
+  "totalUniqueUrlsInSitemaps": 91,
+  "sitemapsParsed": [
+    {
+      "filename": "sitemap.xml",
+      "count": 91,
+      "deprecated": false
+    },
+    {
+      "filename": "sitemap-core.xml",
+      "count": 12,
+      "deprecated": false
+    },
+    {
+      "filename": "sitemap-blog.xml",
+      "count": 23,
+      "deprecated": false
+    },
+    {
+      "filename": "sitemap-locations.xml",
+      "count": 16,
+      "deprecated": false
+    },
+    {
+      "filename": "sitemap-directory.xml",
+      "count": 37,
+      "deprecated": false
+    },
+    {
+      "filename": "sitemap-demos.xml",
+      "count": 3,
+      "deprecated": false
+    }
+  ],
+  "submissionResults": [
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap_index.xml",
+      "success": true
+    },
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap.xml",
+      "success": true
+    },
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap-core.xml",
+      "success": true
+    },
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap-blog.xml",
+      "success": true
+    },
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap-locations.xml",
+      "success": true
+    },
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap-directory.xml",
+      "success": true
+    },
+    {
+      "sitemap": "https://localsurgeseo.com/sitemap-demos.xml",
+      "success": true
+    }
+  ],
+  "inspectionSummary": {
+    "totalSampled": 24,
+    "distribution": {
+      "Submitted and indexed": 4,
+      "Duplicate, Google chose different canonical than user": 2,
+      "Crawled - currently not indexed": 1,
+      "Discovered - currently not indexed": 10,
+      "URL is unknown to Google": 7
+    },
+    "records": [
+      {
+        "url": "https://localsurgeseo.com/",
+        "category": "Core (Homepage)",
+        "verdict": "PASS",
+        "coverageState": "Submitted and indexed",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://localsurgeseo.com/",
+        "userCanonical": "https://localsurgeseo.com/",
+        "issues": []
+      },
+      {
+        "url": "https://localsurgeseo.com/about",
+        "category": "Core (About)",
+        "verdict": "NEUTRAL",
+        "coverageState": "Duplicate, Google chose different canonical than user",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://localsurgeseo.com/",
+        "userCanonical": "https://localsurgeseo.com/about",
+        "issues": [
+          "Coverage: Duplicate, Google chose different canonical than user",
+          "Canonical mismatch: Google picked 'https://localsurgeseo.com/' vs user 'https://localsurgeseo.com/about'"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/pricing",
+        "category": "Core (Pricing)",
+        "verdict": "PASS",
+        "coverageState": "Submitted and indexed",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://localsurgeseo.com/pricing",
+        "userCanonical": "https://localsurgeseo.com/pricing",
+        "issues": []
+      },
+      {
+        "url": "https://localsurgeseo.com/local-seo",
+        "category": "Core (Commercial)",
+        "verdict": "PASS",
+        "coverageState": "Submitted and indexed",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://localsurgeseo.com/local-seo",
+        "userCanonical": "https://localsurgeseo.com/local-seo",
+        "issues": []
+      },
+      {
+        "url": "https://localsurgeseo.com/seo-tool",
+        "category": "Core (SEO Tool)",
+        "verdict": "NEUTRAL",
+        "coverageState": "Crawled - currently not indexed",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://localsurgeseo.com/seo-tool",
+        "userCanonical": "https://localsurgeseo.com/seo-tool",
+        "issues": [
+          "Coverage: Crawled - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/case-studies",
+        "category": "Core (Case Studies)",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/case-studies",
+        "userCanonical": "https://localsurgeseo.com/case-studies",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/site-map",
+        "category": "Core (HTML Sitemap)",
+        "verdict": "PASS",
+        "coverageState": "Submitted and indexed",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://localsurgeseo.com/site-map",
+        "userCanonical": "https://localsurgeseo.com/site-map",
+        "issues": []
+      },
+      {
+        "url": "https://localsurgeseo.com/blog",
+        "category": "Blog Hub",
+        "verdict": "NEUTRAL",
+        "coverageState": "Duplicate, Google chose different canonical than user",
+        "robotsTxtState": "ALLOWED",
+        "indexingState": "INDEXING_ALLOWED",
+        "googleCanonical": "https://www.localsurgeseo.com/blog",
+        "userCanonical": "https://localsurgeseo.com/blog",
+        "issues": [
+          "Coverage: Duplicate, Google chose different canonical than user",
+          "Canonical mismatch: Google picked 'https://www.localsurgeseo.com/blog' vs user 'https://localsurgeseo.com/blog'"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/blog/google-map-pack-optimization-guide",
+        "category": "Blog Article",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/blog/google-map-pack-optimization-guide",
+        "userCanonical": "https://localsurgeseo.com/blog/google-map-pack-optimization-guide",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/blog/local-seo-checklist-contractors",
+        "category": "Blog Article",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/blog/local-seo-checklist-contractors",
+        "userCanonical": "https://localsurgeseo.com/blog/local-seo-checklist-contractors",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/blog/local-business-schema-markup-guide",
+        "category": "Blog Article",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/blog/local-business-schema-markup-guide",
+        "userCanonical": "https://localsurgeseo.com/blog/local-business-schema-markup-guide",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/blog/google-review-management-strategy",
+        "category": "Blog Article",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/blog/google-review-management-strategy",
+        "userCanonical": "https://localsurgeseo.com/blog/google-review-management-strategy",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/locations",
+        "category": "Locations Hub",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/locations",
+        "userCanonical": "https://localsurgeseo.com/locations",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/locations/california",
+        "category": "Location State Hub",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/locations/california",
+        "userCanonical": "https://localsurgeseo.com/locations/california",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/locations/california/los-angeles",
+        "category": "Location Empirical Study",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/locations/california/los-angeles",
+        "userCanonical": "https://localsurgeseo.com/locations/california/los-angeles",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/locations/texas/austin",
+        "category": "Location Empirical Study",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/locations/texas/austin",
+        "userCanonical": "https://localsurgeseo.com/locations/texas/austin",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/locations/florida/miami",
+        "category": "Location Empirical Study",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/locations/florida/miami",
+        "userCanonical": "https://localsurgeseo.com/locations/florida/miami",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/locations/new-york/new-york-city",
+        "category": "Location Empirical Study",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/locations/new-york/new-york-city",
+        "userCanonical": "https://localsurgeseo.com/locations/new-york/new-york-city",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/los-angeles-seo",
+        "category": "City Directory Page",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/los-angeles-seo",
+        "userCanonical": "https://localsurgeseo.com/los-angeles-seo",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/texas",
+        "category": "State Directory Hub",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/texas",
+        "userCanonical": "https://localsurgeseo.com/texas",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/texas/houston",
+        "category": "City Directory Page",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/texas/houston",
+        "userCanonical": "https://localsurgeseo.com/texas/houston",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/florida/orlando",
+        "category": "City Directory Page",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/florida/orlando",
+        "userCanonical": "https://localsurgeseo.com/florida/orlando",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/demo/contractor-surge",
+        "category": "Live Demo",
+        "verdict": "NEUTRAL",
+        "coverageState": "URL is unknown to Google",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/demo/contractor-surge",
+        "userCanonical": "https://localsurgeseo.com/demo/contractor-surge",
+        "issues": [
+          "Coverage: URL is unknown to Google"
+        ]
+      },
+      {
+        "url": "https://localsurgeseo.com/demo/dental-surge",
+        "category": "Live Demo",
+        "verdict": "NEUTRAL",
+        "coverageState": "Discovered - currently not indexed",
+        "robotsTxtState": "ROBOTS_TXT_STATE_UNSPECIFIED",
+        "indexingState": "INDEXING_STATE_UNSPECIFIED",
+        "googleCanonical": "https://localsurgeseo.com/demo/dental-surge",
+        "userCanonical": "https://localsurgeseo.com/demo/dental-surge",
+        "issues": [
+          "Coverage: Discovered - currently not indexed"
+        ]
+      }
+    ]
+  }
+}

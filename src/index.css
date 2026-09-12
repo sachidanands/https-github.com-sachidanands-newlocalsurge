@@ -1,48 +1,52 @@
-@import "tailwindcss";
+ @import "tailwindcss";
 
-@theme {
-  --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
-  --font-display: "Outfit", "Inter", sans-serif;
-  --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
-}
+ @theme {
+   --font-sans: "Inter", ui-sans-serif, system-ui, sans-serif;
+   --font-display: "Outfit", "Inter", sans-serif;
+   --font-mono: "JetBrains Mono", ui-monospace, SFMono-Regular, monospace;
+ }
 
-body {
-  background-color: #f7f6f2;
-  color: #1a1c1a;
-  font-family: var(--font-sans);
-}
+ body {
+   background-color: #f7f6f2;
+   color: #1a1c1a;
+   font-family: var(--font-sans);
+ }
 
-/* Custom premium scrollbars */
-::-webkit-scrollbar {
-  width: 6px;
-  height: 6px;
-}
-::-webkit-scrollbar-track {
-  background: #f7f6f2;
-}
-::-webkit-scrollbar-thumb {
-  background: #dfded6;
-  border-radius: 3px;
-}
-::-webkit-scrollbar-thumb:hover {
-  background: #c3c2b8;
-}
-/* Chrome WebMCP Official Special CSS Classes for AI Active UI States */
-.tool-form-active,
-form.tool-form-active,
-input.tool-form-active,
-textarea.tool-form-active {
-  border-color: #123e35 !important;
-  box-shadow: 0 0 0 3px rgba(18, 62, 53, 0.25) !important;
-  position: relative;
-  transition: all 0.3s ease;
-}
+ /* Custom premium scrollbars */
+ ::-webkit-scrollbar {
+   width: 6px;
+   height: 6px;
+ }
 
-.tool-submit-active,
-form.tool-submit-active,
-div.tool-submit-active {
-  border-color: #bc5f40 !important;
-  box-shadow: 0 0 0 4px rgba(188, 95, 64, 0.3) !important;
-  position: relative;
-  transition: all 0.3s ease;
-}
+ ::-webkit-scrollbar-track {
+   background: #f7f6f2;
+ }
+
+ ::-webkit-scrollbar-thumb {
+   background: #dfded6;
+   border-radius: 3px;
+ }
+
+ ::-webkit-scrollbar-thumb:hover {
+   background: #c3c2b8;
+ }
+
+ /* Chrome WebMCP Official Special CSS Classes for AI Active UI States */
+ .tool-form-active,
+ form.tool-form-active,
+ input.tool-form-active,
+ textarea.tool-form-active {
+   border-color: #123e35 !important;
+   box-shadow: 0 0 0 3px rgba(18, 62, 53, 0.25) !important;
+   position: relative;
+   transition: all 0.3s ease;
+ }
+
+ .tool-submit-active,
+ form.tool-submit-active,
+ div.tool-submit-active {
+   border-color: #bc5f40 !important;
+   box-shadow: 0 0 0 4px rgba(188, 95, 64, 0.3) !important;
+   position: relative;
+   transition: all 0.3s ease;
+ }

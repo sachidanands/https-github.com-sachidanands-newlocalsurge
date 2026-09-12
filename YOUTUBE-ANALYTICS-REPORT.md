@@ -2,7 +2,7 @@
 
 **Channel:** [Local Surge SEO](https://www.youtube.com/@LocalSurgeSEO) (`@LocalSurgeSEO`)  
 **Channel ID:** `@LocalSurgeSEO`  
-**Generated At:** Sun, 06 Sep 2026 04:00:21 GMT  
+**Generated At:** Fri, 11 Sep 2026 12:45:18 GMT  
 **Data Source:** Live YouTube Public Telemetry & Google Cloud YouTube Data API v3
 
 ---
@@ -12,10 +12,10 @@
 | Metric | Metric Value | Benchmark / Health Note |
 | :--- | :--- | :--- |
 | **Subscribers** | **1** | Channel organic subscriber baseline (Verified Live) |
-| **Total Channel Views (Shorts)** | **371** | Cumulative views across public catalog |
-| **Total Shorts / Reels Published** | **6** | Active short-form video inventory |
-| **Average Views Per Short** | **62** | Current average velocity across published shorts |
-| **Average Engagement Rate** | **38.23%** | Likes + Comments / Total Views (Target > 8%) |
+| **Total Channel Views (Shorts)** | **400** | Cumulative views across public catalog |
+| **Total Shorts / Reels Published** | **7** | Active short-form video inventory |
+| **Average Views Per Short** | **57** | Current average velocity across published shorts |
+| **Average Engagement Rate** | **24.78%** | Likes + Comments / Total Views (Target > 8%) |
 
 ---
 
@@ -24,11 +24,12 @@
 | # | Short Title & Link | Views | Likes (Est.) | Comments (Est.) | Engagement % | Duration |
 | :-: | :--- | :-: | :-: | :-: | :-: | :-: |
 | 1 | [One H1 tag. Zero confusion. Maximum rankings. 🚀](https://www.youtube.com/shorts/Vj0btSB4ucw) | **349** | 28 | 5 | **9.46%** | `<60s` |
-| 2 | [Stop letting late-loading images and ads tank your SEO performance! 🛑 #googleseo #business #localseo](https://www.youtube.com/shorts/FmWvMIl-eYY) | **15** | 1 | 0 | **6.67%** | `<60s` |
-| 3 | [Your title tag is the first thing people see in Google. If it’s boring, they won’t click.](https://www.youtube.com/shorts/-O52aC-7eMo) | **4** | 1 | 0 | **25%** | `<60s` |
-| 4 | [LLMS TXT   The New SEO Standard #googleseo  #LLMsTxt #LocalSEO #FreeWebsite #AIReady #WebsiteDesign](https://www.youtube.com/shorts/9EbLi8H5Mu8) | **2** | 1 | 0 | **50%** | `<60s` |
-| 5 | [Free Website Reel   Local Surge SEO with captions](https://www.youtube.com/shorts/iImNu5aP_qc) | **1** | 1 | 0 | **100%** | `<60s` |
-| 6 | [The #1 SEO Mistake Costing You Traffic 🚫📉  #googleseo #automobile #localseo](https://www.youtube.com/shorts/YgseAhln_Hk) | **0** | 0 | 0 | **0%** | `<60s` |
+| 2 | [Stop Paying $30/mo for Slow Websites! Free Storefront for Local Businesses 🚀 #Shorts](https://www.youtube.com/shorts/LI8fQczzlC0) | **23** | 2 | 0 | **8.7%** | `<60s` |
+| 3 | [Stop letting late-loading images and ads tank your SEO performance! 🛑 #googleseo #business #localseo](https://www.youtube.com/shorts/FmWvMIl-eYY) | **19** | 2 | 0 | **10.53%** | `<60s` |
+| 4 | [Your title tag is the first thing people see in Google. If it’s boring, they won’t click.](https://www.youtube.com/shorts/-O52aC-7eMo) | **5** | 1 | 0 | **20%** | `<60s` |
+| 5 | [LLMS TXT   The New SEO Standard #googleseo  #LLMsTxt #LocalSEO #FreeWebsite #AIReady #WebsiteDesign](https://www.youtube.com/shorts/9EbLi8H5Mu8) | **2** | 1 | 0 | **50%** | `<60s` |
+| 6 | [Free Website Reel   Local Surge SEO with captions](https://www.youtube.com/shorts/iImNu5aP_qc) | **2** | 1 | 0 | **50%** | `<60s` |
+| 7 | [The #1 SEO Mistake Costing You Traffic 🚫📉  #googleseo #automobile #localseo](https://www.youtube.com/shorts/YgseAhln_Hk) | **0** | 0 | 0 | **0%** | `<60s` |
 
 ---
 
@@ -39,10 +40,10 @@ Analysis of which Local Surge SEO topic pillars generate the highest audience re
 | Topic Pillar | Videos | Avg Views | Avg Engagement | Top Performer |
 | :--- | :-: | :-: | :-: | :--- |
 | **On-Page Structure & H1 Tags** | 1 | **349** | **9.46%** | One H1 tag. Zero confusion. Maximum rankings. 🚀 |
-| **PageSpeed & Core Web Vitals (Late Loading Images)** | 1 | **15** | **6.67%** | Stop letting late-loading images and ads tank your SEO performance! 🛑 #googleseo #business #localseo |
-| **Title Tags & Click-Through Rate (CTR)** | 1 | **4** | **25%** | Your title tag is the first thing people see in Google. If it’s boring, they won’t click. |
+| **PageSpeed & Core Web Vitals (Late Loading Images)** | 1 | **19** | **10.53%** | Stop letting late-loading images and ads tank your SEO performance! 🛑 #googleseo #business #localseo |
+| **Title Tags & Click-Through Rate (CTR)** | 1 | **5** | **20%** | Your title tag is the first thing people see in Google. If it’s boring, they won’t click. |
 | **Generative Engine Optimization (LLMS.txt & AI)** | 1 | **2** | **50%** | LLMS TXT   The New SEO Standard #googleseo  #LLMsTxt #LocalSEO #FreeWebsite #AIReady #WebsiteDesign |
-| **Local Business Traffic Mistakes & Audits** | 3 | **1** | **50%** | LLMS TXT   The New SEO Standard #googleseo  #LLMsTxt #LocalSEO #FreeWebsite #AIReady #WebsiteDesign |
+| **Local Business Traffic Mistakes & Audits** | 4 | **7** | **27.18%** | Stop Paying $30/mo for Slow Websites! Free Storefront for Local Businesses 🚀 #Shorts |
 
 > [!TIP]
 > **Key Content Takeaway:**

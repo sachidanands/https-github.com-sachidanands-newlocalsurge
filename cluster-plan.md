@@ -8,7 +8,7 @@
 
 ## Executive Summary
 
-To establish indisputable topical authority across local search marketing, Local Surge SEO organizes its 23 editorial guides and commercial views into **5 tightly interlinked topic clusters** anchored by 1 master commercial pillar and 5 cluster pillar blueprints.
+To establish indisputable topical authority across local search marketing, Local Surge SEO organizes its 39 editorial guides and commercial views into **5 tightly interlinked topic clusters** anchored by 1 master commercial pillar and 5 cluster pillar blueprints.
 
 ```
 ============================================================
@@ -16,8 +16,8 @@ To establish indisputable topical authority across local search marketing, Local
 ============================================================
  Master Commercial Pillar: /local-seo
  Total Content Clusters: 5
- Total Cluster Articles: 23
- Total Internal In-Content Links: 115
+ Total Cluster Articles: 39
+ Total Internal In-Content Links: 195
  Orphan Pages: 0 (100% interconnected)
  Pillar Link Coverage: 100% (All spokes link to pillar & vice versa)
 ============================================================
@@ -53,10 +53,14 @@ To establish indisputable topical authority across local search marketing, Local
    - *Target Keyword:* `map pack vs organic seo revenue` (720/mo) | *Template:* `comparison`
 4. **[Google Local Service Ads (LSA): Maximize Pay-Per-Lead ROI](https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization)**  
    - *Target Keyword:* `google local service ads optimization` (1,100/mo) | *Template:* `guide`
+5. **[Google Business Profile Suspended? The Emergency Reinstatement and Appeal Playbook (2026)](https://localsurgeseo.com/blog/google-business-profile-suspended-reinstatement-appeal-guide)**  
+   - *Target Keyword:* `google business profile suspended reinstatement appeal` (2,100/mo) | *Template:* `emergency-guide`
+6. **[How to Remove Fake Negative Google Reviews: The Legal and Algorithmic Defense Guide](https://localsurgeseo.com/blog/how-to-remove-fake-negative-google-reviews-guide)**  
+   - *Target Keyword:* `remove fake negative google reviews review bombing` (1,850/mo) | *Template:* `legal-guide`
 
 ### Cluster Internal Link Matrix
 - **Spoke ➔ Pillar:** Every spoke embeds an explicit link to `google-map-pack-optimization-guide` with the anchor *"Google Map Pack Optimization Guide"*.
-- **Pillar ➔ Spokes:** Pillar embeds direct links to all 4 spokes.
+- **Pillar ➔ Spokes:** Pillar embeds direct links to all 6 spokes.
 - **Cross-Cluster Link:** Links to Cluster 2 spoke `what-is-nap-consistency-citation-guide` for citation verification.
 
 ---
@@ -78,10 +82,16 @@ To establish indisputable topical authority across local search marketing, Local
    - *Target Keyword:* `llms.txt blueprint local business` (850/mo) | *Template:* `explainer`
 3. **[Why Your Business Needs Local SEO Right Now: The AI Overviews Era](https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now)**  
    - *Target Keyword:* `why local seo matters ai search` (1,200/mo) | *Template:* `explainer`
+4. **[How to Optimize Your Local Business for Google AI Overviews and ChatGPT Search](https://localsurgeseo.com/blog/optimize-local-business-google-ai-overviews-chatgpt-search)**  
+   - *Target Keyword:* `optimize local business google ai overviews chatgpt search` (1,600/mo) | *Template:* `ultimate-guide`
+5. **[Entity SEO: How Knowledge Graphs Help Search Engines Trust Your Business](https://localsurgeseo.com/blog/entity-seo-knowledge-graphs-local-business-trust)**  
+   - *Target Keyword:* `entity seo knowledge graphs local business` (1,150/mo) | *Template:* `technical-guide`
+6. **[Why Traditional Keywords Aren’t Enough: Conversational Search for Local Service Providers](https://localsurgeseo.com/blog/conversational-search-local-service-providers-seo)**  
+   - *Target Keyword:* `conversational search local service providers seo` (950/mo) | *Template:* `explainer`
 
 ### Cluster Internal Link Matrix
 - **Spoke ➔ Pillar:** All spokes link back to `local-seo-vs-ai-2026-survival-guide`.
-- **Pillar ➔ Spokes:** Links to all 3 spoke guides.
+- **Pillar ➔ Spokes:** Links to all 6 spoke guides.
 - **Cross-Cluster Link:** Links to Cluster 1 pillar `google-map-pack-optimization-guide`.
 
 ---
@@ -97,18 +107,28 @@ To establish indisputable topical authority across local search marketing, Local
 - **Word Count:** 1,920 words | **Template:** `ultimate-guide`
 
 ### Companion Spoke Guides
-1. **[Why BreadcrumbList JSON-LD Schema is Essential for Local SEO](https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo)**  
+1. **[Why Google PageSpeed Insights Matters for Local SEO](https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo)**  
+   - *Target Keyword:* `google pagespeed insights local seo` (1,800/mo) | *Template:* `how-to`
+2. **[Why BreadcrumbList JSON-LD Schema is Essential for Local SEO](https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo)**  
    - *Target Keyword:* `breadcrumblist json-ld schema local seo` (950/mo)
-2. **[Why Open Graph (OG) Meta Tags Are Essential for Local SEO](https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo)**  
+3. **[Why Open Graph (OG) Meta Tags Are Essential for Local SEO](https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo)**  
    - *Target Keyword:* `open graph meta tags local seo` (1,100/mo)
-3. **[Why a Canonical Link Tag Checker is Essential for Local SEO](https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo)**  
+4. **[Why a Canonical Link Tag Checker is Essential for Local SEO](https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo)**  
    - *Target Keyword:* `canonical link tag checker local seo` (780/mo)
-4. **[Why Image Alt Tags & Accessibility Scanners Drive Local Image Search](https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo)**  
+5. **[Why Image Alt Tags & Accessibility Scanners Drive Local Image Search](https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo)**  
    - *Target Keyword:* `image alt tags local seo accessibility` (820/mo)
-5. **[The 10-Second Website Hack: How Meta Titles Double Local CTR](https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter)**  
+6. **[The 10-Second Website Hack: How Meta Titles Double Local CTR](https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter)**  
    - *Target Keyword:* `local seo meta titles ctr hack` (910/mo)
-6. **[Why Your Website Jumps: How Cumulative Layout Shift (CLS) Destroys Conversions](https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide)**  
+7. **[Why Your Website Jumps: How Cumulative Layout Shift (CLS) Destroys Conversions](https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide)**  
    - *Target Keyword:* `cumulative layout shift local conversions` (670/mo)
+8. **[Complete Guide to LocalBusiness Schema: Nested Service, GeoCoordinates, and Reviews JSON-LD](https://localsurgeseo.com/blog/localbusiness-schema-nested-service-geocoordinates-reviews-guide)**  
+   - *Target Keyword:* `localbusiness schema nested service geocoordinates reviews` (1,950/mo) | *Template:* `ultimate-guide`
+9. **[Fixing Cannibalization: Managing Multi-Location vs. Service-Area Business (SAB) Pages](https://localsurgeseo.com/blog/fixing-keyword-cannibalization-multi-location-vs-sab-pages)**  
+   - *Target Keyword:* `fixing keyword cannibalization multi location sab` (1,400/mo) | *Template:* `technical-guide`
+10. **[Core Web Vitals Checklist for Lead Generation & Local Service Landing Pages](https://localsurgeseo.com/blog/core-web-vitals-checklist-local-service-landing-pages)**  
+   - *Target Keyword:* `core web vitals checklist local service landing pages` (1,250/mo) | *Template:* `checklist`
+11. **[Local Search Ranking Drop? Step-by-Step Recovery Audit After Google Algorithm Updates](https://localsurgeseo.com/blog/local-search-ranking-drops-algorithm-update-audit-guide)**  
+   - *Target Keyword:* `local search ranking drop algorithm update recovery audit` (1,700/mo) | *Template:* `technical-guide`
 
 ---
 
@@ -131,6 +151,14 @@ To establish indisputable topical authority across local search marketing, Local
    - *Target Keyword:* `scaling local seo strategy` (790/mo)
 4. **[Does Local SEO Still Work? The 80/20 Rule of Regional Search Dominance](https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule)**  
    - *Target Keyword:* `does local seo still work 80 20 rule` (980/mo)
+5. **[Franchise SEO Architecture: How to Structure 25+ Location Pages Without Duplicate Penalties](https://localsurgeseo.com/blog/franchise-seo-architecture-multi-location-pages)**  
+   - *Target Keyword:* `franchise seo architecture multi location pages` (1,400/mo) | *Template:* `ultimate-guide`
+6. **[The Multi-Fleet SAB Playbook: How Regional Service Businesses Dominate Google Maps Across Multiple Counties](https://localsurgeseo.com/blog/multi-fleet-sab-local-seo-counties-guide)**  
+   - *Target Keyword:* `multi location sab service area business seo` (1,150/mo) | *Template:* `technical-guide`
+7. **[Managing 10+ Google Business Profiles: Bulk Verification, Review Ops, and Geo-Pages](https://localsurgeseo.com/blog/managing-multiple-google-business-profiles-bulk-verification)**  
+   - *Target Keyword:* `managing multiple google business profiles bulk verification` (1,850/mo) | *Template:* `enterprise-guide`
+8. **[How to Earn Real Local Backlinks: Sponsorships, Chambers of Commerce, and Digital PR Playbook](https://localsurgeseo.com/blog/how-to-earn-real-local-backlinks-sponsorships-pr-playbook)**  
+   - *Target Keyword:* `how to earn real local backlinks local link building` (1,600/mo) | *Template:* `how-to`
 
 ---
 
@@ -144,9 +172,13 @@ To establish indisputable topical authority across local search marketing, Local
 - **Target Keyword:** `single page website local seo`
 - **Word Count:** 1,690 words | **Template:** `ultimate-guide`
 
-### Companion Spoke Guide
+### Companion Spoke Guides
 1. **[Local Website Builders vs Custom Lean Architecture: The True Cost Analysis](https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost)**  
    - *Target Keyword:* `local website builder cost analysis` (840/mo) | *Template:* `comparison`
+2. **[Service-Area Landing Pages That Actually Convert: The High-Intent Local Wireframe Blueprint](https://localsurgeseo.com/blog/service-area-pages-conversion-wireframes-blueprint)**  
+   - *Target Keyword:* `service area landing pages conversion wireframe` (1,450/mo) | *Template:* `technical-guide`
+3. **[Bottom-of-Funnel (BOFU) Local SEO: How Cost Guides, Comparisons, and Case Studies Turn Clicks into Signed Contracts](https://localsurgeseo.com/blog/bofu-local-seo-cost-guides-comparisons-case-studies)**  
+   - *Target Keyword:* `bofu bottom of funnel local seo content` (1,200/mo) | *Template:* `ultimate-guide`
 
 ---
 

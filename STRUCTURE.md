@@ -1,7 +1,7 @@
 # Website Structure & URL Hierarchy Documentation
 **Domain:** `localsurgeseo.com`  
-**Updated:** August 30, 2026  
-**Total Canonical URLs:** 91  
+**Updated:** September 12, 2026  
+**Total Canonical URLs:** 107  
 **Architecture Model:** Hybrid Content-Led Local Authority (Hub-and-Spoke + Programmatic Directory)
 
 ---
@@ -20,12 +20,12 @@ localsurgeseo.com/
   │     ├── /seo-tool              -> Free Instant Diagnostic Audit Tool
   │     └── ...
   │
-  ├── [Editorial Topic Clusters] (23 articles)
-  │     ├── /blog/google-map-pack-optimization-guide  (Pillar 1: Map Pack & GBP)
-  │     ├── /blog/local-seo-vs-ai-2026-survival-guide (Pillar 2: GEO & AI Search)
-  │     ├── /blog/top-on-page-seo-mistakes-...        (Pillar 3: Technical & Schema)
-  │     ├── /blog/unlocking-the-power-of-local-seo-... (Pillar 4: Citations & Scale)
-  │     └── /blog/single-page-blueprint-...           (Pillar 5: Lean Web Architecture)
+  ├── [Editorial Topic Clusters] (39 articles)
+  │     ├── /blog/google-map-pack-optimization-guide  (Pillar 1: Map Pack & GBP - 6 Spokes)
+  │     ├── /blog/local-seo-vs-ai-2026-survival-guide (Pillar 2: GEO & AI Search - 6 Spokes)
+  │     ├── /blog/top-on-page-seo-mistakes-...        (Pillar 3: Technical & Schema - 11 Spokes)
+  │     ├── /blog/unlocking-the-power-of-local-seo-... (Pillar 4: Citations & Scale - 8 Spokes)
+  │     └── /blog/single-page-blueprint-...           (Pillar 5: Lean Web & CRO - 3 Spokes)
   │
   ├── [Empirical Research Studies] (16 studies)
   │     ├── /locations                                -> National Research Hub
@@ -49,11 +49,11 @@ localsurgeseo.com/
 | Sitemap File | Scope | URL Count | Key XML Tags | Google Search Console Bucket |
 | :--- | :--- | :---: | :--- | :--- |
 | **`sitemap-core.xml`** | Static & Marketing Pages | 12 | `<loc>`, `<lastmod>`, `<xhtml:link>` | Primary Brand & Services |
-| **`sitemap-blog.xml`** | Editorial & Guides | 23 | `<loc>`, `<lastmod>`, `<xhtml:link>`, `<image:image>` | Organic Top-of-Funnel & Image SERPs |
+| **`sitemap-blog.xml`** | Editorial & Guides | 39 | `<loc>`, `<lastmod>`, `<xhtml:link>`, `<image:image>` | Organic Top-of-Funnel & Image SERPs |
 | **`sitemap-locations.xml`** | Empirical Search Studies | 16 | `<loc>`, `<lastmod>`, `<xhtml:link>` | Informational GEO & LLM Grounding |
 | **`sitemap-directory.xml`** | Regional City Directories | 37 | `<loc>`, `<lastmod>`, `<xhtml:link>` | Bottom-of-Funnel Local Commercial Keywords |
 | **`sitemap-demos.xml`** | Interactive Industry Demos | 3 | `<loc>`, `<lastmod>`, `<xhtml:link>` | Conversion & Sales Proof |
-| **`sitemap.xml`** | Consolidated All-in-One | 91 | Full Unified Set | Universal Fallback Crawlers |
+| **`sitemap.xml`** | Consolidated All-in-One | 107 | Full Unified Set | Universal Fallback Crawlers |
 | **`sitemap_index.xml`** | Master Index | 5 sitemaps | `<sitemap>`, `<loc>`, `<lastmod>` | Primary Google Search Console Submission |
 
 ---
