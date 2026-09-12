@@ -4,9 +4,17 @@ import { BlogPost, BLOG_POSTS, getClusterForPost, TOPIC_CLUSTERS } from '../data
 const ClientMicroToolWidget = React.lazy(() => import('./ClientMicroToolWidget'));
 import { 
   ArrowLeft, Search, Sparkles, Clock, Calendar, User, ArrowRight, Check, 
-  Share2, BookOpen, ExternalLink, MapPin, CheckSquare, RefreshCw, ChevronDown
+  Share2, BookOpen, ExternalLink, MapPin, CheckSquare, RefreshCw, ChevronDown,
+  ChevronLeft, ChevronRight
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { 
+  BlogCardSkeleton, 
+  BlogGridSkeleton, 
+  BlogFeaturedSkeleton, 
+  BlogArticleSkeleton, 
+  ImageWithSkeleton 
+} from './SkeletonLoaders';
 
 interface BlogViewProps {
   initialSlug: string | null;
@@ -28,7 +36,11 @@ export default function BlogView({
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCitation, setCopiedCitation] = useState<'markdown' | 'apa' | null>(null);
   const [showAiSummarize, setShowAiSummarize] = useState(false);
+  const [currentPage, setCurrentPage] = useState(1);
+  const [isGridLoading, setIsGridLoading] = useState(false);
   const summarizeMenuRef = useRef<HTMLDivElement>(null);
+  const gridSectionRef = useRef<HTMLDivElement>(null);
+  const POSTS_PER_PAGE = 8;
 
   // Close AI summarize menu on outside click or Escape
   useEffect(() => {
@@ -113,6 +125,45 @@ export default function BlogView({
   const listPosts = selectedCategory === 'All' && searchQuery === '' 
     ? filteredPosts.filter(p => p.slug !== featuredPost.slug)
     : filteredPosts;
+
+  // Reset page and trigger smooth skeleton transition on filter/search change
+  useEffect(() => {
+    setCurrentPage(1);
+    setIsGridLoading(true);
+    const timer = setTimeout(() => setIsGridLoading(false), 240);
+    return () => clearTimeout(timer);
+  }, [selectedCategory, searchQuery]);
+
+  const totalPages = Math.max(1, Math.ceil(listPosts.length / POSTS_PER_PAGE));
+  const paginatedPosts = listPosts.slice(
+    (currentPage - 1) * POSTS_PER_PAGE,
+    currentPage * POSTS_PER_PAGE
+  );
+  const startIdx = listPosts.length > 0 ? (currentPage - 1) * POSTS_PER_PAGE + 1 : 0;
+  const endIdx = Math.min(currentPage * POSTS_PER_PAGE, listPosts.length);
+
+  const handlePageChange = (newPage: number) => {
+    if (newPage === currentPage || newPage < 1 || newPage > totalPages) return;
+    setIsGridLoading(true);
+    setCurrentPage(newPage);
+    if (gridSectionRef.current) {
+      gridSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
+    }
+    setTimeout(() => setIsGridLoading(false), 240);
+  };
+
+  const getPageNumbers = () => {
+    if (totalPages <= 5) {
+      return Array.from({ length: totalPages }, (_, i) => i + 1);
+    }
+    if (currentPage <= 3) {
+      return [1, 2, 3, 4, '...', totalPages];
+    }
+    if (currentPage >= totalPages - 2) {
+      return [1, '...', totalPages - 3, totalPages - 2, totalPages - 1, totalPages];
+    }
+    return [1, '...', currentPage - 1, currentPage, currentPage + 1, '...', totalPages];
+  };
 
 
   const handleShareArticle = (e: React.MouseEvent, post: BlogPost) => {
@@ -450,8 +501,8 @@ export default function BlogView({
 
                 {/* Article Main Image */}
                 <div className="relative h-64 sm:h-96 w-full rounded-2xl overflow-hidden border border-[#dfded4] shadow-inner-lg">
-                  <div className="absolute inset-0 bg-[#123e35]/5 mix-blend-multiply" aria-hidden="true" />
-                  <img
+                  <div className="absolute inset-0 bg-[#123e35]/5 mix-blend-multiply z-10 pointer-events-none" aria-hidden="true" />
+                  <ImageWithSkeleton
                     src={activeArticle.image}
                     alt={`${activeArticle.title} - Local Surge SEO Strategy Guide`}
                     fetchPriority="high"
@@ -1056,8 +1107,8 @@ export default function BlogView({
                 >
                   {/* Left Hero Image */}
                   <div className="lg:col-span-7 h-64 sm:h-80 lg:h-full relative overflow-hidden">
-                    <div className="absolute inset-0 bg-[#123e35]/10 mix-blend-multiply group-hover:bg-transparent transition-all duration-500" aria-hidden="true" />
-                    <img
+                    <div className="absolute inset-0 bg-[#123e35]/10 mix-blend-multiply group-hover:bg-transparent transition-all duration-500 z-10 pointer-events-none" aria-hidden="true" />
+                    <ImageWithSkeleton
                       src={featuredPost.image}
                       alt={`${featuredPost.title} - Featured Strategy Guide`}
                       loading="lazy"
@@ -1111,10 +1162,19 @@ export default function BlogView({
               )}
 
               {/* POST RESULTS GRID */}
-              <div className="space-y-6">
-                <h3 className="text-xs font-mono font-black text-[#888b88] uppercase tracking-widest">
-                  {searchQuery !== '' ? `Found ${filteredPosts.length} results matching "${searchQuery}"` : 'All Available Articles'}
-                </h3>
+              <div ref={gridSectionRef} id="articles-grid" className="space-y-6 scroll-mt-24">
+                <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                  <h3 className="text-xs font-mono font-black text-[#888b88] uppercase tracking-widest">
+                    {searchQuery !== '' 
+                      ? `Found ${filteredPosts.length} results matching "${searchQuery}"` 
+                      : `All Available Articles ${listPosts.length > 0 ? `(Showing ${startIdx}–${endIdx} of ${listPosts.length})` : ''}`}
+                  </h3>
+                  {totalPages > 1 && (
+                    <p className="text-[11px] font-mono text-[#888b88]">
+                      Page <span className="font-bold text-[#123e35]">{currentPage}</span> of <span className="font-bold text-[#123e35]">{totalPages}</span>
+                    </p>
+                  )}
+                </div>
 
                 {filteredPosts.length === 0 ? (
                   <div className="p-16 text-center bg-white border border-[#dfded4] rounded-3xl space-y-2">
@@ -1122,76 +1182,155 @@ export default function BlogView({
                     <h4 className="text-sm font-bold text-[#151716]">No matching insights identified</h4>
                     <p className="text-xs text-[#4e524f] font-semibold">Try typing a different keyword or choosing other channel directories.</p>
                   </div>
+                ) : isGridLoading ? (
+                  <BlogGridSkeleton count={Math.min(POSTS_PER_PAGE, paginatedPosts.length || 8)} />
                 ) : (
-                  <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
-                    {listPosts.map((post) => (
-                      <a
-                        key={post.slug}
-                        href={`/blog/${post.slug}`}
-                        onClick={(e) => {
-                          e.preventDefault();
-                          handleArticleClick(post.slug);
-                        }}
-                        aria-label={`Read article: ${post.title}`}
-                        className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none block"
-                      >
-                        <div>
-                          {/* Image box */}
-                          <div className="h-44 w-full relative overflow-hidden border-b border-[#dfded4]">
-                            <img
-                              src={post.image}
-                              alt={`${post.title} editorial cover`}
-                              loading="lazy"
-                              decoding="async"
-                              width={600}
-                              height={340}
-                              referrerPolicy="no-referrer"
-                              className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
-                            />
-                            <span className="absolute top-3.5 left-3.5 px-2 py-0.5 text-[8px] font-black uppercase font-mono tracking-wider bg-white/95 text-[#1a1c1a] border border-[#dfded4] rounded shadow-xs">
-                              {post.category}
-                            </span>
-                          </div>
-
-                          {/* Content */}
-                          <div className="p-5.5 space-y-3">
-                            <div className="flex items-center gap-1 text-[10px] text-[#bc5f40] font-bold font-mono">
-                              <Clock className="w-3.5 h-3.5" />
-                              <span>{post.readTime}</span>
+                  <>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
+                      {paginatedPosts.map((post) => (
+                        <a
+                          key={post.slug}
+                          href={`/blog/${post.slug}`}
+                          onClick={(e) => {
+                            e.preventDefault();
+                            handleArticleClick(post.slug);
+                          }}
+                          aria-label={`Read article: ${post.title}`}
+                          className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none block"
+                        >
+                          <div>
+                            {/* Image box */}
+                            <div className="h-44 w-full relative overflow-hidden border-b border-[#dfded4]">
+                              <ImageWithSkeleton
+                                src={post.image}
+                                alt={`${post.title} editorial cover`}
+                                loading="lazy"
+                                decoding="async"
+                                width={600}
+                                height={340}
+                                referrerPolicy="no-referrer"
+                                className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                              />
+                              <span className="absolute top-3.5 left-3.5 px-2 py-0.5 text-[8px] font-black uppercase font-mono tracking-wider bg-white/95 text-[#1a1c1a] border border-[#dfded4] rounded shadow-xs z-10">
+                                {post.category}
+                              </span>
                             </div>
 
-                            <h4 className="font-extrabold text-sm sm:text-base text-[#151716] group-hover:text-[#bc5f40] transition-colors leading-snug">
-                              {post.title}
-                            </h4>
+                            {/* Content */}
+                            <div className="p-5.5 space-y-3">
+                              <div className="flex items-center gap-1 text-[10px] text-[#bc5f40] font-bold font-mono">
+                                <Clock className="w-3.5 h-3.5" />
+                                <span>{post.readTime}</span>
+                              </div>
 
-                            <p className="text-xs text-[#4e524f] leading-relaxed line-clamp-3 font-semibold">
-                              {post.description}
-                            </p>
+                              <h4 className="font-extrabold text-sm sm:text-base text-[#151716] group-hover:text-[#bc5f40] transition-colors leading-snug">
+                                {post.title}
+                              </h4>
+
+                              <p className="text-xs text-[#4e524f] leading-relaxed line-clamp-3 font-semibold">
+                                {post.description}
+                              </p>
+                            </div>
                           </div>
+
+                          {/* Footer details */}
+                          <div className="p-5.5 pt-0 border-t border-[#dfded4]/60 mt-4 flex items-center justify-between">
+                            <div className="flex items-center gap-2.5">
+                              <div className="w-7 h-7 rounded-full bg-[#123e35]/10 text-[#123e35] flex items-center justify-center font-black text-[10px] font-display overflow-hidden">
+                                {typeof post.author.avatar === 'string' && post.author.avatar.length <= 3
+                                  ? post.author.avatar
+                                  : (post.author.name ? post.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
+                              </div>
+                              <div>
+                                <p className="text-[10px] font-black text-[#1a1c1a]">{post.author.name}</p>
+                                <p className="text-[9px] text-[#888b88] font-mono leading-none">{post.date}</p>
+                              </div>
+                            </div>
+
+                            <div className="w-7 h-7 rounded-full border border-[#dfded4] hover:border-[#bc5f40] flex items-center justify-center text-[#888b88] hover:text-[#bc5f40] hover:bg-[#bc5f40]/5 transition-colors cursor-pointer">
+                              <ArrowRight className="w-3.5 h-3.5" />
+                            </div>
+                          </div>
+
+                        </a>
+                      ))}
+                    </div>
+
+                    {/* NUMBERED PAGINATION CONTROLS */}
+                    {totalPages > 1 && (
+                      <div className="pt-8 pb-2 flex flex-col sm:flex-row items-center justify-between gap-4 border-t border-[#dfded4]">
+                        <div className="text-xs text-[#4e524f] font-semibold">
+                          Showing <span className="font-bold text-[#151716]">{startIdx}</span> to <span className="font-bold text-[#151716]">{endIdx}</span> of <span className="font-bold text-[#151716]">{listPosts.length}</span> articles
                         </div>
 
-                        {/* Footer details */}
-                        <div className="p-5.5 pt-0 border-t border-[#dfded4]/60 mt-4 flex items-center justify-between">
-                          <div className="flex items-center gap-2.5">
-                            <div className="w-7 h-7 rounded-full bg-[#123e35]/10 text-[#123e35] flex items-center justify-center font-black text-[10px] font-display overflow-hidden">
-                              {typeof post.author.avatar === 'string' && post.author.avatar.length <= 3
-                                ? post.author.avatar
-                                : (post.author.name ? post.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
-                            </div>
-                            <div>
-                              <p className="text-[10px] font-black text-[#1a1c1a]">{post.author.name}</p>
-                              <p className="text-[9px] text-[#888b88] font-mono leading-none">{post.date}</p>
-                            </div>
-                          </div>
+                        <nav aria-label="Blog pagination" className="flex items-center gap-1.5">
+                          {/* Previous Button */}
+                          <button
+                            type="button"
+                            onClick={() => handlePageChange(currentPage - 1)}
+                            disabled={currentPage === 1}
+                            aria-label="Go to previous page"
+                            className={`flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
+                              currentPage === 1
+                                ? 'opacity-40 cursor-not-allowed bg-[#faf9f6] border-[#dfded4] text-[#888b88]'
+                                : 'bg-white hover:bg-[#edeae1] border-[#dfded4] text-[#151716] cursor-pointer hover:border-[#bc5f40]/50 shadow-2xs'
+                            }`}
+                          >
+                            <ChevronLeft className="w-4 h-4" />
+                            <span className="hidden sm:inline">Prev</span>
+                          </button>
 
-                          <div className="w-7 h-7 rounded-full border border-[#dfded4] hover:border-[#bc5f40] flex items-center justify-center text-[#888b88] hover:text-[#bc5f40] hover:bg-[#bc5f40]/5 transition-colors cursor-pointer">
-                            <ArrowRight className="w-3.5 h-3.5" />
-                          </div>
-                        </div>
+                          {/* Numbered Page Buttons */}
+                          {getPageNumbers().map((item, idx) => {
+                            if (item === '...') {
+                              return (
+                                <span
+                                  key={`ellipsis-${idx}`}
+                                  className="w-9 h-9 flex items-center justify-center text-xs font-mono font-bold text-[#888b88]"
+                                >
+                                  …
+                                </span>
+                              );
+                            }
+                            const pageNum = Number(item);
+                            const isActive = pageNum === currentPage;
+                            return (
+                              <button
+                                key={pageNum}
+                                type="button"
+                                onClick={() => handlePageChange(pageNum)}
+                                aria-label={`Page ${pageNum}`}
+                                aria-current={isActive ? 'page' : undefined}
+                                className={`w-9 h-9 rounded-xl text-xs font-bold font-mono transition-all border ${
+                                  isActive
+                                    ? 'bg-[#123e35] text-white border-[#123e35] shadow-xs scale-105'
+                                    : 'bg-white hover:bg-[#edeae1] border-[#dfded4] text-[#151716] hover:text-[#123e35] cursor-pointer hover:border-[#bc5f40]/50 shadow-2xs'
+                                }`}
+                              >
+                                {pageNum}
+                              </button>
+                            );
+                          })}
 
-                      </a>
-                    ))}
-                  </div>
+                          {/* Next Button */}
+                          <button
+                            type="button"
+                            onClick={() => handlePageChange(currentPage + 1)}
+                            disabled={currentPage === totalPages}
+                            aria-label="Go to next page"
+                            className={`flex items-center gap-1 px-3 py-2 rounded-xl text-xs font-bold transition-all border ${
+                              currentPage === totalPages
+                                ? 'opacity-40 cursor-not-allowed bg-[#faf9f6] border-[#dfded4] text-[#888b88]'
+                                : 'bg-white hover:bg-[#edeae1] border-[#dfded4] text-[#151716] cursor-pointer hover:border-[#bc5f40]/50 shadow-2xs'
+                            }`}
+                          >
+                            <span className="hidden sm:inline">Next</span>
+                            <ChevronRight className="w-4 h-4" />
+                          </button>
+                        </nav>
+                      </div>
+                    )}
+                  </>
                 )}
               </div>
 

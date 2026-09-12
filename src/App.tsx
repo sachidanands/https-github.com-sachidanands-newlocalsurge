@@ -15,6 +15,7 @@ import {
   trackPdfDownload, 
   trackLeadGeneration 
 } from './utils/analytics';
+import { PageSkeleton } from './components/SkeletonLoaders';
 
 // Code-split secondary views & heavy interactive widgets for maximum Core Web Vitals & minimum TBT
 const SeoHomeTool = React.lazy(() => import('./components/SeoHomeTool'));
@@ -1157,11 +1158,7 @@ export default function App() {
 
       {/* Main viewport */}
       <main id="main-content" tabIndex={-1} className="flex-grow outline-none">
-        <Suspense fallback={
-          <div className="min-h-[50vh] flex items-center justify-center">
-            <div className="w-8 h-8 border-2 border-[#123e35] border-t-transparent rounded-full animate-spin"></div>
-          </div>
-        }>
+        <Suspense fallback={<PageSkeleton />}>
           <AnimatePresence mode="wait">
 
           {/* HOME SCREEN */}
