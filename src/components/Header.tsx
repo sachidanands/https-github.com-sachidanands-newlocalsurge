@@ -5,6 +5,7 @@ import {
   Menu, X, ChevronRight, Phone
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
+import { MagneticButton } from './MagneticButton';
 
 interface HeaderProps {
   currentPage: Page;
@@ -113,15 +114,15 @@ export default function Header({ currentPage, setCurrentPage, onOpenOnboarding }
 
           {/* Right Action Group: Strategy CTA + Right-aligned Mobile Hamburger Button */}
           <div className="flex items-center gap-2 sm:gap-3">
-            <button
+            <MagneticButton
               id="header-get-started"
               onClick={onOpenOnboarding}
-              className="bg-[#123e35] hover:bg-[#185246] text-[#fbfaf8] shadow-sm text-xs font-bold px-3.5 sm:px-5 py-2.5 rounded-lg flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-all hover:scale-[1.02] active:scale-95 duration-200"
+              className="bg-[#123e35] hover:bg-[#185246] text-[#fbfaf8] shadow-sm text-xs font-bold px-3.5 sm:px-5 py-2.5 rounded-lg flex items-center gap-1.5 sm:gap-2 cursor-pointer transition-colors active:scale-95 duration-200"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-300" aria-hidden="true" />
               <span className="hidden sm:inline">Get Free Strategy</span>
               <span className="sm:hidden">Strategy</span>
-            </button>
+            </MagneticButton>
 
             {/* Hamburger Button on Right for Ergonomic Right-Handed Thumb Reach */}
             <button

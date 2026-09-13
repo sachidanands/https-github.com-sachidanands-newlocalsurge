@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import InteractiveLocationsMap from './InteractiveLocationsMap';
 import { LocationState, getDistrictsForState, getAllMappedStates, DISTRICTS_REGISTRY } from '../data/locationsData';
+import { MagneticButton } from './MagneticButton';
 
 interface LocationsStateViewProps {
   stateData: LocationState;
@@ -501,13 +502,13 @@ export default function LocationsStateView({
             Gain a complete audit of your Google Business Profile, local citation health, and neighborhood coordinate signals.
           </p>
           <div className="pt-2">
-            <button
+            <MagneticButton
               type="button"
               onClick={onOpenOnboarding}
-              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-4 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all shadow-md focus-visible:outline-2 focus-visible:outline-white"
+              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-4 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors shadow-md focus-visible:outline-2 focus-visible:outline-white"
             >
               Claim Free {stateData.name} SEO Audit
-            </button>
+            </MagneticButton>
           </div>
         </div>
 

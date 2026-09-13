@@ -4,6 +4,7 @@ import {
   Rocket, Search, MapPin, BarChart3, Sparkles, Award, BookOpen, 
   ArrowLeft, Phone, Compass, ArrowRight, X, HelpCircle
 } from 'lucide-react';
+import { MagneticButton } from './MagneticButton';
 
 interface NotFoundViewProps {
   setCurrentPage: (page: Page) => void;
@@ -176,14 +177,14 @@ export default function NotFoundView({
               <ArrowLeft className="w-3.5 h-3.5" />
               <span>Back to Homepage</span>
             </a>
-            <button
+            <MagneticButton
               type="button"
               onClick={onOpenOnboarding}
               className="inline-flex items-center gap-2 px-5 py-2.5 rounded-xl bg-white border border-[#dfded4] text-[#151716] text-xs font-bold hover:bg-[#f7f6f2] transition-colors shadow-2xs cursor-pointer"
             >
               <Sparkles className="w-3.5 h-3.5 text-amber-500" />
               <span>Get Free Strategy</span>
-            </button>
+            </MagneticButton>
           </div>
         </div>
 

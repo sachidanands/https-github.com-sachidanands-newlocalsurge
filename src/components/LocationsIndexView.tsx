@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import InteractiveLocationsMap from './InteractiveLocationsMap';
 import { getAllMappedStates, getAllMappedDistricts, DISTRICTS_REGISTRY } from '../data/locationsData';
+import { MagneticButton } from './MagneticButton';
 
 interface LocationsIndexViewProps {
   setCurrentPage: (page: Page) => void;
@@ -449,13 +450,13 @@ export default function LocationsIndexView({
             Stop losing qualified local customers to competitors down the street. Claim your free Local Surge SEO audit and market gap analysis today.
           </p>
           <div className="pt-2">
-            <button
+            <MagneticButton
               type="button"
               onClick={onOpenOnboarding}
-              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-4 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all shadow-md focus-visible:outline-2 focus-visible:outline-white"
+              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-4 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors shadow-md focus-visible:outline-2 focus-visible:outline-white"
             >
               Get Your Free Strategy & Audit Now
-            </button>
+            </MagneticButton>
           </div>
         </div>
 

@@ -5,6 +5,7 @@ import {
   FileText, ChevronRight, Award, Compass, HeartHandshake, ShieldCheck
 } from 'lucide-react';
 import { motion } from 'motion/react';
+import { MagneticButton } from './MagneticButton';
 
 interface CaseStudiesViewProps {
   setCurrentPage: (page: Page) => void;
@@ -193,13 +194,13 @@ export default function CaseStudiesView({ setCurrentPage, onOpenOnboarding }: Ca
             Don't leave your local ranking coordinates to chance. Request your free competitor local SEO analysis prepared directly by our search experts to discover untapped neighborhood keyword opportunities.
           </p>
           <div className="pt-2">
-            <button
+            <MagneticButton
               onClick={handleGetStarted}
-              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-3.5 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all inline-flex items-center gap-2 shadow-xs"
+              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-3.5 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors inline-flex items-center gap-2 shadow-xs"
             >
               <span>Launch Your Free Strategy Setup</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </MagneticButton>
           </div>
         </div>
 

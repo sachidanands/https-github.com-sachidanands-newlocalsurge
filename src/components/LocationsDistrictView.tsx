@@ -6,6 +6,7 @@ import {
   AlertCircle, BarChart3, ExternalLink, ChevronRight, BookOpen, Smartphone, Search
 } from 'lucide-react';
 import { LocationDistrict, getDistrictsForState, getStateBySlug } from '../data/locationsData';
+import { MagneticButton } from './MagneticButton';
 
 interface LocationsDistrictViewProps {
   districtData: LocationDistrict;
@@ -509,13 +510,13 @@ export default function LocationsDistrictView({
             Stop losing high-value local calls to direct competitors. Let our local search team analyze your citations, schema health, and ranking gaps in {districtData.name}.
           </p>
           <div className="pt-2">
-            <button
+            <MagneticButton
               type="button"
               onClick={onOpenOnboarding}
-              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-4 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all shadow-md focus-visible:outline-2 focus-visible:outline-white"
+              className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-4 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors shadow-md focus-visible:outline-2 focus-visible:outline-white"
             >
               Get Free {districtData.name} Strategy Audit
-            </button>
+            </MagneticButton>
           </div>
         </div>
 

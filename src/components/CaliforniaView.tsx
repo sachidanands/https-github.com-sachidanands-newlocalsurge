@@ -7,6 +7,7 @@ import {
 } from 'lucide-react';
 import { motion } from 'motion/react';
 import LocalDirectoryTool from './LocalDirectoryTool';
+import { MagneticButton } from './MagneticButton';
 
 interface CaliforniaViewProps {
   setCurrentPage: (page: Page) => void;
@@ -66,13 +67,13 @@ export default function CaliforniaView({
             </p>
             
             <div className="flex flex-col sm:flex-row gap-3.5 pt-2">
-              <button
+              <MagneticButton
                 onClick={handleGetStarted}
-                className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all duration-200 flex items-center justify-center gap-2 shadow-2xs"
+                className="bg-[#bc5f40] hover:bg-[#cf6d4e] active:scale-95 text-white font-extrabold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors duration-200 flex items-center justify-center gap-2 shadow-2xs"
               >
                 <span>Get Free Strategy</span>
                 <ArrowRight className="w-3.5 h-3.5" />
-              </button>
+              </MagneticButton>
               <a
                 href="#ca-cities"
                 className="border border-[#dfded4] hover:bg-[#dfded4]/30 text-[#151716] font-bold py-3.5 px-6 rounded-xl text-xs text-center cursor-pointer transition-colors"
@@ -445,13 +446,13 @@ export default function CaliforniaView({
             Let us design a custom directory domination strategy for your brand. Claim your single-page setup or request a comprehensive local competitor audit perfectly matched to California search landscapes.
           </p>
           <div className="pt-2">
-            <button
+            <MagneticButton
               onClick={handleGetStarted}
-              className="bg-[#123e35] hover:bg-[#185246] text-white font-extrabold py-3.5 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all inline-flex items-center gap-2 shadow-xs"
+              className="bg-[#123e35] hover:bg-[#185246] text-white font-extrabold py-3.5 px-8 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors inline-flex items-center gap-2 shadow-xs"
             >
               <span>Get Free Strategy Now</span>
               <ArrowRight className="w-3.5 h-3.5" />
-            </button>
+            </MagneticButton>
           </div>
         </div>
 

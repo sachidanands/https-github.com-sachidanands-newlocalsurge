@@ -6,6 +6,7 @@ import {
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import LocalDirectoryTool from './LocalDirectoryTool';
+import { MagneticButton } from './MagneticButton';
 
 interface LocalSeoViewProps {
   onOpenOnboarding: () => void;
@@ -100,12 +101,12 @@ export default function LocalSeoView({ onOpenOnboarding, onGetFreeStrategy, setC
             Google Maps and local directories capture 68% of customers. If you are not listed, local buyers will call your competitors instead.
           </p>
           <div className="flex flex-col sm:flex-row justify-center gap-3.5 pt-4">
-            <button
+            <MagneticButton
               onClick={onGetFreeStrategy || onOpenOnboarding}
-              className="bg-[#bc5f40] hover:bg-[#cf6d4e] hover:shadow-md text-white font-extrabold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-all duration-200"
+              className="bg-[#bc5f40] hover:bg-[#cf6d4e] hover:shadow-md text-white font-extrabold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider cursor-pointer transition-colors duration-200"
             >
               Get Free Strategy
-            </button>
+            </MagneticButton>
             <a
               href="#local-business-directory-tool"
               className="bg-white/10 hover:bg-white/15 border border-white/20 text-white font-extrabold py-3.5 px-6 rounded-xl text-xs uppercase tracking-wider text-center transition-all duration-200"

@@ -16,6 +16,7 @@ import {
   trackLeadGeneration 
 } from './utils/analytics';
 import { PageSkeleton } from './components/SkeletonLoaders';
+import { MagneticButton } from './components/MagneticButton';
 
 // Code-split secondary views & heavy interactive widgets for maximum Core Web Vitals & minimum TBT
 const SeoHomeTool = React.lazy(() => import('./components/SeoHomeTool'));
@@ -1202,16 +1203,16 @@ export default function App() {
                       </p>
 
                       <div className="pt-4 flex flex-col sm:flex-row gap-4 justify-center lg:justify-start">
-                        <button
+                        <MagneticButton
                           onClick={() => {
                             setCurrentPage('pricing');
                             setSelectedPricingPlanId('single-page');
                           }}
-                          className="bg-[#123e35] hover:bg-[#185246] text-[#fbfaf8] text-sm font-bold px-7 py-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-all active:scale-95 duration-200 shadow-sm"
+                          className="bg-[#123e35] hover:bg-[#185246] text-[#fbfaf8] text-sm font-bold px-7 py-4 rounded-xl flex items-center justify-center gap-2 cursor-pointer transition-colors active:scale-95 duration-200 shadow-sm"
                         >
                           Get Free Strategy
                           <ArrowRight className="w-4 h-4 text-white" />
-                        </button>
+                        </MagneticButton>
                         <a
                           href="/seo-tool"
                           onClick={(e) => {
