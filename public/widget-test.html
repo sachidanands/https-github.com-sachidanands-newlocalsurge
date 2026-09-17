@@ -1,0 +1,715 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>LocalSurge AI FrontDesk (SurgeBot) — Widget Sandbox & QA Lab</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com">
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+  <link href="https://fonts.googleapis.com/css2?family=Plus+Jakarta+Sans:wght@400;500;600;700;800&family=JetBrains+Mono:wght@400;500;600&display=swap" rel="stylesheet">
+  <style>
+    :root {
+      --bg-base: #090d16;
+      --bg-surface: #111827;
+      --bg-card: #1e293b;
+      --border-subtle: #334155;
+      --primary: #10b981;
+      --primary-glow: rgba(16, 185, 129, 0.25);
+      --text-main: #f8fafc;
+      --text-muted: #94a3b8;
+      --accent-blue: #38bdf8;
+      --accent-amber: #fbbf24;
+      --accent-rose: #f43f5e;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+    }
+
+    body {
+      font-family: 'Plus Jakarta Sans', -apple-system, BlinkMacSystemFont, sans-serif;
+      background-color: var(--bg-base);
+      color: var(--text-main);
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      line-height: 1.5;
+    }
+
+    header {
+      background: linear-gradient(180deg, #111827 0%, rgba(17, 24, 39, 0.8) 100%);
+      border-bottom: 1px solid var(--border-subtle);
+      padding: 16px 24px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      backdrop-filter: blur(12px);
+      position: sticky;
+      top: 0;
+      z-index: 100;
+    }
+
+    .brand-group {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .brand-logo {
+      width: 36px;
+      height: 36px;
+      border-radius: 10px;
+      background: linear-gradient(135deg, #10b981, #047857);
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 20px;
+      box-shadow: 0 0 20px var(--primary-glow);
+    }
+
+    .brand-title {
+      font-size: 18px;
+      font-weight: 800;
+      letter-spacing: -0.02em;
+    }
+
+    .brand-badge {
+      font-size: 11px;
+      font-weight: 700;
+      text-transform: uppercase;
+      padding: 3px 8px;
+      background: rgba(16, 185, 129, 0.15);
+      border: 1px solid var(--primary);
+      color: var(--primary);
+      border-radius: 6px;
+    }
+
+    .header-links {
+      display: flex;
+      gap: 12px;
+      align-items: center;
+    }
+
+    .btn-secondary {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      color: var(--text-main);
+      padding: 8px 14px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 600;
+      cursor: pointer;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+      transition: all 0.15s ease;
+      text-decoration: none;
+    }
+
+    .btn-secondary:hover {
+      border-color: var(--text-muted);
+      background: #273549;
+    }
+
+    .btn-primary {
+      background: linear-gradient(135deg, #10b981, #059669);
+      border: none;
+      color: white;
+      padding: 8px 16px;
+      border-radius: 8px;
+      font-size: 13px;
+      font-weight: 700;
+      cursor: pointer;
+      box-shadow: 0 4px 12px var(--primary-glow);
+      transition: transform 0.15s, opacity 0.15s;
+    }
+
+    .btn-primary:hover {
+      transform: translateY(-1px);
+      opacity: 0.95;
+    }
+
+    main {
+      flex: 1;
+      padding: 32px 24px 80px 24px;
+      max-width: 1300px;
+      margin: 0 auto;
+      width: 100%;
+      display: grid;
+      grid-template-columns: 1fr 380px;
+      gap: 28px;
+    }
+
+    @media (max-width: 1024px) {
+      main {
+        grid-template-columns: 1fr;
+      }
+    }
+
+    .sandbox-panel {
+      display: flex;
+      flex-direction: column;
+      gap: 24px;
+    }
+
+    .card {
+      background: var(--bg-surface);
+      border: 1px solid var(--border-subtle);
+      border-radius: 14px;
+      padding: 22px;
+      box-shadow: 0 10px 25px rgba(0, 0, 0, 0.25);
+    }
+
+    .card-title {
+      font-size: 15px;
+      font-weight: 700;
+      margin-bottom: 14px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      color: #e2e8f0;
+    }
+
+    /* Site Profile Switcher Tabs */
+    .profile-tabs {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+      gap: 10px;
+    }
+
+    .profile-tab {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 10px;
+      padding: 12px 14px;
+      cursor: pointer;
+      text-align: left;
+      transition: all 0.2s ease;
+      color: var(--text-main);
+    }
+
+    .profile-tab:hover {
+      border-color: var(--accent-blue);
+      transform: translateY(-2px);
+    }
+
+    .profile-tab.active {
+      border-color: var(--primary);
+      background: rgba(16, 185, 129, 0.1);
+      box-shadow: 0 0 14px var(--primary-glow);
+    }
+
+    .profile-tab-title {
+      font-size: 14px;
+      font-weight: 700;
+      margin-bottom: 4px;
+    }
+
+    .profile-tab-sub {
+      font-size: 11px;
+      color: var(--text-muted);
+    }
+
+    .tier-tag {
+      display: inline-block;
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      margin-top: 6px;
+    }
+
+    .tier-tag.pro { background: rgba(56, 189, 248, 0.2); color: var(--accent-blue); }
+    .tier-tag.starter { background: rgba(251, 191, 36, 0.2); color: var(--accent-amber); }
+    .tier-tag.micro { background: rgba(148, 163, 184, 0.2); color: #cbd5e1; }
+
+    /* Scenario Triggers */
+    .scenario-grid {
+      display: grid;
+      grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+      gap: 12px;
+    }
+
+    .scenario-btn {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 10px 14px;
+      color: var(--text-main);
+      font-size: 12.5px;
+      font-weight: 600;
+      cursor: pointer;
+      text-align: left;
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      transition: all 0.15s ease;
+    }
+
+    .scenario-btn:hover {
+      background: #2a374a;
+      border-color: var(--primary);
+      color: white;
+    }
+
+    /* Code Snippet Box */
+    .code-box {
+      background: #0d1117;
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 14px;
+      font-family: 'JetBrains Mono', monospace;
+      font-size: 12px;
+      color: #7ee787;
+      position: relative;
+      overflow-x: auto;
+    }
+
+    .code-box pre {
+      white-space: pre-wrap;
+      word-break: break-all;
+    }
+
+    .copy-snippet-btn {
+      position: absolute;
+      top: 10px;
+      right: 10px;
+      background: #21262d;
+      border: 1px solid var(--border-subtle);
+      color: #c9d1d9;
+      font-size: 11px;
+      padding: 4px 8px;
+      border-radius: 6px;
+      cursor: pointer;
+    }
+
+    .copy-snippet-btn:hover {
+      background: #30363d;
+      color: white;
+    }
+
+    /* Live Feed Sidebar */
+    .feed-sidebar {
+      display: flex;
+      flex-direction: column;
+      gap: 20px;
+    }
+
+    .config-meta-table {
+      width: 100%;
+      border-collapse: collapse;
+      font-size: 12px;
+    }
+
+    .config-meta-table td {
+      padding: 6px 0;
+      border-bottom: 1px solid rgba(255, 255, 255, 0.06);
+    }
+
+    .config-meta-table td:first-child {
+      color: var(--text-muted);
+      width: 40%;
+    }
+
+    .config-meta-table td:last-child {
+      font-family: 'JetBrains Mono', monospace;
+      text-align: right;
+      font-weight: 600;
+    }
+
+    .leads-list {
+      max-height: 380px;
+      overflow-y: auto;
+      display: flex;
+      flex-direction: column;
+      gap: 10px;
+      margin-top: 10px;
+    }
+
+    .lead-item {
+      background: var(--bg-card);
+      border: 1px solid var(--border-subtle);
+      border-radius: 8px;
+      padding: 12px;
+      font-size: 12px;
+    }
+
+    .lead-header {
+      display: flex;
+      justify-content: space-between;
+      align-items: center;
+      margin-bottom: 6px;
+    }
+
+    .lead-urgency {
+      font-size: 10px;
+      font-weight: 700;
+      padding: 2px 6px;
+      border-radius: 4px;
+      text-transform: uppercase;
+    }
+
+    .urgency-high { background: rgba(244, 63, 94, 0.2); color: var(--accent-rose); border: 1px solid var(--accent-rose); }
+    .urgency-medium { background: rgba(251, 191, 36, 0.2); color: var(--accent-amber); border: 1px solid var(--accent-amber); }
+    .urgency-low { background: rgba(16, 185, 129, 0.2); color: var(--primary); border: 1px solid var(--primary); }
+
+    /* Simulated Client Site Hero Container */
+    .mock-site-hero {
+      background: linear-gradient(135deg, #1e293b, #0f172a);
+      border: 1px dashed var(--border-subtle);
+      border-radius: 12px;
+      padding: 40px 24px;
+      text-align: center;
+      margin-bottom: 20px;
+    }
+
+    .mock-site-hero h1 {
+      font-size: 26px;
+      font-weight: 800;
+      margin-bottom: 8px;
+    }
+
+    .mock-site-hero p {
+      color: var(--text-muted);
+      font-size: 14px;
+      max-width: 600px;
+      margin: 0 auto 20px auto;
+    }
+  </style>
+</head>
+<body>
+
+  <!-- Top Navigation -->
+  <header>
+    <div class="brand-group">
+      <div class="brand-logo">⚡</div>
+      <div>
+        <div style="display: flex; align-items: center; gap: 8px;">
+          <span class="brand-title">LocalSurge AI FrontDesk</span>
+          <span class="brand-badge">Phase 3 QA Workbench</span>
+        </div>
+      </div>
+    </div>
+    <div class="header-links">
+      <button class="btn-secondary" onclick="window.LocalSurgeFrontDesk.resetChat()">
+        🔄 Reset Chat
+      </button>
+      <button class="btn-primary" onclick="window.LocalSurgeFrontDesk.open()">
+        💬 Open Widget
+      </button>
+    </div>
+  </header>
+
+  <!-- Main QA Workspace -->
+  <main>
+    <div class="sandbox-panel">
+
+      <!-- Simulated Client Website Context -->
+      <div class="card">
+        <div class="mock-site-hero">
+          <span style="font-size: 12px; font-weight: 700; color: var(--primary); text-transform: uppercase; letter-spacing: 0.08em;">Live Host Preview</span>
+          <h1 id="hostSiteTitle">Apex 24/7 Emergency Plumbing</h1>
+          <p id="hostSiteTagline">Austin's #1 Rated Emergency Plumbers — Fast 45-Min Guaranteed Arrival across Travis County.</p>
+          <div style="display: flex; justify-content: center; gap: 12px;">
+            <button class="btn-primary" onclick="window.LocalSurgeFrontDesk.open()">Request 5-Min Dispatch</button>
+            <a href="#leads" class="btn-secondary" onclick="fetchLeads()">View Captured Leads (<span id="leadCountBadge">0</span>)</a>
+          </div>
+        </div>
+      </div>
+
+      <!-- Profile Switcher Tabs -->
+      <div class="card">
+        <div class="card-title">
+          <span>1. Select Contractor Profile & Feature Tier</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Dynamic shadow DOM reconfiguration</span>
+        </div>
+        <div class="profile-tabs">
+          <div class="profile-tab active" data-site-id="site_apex_plumbing" onclick="switchProfile('site_apex_plumbing', this)">
+            <div class="profile-tab-title">🚰 Apex Plumbing</div>
+            <div class="profile-tab-sub">Austin, TX • Water Leaks & Repipe</div>
+            <span class="tier-tag pro">$89 Pro • Photo + Dispatch</span>
+          </div>
+
+          <div class="profile-tab" data-site-id="site_bayarea_hvac" onclick="switchProfile('site_bayarea_hvac', this)">
+            <div class="profile-tab-title">❄️ Bay Area HVAC</div>
+            <div class="profile-tab-sub">San Jose, CA • Heat Pumps & AC</div>
+            <span class="tier-tag starter">$49 Starter • Email Leads</span>
+          </div>
+
+          <div class="profile-tab" data-site-id="site_summit_roofing" onclick="switchProfile('site_summit_roofing', this)">
+            <div class="profile-tab-title">🏠 Summit Peak Roofing</div>
+            <div class="profile-tab-sub">Denver, CO • Storm Damage</div>
+            <span class="tier-tag pro">$89 Pro • Storm Analysis</span>
+          </div>
+
+          <div class="profile-tab" data-site-id="site_micro_demo" onclick="switchProfile('site_micro_demo', this)">
+            <div class="profile-tab-title">⚡ Budget Handyman</div>
+            <div class="profile-tab-sub">Dallas, TX • Text Only</div>
+            <span class="tier-tag micro">$5 Micro • Text Triage</span>
+          </div>
+        </div>
+      </div>
+
+      <!-- Quick Test Scenarios -->
+      <div class="card">
+        <div class="card-title">
+          <span>2. Quick Test Scenarios</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Simulate real customer inquiries</span>
+        </div>
+        <div class="scenario-grid">
+          <button class="scenario-btn" onclick="runScenario('🚨 Emergency pipe burst in kitchen, water is leaking through floor! My number is 512-555-4821 at 1402 Congress Ave')">
+            <span>🚨</span>
+            <div>
+              <strong>Emergency Leak</strong>
+              <div style="font-size: 11px; color: var(--text-muted);">Tests urgent triage + shutoff safety</div>
+            </div>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('Do you service Seattle WA? My AC stopped blowing cold')">
+            <span>📍</span>
+            <div>
+              <strong>Out of Area Check</strong>
+              <div style="font-size: 11px; color: var(--text-muted);">Tests zip code boundary guardrails</div>
+            </div>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('How much does it cost to install a Navien tankless water heater?')">
+            <span>💰</span>
+            <div>
+              <strong>Price & Policy Query</strong>
+              <div style="font-size: 11px; color: var(--text-muted);">Tests estimate policy & pricing bounds</div>
+            </div>
+          </button>
+
+          <button class="scenario-btn" onclick="runScenario('Can you call me back regarding a commercial sewer replacement? Reach me at 512-555-8833')">
+            <span>📞</span>
+            <div>
+              <strong>Callback Request</strong>
+              <div style="font-size: 11px; color: var(--text-muted);">Tests lead entity extraction + Resend</div>
+            </div>
+          </button>
+        </div>
+      </div>
+
+      <!-- Embed Code Generator -->
+      <div class="card">
+        <div class="card-title">
+          <span>3. 1-Line Embed Snippet for Contractor Websites</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Zero CSS Conflicts &bull; Async &bull; Shadow DOM</span>
+        </div>
+        <div class="code-box">
+          <button class="copy-snippet-btn" onclick="copySnippet()">Copy Snippet</button>
+          <pre id="embedSnippetCode">&lt;!-- LocalSurge AI FrontDesk Embed --&gt;
+&lt;script src="http://localhost:3000/widget.js" data-site-id="site_apex_plumbing" defer&gt;&lt;/script&gt;</pre>
+        </div>
+      </div>
+
+    </div>
+
+    <!-- Right Sidebar: Live State & Captured Leads -->
+    <div class="feed-sidebar">
+
+      <!-- Active Profile Meta -->
+      <div class="card">
+        <div class="card-title">
+          <span>Active Config</span>
+          <span class="brand-badge" id="activeTierLabel">PRO TIER</span>
+        </div>
+        <table class="config-meta-table">
+          <tr>
+            <td>Site ID</td>
+            <td id="metaSiteId">site_apex_plumbing</td>
+          </tr>
+          <tr>
+            <td>Industry</td>
+            <td id="metaIndustry">Plumbing</td>
+          </tr>
+          <tr>
+            <td>Photo Upload</td>
+            <td id="metaPhotoUpload" style="color: #22c55e;">ENABLED</td>
+          </tr>
+          <tr>
+            <td>Emergency Banner</td>
+            <td id="metaEmergencyBanner" style="color: #22c55e;">ENABLED</td>
+          </tr>
+          <tr>
+            <td>Email Dispatch</td>
+            <td id="metaEmailDispatch" style="color: #22c55e;">ENABLED</td>
+          </tr>
+          <tr>
+            <td>Theme Color</td>
+            <td id="metaThemeColor" style="color: #0284c7;">#0284c7</td>
+          </tr>
+        </table>
+      </div>
+
+      <!-- Live Leads Captured -->
+      <div class="card" id="leads">
+        <div class="card-title">
+          <span>Captured Leads</span>
+          <button class="btn-secondary" style="padding: 2px 8px; font-size: 11px;" onclick="fetchLeads()">Refresh</button>
+        </div>
+        <div class="leads-list" id="leadsContainer">
+          <div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 20px;">
+            Loading leads...
+          </div>
+        </div>
+      </div>
+
+    </div>
+  </main>
+
+  <!-- Embed Widget Script -->
+  <script src="/widget.js" data-site-id="site_apex_plumbing" defer></script>
+
+  <!-- Sandbox Controller Logic -->
+  <script>
+    let currentSiteId = 'site_apex_plumbing';
+
+    const siteProfiles = {
+      site_apex_plumbing: {
+        title: "Apex 24/7 Emergency Plumbing",
+        tagline: "Austin's #1 Rated Emergency Plumbers — Fast 45-Min Guaranteed Arrival across Travis County.",
+        industry: "Plumbing",
+        tier: "PRO TIER ($89)",
+        photo: "ENABLED",
+        emergency: "ENABLED",
+        email: "ENABLED",
+        theme: "#0284c7"
+      },
+      site_bayarea_hvac: {
+        title: "Bay Area Elite HVAC & Heat Pumps",
+        tagline: "San Jose & Silicon Valley Premier Heating, Air Conditioning & Heat Pump Specialists.",
+        industry: "HVAC",
+        tier: "STARTER TIER ($49)",
+        photo: "DISABLED",
+        emergency: "ENABLED",
+        email: "ENABLED",
+        theme: "#0ea5e9"
+      },
+      site_summit_roofing: {
+        title: "Summit Peak Roofing & Restoration",
+        tagline: "Denver Metro & Front Range Hail & Storm Damage Roof Replacement Experts.",
+        industry: "Roofing",
+        tier: "PRO TIER ($89)",
+        photo: "ENABLED",
+        emergency: "ENABLED",
+        email: "ENABLED",
+        theme: "#d97706"
+      },
+      site_micro_demo: {
+        title: "Budget Handyman Micro",
+        tagline: "Dallas Metro Flat-rate Home Repairs & Fast Estimates.",
+        industry: "Handyman",
+        tier: "MICRO TIER ($5)",
+        photo: "DISABLED",
+        emergency: "DISABLED",
+        email: "DISABLED",
+        theme: "#10b981"
+      }
+    };
+
+    function switchProfile(siteId, tabEl) {
+      currentSiteId = siteId;
+      document.querySelectorAll('.profile-tab').forEach(t => t.classList.remove('active'));
+      if (tabEl) tabEl.classList.add('active');
+
+      const p = siteProfiles[siteId] || {};
+      document.getElementById('hostSiteTitle').textContent = p.title || siteId;
+      document.getElementById('hostSiteTagline').textContent = p.tagline || '';
+      document.getElementById('activeTierLabel').textContent = p.tier || 'STANDARD';
+      document.getElementById('metaSiteId').textContent = siteId;
+      document.getElementById('metaIndustry').textContent = p.industry || 'Local Service';
+      document.getElementById('metaPhotoUpload').textContent = p.photo || 'ENABLED';
+      document.getElementById('metaPhotoUpload').style.color = p.photo === 'ENABLED' ? '#22c55e' : '#94a3b8';
+      document.getElementById('metaEmergencyBanner').textContent = p.emergency || 'ENABLED';
+      document.getElementById('metaEmergencyBanner').style.color = p.emergency === 'ENABLED' ? '#22c55e' : '#94a3b8';
+      document.getElementById('metaEmailDispatch').textContent = p.email || 'ENABLED';
+      document.getElementById('metaEmailDispatch').style.color = p.email === 'ENABLED' ? '#22c55e' : '#94a3b8';
+      document.getElementById('metaThemeColor').textContent = p.theme || '#10b981';
+      document.getElementById('metaThemeColor').style.color = p.theme || '#10b981';
+
+      // Update snippet
+      document.getElementById('embedSnippetCode').textContent = `<!-- LocalSurge AI FrontDesk Embed -->\n<script src="${window.location.origin}/widget.js" data-site-id="${siteId}" defer><\/script>`;
+
+      // Call programmatic API to load site in widget
+      if (window.LocalSurgeFrontDesk && window.LocalSurgeFrontDesk.loadSite) {
+        window.LocalSurgeFrontDesk.loadSite(siteId);
+      }
+
+      fetchLeads();
+    }
+
+    function runScenario(promptText) {
+      if (window.LocalSurgeFrontDesk) {
+        window.LocalSurgeFrontDesk.open();
+        // Send message into chat
+        setTimeout(() => {
+          const root = document.getElementById('localsurge-frontdesk-root');
+          if (root && root.shadowRoot) {
+            const input = root.shadowRoot.getElementById('lsInput');
+            const sendBtn = root.shadowRoot.getElementById('lsSendBtn');
+            if (input && sendBtn) {
+              input.value = promptText;
+              sendBtn.click();
+            }
+          }
+        }, 300);
+      }
+    }
+
+    async function fetchLeads() {
+      const container = document.getElementById('leadsContainer');
+      const badge = document.getElementById('leadCountBadge');
+      try {
+        const resp = await fetch(`/api/frontdesk/leads/${currentSiteId}`);
+        const data = await resp.json();
+        const leads = data.leads || [];
+        badge.textContent = leads.length;
+
+        if (leads.length === 0) {
+          container.innerHTML = '<div style="font-size: 12px; color: var(--text-muted); text-align: center; padding: 20px;">No leads captured yet for this site.</div>';
+          return;
+        }
+
+        container.innerHTML = leads.map(l => {
+          const urgencyClass = l.urgency === 'high' || l.urgency === 'emergency' ? 'urgency-high' : (l.urgency === 'medium' ? 'urgency-medium' : 'urgency-low');
+          const time = new Date(l.created_at).toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' });
+          return `
+            <div class="lead-item">
+              <div class="lead-header">
+                <strong>📞 ${l.customer_phone || 'No phone'}</strong>
+                <span class="lead-urgency ${urgencyClass}">${l.urgency || 'normal'}</span>
+              </div>
+              <div style="color: #cbd5e1; font-weight: 500;">${l.issue_summary || 'Service Inquiry'}</div>
+              ${l.service_address ? `<div style="color: #94a3b8; font-size: 11px; margin-top: 2px;">📍 ${l.service_address}</div>` : ''}
+              <div style="display: flex; justify-content: space-between; margin-top: 6px; font-size: 10px; color: #64748b;">
+                <span>Status: <strong style="color: #38bdf8;">${l.status || 'new'}</strong></span>
+                <span>${time}</span>
+              </div>
+            </div>
+          `;
+        }).join('');
+      } catch (err) {
+        container.innerHTML = '<div style="font-size: 12px; color: var(--accent-rose); text-align: center; padding: 20px;">Failed to load leads</div>';
+      }
+    }
+
+    function copySnippet() {
+      const text = document.getElementById('embedSnippetCode').textContent;
+      navigator.clipboard.writeText(text).then(() => {
+        const btn = document.querySelector('.copy-snippet-btn');
+        btn.textContent = 'Copied! ✅';
+        setTimeout(() => btn.textContent = 'Copy Snippet', 2000);
+      });
+    }
+
+    // Initialize initial leads
+    window.addEventListener('load', () => {
+      setTimeout(fetchLeads, 1000);
+    });
+  </script>
+</body>
+</html>

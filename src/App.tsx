@@ -42,6 +42,7 @@ const NotFoundView = React.lazy(() => import('./components/NotFoundView'));
 const CompetitorIndexView = React.lazy(() => import('./components/CompetitorIndexView'));
 const CompetitorComparisonView = React.lazy(() => import('./components/CompetitorComparisonView'));
 const ExploreOtherTools = React.lazy(() => import('./components/ExploreOtherTools'));
+const AiFrontdeskView = React.lazy(() => import('./components/AiFrontdeskView'));
 
 // Toggle flag to enable or disable the AI Citation Readiness Scanner component
 const ENABLE_AI_CITATION_WIDGET = true;
@@ -119,6 +120,7 @@ function getPageFromPath(pathname: string): {
   if (cleanPath === '/why-us') return { page: 'why-us', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/ai-frontdesk') return { page: 'ai-frontdesk', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
@@ -226,6 +228,7 @@ export default function App() {
     else if (currentPage === 'why-us') path = '/why-us';
     else if (currentPage === 'local-seo') path = '/local-seo';
     else if (currentPage === 'pricing') path = '/pricing';
+    else if (currentPage === 'ai-frontdesk') path = '/ai-frontdesk';
     else if (currentPage === 'seo-tool') path = '/seo-tool';
     else if (currentPage === 'contact') path = '/contact';
     else if (currentPage === 'admin') path = '/admin/dashboard';
@@ -2499,6 +2502,23 @@ export default function App() {
                   />
                 );
               })()}
+            </motion.div>
+          )}
+
+          {/* AI FRONTDESK MARKETING VIEW */}
+          {currentPage === 'ai-frontdesk' && (
+            <motion.div
+              key="ai-frontdesk"
+              initial={{ opacity: 0, y: 15 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -15 }}
+              transition={{ duration: 0.3 }}
+            >
+              <AiFrontdeskView
+                setCurrentPage={setCurrentPage}
+                onOpenOnboarding={() => handleOpenOnboarding(null)}
+                onGetFreeStrategy={handleGetFreeStrategy}
+              />
             </motion.div>
           )}
 

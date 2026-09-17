@@ -658,7 +658,65 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     }
   }
 
-  // 4. Core Pages SSR: /pricing, /about, /why-us, /case-studies, /local-seo
+  // 4. Core Pages SSR: /ai-frontdesk, /pricing, /about, /why-us, /case-studies, /local-seo
+  if (cleanPath === '/ai-frontdesk') {
+    const title = "AI FrontDesk Dispatcher & Estimator (SurgeBot) - Local Surge SEO";
+    const description = "24/7 AI FrontDesk dispatcher for trade contractors. $10/mo standard plan or custom fleet suite. Start your 30-day free trial on your website today.";
+    const canonical = "https://localsurgeseo.com/ai-frontdesk";
+    const ogImage = "https://localsurgeseo.com/assets/og-frontdesk.png";
+
+    const schemaJson = {
+      "@context": "https://schema.org",
+      "@graph": [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "AI FrontDesk", "item": canonical }
+          ]
+        },
+        {
+          "@type": "SoftwareApplication",
+          "name": "SurgeBot AI FrontDesk",
+          "applicationCategory": "BusinessApplication",
+          "operatingSystem": "Web",
+          "offers": [
+            {
+              "@type": "Offer",
+              "name": "AI FrontDesk Core",
+              "price": "10",
+              "priceCurrency": "USD",
+              "description": "24/7 AI chat triage, WebMCP conversational lead collector, and 30-day free trial."
+            },
+            {
+              "@type": "Offer",
+              "name": "Custom Trade Plan",
+              "price": "Custom",
+              "description": "Bespoke setup with damage photo vision, email dispatches, and phone/SMS alerts."
+            }
+          ]
+        }
+      ]
+    };
+
+    const crawlMarkup = `
+      <div id="ssr-frontdesk-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
+        <h1>SurgeBot: 24/7 AI FrontDesk Dispatcher & Estimator</h1>
+        <p>${description}</p>
+        <section>
+          <h2>Standard Plan - $10 / Month (30-Day Free Trial Available)</h2>
+          <p>Instant 24/7 AI triage, WebMCP conversational lead collection and auto-submission on customer behalf, 60s auto-crawl, and zero-conflict Shadow DOM embed.</p>
+        </section>
+        <section>
+          <h2>Custom Contractor Plan</h2>
+          <p>Tailored trade setups with damage photo inspection, instant email dispatches with 1-click call/maps, and phone/SMS alerts.</p>
+        </section>
+      </div>
+    `;
+
+    return injectMetadataAndFallback(rawHtml, title, description, canonical, ogImage, schemaJson, crawlMarkup);
+  }
+
   if (cleanPath === '/pricing') {
     const title = "Transparent Local SEO Pricing & Plans - Local Surge SEO";
     const description = "Contract-free monthly SEO signal boosters: Single-Page Blast ($0/mo), Starter Boost ($999/mo), and Premium Surge ($1,999/mo). Complete pricing matrix.";

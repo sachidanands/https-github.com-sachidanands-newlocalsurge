@@ -672,6 +672,37 @@ export default function SchemaMarkup({
       });
     }
 
+    if (currentPage === 'ai-frontdesk') {
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'SoftwareApplication',
+        'name': 'LocalSurge AI FrontDesk (SurgeBot)',
+        'operatingSystem': 'Web, iOS, Android',
+        'applicationCategory': 'BusinessApplication',
+        'offers': [
+          {
+            '@type': 'Offer',
+            'name': 'Solo Handyman Micro',
+            'price': '5.00',
+            'priceCurrency': 'USD'
+          },
+          {
+            '@type': 'Offer',
+            'name': 'Starter Plan',
+            'price': '49.00',
+            'priceCurrency': 'USD'
+          },
+          {
+            '@type': 'Offer',
+            'name': 'Pro Tier',
+            'price': '89.00',
+            'priceCurrency': 'USD'
+          }
+        ],
+        'description': '24/7 AI Receptionist and lead qualification engine for local contractors (Plumbing, HVAC, Roofing, Electricians, Dental). Reads contractor websites in 60s, inspects damage photos, and dispatches leads via SMS and email.'
+      });
+    }
+
     return schemas;
   };
 

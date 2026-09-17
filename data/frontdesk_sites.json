@@ -1,0 +1,392 @@
+[
+  {
+    "id": "trial_apexplumbingaustin_com_mu499k3x",
+    "created_at": "2026-09-16T15:28:27.405Z",
+    "updated_at": "2026-09-16T15:28:27.405Z",
+    "business_name": "Apex Plumbing",
+    "industry": "home_services",
+    "website_url": "https://apexplumbingaustin.com",
+    "contact_name": "Mark Test",
+    "contact_email": "mark@test.com",
+    "is_trial": true,
+    "trial_ends_at": "2026-10-16T15:28:27.405Z",
+    "status": "active",
+    "service_radius": {
+      "city": "Local Area",
+      "radiusMiles": 25,
+      "zipCodes": []
+    },
+    "estimate_policy": "Free estimates during normal business hours.",
+    "working_hours": {
+      "weekday": "7:00 AM - 7:00 PM",
+      "weekend": "8:00 AM - 5:00 PM",
+      "emergency247": true
+    },
+    "widget_config": {
+      "themeColor": "#10b981",
+      "greeting": "👋 Hi! Need fast assistance or a free estimate for Apex Plumbing?",
+      "speedToLeadCity": "Local Area",
+      "quickChips": [
+        "🚨 Emergency Service",
+        "📍 Check My Zip Code",
+        "💰 Get Free Estimate",
+        "📞 Request 5-Min Callback"
+      ]
+    },
+    "feature_flags": {
+      "enablePhotoUpload": false,
+      "enableEmailDispatch": true,
+      "enableSmsDispatch": false,
+      "enablePhoneCallback": true,
+      "enableEmergencyBanner": true,
+      "enableDirectBooking": false,
+      "enableCustomBranding": false,
+      "planTier": "trial"
+    },
+    "scraped_knowledge": {}
+  },
+  {
+    "id": "site_micro_demo",
+    "created_at": "2026-09-13T06:09:29.289Z",
+    "updated_at": "2026-09-13T06:09:29.289Z",
+    "business_name": "Budget Handyman Micro",
+    "industry": "handyman",
+    "service_radius": {
+      "city": "Dallas, TX",
+      "radiusMiles": 15,
+      "zipCodes": [
+        "75001"
+      ]
+    },
+    "estimate_policy": "Free estimates during normal business hours.",
+    "working_hours": {
+      "weekday": "7:00 AM - 7:00 PM",
+      "weekend": "8:00 AM - 5:00 PM",
+      "emergency247": true
+    },
+    "widget_config": {
+      "themeColor": "#10b981",
+      "greeting": "👋 Hi! Need fast assistance or a free estimate for Budget Handyman Micro?",
+      "speedToLeadCity": "Dallas, TX",
+      "quickChips": [
+        "🚨 24/7 Emergency Service",
+        "📍 Check My Zip Code",
+        "💰 Get Free Estimate",
+        "📞 Request 5-Min Callback"
+      ]
+    },
+    "feature_flags": {
+      "enablePhotoUpload": false,
+      "enableEmailDispatch": false,
+      "enableSmsDispatch": false,
+      "enablePhoneCallback": false,
+      "enableEmergencyBanner": false,
+      "enableDirectBooking": false,
+      "enableCustomBranding": false,
+      "planTier": "micro"
+    },
+    "status": "active",
+    "scraped_knowledge": {}
+  },
+  {
+    "id": "site_apex_plumbing",
+    "created_at": "2026-08-14T04:36:30.683Z",
+    "updated_at": "2026-09-17T14:11:27.407Z",
+    "business_name": "Apex 24/7 Emergency Plumbing",
+    "industry": "plumbing",
+    "website_url": "https://apexplumbingaustin.com",
+    "phone": "(512) 555-0199",
+    "emergency_phone": "(512) 555-9111",
+    "service_radius": {
+      "city": "Austin, TX",
+      "radiusMiles": 30,
+      "zipCodes": [
+        "78701",
+        "78702",
+        "78704",
+        "78745",
+        "78759",
+        "78703",
+        "78746",
+        "78748",
+        "78750",
+        "78758"
+      ]
+    },
+    "estimate_policy": "Free on-site estimates for tankless water heaters & whole-home repiping during normal business hours. $49 diagnostic trip fee for after-hours emergency calls (fully waived if repair is authorized).",
+    "working_hours": {
+      "weekday": "6:00 AM - 9:00 PM",
+      "weekend": "7:00 AM - 7:00 PM",
+      "emergency247": true,
+      "holidayNote": "24/7 Master Plumber on-call during all major holidays."
+    },
+    "widget_config": {
+      "themeColor": "#0284c7",
+      "greeting": "🚨 Apex Plumbing Emergency Line: Dealing with a leak, burst pipe, or sewer backup in Austin? Our on-duty vans are rolling!",
+      "speedToLeadCity": "Austin & Travis County",
+      "quickChips": [
+        "🚨 24/7 Emergency Water Leak",
+        "🚿 Water Heater Replacement",
+        "🚰 Hydro-Jet Drain Cleaning",
+        "💰 Request Free Estimate"
+      ],
+      "phonePrompt": "Snap a quick photo or describe what's leaking, and we'll dispatch a licensed tech immediately."
+    },
+    "custom_instructions": "Prioritize active water leaks and sewer line backups. If water is gushing, immediately instruct the homeowner to turn off the main water shutoff valve while dispatch is contacted.",
+    "status": "active_paid",
+    "scraped_knowledge": {
+      "businessName": "Apex 24/7 Emergency Plumbing",
+      "industry": "Plumbing & Drain Cleaning",
+      "tagline": "Austin's #1 Rated Emergency Plumbers — Fast 45-Min Guaranteed Arrival",
+      "primaryServices": [
+        "24/7 Emergency Pipe Burst Repair",
+        "Tankless & Traditional Water Heater Installation",
+        "High-Pressure Hydro-Jet Drain Cleaning",
+        "Trenchless Sewer Line Repair & Camera Scans",
+        "Gas Line Leak Detection & Repair",
+        "Commercial & Residential Repiping"
+      ],
+      "serviceAreas": [
+        "Austin",
+        "Round Rock",
+        "Cedar Park",
+        "Pflugerville",
+        "Lakeway",
+        "Buda",
+        "Kyle",
+        "Westlake"
+      ],
+      "emergencyPolicy": "Guaranteed 45-minute response time in Travis & Williamson counties. Master Plumbers on-call 24 hours a day, 365 days a year.",
+      "estimatePolicy": "100% Free upfront estimates for scheduled repairs and replacements. Flat-rate pricing with zero hidden surcharges.",
+      "pricingCues": [
+        "$99 Drain Clearing Special (Standard Clogs)",
+        "$250 OFF Tankless Water Heater Installation",
+        "10% Senior, Veteran & First-Responder Discount",
+        "0% APR Financing for 18 Months on Repiping"
+      ],
+      "faqs": [
+        {
+          "question": "How fast can you get to my house in Austin?",
+          "answer": "For active water emergencies, our mobile dispatched vans arrive in 45 minutes or less across Austin, Round Rock, and Cedar Park."
+        },
+        {
+          "question": "What should I do if a pipe bursts right now?",
+          "answer": "First, locate your main water shutoff valve (usually in the front yard near the curb or garage) and turn it clockwise to stop flooding. Our emergency dispatch team is ready to assist you right now!"
+        },
+        {
+          "question": "Are your plumbers licensed and background checked?",
+          "answer": "Yes, every technician is a Texas-licensed Journeyman or Master Plumber with clean background checks and complete liability coverage."
+        }
+      ],
+      "keyFacts": [
+        "Texas State Board of Plumbing Examiners License #M-41920",
+        "Over 1,200+ 5-Star Google Reviews across Austin",
+        "Fully Bonded & Insured up to $2,000,000"
+      ],
+      "extractedAt": "2026-09-13T04:36:30.684Z",
+      "rawPageCount": 5
+    },
+    "is_trial": false,
+    "is_expired": false,
+    "plan_tier": "standard_paid"
+  },
+  {
+    "id": "site_bayarea_hvac",
+    "created_at": "2026-08-19T04:36:30.684Z",
+    "updated_at": "2026-09-13T04:36:30.684Z",
+    "business_name": "Bay Area Elite HVAC & Heat Pumps",
+    "industry": "hvac",
+    "website_url": "https://bayareaelitehvac.com",
+    "phone": "(408) 555-0142",
+    "emergency_phone": "(408) 555-9482",
+    "service_radius": {
+      "city": "San Jose, CA",
+      "radiusMiles": 35,
+      "zipCodes": [
+        "95112",
+        "95125",
+        "95120",
+        "94086",
+        "95050",
+        "94043",
+        "94301",
+        "94538",
+        "95014",
+        "95032"
+      ]
+    },
+    "estimate_policy": "Free in-home energy consultation & heat pump installation estimates with TECH Clean California rebate assistance (up to $8,000). $69 diagnostic tune-up fee for emergency system failures.",
+    "working_hours": {
+      "weekday": "7:00 AM - 8:00 PM",
+      "weekend": "8:00 AM - 6:00 PM",
+      "emergency247": true,
+      "holidayNote": "On-call HVAC certified technicians available 24/7 for heat wave / winter freeze triage."
+    },
+    "widget_config": {
+      "themeColor": "#10b981",
+      "greeting": "❄️ Bay Area Elite HVAC: Need emergency AC repair, furnace diagnostic, or heat pump rebates in the South Bay?",
+      "speedToLeadCity": "San Jose & South Bay",
+      "quickChips": [
+        "❄️ AC Blowing Warm Air",
+        "🔥 Furnace Not Heating",
+        "⚡ Heat Pump Rebates & Quote",
+        "📞 Request 5-Min Callback"
+      ],
+      "phonePrompt": "Enter your phone number for instant technician dispatch scheduling."
+    },
+    "custom_instructions": "Highlight TECH Clean California and Federal 25C Heat Pump tax credits whenever customers ask about HVAC replacement or high electricity bills.",
+    "status": "active",
+    "scraped_knowledge": {
+      "businessName": "Bay Area Elite HVAC & Heat Pumps",
+      "industry": "Heating, Ventilation & Air Conditioning",
+      "tagline": "Silicon Valley's High-Efficiency Heat Pump & AC Specialists",
+      "primaryServices": [
+        "Inverter Heat Pump System Upgrades & Retrofits",
+        "Same-Day AC Repair & Refrigerant Leak Triage",
+        "High-Efficiency Gas & Electric Furnace Replacement",
+        "Ductless Mini-Split Zoning Installation",
+        "Indoor Air Quality (IAQ) & HEPA Filtration",
+        "Whole-Home Air Duct Sealing & Energy Audits"
+      ],
+      "serviceAreas": [
+        "San Jose",
+        "Santa Clara",
+        "Sunnyvale",
+        "Mountain View",
+        "Palo Alto",
+        "Fremont",
+        "Cupertino",
+        "Los Gatos"
+      ],
+      "emergencyPolicy": "Same-day priority service window. 24/7 emergency dispatch during severe heatwaves and winter freezes.",
+      "estimatePolicy": "Free in-person design consultation on all heat pump and AC installations. Upfront flat-rate pricing on all diagnostics.",
+      "pricingCues": [
+        "Up to $8,000 in Combined TECH & IRA Federal Heat Pump Rebates",
+        "$79 AC / Heating Complete Multi-Point Precision Tune-up",
+        "0% Financing for 24 Months on Mitsubishi & Daikin Systems",
+        "10-Year Parts & Labor Warranty Included"
+      ],
+      "faqs": [
+        {
+          "question": "How much can I save with heat pump rebates in California?",
+          "answer": "Between TECH Clean California, 3C-REN/SVCE regional rebates, and federal 25C tax credits, homeowners can save between $3,000 and $8,000 on qualifying high-efficiency heat pump systems."
+        },
+        {
+          "question": "Why is my AC blowing warm air?",
+          "answer": "Common causes include a frozen evaporator coil, tripped breaker, faulty capacitor, or refrigerant leak. Our technicians carry all universal parts on-truck for instant same-day resolution."
+        },
+        {
+          "question": "Do you offer warranties on replacement systems?",
+          "answer": "Yes! All full system replacements come with a 10-year manufacturer parts warranty and our 10-year Elite workmanship guarantee."
+        }
+      ],
+      "keyFacts": [
+        "California C-20 HVAC Contractor License #1084920",
+        "Mitsubishi Electric Diamond Contractor & Daikin Comfort Pro",
+        "EPA Section 608 Universal Certified Technicians"
+      ],
+      "extractedAt": "2026-09-13T04:36:30.684Z",
+      "rawPageCount": 6
+    }
+  },
+  {
+    "id": "site_summit_roofing",
+    "created_at": "2026-08-24T04:36:30.684Z",
+    "updated_at": "2026-09-13T04:36:30.684Z",
+    "business_name": "Summit Peak Roofing Specialists",
+    "industry": "roofing",
+    "website_url": "https://summitpeakroofing.com",
+    "phone": "(303) 555-0188",
+    "emergency_phone": "(303) 555-9833",
+    "service_radius": {
+      "city": "Denver, CO",
+      "radiusMiles": 40,
+      "zipCodes": [
+        "80202",
+        "80206",
+        "80014",
+        "80123",
+        "80302",
+        "80020",
+        "80112",
+        "80401",
+        "80211",
+        "80012"
+      ]
+    },
+    "estimate_policy": "100% Free Drone Roof Inspection & Comprehensive 4K Hail/Wind Damage Storm Reports. Full insurance claim navigation with zero upfront out-of-pocket costs.",
+    "working_hours": {
+      "weekday": "7:00 AM - 7:00 PM",
+      "weekend": "8:00 AM - 4:00 PM",
+      "emergency247": true,
+      "holidayNote": "24/7 Emergency storm tarping crews active within 2 hours of hail/wind events."
+    },
+    "widget_config": {
+      "themeColor": "#f59e0b",
+      "greeting": "🏠 Summit Peak Roofing: Dealing with a roof leak or recent Front Range hail damage in Denver? We provide instant free drone inspection reports!",
+      "speedToLeadCity": "Denver Metro & Boulder",
+      "quickChips": [
+        "🏠 Urgent Roof Leak Triage",
+        "🚁 Free 4K Drone Roof Inspection",
+        "⛈️ Hail/Storm Insurance Claim",
+        "💰 Full Roof Replacement Quote"
+      ],
+      "phonePrompt": "Upload a photo of your ceiling leak or roof, and our field inspector will call you in 5 minutes."
+    },
+    "custom_instructions": "Emphasize Class 4 impact-resistant shingles (which lower Colorado homeowners insurance premiums by up to 25%) during replacement conversations.",
+    "status": "active",
+    "scraped_knowledge": {
+      "businessName": "Summit Peak Roofing Specialists",
+      "industry": "Roofing & Storm Restoration",
+      "tagline": "Colorado's Elite Storm Restoration & Class 4 Impact Shingle Specialists",
+      "primaryServices": [
+        "Emergency Storm Tarping & Water Intrusion Triage",
+        "Free 4K High-Resolution Drone Roof Inspections",
+        "Hail & Wind Damage Insurance Claim Representation",
+        "Class 4 Impact-Resistant Architectural Shingle Installation",
+        "Standing Seam Metal & Tile Roofing",
+        "Commercial Flat Roof Restoration & TPO Membranes"
+      ],
+      "serviceAreas": [
+        "Denver",
+        "Aurora",
+        "Lakewood",
+        "Littleton",
+        "Centennial",
+        "Boulder",
+        "Broomfield",
+        "Highlands Ranch",
+        "Golden"
+      ],
+      "emergencyPolicy": "2-hour rapid response emergency tarping crews deployed across Denver metro following major storm events.",
+      "estimatePolicy": "100% Free drone inspection report and detailed damage assessment with zero obligation.",
+      "pricingCues": [
+        "Class 4 Shingles qualify for up to 25% annual insurance premium discount",
+        "$500 Deductible Match Upgrade on Approved Full Roof Claims",
+        "Lifetime Transferable Material & Workmanship Warranty",
+        "Flexible $0-Down Financing Options"
+      ],
+      "faqs": [
+        {
+          "question": "How does the free drone roof inspection work?",
+          "answer": "Our FAA-certified drone pilot captures high-resolution 4K imagery of your roof shingles, gutters, and flashing in 15 minutes without damaging your roof. You receive a full digital report within 1 hour."
+        },
+        {
+          "question": "Can you help me file my hail damage insurance claim?",
+          "answer": "Yes! We meet directly with your insurance adjuster on-site, provide our drone data to ensure every damaged shingle and gutter is documented, and maximize your claim approval with zero hassle."
+        },
+        {
+          "question": "What is a Class 4 shingle?",
+          "answer": "Class 4 shingles are tested to withstand 2-inch steel hail balls dropped from 20 feet. In Colorado, they prevent storm damage and qualify for significant discounts on your homeowner's insurance policy."
+        }
+      ],
+      "keyFacts": [
+        "Owens Corning Platinum Preferred Contractor (Top 1% in US)",
+        "GAF Master Elite Certified & BBB A+ Accredited",
+        "Over 3,500 Colorado Roofs Replaced Since 2011"
+      ],
+      "extractedAt": "2026-09-13T04:36:30.684Z",
+      "rawPageCount": 5
+    }
+  }
+]

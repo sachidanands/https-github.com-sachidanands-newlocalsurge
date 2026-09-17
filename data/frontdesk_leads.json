@@ -1,0 +1,239 @@
+[
+  {
+    "id": "flead_mtzu1cv4_1jd5",
+    "site_id": "site_apex_plumbing",
+    "created_at": "2026-09-13T13:11:05.824Z",
+    "status": "new",
+    "urgency": "standard",
+    "customer_name": "back at",
+    "customer_phone": "512-555-0812",
+    "customer_email": null,
+    "service_address": "0812 at 1204 Congress Ave",
+    "issue_description": "Can you call me back at 512-555-0812 at 1204 Congress Ave?",
+    "photo_urls": [],
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "🚨 Apex Plumbing Emergency Line: Dealing with a leak, burst pipe, or sewer backup in Austin? Our on-duty vans are rolling!"
+      },
+      {
+        "role": "user",
+        "content": "Can you call me back at 512-555-0812 at 1204 Congress Ave?"
+      },
+      {
+        "role": "assistant",
+        "content": "Thank you! I have recorded your contact details. Our dispatch team has been notified and will call you within 5 minutes to confirm your appointment!",
+        "timestamp": "2026-09-13T13:11:05.800Z"
+      }
+    ],
+    "qualification_summary": {
+      "urgencyScore": 50,
+      "isInsideServiceArea": true,
+      "actionRequired": "Standard Callback"
+    },
+    "dispatched_at": "2026-09-13T13:11:05.824Z",
+    "dispatch_channel": "email"
+  },
+  {
+    "id": "flead_mtzgvc0b_6jf0",
+    "site_id": "site_apex_plumbing",
+    "created_at": "2026-09-13T07:02:29.771Z",
+    "status": "new",
+    "urgency": "urgent",
+    "customer_name": "Website Lead",
+    "customer_phone": "(512) 555-3399",
+    "customer_email": null,
+    "service_address": "7 Emergency Water Leak\nMy address is 1400 Lavaca St",
+    "issue_description": "🚨 24/7 Emergency Water Leak\nMy address is 1400 Lavaca St, Austin TX, and cell is (512) 555-3399",
+    "photo_urls": [],
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "🚨 Apex Plumbing Emergency Line: Dealing with a leak, burst pipe, or sewer backup in Austin? Our on-duty vans are rolling!",
+        "timestamp": "2026-09-13T07:01:28.072Z"
+      },
+      {
+        "role": "user",
+        "content": "🚨 24/7 Emergency Water Leak",
+        "timestamp": "2026-09-13T07:01:51.362Z"
+      },
+      {
+        "role": "assistant",
+        "content": "🚨 This sounds urgent! If water is actively leaking, please turn off your main water shutoff valve immediately to prevent damage. We have on-duty technicians ready in Austin, TX. What is your address and phone number so dispatch can confirm arrival time?",
+        "timestamp": "2026-09-13T07:01:53.709Z"
+      },
+      {
+        "role": "user",
+        "content": "My address is 1400 Lavaca St, Austin TX, and cell is (512) 555-3399",
+        "timestamp": "2026-09-13T07:02:27.265Z"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for reaching out to Apex 24/7 Emergency Plumbing! We specialize in 24/7 Emergency Pipe Burst Repair, Tankless & Traditional Water Heater Installation, High-Pressure Hydro-Jet Drain Cleaning. Let me know what issue you are experiencing or share your phone number for fast scheduling!",
+        "timestamp": "2026-09-13T07:02:29.769Z"
+      }
+    ],
+    "qualification_summary": {
+      "urgencyScore": 75,
+      "isInsideServiceArea": true,
+      "actionRequired": "Standard Callback"
+    },
+    "dispatched_at": "2026-09-13T07:02:29.771Z",
+    "dispatch_channel": "email"
+  },
+  {
+    "id": "flead_mtzgrkma_15pd",
+    "site_id": "site_apex_plumbing",
+    "created_at": "2026-09-13T06:59:34.306Z",
+    "status": "new",
+    "urgency": "emergency",
+    "customer_name": "Website Lead",
+    "customer_phone": "512-555-8942",
+    "customer_email": null,
+    "service_address": "2104 South Lamar Blvd 78704",
+    "issue_description": "Hi, I have a burst water pipe flooding my laundry room in Austin! My address is 2104 South Lamar Blvd, Austin TX 78704, and my phone number is 512-555-8942. Please send a plumber ASAP!",
+    "photo_urls": [],
+    "transcript": [
+      {
+        "role": "user",
+        "content": "Hi, I have a burst water pipe flooding my laundry room in Austin! My address is 2104 South Lamar Blvd, Austin TX 78704, and my phone number is 512-555-8942. Please send a plumber ASAP!"
+      },
+      {
+        "role": "assistant",
+        "content": "🚨 This sounds urgent! If water is actively leaking, please turn off your main water shutoff valve immediately to prevent damage. We have on-duty technicians ready in Austin, TX. What is your address and phone number so dispatch can confirm arrival time?",
+        "timestamp": "2026-09-13T06:59:34.304Z"
+      }
+    ],
+    "qualification_summary": {
+      "urgencyScore": 95,
+      "isInsideServiceArea": true,
+      "actionRequired": "Immediate Dispatch Required"
+    },
+    "dispatched_at": "2026-09-13T06:59:34.306Z",
+    "dispatch_channel": "email"
+  },
+  {
+    "id": "flead_mtzez5hz_z2bi",
+    "site_id": "site_apex_plumbing",
+    "created_at": "2026-09-13T06:09:28.727Z",
+    "status": "new",
+    "urgency": "emergency",
+    "customer_name": "Marcus Vance",
+    "customer_phone": "(512) 555-9081",
+    "customer_email": null,
+    "service_address": "4501 South Congress Ave 78745",
+    "issue_description": "Water pipe burst, gushing in my garage!\nI am Marcus Vance, phone is (512) 555-9081, address is 4501 South Congress Ave, Austin TX 78745",
+    "photo_urls": [],
+    "transcript": [
+      {
+        "role": "user",
+        "content": "Water pipe burst, gushing in my garage!",
+        "timestamp": "2026-09-13T06:09:26.868Z"
+      },
+      {
+        "role": "assistant",
+        "content": "Turn off your main shutoff valve immediately! What is your address and phone?",
+        "timestamp": "2026-09-13T06:09:26.868Z"
+      },
+      {
+        "role": "user",
+        "content": "I am Marcus Vance, phone is (512) 555-9081, address is 4501 South Congress Ave, Austin TX 78745",
+        "timestamp": "2026-09-13T06:09:26.868Z"
+      },
+      {
+        "role": "assistant",
+        "content": "Thanks for reaching out to Apex 24/7 Emergency Plumbing! We specialize in 24/7 Emergency Pipe Burst Repair, Tankless & Traditional Water Heater Installation, High-Pressure Hydro-Jet Drain Cleaning. Let me know what issue you are experiencing or share your phone number for fast scheduling!",
+        "timestamp": "2026-09-13T06:09:28.709Z"
+      }
+    ],
+    "qualification_summary": {
+      "urgencyScore": 95,
+      "isInsideServiceArea": true,
+      "actionRequired": "Immediate Dispatch Required"
+    },
+    "dispatched_at": "2026-09-13T06:09:28.727Z",
+    "dispatch_channel": "email"
+  },
+  {
+    "id": "flead_mtzbnmeg_og5z",
+    "site_id": "site_apex_plumbing",
+    "created_at": "2026-09-13T04:36:31.912Z",
+    "status": "new",
+    "urgency": "urgent",
+    "customer_name": "Sarah Jenkins",
+    "customer_phone": "(512) 555-4921",
+    "customer_email": "sarah@austinhome.com",
+    "service_address": "1204 S Congress Ave, Austin, TX",
+    "issue_description": "Main water shutoff leaking slowly under the sink.",
+    "photo_urls": [
+      "https://images.unsplash.com/photo-1584622650111-993a426fbf0a?w=600&auto=format&fit=crop&q=80"
+    ],
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "Hi Sarah, how can Apex Plumbing help you today?",
+        "timestamp": "2026-09-13T04:36:31.674Z"
+      },
+      {
+        "role": "user",
+        "content": "I have a slow leak under my kitchen sink.",
+        "timestamp": "2026-09-13T04:36:31.674Z"
+      }
+    ],
+    "qualification_summary": {
+      "urgencyScore": 75,
+      "detectedService": "Under-sink supply line repair"
+    },
+    "dispatched_at": "2026-09-13T04:36:31.912Z",
+    "dispatch_channel": "email"
+  },
+  {
+    "id": "flead_demo_plumb1",
+    "site_id": "site_apex_plumbing",
+    "created_at": "2026-09-13T02:36:30.686Z",
+    "status": "dispatched",
+    "urgency": "emergency",
+    "customer_name": "Marcus Vance",
+    "customer_phone": "(512) 555-0812",
+    "customer_email": "marcus.vance@gmail.com",
+    "service_address": "3402 Barton Springs Rd, Austin, TX 78704",
+    "issue_description": "Water heater burst in the garage, active flooding on the floor. Main shutoff engaged.",
+    "photo_urls": [],
+    "transcript": [
+      {
+        "role": "assistant",
+        "content": "🚨 Apex Plumbing Emergency Line: Dealing with a leak, burst pipe, or sewer backup in Austin? Our on-duty vans are rolling!",
+        "timestamp": "2026-09-13T02:36:30.686Z"
+      },
+      {
+        "role": "user",
+        "content": "My water heater just ruptured and water is pouring into my garage!",
+        "timestamp": "2026-09-13T02:37:00.686Z"
+      },
+      {
+        "role": "assistant",
+        "content": "Stay calm Marcus! Turn off your water heater's cold water inlet valve immediately if safe. What is your address and cell phone? Dispatch is ready to roll.",
+        "timestamp": "2026-09-13T02:37:30.686Z"
+      },
+      {
+        "role": "user",
+        "content": "3402 Barton Springs Rd, 512-555-0812. Valve is closed now.",
+        "timestamp": "2026-09-13T02:38:00.686Z"
+      },
+      {
+        "role": "assistant",
+        "content": "Great job shutting off the valve! Technician Dave is dispatched in Van #4 and will arrive within 35 minutes.",
+        "timestamp": "2026-09-13T02:38:30.686Z"
+      }
+    ],
+    "qualification_summary": {
+      "urgencyScore": 98,
+      "detectedService": "Emergency Water Heater Rupture",
+      "estimatedScope": "Immediate tank drainage + same-day 50-gallon replacement",
+      "actionRequired": "Technician dispatched to Barton Springs location",
+      "isInsideServiceArea": true
+    },
+    "dispatched_at": "2026-09-13T02:38:30.687Z",
+    "dispatch_channel": "sms"
+  }
+]

@@ -1,8 +1,23 @@
 import express from "express";
 import path from "path";
 import fs from "fs";
-
+import crypto from "crypto";
 import dotenv from "dotenv";
+import type { FrontdeskLead, LeadStatus, LeadUrgency } from "../src/types/frontdesk";
+import { crawlSiteKnowledge } from "./services/frontdesk-crawler";
+import {
+  buildFrontdeskSystemPrompt,
+  formatGeminiContents,
+  extractLeadEntitiesFromText,
+  generateFallbackStream,
+  streamMultiProviderChat
+} from "./services/frontdesk-ai";
+import {
+  dispatchLeadEmail,
+  dispatchTrialWelcomeEmail,
+  sendTrialExpiryReportEmail,
+  sendGracePeriodEndedEmail
+} from "./services/frontdesk-dispatch";
 
 dotenv.config();
 
@@ -31,8 +46,13 @@ app.use((req, res, next) => {
   next();
 });
 
-// Set safe payload size limit (since PDF generation is now server-side, large client uploads are not needed)
-app.use(express.json({ limit: "1mb" }));
+// Set safe payload size limit & capture rawBody for webhook HMAC verification
+app.use(express.json({
+  limit: "1mb",
+  verify: (req: any, _res, buf) => {
+    req.rawBody = buf;
+  }
+}));
 app.use(express.urlencoded({ limit: "1mb", extended: true }));
 
 // HTML escaping helper to prevent HTML injection in emails
@@ -249,6 +269,8 @@ async function getGemini() {
 const isVercel = process.env.VERCEL === "1";
 const DATA_DIR = isVercel ? "/tmp" : path.join(process.cwd(), "data");
 const LEADS_FILE = path.join(DATA_DIR, "leads.json");
+const FRONTDESK_SITES_FILE = path.join(DATA_DIR, "frontdesk_sites.json");
+const FRONTDESK_LEADS_FILE = path.join(DATA_DIR, "frontdesk_leads.json");
 
 function initDb() {
   try {
@@ -318,46 +340,402 @@ function initDb() {
             ],
             executiveSummary: "Denver's plumbing search volume is highly lucrative. Elite Plumbing has a solid foundation with an existing website, but lagging on-page keyword density and citation consistency on Yelp/Bing are throttling their rankings.",
             actionPlan: [
-              "Perform local citation NAP cleanup (fix old addresses)",
-              "Deploy plumbing LocalBusiness Schema markup on homepage",
-              "Establish automated review collection funnel for new service calls",
-              "Optimize GBP keywords specifically for emergency leak repairs"
+              "Standardize Name, Address, and Phone numbers across all local business directories.",
+              "Embed schema markup to guarantee enhanced rich snippets in Google Search results.",
+              "Setup real-time rank tracking to monitor top 10 keywords.",
+              "Generate customer review QR code placards for technician service vans."
             ]
           }
         },
         {
           id: "lead_2",
-          createdAt: new Date(Date.now() - 4 * 3600 * 1000).toISOString(),
-          status: "new",
-          notes: "Brand new lead. Needs initial contact email. Wants a completely new single-page website built.",
+          createdAt: new Date(Date.now() - 14 * 3600 * 1000).toISOString(),
+          status: "pending",
+          notes: "Single location HVAC provider in Miami. Requires complete GBP verification from scratch.",
           input: {
             planId: "single-page",
             planName: "Single-Page Blast",
-            businessName: "Luminate Dental Care",
-            contactName: "Dr. Sarah Kim",
-            email: "contact@luminatedental.com",
-            phone: "650-555-9831",
-            website: "",
+            businessName: "South Beach HVAC Pros",
+            contactName: "Maria Garcia",
+            email: "maria@southbeachhvac.com",
+            phone: "305-555-0182",
+            website: "https://southbeachhvac.com",
             hasWebsite: false,
-            industry: "Cosmetic & General Dentistry",
-            location: "San Mateo, CA",
-            keywords: "dentist san mateo, teeth whitening, clear aligners nearby",
+            industry: "HVAC & Air Conditioning",
+            location: "Miami, FL",
+            keywords: "emergency ac repair miami, hvac south beach, air duct cleaning",
             hasGBP: false,
             gbpLink: ""
+          },
+          aiAudit: {
+            overallScore: 48,
+            domainName: "southbeachhvac.com",
+            niche: "HVAC & Air Conditioning",
+            location: "Miami, FL",
+            timestamp: new Date(Date.now() - 14 * 3600 * 1000).toISOString(),
+            EXECUTIVE_SUMMARY: "Miami HVAC is fiercely competitive. South Beach HVAC Pros is starting fresh without an optimized GBP, offering massive growth upside once the core NAP and verification pillars are established.",
+            analysis: [
+              {
+                title: "Google Business Profile Status",
+                score: 30,
+                description: "No verified GBP found under exact name match. Critical baseline for local pack ranking.",
+                recommendations: [
+                  "Initiate postal/video verification for South Beach primary address immediately.",
+                  "Configure primary category as 'Air Conditioning Repair Service' and secondary as 'HVAC Contractor'.",
+                  "Define service boundaries covering Miami-Dade county."
+                ]
+              },
+              {
+                title: "Local Search Presence",
+                score: 55,
+                description: "Brand visibility is currently zero in local map pack search terms.",
+                recommendations: [
+                  "Launch 1-page high-converting local landing page with click-to-call CTA.",
+                  "Add customer review collection mechanism for service techs."
+                ]
+              },
+              {
+                title: "Competitive Landscape",
+                score: 60,
+                description: "Top 3 competitors average 85+ reviews. Targeted local landing pages can bridge the gap.",
+                recommendations: [
+                  "Target high-intent emergency keywords: 'same day ac repair miami'.",
+                  "Publish upfront flat-rate pricing guarantee on landing page."
+                ]
+              }
+            ],
+            executiveSummary: "Miami HVAC is fiercely competitive. South Beach HVAC Pros is starting fresh without an optimized GBP, offering massive growth upside once the core NAP and verification pillars are established.",
+            actionPlan: [
+              "Create and verify Google Business Profile with emergency HVAC category tags.",
+              "Launch high-speed landing page with click-to-call emergency dispatch button.",
+              "Submit NAP to top 40 citation directories (Yelp, Apple Maps, Bing Places).",
+              "Install review request automation via SMS for completed jobs."
+            ]
           }
         }
       ];
       fs.writeFileSync(LEADS_FILE, JSON.stringify(initialLeads, null, 2));
+      console.log("Initialized default sample leads in data/leads.json");
     }
-  } catch (err) {
-    console.error("⚠️ Failed to initialize local database in initDb():", err);
+
+    // Seed FrontDesk Sites if not existing
+    if (!fs.existsSync(FRONTDESK_SITES_FILE)) {
+      const initialSites = [
+        {
+          id: "site_apex_plumbing",
+          created_at: new Date(Date.now() - 30 * 86400 * 1000).toISOString(),
+          updated_at: new Date().toISOString(),
+          business_name: "Apex 24/7 Emergency Plumbing",
+          industry: "plumbing",
+          website_url: "https://apexplumbingaustin.com",
+          phone: "(512) 555-0199",
+          emergency_phone: "(512) 555-9111",
+          service_radius: {
+            city: "Austin, TX",
+            radiusMiles: 30,
+            zipCodes: ["78701", "78702", "78704", "78745", "78759", "78703", "78746", "78748", "78750", "78758"]
+          },
+          estimate_policy: "Free on-site estimates for tankless water heaters & whole-home repiping during normal business hours. $49 diagnostic trip fee for after-hours emergency calls (fully waived if repair is authorized).",
+          working_hours: {
+            weekday: "6:00 AM - 9:00 PM",
+            weekend: "7:00 AM - 7:00 PM",
+            emergency247: true,
+            holidayNote: "24/7 Master Plumber on-call during all major holidays."
+          },
+          widget_config: {
+            themeColor: "#0284c7",
+            greeting: "🚨 Apex Plumbing Emergency Line: Dealing with a leak, burst pipe, or sewer backup in Austin? Our on-duty vans are rolling!",
+            speedToLeadCity: "Austin & Travis County",
+            quickChips: [
+              "🚨 24/7 Emergency Water Leak",
+              "🚿 Water Heater Replacement",
+              "🚰 Hydro-Jet Drain Cleaning",
+              "💰 Request Free Estimate"
+            ],
+            phonePrompt: "Snap a quick photo or describe what's leaking, and we'll dispatch a licensed tech immediately."
+          },
+          feature_flags: {
+            enablePhotoUpload: true,
+            enableEmailDispatch: true,
+            enableSmsDispatch: true,
+            enablePhoneCallback: true,
+            enableEmergencyBanner: true,
+            enableDirectBooking: false,
+            enableCustomBranding: false,
+            planTier: "pro"
+          },
+          custom_instructions: "Prioritize active water leaks and sewer line backups. If water is gushing, immediately instruct the homeowner to turn off the main water shutoff valve while dispatch is contacted.",
+          status: "active",
+          scraped_knowledge: {
+            businessName: "Apex 24/7 Emergency Plumbing",
+            industry: "Plumbing & Drain Cleaning",
+            tagline: "Austin's #1 Rated Emergency Plumbers — Fast 45-Min Guaranteed Arrival",
+            primaryServices: [
+              "24/7 Emergency Pipe Burst Repair",
+              "Tankless & Traditional Water Heater Installation",
+              "High-Pressure Hydro-Jet Drain Cleaning",
+              "Trenchless Sewer Line Repair & Camera Scans",
+              "Gas Line Leak Detection & Repair",
+              "Commercial & Residential Repiping"
+            ],
+            serviceAreas: ["Austin", "Round Rock", "Cedar Park", "Pflugerville", "Lakeway", "Buda", "Kyle", "Westlake"],
+            emergencyPolicy: "Guaranteed 45-minute response time in Travis & Williamson counties. Master Plumbers on-call 24 hours a day, 365 days a year.",
+            estimatePolicy: "100% Free upfront estimates for scheduled repairs and replacements. Flat-rate pricing with zero hidden surcharges.",
+            pricingCues: [
+              "$99 Drain Clearing Special (Standard Clogs)",
+              "$250 OFF Tankless Water Heater Installation",
+              "10% Senior, Veteran & First-Responder Discount",
+              "0% APR Financing for 18 Months on Repiping"
+            ],
+            faqs: [
+              {
+                question: "How fast can you get to my house in Austin?",
+                answer: "For active water emergencies, our mobile dispatched vans arrive in 45 minutes or less across Austin, Round Rock, and Cedar Park."
+              },
+              {
+                question: "What should I do if a pipe bursts right now?",
+                answer: "First, locate your main water shutoff valve (usually in the front yard near the curb or garage) and turn it clockwise to stop flooding. Our emergency dispatch team is ready to assist you right now!"
+              },
+              {
+                question: "Are your plumbers licensed and background checked?",
+                answer: "Yes, every technician is a Texas-licensed Journeyman or Master Plumber with clean background checks and complete liability coverage."
+              }
+            ],
+            keyFacts: [
+              "Texas State Board of Plumbing Examiners License #M-41920",
+              "Over 1,200+ 5-Star Google Reviews across Austin",
+              "Fully Bonded & Insured up to $2,000,000"
+            ],
+            extractedAt: new Date().toISOString(),
+            rawPageCount: 5
+          }
+        },
+        {
+          id: "site_bayarea_hvac",
+          created_at: new Date(Date.now() - 25 * 86400 * 1000).toISOString(),
+          updated_at: new Date().toISOString(),
+          business_name: "Bay Area Elite HVAC & Heat Pumps",
+          industry: "hvac",
+          website_url: "https://bayareaelitehvac.com",
+          phone: "(408) 555-0142",
+          emergency_phone: "(408) 555-9482",
+          service_radius: {
+            city: "San Jose, CA",
+            radiusMiles: 35,
+            zipCodes: ["95112", "95125", "95120", "94086", "95050", "94043", "94301", "94538", "95014", "95032"]
+          },
+          estimate_policy: "Free in-home energy consultation & heat pump installation estimates with TECH Clean California rebate assistance (up to $8,000). $69 diagnostic tune-up fee for emergency system failures.",
+          working_hours: {
+            weekday: "7:00 AM - 8:00 PM",
+            weekend: "8:00 AM - 6:00 PM",
+            emergency247: true,
+            holidayNote: "On-call HVAC certified technicians available 24/7 for heat wave / winter freeze triage."
+          },
+          widget_config: {
+            themeColor: "#10b981",
+            greeting: "❄️ Bay Area Elite HVAC: Need emergency AC repair, furnace diagnostic, or heat pump rebates in the South Bay?",
+            speedToLeadCity: "San Jose & South Bay",
+            quickChips: [
+              "❄️ AC Blowing Warm Air",
+              "🔥 Furnace Not Heating",
+              "⚡ Heat Pump Rebates & Quote",
+              "📞 Request 5-Min Callback"
+            ],
+            phonePrompt: "Enter your phone number for instant technician dispatch scheduling."
+          },
+          feature_flags: {
+            enablePhotoUpload: true,
+            enableEmailDispatch: true,
+            enableSmsDispatch: false,
+            enablePhoneCallback: true,
+            enableEmergencyBanner: true,
+            enableDirectBooking: false,
+            enableCustomBranding: false,
+            planTier: "starter"
+          },
+          custom_instructions: "Highlight TECH Clean California and Federal 25C Heat Pump tax credits whenever customers ask about HVAC replacement or high electricity bills.",
+          status: "active",
+          scraped_knowledge: {
+            businessName: "Bay Area Elite HVAC & Heat Pumps",
+            industry: "Heating, Ventilation & Air Conditioning",
+            tagline: "Silicon Valley's High-Efficiency Heat Pump & AC Specialists",
+            primaryServices: [
+              "Inverter Heat Pump System Upgrades & Retrofits",
+              "Same-Day AC Repair & Refrigerant Leak Triage",
+              "High-Efficiency Gas & Electric Furnace Replacement",
+              "Ductless Mini-Split Zoning Installation",
+              "Indoor Air Quality (IAQ) & HEPA Filtration",
+              "Whole-Home Air Duct Sealing & Energy Audits"
+            ],
+            serviceAreas: ["San Jose", "Santa Clara", "Sunnyvale", "Mountain View", "Palo Alto", "Fremont", "Cupertino", "Los Gatos"],
+            emergencyPolicy: "Same-day priority service window. 24/7 emergency dispatch during severe heatwaves and winter freezes.",
+            estimatePolicy: "Free in-person design consultation on all heat pump and AC installations. Upfront flat-rate pricing on all diagnostics.",
+            pricingCues: [
+              "Up to $8,000 in Combined TECH & IRA Federal Heat Pump Rebates",
+              "$79 AC / Heating Complete Multi-Point Precision Tune-up",
+              "0% Financing for 24 Months on Mitsubishi & Daikin Systems",
+              "10-Year Parts & Labor Warranty Included"
+            ],
+            faqs: [
+              {
+                question: "How much can I save with heat pump rebates in California?",
+                answer: "Between TECH Clean California, 3C-REN/SVCE regional rebates, and federal 25C tax credits, homeowners can save between $3,000 and $8,000 on qualifying high-efficiency heat pump systems."
+              },
+              {
+                question: "Why is my AC blowing warm air?",
+                answer: "Common causes include a frozen evaporator coil, tripped breaker, faulty capacitor, or refrigerant leak. Our technicians carry all universal parts on-truck for instant same-day resolution."
+              },
+              {
+                question: "Do you offer warranties on replacement systems?",
+                answer: "Yes! All full system replacements come with a 10-year manufacturer parts warranty and our 10-year Elite workmanship guarantee."
+              }
+            ],
+            keyFacts: [
+              "California C-20 HVAC Contractor License #1084920",
+              "Mitsubishi Electric Diamond Contractor & Daikin Comfort Pro",
+              "EPA Section 608 Universal Certified Technicians"
+            ],
+            extractedAt: new Date().toISOString(),
+            rawPageCount: 6
+          }
+        },
+        {
+          id: "site_summit_roofing",
+          created_at: new Date(Date.now() - 20 * 86400 * 1000).toISOString(),
+          updated_at: new Date().toISOString(),
+          business_name: "Summit Peak Roofing Specialists",
+          industry: "roofing",
+          website_url: "https://summitpeakroofing.com",
+          phone: "(303) 555-0188",
+          emergency_phone: "(303) 555-9833",
+          service_radius: {
+            city: "Denver, CO",
+            radiusMiles: 40,
+            zipCodes: ["80202", "80206", "80014", "80123", "80302", "80020", "80112", "80401", "80211", "80012"]
+          },
+          estimate_policy: "100% Free Drone Roof Inspection & Comprehensive 4K Hail/Wind Damage Storm Reports. Full insurance claim navigation with zero upfront out-of-pocket costs.",
+          working_hours: {
+            weekday: "7:00 AM - 7:00 PM",
+            weekend: "8:00 AM - 4:00 PM",
+            emergency247: true,
+            holidayNote: "24/7 Emergency storm tarping crews active within 2 hours of hail/wind events."
+          },
+          widget_config: {
+            themeColor: "#f59e0b",
+            greeting: "🏠 Summit Peak Roofing: Dealing with a roof leak or recent Front Range hail damage in Denver? We provide instant free drone inspection reports!",
+            speedToLeadCity: "Denver Metro & Boulder",
+            quickChips: [
+              "🏠 Urgent Roof Leak Triage",
+              "🚁 Free 4K Drone Roof Inspection",
+              "⛈️ Hail/Storm Insurance Claim",
+              "💰 Full Roof Replacement Quote"
+            ],
+            phonePrompt: "Upload a photo of your ceiling leak or roof, and our field inspector will call you in 5 minutes."
+          },
+          feature_flags: {
+            enablePhotoUpload: true,
+            enableEmailDispatch: true,
+            enableSmsDispatch: true,
+            enablePhoneCallback: true,
+            enableEmergencyBanner: true,
+            enableDirectBooking: false,
+            enableCustomBranding: true,
+            planTier: "enterprise"
+          },
+          custom_instructions: "Emphasize Class 4 impact-resistant shingles (which lower Colorado homeowners insurance premiums by up to 25%) during replacement conversations.",
+          status: "active",
+          scraped_knowledge: {
+            businessName: "Summit Peak Roofing Specialists",
+            industry: "Roofing & Storm Restoration",
+            tagline: "Colorado's Elite Storm Restoration & Class 4 Impact Shingle Specialists",
+            primaryServices: [
+              "Emergency Storm Tarping & Water Intrusion Triage",
+              "Free 4K High-Resolution Drone Roof Inspections",
+              "Hail & Wind Damage Insurance Claim Representation",
+              "Class 4 Impact-Resistant Architectural Shingle Installation",
+              "Standing Seam Metal & Tile Roofing",
+              "Commercial Flat Roof Restoration & TPO Membranes"
+            ],
+            serviceAreas: ["Denver", "Aurora", "Lakewood", "Littleton", "Centennial", "Boulder", "Broomfield", "Highlands Ranch", "Golden"],
+            emergencyPolicy: "2-hour rapid response emergency tarping crews deployed across Denver metro following major storm events.",
+            estimatePolicy: "100% Free drone inspection report and detailed damage assessment with zero obligation.",
+            pricingCues: [
+              "Class 4 Shingles qualify for up to 25% annual insurance premium discount",
+              "$500 Deductible Match Upgrade on Approved Full Roof Claims",
+              "Lifetime Transferable Material & Workmanship Warranty",
+              "Flexible $0-Down Financing Options"
+            ],
+            faqs: [
+              {
+                question: "How does the free drone roof inspection work?",
+                answer: "Our FAA-certified drone pilot captures high-resolution 4K imagery of your roof shingles, gutters, and flashing in 15 minutes without damaging your roof. You receive a full digital report within 1 hour."
+              },
+              {
+                question: "Can you help me file my hail damage insurance claim?",
+                answer: "Yes! We meet directly with your insurance adjuster on-site, provide our drone data to ensure every damaged shingle and gutter is documented, and maximize your claim approval with zero hassle."
+              },
+              {
+                question: "What is a Class 4 shingle?",
+                answer: "Class 4 shingles are tested to withstand 2-inch steel hail balls dropped from 20 feet. In Colorado, they prevent storm damage and qualify for significant discounts on your homeowner's insurance policy."
+              }
+            ],
+            keyFacts: [
+              "Owens Corning Platinum Preferred Contractor (Top 1% in US)",
+              "GAF Master Elite Certified & BBB A+ Accredited",
+              "Over 3,500 Colorado Roofs Replaced Since 2011"
+            ],
+            extractedAt: new Date().toISOString(),
+            rawPageCount: 5
+          }
+        }
+      ];
+      fs.writeFileSync(FRONTDESK_SITES_FILE, JSON.stringify(initialSites, null, 2));
+      console.log("Initialized default sample FrontDesk sites in data/frontdesk_sites.json");
+    }
+
+    // Seed FrontDesk Leads if not existing
+    if (!fs.existsSync(FRONTDESK_LEADS_FILE)) {
+      const initialFrontdeskLeads = [
+        {
+          id: "flead_demo_plumb1",
+          site_id: "site_apex_plumbing",
+          created_at: new Date(Date.now() - 2 * 3600 * 1000).toISOString(),
+          status: "dispatched",
+          urgency: "emergency",
+          customer_name: "Marcus Vance",
+          customer_phone: "(512) 555-0812",
+          customer_email: "marcus.vance@gmail.com",
+          service_address: "3402 Barton Springs Rd, Austin, TX 78704",
+          issue_description: "Water heater burst in the garage, active flooding on the floor. Main shutoff engaged.",
+          photo_urls: [],
+          transcript: [
+            { role: "assistant", content: "🚨 Apex Plumbing Emergency Line: Dealing with a leak, burst pipe, or sewer backup in Austin? Our on-duty vans are rolling!", timestamp: new Date(Date.now() - 2 * 3600 * 1000).toISOString() },
+            { role: "user", content: "My water heater just ruptured and water is pouring into my garage!", timestamp: new Date(Date.now() - 2 * 3600 * 1000 + 30000).toISOString() },
+            { role: "assistant", content: "Stay calm Marcus! Turn off your water heater's cold water inlet valve immediately if safe. What is your address and cell phone? Dispatch is ready to roll.", timestamp: new Date(Date.now() - 2 * 3600 * 1000 + 60000).toISOString() },
+            { role: "user", content: "3402 Barton Springs Rd, 512-555-0812. Valve is closed now.", timestamp: new Date(Date.now() - 2 * 3600 * 1000 + 90000).toISOString() },
+            { role: "assistant", content: "Great job shutting off the valve! Technician Dave is dispatched in Van #4 and will arrive within 35 minutes.", timestamp: new Date(Date.now() - 2 * 3600 * 1000 + 120000).toISOString() }
+          ],
+          qualification_summary: {
+            urgencyScore: 98,
+            detectedService: "Emergency Water Heater Rupture",
+            estimatedScope: "Immediate tank drainage + same-day 50-gallon replacement",
+            actionRequired: "Technician dispatched to Barton Springs location",
+            isInsideServiceArea: true
+          },
+          dispatched_at: new Date(Date.now() - 2 * 3600 * 1000 + 120000).toISOString(),
+          dispatch_channel: "sms"
+        }
+      ];
+      fs.writeFileSync(FRONTDESK_LEADS_FILE, JSON.stringify(initialFrontdeskLeads, null, 2));
+      console.log("Initialized default sample FrontDesk leads in data/frontdesk_leads.json");
+    }
+  } catch (error) {
+    console.error("Error initializing mock DB files:", error);
   }
 }
 
-initDb();
-
+// Templates configuration helper for programmatic lead nurturing
 const TEMPLATES_FILE = path.join(DATA_DIR, "pdf_templates.json");
-
 const defaultTemplates = {
   "single-page": {
     timeline: "2 - 3 Business Days to Live Sandbox",
@@ -486,6 +864,48 @@ function writeLeads(leads: any) {
     fs.writeFileSync(LEADS_FILE, JSON.stringify(leads, null, 2));
   } catch (error) {
     console.error("Error writing leads file:", error);
+  }
+}
+
+function readFrontdeskSites() {
+  try {
+    if (!fs.existsSync(FRONTDESK_SITES_FILE)) {
+      initDb();
+    }
+    const data = fs.readFileSync(FRONTDESK_SITES_FILE, "utf-8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading frontdesk sites file:", error);
+    return [];
+  }
+}
+
+function writeFrontdeskSites(sites: any) {
+  try {
+    fs.writeFileSync(FRONTDESK_SITES_FILE, JSON.stringify(sites, null, 2));
+  } catch (error) {
+    console.error("Error writing frontdesk sites file:", error);
+  }
+}
+
+function readFrontdeskLeads() {
+  try {
+    if (!fs.existsSync(FRONTDESK_LEADS_FILE)) {
+      initDb();
+    }
+    const data = fs.readFileSync(FRONTDESK_LEADS_FILE, "utf-8");
+    return JSON.parse(data);
+  } catch (error) {
+    console.error("Error reading frontdesk leads file:", error);
+    return [];
+  }
+}
+
+function writeFrontdeskLeads(leads: any) {
+  try {
+    fs.writeFileSync(FRONTDESK_LEADS_FILE, JSON.stringify(leads, null, 2));
+  } catch (error) {
+    console.error("Error writing frontdesk leads file:", error);
   }
 }
 
@@ -2610,6 +3030,874 @@ app.post("/api/webmcp/invoke", async (req, res) => {
   }
 
   return res.status(404).json({ success: false, error: `Unknown WebMCP tool "${toolName}".` });
+});
+
+// =========================================================================
+// AI FRONTDESK & SURGEBOT REST ENDPOINTS (PHASE 1)
+// =========================================================================
+
+// 1. GET /api/frontdesk/schema.sql - Serve raw Supabase SQL DDL
+app.get("/api/frontdesk/schema.sql", (_req, res) => {
+  const schemaPath = path.join(process.cwd(), "scripts", "frontdesk_schema.sql");
+  if (fs.existsSync(schemaPath)) {
+    res.type("text/plain");
+    return res.send(fs.readFileSync(schemaPath, "utf-8"));
+  }
+  return res.status(404).send("-- frontdesk_schema.sql not found");
+});
+
+// 2. GET /api/frontdesk/sites - List all registered FrontDesk sites
+app.get("/api/frontdesk/sites", async (_req, res) => {
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("frontdesk_sites")
+        .select("*")
+        .order("created_at", { ascending: false });
+      if (!error && data && data.length > 0) {
+        return res.json({ success: true, count: data.length, sites: data, source: "supabase" });
+      }
+    } catch {
+      // Fallback to local JSON
+    }
+  }
+  const localSites = readFrontdeskSites();
+  return res.json({ success: true, count: localSites.length, sites: localSites, source: "local" });
+});
+
+// ==========================================
+// 30-DAY TRIAL LIFECYCLE & LEMONSQUEEZY SUITE
+// ==========================================
+
+function getLemonSqueezyCheckoutUrl(site: any): string {
+  const baseCheckoutUrl = process.env.LEMONSQUEEZY_CHECKOUT_URL;
+  if (!baseCheckoutUrl) {
+    return `/pricing?siteId=${encodeURIComponent(site.id)}&action=activate_frontdesk`;
+  }
+  try {
+    const url = new URL(baseCheckoutUrl);
+    url.searchParams.set("checkout[custom][site_id]", site.id);
+    if (site.contact_email) {
+      url.searchParams.set("checkout[email]", site.contact_email);
+    }
+    if (site.contact_name) {
+      url.searchParams.set("checkout[name]", site.contact_name);
+    }
+    return url.toString();
+  } catch {
+    return `${baseCheckoutUrl}?checkout[custom][site_id]=${encodeURIComponent(site.id)}`;
+  }
+}
+
+function getSiteLeadStats(siteId: string) {
+  const allLeads = readFrontdeskLeads();
+  const siteLeads = allLeads.filter((l: any) => l.site_id === siteId);
+  const totalLeads = siteLeads.length;
+  const emergencyLeads = siteLeads.filter((l: any) => l.urgency === "emergency" || l.urgency === "urgent").length;
+  const estimatedPipelineValue = Math.max(totalLeads * 450, totalLeads > 0 ? 450 : 0);
+
+  const afterHoursLeads = siteLeads.filter((l: any) => {
+    if (!l.created_at) return false;
+    const date = new Date(l.created_at);
+    const hour = date.getHours();
+    const day = date.getDay();
+    return hour >= 18 || hour < 7 || day === 0 || day === 6;
+  }).length;
+
+  return {
+    totalLeads,
+    emergencyLeads,
+    estimatedPipelineValue,
+    afterHoursLeads: afterHoursLeads || (totalLeads > 0 ? Math.max(1, Math.floor(totalLeads * 0.4)) : 0)
+  };
+}
+
+async function evaluateSiteTrialStatus(site: any, supabaseClient?: any): Promise<{ site: any; status: string; checkoutUrl: string }> {
+  const checkoutUrl = getLemonSqueezyCheckoutUrl(site);
+
+  // If already paid or not a trial, keep active
+  if (!site.is_trial || site.status === "active_paid") {
+    return { site, status: site.status || "active_paid", checkoutUrl };
+  }
+
+  const now = Date.now();
+  const trialEnds = site.trial_ends_at
+    ? new Date(site.trial_ends_at).getTime()
+    : new Date(site.created_at || now).getTime() + 30 * 24 * 60 * 60 * 1000;
+
+  // 3-day courtesy grace period
+  const graceEnds = site.grace_ends_at
+    ? new Date(site.grace_ends_at).getTime()
+    : trialEnds + 3 * 24 * 60 * 60 * 1000;
+
+  let dirty = false;
+
+  if (!site.grace_ends_at) {
+    site.grace_ends_at = new Date(graceEnds).toISOString();
+    dirty = true;
+  }
+
+  if (now < trialEnds) {
+    // 1. Within 30-Day Free Trial
+    if (site.status !== "active") {
+      site.status = "active";
+      dirty = true;
+    }
+  } else if (now >= trialEnds && now < graceEnds) {
+    // 2. Within 3-Day Grace Period (Day 30 to Day 33)
+    if (site.status !== "grace_period") {
+      site.status = "grace_period";
+      dirty = true;
+    }
+
+    // Proactively send Day 30 Performance Report & Grace Period email if not sent yet
+    if (!site.trial_expiry_email_sent_at) {
+      site.trial_expiry_email_sent_at = new Date().toISOString();
+      dirty = true;
+      const stats = getSiteLeadStats(site.id);
+      sendTrialExpiryReportEmail(site, stats, checkoutUrl, getResend).catch((err) => {
+        console.error("❌ Failed to dispatch trial expiry report email:", err);
+      });
+    }
+  } else {
+    // 3. Grace Period Concluded (Day 33+) -> Soft-Locked
+    if (site.status !== "soft_locked") {
+      site.status = "soft_locked";
+      site.is_expired = true;
+      dirty = true;
+    }
+
+    // Proactively send Day 33 Grace Ended notice if not sent yet
+    if (!site.grace_ended_email_sent_at) {
+      site.grace_ended_email_sent_at = new Date().toISOString();
+      dirty = true;
+      sendGracePeriodEndedEmail(site, checkoutUrl, getResend).catch((err) => {
+        console.error("❌ Failed to dispatch grace ended email:", err);
+      });
+    }
+  }
+
+  if (dirty) {
+    site.updated_at = new Date().toISOString();
+    // Persist to local JSON
+    const localSites = readFrontdeskSites();
+    const idx = localSites.findIndex((s: any) => s.id === site.id);
+    if (idx >= 0) {
+      localSites[idx] = { ...localSites[idx], ...site };
+      writeFrontdeskSites(localSites);
+    }
+    // Persist to Supabase if configured
+    const sb = supabaseClient || (await getSupabase());
+    if (sb) {
+      try {
+        await sb.from("frontdesk_sites").upsert([site]);
+      } catch (err) {
+        console.warn("⚠️ Supabase site update warning:", err);
+      }
+    }
+  }
+
+  return { site, status: site.status, checkoutUrl };
+}
+
+// Background Task: Check for expiring sites & dispatch Day 30 / Day 33 emails every 6 hours
+setInterval(async () => {
+  try {
+    const sites = readFrontdeskSites();
+    for (const site of sites) {
+      if (site.is_trial && site.status !== "active_paid") {
+        await evaluateSiteTrialStatus(site);
+      }
+    }
+  } catch (err) {
+    console.error("⚠️ Background trial status evaluation error:", err);
+  }
+}, 6 * 60 * 60 * 1000);
+
+// 3. GET /api/frontdesk/sites/:id - Fetch single site by ID (used by widget.js)
+app.get("/api/frontdesk/sites/:id", async (req, res) => {
+  const siteId = String(req.params.id).trim();
+  let site: any = null;
+  let source = "local";
+
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("frontdesk_sites")
+        .select("*")
+        .eq("id", siteId)
+        .single();
+      if (!error && data) {
+        site = data;
+        source = "supabase";
+      }
+    } catch {
+      // Fallback to local JSON
+    }
+  }
+
+  if (!site) {
+    const localSites = readFrontdeskSites();
+    site = localSites.find((s: any) => s.id === siteId);
+  }
+
+  if (!site) {
+    return res.status(404).json({ success: false, error: `FrontDesk site "${siteId}" not found.` });
+  }
+
+  // Evaluate 30-day trial and grace period status
+  const evaluation = await evaluateSiteTrialStatus(site, supabase);
+  const checkoutUrl = evaluation.checkoutUrl;
+  const currentStatus = evaluation.status;
+
+  return res.json({
+    success: true,
+    site: evaluation.site,
+    status: currentStatus,
+    isGracePeriod: currentStatus === "grace_period",
+    isSoftLocked: currentStatus === "soft_locked",
+    isExpired: currentStatus === "soft_locked" || currentStatus === "expired",
+    checkoutUrl,
+    contactPhone: site.emergency_phone || site.phone || "(512) 555-0199",
+    source
+  });
+});
+
+// 3b. GET /api/frontdesk/checkout-url - Get personalized LemonSqueezy checkout URL for a site
+app.get("/api/frontdesk/checkout-url", async (req, res) => {
+  const { siteId } = req.query;
+  if (!siteId) {
+    return res.status(400).json({ success: false, error: "siteId query parameter is required" });
+  }
+
+  const localSites = readFrontdeskSites();
+  const site = localSites.find((s: any) => s.id === String(siteId));
+  if (!site) {
+    return res.status(404).json({ success: false, error: "FrontDesk site not found" });
+  }
+
+  const checkoutUrl = getLemonSqueezyCheckoutUrl(site);
+  return res.json({ success: true, siteId, checkoutUrl });
+});
+
+// 3c. POST /api/frontdesk/webhook/lemonsqueezy - Instant LemonSqueezy Subscription Activation
+app.post("/api/frontdesk/webhook/lemonsqueezy", async (req: any, res) => {
+  const secret = process.env.LEMONSQUEEZY_WEBHOOK_SECRET;
+  const signature = req.headers["x-signature"] as string;
+
+  if (secret && signature) {
+    try {
+      const raw = req.rawBody || JSON.stringify(req.body);
+      const hmac = crypto.createHmac("sha256", secret);
+      const digest = Buffer.from(hmac.update(raw).digest("hex"), "utf8");
+      const checksum = Buffer.from(signature, "utf8");
+      if (checksum.length !== digest.length || !crypto.timingSafeEqual(digest, checksum)) {
+        console.warn("⚠️ Invalid LemonSqueezy webhook signature");
+        return res.status(403).json({ error: "Invalid webhook signature" });
+      }
+    } catch (err) {
+      console.warn("⚠️ LemonSqueezy signature verification error:", err);
+      return res.status(403).json({ error: "Signature verification failed" });
+    }
+  }
+
+  const eventName = req.body?.meta?.event_name || req.body?.event_name || "unknown";
+  console.log(`📥 Received LemonSqueezy webhook event: ${eventName}`);
+
+  // Retrieve custom_data.site_id from checkout metadata
+  const customData = req.body?.meta?.custom_data || {};
+  const siteId = customData.site_id || customData.siteId || req.body?.data?.attributes?.first_order_item?.product_name;
+
+  if (!siteId) {
+    console.warn("⚠️ LemonSqueezy webhook received without custom site_id", customData);
+    return res.json({ received: true, note: "No site_id found in custom_data" });
+  }
+
+  // Activate site upon subscription or successful order payment
+  const localSites = readFrontdeskSites();
+  const targetSite = localSites.find((s: any) => s.id === String(siteId).trim());
+
+  if (targetSite) {
+    targetSite.status = "active_paid";
+    targetSite.is_trial = false;
+    targetSite.is_expired = false;
+    targetSite.plan_tier = "standard_paid";
+    targetSite.updated_at = new Date().toISOString();
+    writeFrontdeskSites(localSites);
+
+    const supabase = await getSupabase();
+    if (supabase) {
+      try {
+        await supabase.from("frontdesk_sites").upsert([targetSite]);
+      } catch (err) {
+        console.warn("⚠️ Supabase webhook site update warning:", err);
+      }
+    }
+    console.log(`✅ FrontDesk site "${siteId}" successfully upgraded to active_paid!`);
+  } else {
+    console.warn(`⚠️ FrontDesk site "${siteId}" not found in database during webhook processing.`);
+  }
+
+  return res.json({ received: true, siteId, activated: Boolean(targetSite) });
+});
+
+// 4. POST /api/frontdesk/sites/create - Register new contractor profile
+app.post("/api/frontdesk/sites/create", async (req, res) => {
+  const {
+    id,
+    businessName,
+    industry = "general_contractor",
+    websiteUrl,
+    phone,
+    emergencyPhone,
+    serviceRadius,
+    estimatePolicy,
+    workingHours,
+    widgetConfig,
+    featureFlags,
+    feature_flags,
+    customInstructions
+  } = req.body;
+
+  if (!businessName) {
+    return res.status(400).json({ success: false, error: "businessName is required." });
+  }
+
+  const siteId = id
+    ? String(id).trim().toLowerCase().replace(/[^a-z0-9_-]/g, "_")
+    : `site_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`;
+
+  const resolvedFlags = featureFlags || feature_flags || {
+    enablePhotoUpload: true,
+    enableEmailDispatch: true,
+    enableSmsDispatch: false,
+    enablePhoneCallback: true,
+    enableEmergencyBanner: true,
+    enableDirectBooking: false,
+    enableCustomBranding: false,
+    planTier: "starter"
+  };
+
+  const newSite: any = {
+    id: siteId,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    business_name: String(businessName).trim(),
+    industry: String(industry).trim(),
+    website_url: websiteUrl ? String(websiteUrl).trim() : undefined,
+    phone: phone ? String(phone).trim() : undefined,
+    emergency_phone: emergencyPhone ? String(emergencyPhone).trim() : undefined,
+    service_radius: serviceRadius || { city: "Local Area", radiusMiles: 25, zipCodes: [] },
+    estimate_policy: estimatePolicy || "Free estimates during normal business hours.",
+    working_hours: workingHours || { weekday: "7:00 AM - 7:00 PM", weekend: "8:00 AM - 5:00 PM", emergency247: true },
+    widget_config: widgetConfig || {
+      themeColor: "#10b981",
+      greeting: `👋 Hi! Need fast assistance or a free estimate for ${businessName}?`,
+      speedToLeadCity: serviceRadius?.city || "Local Area",
+      quickChips: ["🚨 24/7 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]
+    },
+    feature_flags: resolvedFlags,
+    custom_instructions: customInstructions || undefined,
+    status: "active",
+    scraped_knowledge: {}
+  };
+
+  // 1. Local JSON persistence
+  const sites = readFrontdeskSites();
+  const existingIdx = sites.findIndex((s: any) => s.id === siteId);
+  if (existingIdx >= 0) {
+    sites[existingIdx] = { ...sites[existingIdx], ...newSite, updated_at: new Date().toISOString() };
+  } else {
+    sites.unshift(newSite);
+  }
+  writeFrontdeskSites(sites);
+
+  // 2. Supabase persistence
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      await supabase.from("frontdesk_sites").upsert([newSite]);
+    } catch (err) {
+      console.warn("⚠️ Supabase site insert warning (saved locally):", err);
+    }
+  }
+
+  return res.json({ success: true, siteId: newSite.id, site: newSite });
+});
+
+// 4b. POST /api/frontdesk/trial - 30-Day Free Trial Onboarding (Generates script, emails steps, crawls domain)
+app.post("/api/frontdesk/trial", async (req, res) => {
+  const { domain, websiteUrl, email, name, businessName, phone } = req.body;
+  const targetDomain = String(domain || websiteUrl || "").trim();
+  const contactEmail = String(email || "").trim();
+  const contactName = String(name || "").trim();
+  const bName = String(businessName || "").trim();
+
+  if (!targetDomain || !contactEmail || !bName) {
+    return res.status(400).json({
+      success: false,
+      error: "Website domain, business email, and business name are required to start a 30-day trial."
+    });
+  }
+
+  // Format domain to clean URL
+  let fullUrl = targetDomain;
+  if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://")) {
+    fullUrl = `https://${fullUrl}`;
+  }
+
+  const cleanHost = targetDomain
+    .replace(/^https?:\/\//i, "")
+    .replace(/\/.*$/, "")
+    .replace(/[^a-zA-Z0-9]/g, "_")
+    .toLowerCase()
+    .slice(0, 24);
+
+  const siteId = `trial_${cleanHost}_${Date.now().toString(36)}`;
+  // Expiry timestamp: exactly 30 days from now
+  const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+  const newTrialSite: any = {
+    id: siteId,
+    created_at: new Date().toISOString(),
+    updated_at: new Date().toISOString(),
+    business_name: bName,
+    industry: "home_services",
+    website_url: fullUrl,
+    contact_name: contactName,
+    contact_email: contactEmail,
+    phone: phone ? String(phone).trim() : undefined,
+    is_trial: true,
+    trial_ends_at: trialEndsAt,
+    status: "active",
+    service_radius: { city: "Local Area", radiusMiles: 25, zipCodes: [] },
+    estimate_policy: "Free estimates during normal business hours.",
+    working_hours: { weekday: "7:00 AM - 7:00 PM", weekend: "8:00 AM - 5:00 PM", emergency247: true },
+    widget_config: {
+      themeColor: "#10b981",
+      greeting: `👋 Hi! Need fast assistance or a free estimate for ${bName}?`,
+      speedToLeadCity: "Local Area",
+      quickChips: ["🚨 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]
+    },
+    feature_flags: {
+      enablePhotoUpload: false,
+      enableEmailDispatch: true,
+      enableSmsDispatch: false,
+      enablePhoneCallback: true,
+      enableEmergencyBanner: true,
+      enableDirectBooking: false,
+      enableCustomBranding: false,
+      planTier: "trial"
+    },
+    scraped_knowledge: {}
+  };
+
+  // 1. Local JSON persistence
+  const sites = readFrontdeskSites();
+  sites.unshift(newTrialSite);
+  writeFrontdeskSites(sites);
+
+  // 2. Supabase persistence
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      await supabase.from("frontdesk_sites").upsert([newTrialSite]);
+    } catch (err) {
+      console.warn("⚠️ Supabase trial site insert warning (saved locally):", err);
+    }
+  }
+
+  // 3. Asynchronously trigger website crawl so knowledge is ready
+  crawlSiteKnowledge(fullUrl, getGemini, { businessName: bName, deepCrawl: false })
+    .then(async (crawlResult) => {
+      if (crawlResult.success && crawlResult.knowledge) {
+        const currentSites = readFrontdeskSites();
+        const idx = currentSites.findIndex((s: any) => s.id === siteId);
+        if (idx >= 0) {
+          currentSites[idx].scraped_knowledge = crawlResult.knowledge;
+          if (crawlResult.knowledge.businessName) {
+            currentSites[idx].business_name = crawlResult.knowledge.businessName;
+          }
+          currentSites[idx].updated_at = new Date().toISOString();
+          writeFrontdeskSites(currentSites);
+        }
+      }
+    })
+    .catch((crawlErr) => {
+      console.warn("⚠️ Background trial website crawl error:", crawlErr);
+    });
+
+  // 4. Send email with script and setup instructions via Resend
+  dispatchTrialWelcomeEmail(newTrialSite, getResend).catch((emailErr) => {
+    console.warn("⚠️ Trial welcome email dispatch warning:", emailErr);
+  });
+
+  const scriptTag = `<script src="https://localsurge.com/widget.js" data-site-id="${siteId}" defer></script>`;
+
+  return res.json({
+    success: true,
+    siteId,
+    trialEndsAt,
+    scriptTag,
+    site: newTrialSite,
+    instructions: {
+      wordpress: "1. Install WPCode plugin. 2. Go to Code Snippets > Header & Footer. 3. Paste the script tag into Footer box and Save.",
+      wix: "1. Go to Settings > Custom Code. 2. Click '+ Add Custom Code'. 3. Paste snippet, select 'Body - End', and click Apply.",
+      squarespace: "1. Go to Website > Website Tools > Code Injection. 2. Paste snippet in Footer box and Save.",
+      html: "Paste the snippet right before the closing </body> tag on any website."
+    }
+  });
+});
+
+// 5. POST /api/frontdesk/crawl - Standalone URL knowledge ingestion
+app.post("/api/frontdesk/crawl", async (req, res) => {
+  const { url, businessName, industry, deepCrawl = true } = req.body;
+  if (!url) {
+    return res.status(400).json({ success: false, error: "Website URL is required." });
+  }
+
+  const crawlResult = await crawlSiteKnowledge(url, getGemini, { businessName, industry, deepCrawl });
+  return res.json({ success: crawlResult.success, result: crawlResult });
+});
+
+// 6. POST /api/frontdesk/sites/:id/crawl - Crawl & update an existing site's knowledge
+app.post("/api/frontdesk/sites/:id/crawl", async (req, res) => {
+  const siteId = String(req.params.id).trim();
+  const sites = readFrontdeskSites();
+  const siteIdx = sites.findIndex((s: any) => s.id === siteId);
+
+  let targetUrl = req.body.url;
+  let currentSite = siteIdx >= 0 ? sites[siteIdx] : null;
+
+  if (!targetUrl && currentSite?.website_url) {
+    targetUrl = currentSite.website_url;
+  }
+
+  if (!targetUrl) {
+    return res.status(400).json({ success: false, error: "No URL provided and site has no website_url." });
+  }
+
+  const crawlResult = await crawlSiteKnowledge(targetUrl, getGemini, {
+    businessName: currentSite?.business_name,
+    industry: currentSite?.industry,
+    deepCrawl: req.body.deepCrawl !== false
+  });
+
+  if (currentSite) {
+    currentSite.scraped_knowledge = crawlResult.knowledge;
+    currentSite.updated_at = new Date().toISOString();
+    if (crawlResult.knowledge.businessName && currentSite.business_name === "Local Service Specialist") {
+      currentSite.business_name = crawlResult.knowledge.businessName;
+    }
+    if (crawlResult.knowledge.industry && currentSite.industry === "general_contractor") {
+      currentSite.industry = crawlResult.knowledge.industry;
+    }
+    sites[siteIdx] = currentSite;
+    writeFrontdeskSites(sites);
+
+    const supabase = await getSupabase();
+    if (supabase) {
+      try {
+        await supabase.from("frontdesk_sites").upsert([currentSite]);
+      } catch (dbErr) {
+        console.warn("⚠️ Supabase update warning:", dbErr);
+      }
+    }
+  }
+
+  return res.json({ success: crawlResult.success, siteId, result: crawlResult });
+});
+
+// 7. POST /api/frontdesk/leads/create - Capture qualified lead from chat widget
+app.post("/api/frontdesk/leads/create", async (req, res) => {
+  const {
+    siteId,
+    customerName,
+    customerPhone,
+    customerEmail,
+    serviceAddress,
+    issueDescription,
+    urgency = "standard",
+    photoUrls = [],
+    transcript = [],
+    qualificationSummary = {},
+    dispatchChannel = "email"
+  } = req.body;
+
+  if (!siteId || !customerName || !customerPhone) {
+    return res.status(400).json({ success: false, error: "Missing required fields (siteId, customerName, customerPhone)." });
+  }
+
+  const newLeadId = `flead_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`;
+  const newLead: FrontdeskLead = {
+    id: newLeadId,
+    site_id: String(siteId).trim(),
+    created_at: new Date().toISOString(),
+    status: "new" as LeadStatus,
+    urgency: (["emergency", "urgent", "standard", "inquiry"].includes(urgency) ? urgency : "standard") as LeadUrgency,
+    customer_name: String(customerName).trim(),
+    customer_phone: String(customerPhone).trim(),
+    customer_email: customerEmail ? String(customerEmail).trim() : undefined,
+    service_address: serviceAddress ? String(serviceAddress).trim() : undefined,
+    issue_description: issueDescription ? String(issueDescription).trim() : undefined,
+    photo_urls: Array.isArray(photoUrls) ? photoUrls : [],
+    transcript: Array.isArray(transcript) ? transcript : [],
+    qualification_summary: qualificationSummary || {},
+    dispatched_at: new Date().toISOString(),
+    dispatch_channel: dispatchChannel
+  };
+
+  // 1. Local JSON persistence
+  const leads = readFrontdeskLeads();
+  leads.unshift(newLead);
+  writeFrontdeskLeads(leads);
+
+  // 2. Supabase persistence
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      const { error } = await supabase.from("frontdesk_leads").insert([newLead]);
+      if (error) {
+        if (error.code === "42P01") {
+          console.info(`ℹ️ Supabase table 'frontdesk_leads' pending creation - stored in local JSON!`);
+        } else {
+          console.warn("⚠️ Supabase frontdesk lead insert warning:", error.message || error);
+        }
+      } else {
+        console.log(`🟢 Successfully saved FrontDesk lead ${newLead.id} to Supabase!`);
+      }
+    } catch {
+      // Fallback caught
+    }
+  }
+
+  // 3. Trigger instant email dispatch via Resend (respects feature flags)
+  const sites = readFrontdeskSites();
+  const site = sites.find((s: any) => s.id === newLead.site_id);
+  if (site) {
+    dispatchLeadEmail(newLead, site, getResend).catch((err) => {
+      console.warn("⚠️ Lead email alert dispatch error:", err);
+    });
+  }
+
+  return res.json({
+    success: true,
+    leadId: newLead.id,
+    status: newLead.status,
+    urgency: newLead.urgency,
+    dispatchedAt: newLead.dispatched_at
+  });
+});
+
+// 8. GET /api/frontdesk/leads/:siteId - Retrieve leads for a specific contractor
+app.get("/api/frontdesk/leads/:siteId", async (req, res) => {
+  const siteId = String(req.params.siteId).trim();
+  const localLeads = readFrontdeskLeads();
+  const filteredLocal = localLeads.filter((l: any) => l.site_id === siteId);
+
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      const { data, error } = await supabase
+        .from("frontdesk_leads")
+        .select("*")
+        .eq("site_id", siteId)
+        .order("created_at", { ascending: false });
+      if (!error && data && data.length > 0) {
+        return res.json({ success: true, siteId, count: data.length, leads: data, source: "supabase" });
+      }
+    } catch {
+      // Fallback to local
+    }
+  }
+
+  return res.json({ success: true, siteId, count: filteredLocal.length, leads: filteredLocal, source: "local" });
+});
+
+// Adaptive IP Chat Rate Limiter (25 messages per 15 mins per IP)
+const chatIpLimits = new Map<string, { count: number; resetTime: number }>();
+const CHAT_RATE_WINDOW = 15 * 60 * 1000;
+const MAX_CHAT_PER_WINDOW = 25;
+
+function isChatRateLimited(ip: string): boolean {
+  const now = Date.now();
+  const limit = chatIpLimits.get(ip);
+  if (!limit || now > limit.resetTime) {
+    chatIpLimits.set(ip, { count: 1, resetTime: now + CHAT_RATE_WINDOW });
+    return false;
+  }
+  if (limit.count >= MAX_CHAT_PER_WINDOW) {
+    return true;
+  }
+  limit.count++;
+  return false;
+}
+
+// 9. POST /api/frontdesk/chat - Real-time SSE Chat Stream with Multi-Provider Cascade & Triage
+app.post("/api/frontdesk/chat", async (req, res) => {
+  const clientIp = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+  if (isChatRateLimited(clientIp)) {
+    return res.status(429).json({
+      success: false,
+      error: "Too many chat messages. Please wait a few minutes before sending another inquiry."
+    });
+  }
+
+  const { siteId, messages = [] } = req.body;
+
+  if (!siteId) {
+    return res.status(400).json({ success: false, error: "siteId is required." });
+  }
+
+  // Find site
+  let site: any = null;
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      const { data } = await supabase.from("frontdesk_sites").select("*").eq("id", siteId).single();
+      if (data) site = data;
+    } catch {
+      // Fallback
+    }
+  }
+  if (!site) {
+    const sites = readFrontdeskSites();
+    site = sites.find((s: any) => s.id === siteId);
+  }
+
+  if (!site) {
+    return res.status(404).json({ success: false, error: `FrontDesk site "${siteId}" not found.` });
+  }
+
+  // Check trial & grace period expiration
+  const evaluation = await evaluateSiteTrialStatus(site, supabase);
+  if (evaluation.status === "soft_locked" || site.status === "expired") {
+    res.setHeader("Content-Type", "text/event-stream");
+    res.setHeader("Cache-Control", "no-cache, no-transform");
+    res.setHeader("Connection", "keep-alive");
+    const phone = site.emergency_phone || site.phone || "our dispatch line";
+    res.write(`data: ${JSON.stringify({ token: `⚠️ 24/7 AI chat answering is paused as the trial period has concluded. Please contact ${phone} directly for assistance, or reactivate SurgeBot at ${evaluation.checkoutUrl}.` })}\n\n`);
+    res.write(`data: [DONE]\n\n`);
+    return res.end();
+  }
+
+  // Filter messages based on feature flags
+  const flags = site.feature_flags || {
+    enablePhotoUpload: true,
+    enableEmailDispatch: true,
+    enableSmsDispatch: false,
+    enablePhoneCallback: true,
+    enableEmergencyBanner: true,
+    enableDirectBooking: false,
+    enableCustomBranding: false,
+    planTier: "starter"
+  };
+
+  const processedMessages = messages.map((m: any) => {
+    if (flags.enablePhotoUpload === false) {
+      const { imageUrl, ...rest } = m;
+      return rest;
+    }
+    return m;
+  });
+
+  // Setup SSE stream headers
+  res.setHeader("Content-Type", "text/event-stream");
+  res.setHeader("Cache-Control", "no-cache, no-transform");
+  res.setHeader("Connection", "keep-alive");
+  res.setHeader("X-Accel-Buffering", "no");
+  res.flushHeaders?.();
+
+  let fullAssistantText = "";
+
+  try {
+    // Execute Multi-Provider Cascade (Gemini 2.5 Flash -> Groq/OpenAI -> Local Rule Engine)
+    for await (const token of streamMultiProviderChat(site, processedMessages, getGemini)) {
+      fullAssistantText += token;
+      res.write(`data: ${JSON.stringify({ type: "token", token })}\n\n`);
+    }
+
+    // Combine transcript with assistant response
+    const completeTranscript = [
+      ...processedMessages,
+      { role: "assistant", content: fullAssistantText, timestamp: new Date().toISOString() }
+    ];
+
+    // Extract lead entities
+    const extracted = extractLeadEntitiesFromText(completeTranscript, site);
+
+    // If phone or email captured, record lead & trigger dispatch
+    let savedLeadId: string | undefined = undefined;
+    if (extracted.isComplete && extracted.customerPhone) {
+      const leads = readFrontdeskLeads();
+      const existingLeadIdx = leads.findIndex((l: any) => l.site_id === site.id && l.customer_phone === extracted.customerPhone);
+
+      // Collect photo attachments from transcript
+      const photoUrls: string[] = [];
+      for (const m of processedMessages) {
+        if (m.imageUrl) photoUrls.push(m.imageUrl);
+      }
+
+      const leadPayload: any = {
+        id: existingLeadIdx >= 0 ? leads[existingLeadIdx].id : `flead_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`,
+        site_id: site.id,
+        created_at: existingLeadIdx >= 0 ? leads[existingLeadIdx].created_at : new Date().toISOString(),
+        status: existingLeadIdx >= 0 ? leads[existingLeadIdx].status : "new",
+        urgency: extracted.urgency,
+        customer_name: extracted.customerName || "Website Lead",
+        customer_phone: extracted.customerPhone,
+        customer_email: extracted.customerEmail || null,
+        service_address: extracted.serviceAddress || null,
+        issue_description: extracted.issueDescription || fullAssistantText.slice(0, 150),
+        photo_urls: photoUrls,
+        transcript: completeTranscript,
+        qualification_summary: {
+          urgencyScore: extracted.urgency === "emergency" ? 95 : extracted.urgency === "urgent" ? 75 : 50,
+          isInsideServiceArea: extracted.isInsideServiceArea,
+          actionRequired: extracted.urgency === "emergency" ? "Immediate Dispatch Required" : "Standard Callback"
+        },
+        dispatched_at: new Date().toISOString(),
+        dispatch_channel: flags.enableEmailDispatch ? "email" : "none"
+      };
+
+      if (existingLeadIdx >= 0) {
+        leads[existingLeadIdx] = leadPayload;
+      } else {
+        leads.unshift(leadPayload);
+      }
+      writeFrontdeskLeads(leads);
+      savedLeadId = leadPayload.id;
+
+      // Supabase sync
+      if (supabase) {
+        try {
+          await supabase.from("frontdesk_leads").upsert([leadPayload]);
+        } catch {
+          // Fallback
+        }
+      }
+
+      // Trigger Resend email dispatch if enabled
+      if (flags.enableEmailDispatch !== false) {
+        dispatchLeadEmail(leadPayload, site, getResend).catch((err) => {
+          console.warn("⚠️ Lead email alert background dispatch error:", err);
+        });
+      }
+
+      res.write(`data: ${JSON.stringify({ type: "lead_update", lead: extracted, leadId: savedLeadId })}\n\n`);
+    } else {
+      res.write(`data: ${JSON.stringify({ type: "lead_update", lead: extracted })}\n\n`);
+    }
+
+    res.write(`data: ${JSON.stringify({ type: "done", fullText: fullAssistantText })}\n\n`);
+    res.end();
+  } catch (err: any) {
+    console.error("❌ FrontDesk chat stream error:", err);
+    res.write(`data: ${JSON.stringify({ type: "error", error: err.message || "Chat stream failed" })}\n\n`);
+    res.end();
+  }
 });
 
 export default app;

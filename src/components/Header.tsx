@@ -2,7 +2,7 @@ import React, { useState, useEffect } from 'react';
 import { Page } from '../types';
 import { 
   Rocket, BarChart3, Users, Landmark, Contact, Sparkles, MapPin, 
-  Menu, X, ChevronRight, Phone
+  Menu, X, ChevronRight, Phone, Bot
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MagneticButton } from './MagneticButton';

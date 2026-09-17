@@ -8,7 +8,7 @@ declare namespace React {
   }
 }
 
-export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'admin' | 'blog' | 'site-map' | 'local-seo' | 'california' | 'los-angeles-seo' | 'state-seo' | 'city-seo' | 'privacy-policy' | 'terms-of-service' | 'case-studies' | 'demo' | 'locations-index' | 'locations-state' | 'locations-district' | 'compare-index' | 'compare-detail' | '404';
+export type Page = 'home' | 'about' | 'why-us' | 'pricing' | 'contact' | 'seo-tool' | 'ai-frontdesk' | 'admin' | 'blog' | 'site-map' | 'local-seo' | 'california' | 'los-angeles-seo' | 'state-seo' | 'city-seo' | 'privacy-policy' | 'terms-of-service' | 'case-studies' | 'demo' | 'locations-index' | 'locations-state' | 'locations-district' | 'compare-index' | 'compare-detail' | '404';
 
 export interface CompetitorFeatureRow {
   feature: string;
