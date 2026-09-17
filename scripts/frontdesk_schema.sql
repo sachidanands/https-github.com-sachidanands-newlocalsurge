@@ -109,3 +109,14 @@ BEGIN
       FOR INSERT WITH CHECK (true);
   END IF;
 END $$;
+
+-- 6. Optional Table Upgrades (For existing databases upgrading to v1.1.0)
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS contact_name TEXT;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS contact_email TEXT;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS is_trial BOOLEAN DEFAULT false;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS trial_ends_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS grace_ends_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS trial_expiry_email_sent_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS grace_ended_email_sent_at TIMESTAMP WITH TIME ZONE;
+ALTER TABLE public.frontdesk_sites ADD COLUMN IF NOT EXISTS feature_flags JSONB DEFAULT '{}'::jsonb;
+

@@ -51,9 +51,17 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
         })
       });
 
-      const data = await resp.json();
-      if (!resp.ok || !data.success) {
-        throw new Error(data.error || 'Failed to generate trial script');
+      const text = await resp.text();
+      let data: any = null;
+      try {
+        data = JSON.parse(text);
+      } catch {
+        // Response was not JSON (e.g. serverless HTML/text error)
+      }
+
+      if (!resp.ok || !data?.success) {
+        const errorMsg = data?.error || (text && text.length < 150 && !text.includes("<html") ? text.trim() : `Server error (${resp.status}). Please try again.`);
+        throw new Error(errorMsg);
       }
 
       setTrialResult(data);

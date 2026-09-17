@@ -266,8 +266,15 @@ async function getGemini() {
 }
 
 // Database helper
-const isVercel = process.env.VERCEL === "1";
-const DATA_DIR = isVercel ? "/tmp" : path.join(process.cwd(), "data");
+const isVercel = process.env.VERCEL === "1" || !!process.env.VERCEL_ENV || !!process.env.AWS_LAMBDA_FUNCTION_NAME || !!process.env.LAMBDA_TASK_ROOT;
+let DATA_DIR = isVercel ? "/tmp" : path.join(process.cwd(), "data");
+try {
+  if (!fs.existsSync(DATA_DIR)) {
+    fs.mkdirSync(DATA_DIR, { recursive: true });
+  }
+} catch {
+  DATA_DIR = "/tmp";
+}
 const LEADS_FILE = path.join(DATA_DIR, "leads.json");
 const FRONTDESK_SITES_FILE = path.join(DATA_DIR, "frontdesk_sites.json");
 const FRONTDESK_LEADS_FILE = path.join(DATA_DIR, "frontdesk_leads.json");
@@ -886,6 +893,78 @@ function writeFrontdeskSites(sites: any) {
   } catch (error) {
     console.error("Error writing frontdesk sites file:", error);
   }
+}
+
+// Helper: Map all FrontDesk site attributes safely to native Supabase columns.
+// Any extra attributes (feature_flags, trial metadata, contact info) are stored
+// inside widget_config (JSONB), preventing PostgREST PGRST204 schema cache errors.
+function serializeSiteForSupabase(site: any) {
+  if (!site) return site;
+  const allowedColumns = new Set([
+    "id",
+    "created_at",
+    "updated_at",
+    "business_name",
+    "industry",
+    "website_url",
+    "phone",
+    "emergency_phone",
+    "service_radius",
+    "estimate_policy",
+    "working_hours",
+    "scraped_knowledge",
+    "widget_config",
+    "custom_instructions",
+    "status"
+  ]);
+
+  const mergedWidgetConfig = {
+    ...(site.widget_config || {}),
+    contact_name: site.contact_name,
+    contact_email: site.contact_email,
+    is_trial: site.is_trial,
+    trial_ends_at: site.trial_ends_at,
+    grace_ends_at: site.grace_ends_at,
+    trial_expiry_email_sent_at: site.trial_expiry_email_sent_at,
+    grace_ended_email_sent_at: site.grace_ended_email_sent_at,
+    feature_flags: site.feature_flags,
+    plan_tier: site.plan_tier || site.feature_flags?.planTier
+  };
+
+  const payload: any = {};
+  for (const k of Object.keys(site)) {
+    if (allowedColumns.has(k)) {
+      payload[k] = site[k];
+    }
+  }
+  payload.widget_config = mergedWidgetConfig;
+  return payload;
+}
+
+// Helper: Hydrate Supabase site row so widget_config metadata is accessible as top-level fields
+function hydrateFrontdeskSite(row: any) {
+  if (!row) return row;
+  const cfg = row.widget_config || {};
+  return {
+    ...row,
+    contact_name: row.contact_name || cfg.contact_name,
+    contact_email: row.contact_email || cfg.contact_email,
+    is_trial: row.is_trial !== undefined ? row.is_trial : (cfg.is_trial !== undefined ? cfg.is_trial : false),
+    trial_ends_at: row.trial_ends_at || cfg.trial_ends_at,
+    grace_ends_at: row.grace_ends_at || cfg.grace_ends_at,
+    trial_expiry_email_sent_at: row.trial_expiry_email_sent_at || cfg.trial_expiry_email_sent_at,
+    grace_ended_email_sent_at: row.grace_ended_email_sent_at || cfg.grace_ended_email_sent_at,
+    feature_flags: row.feature_flags || cfg.feature_flags || {
+      enablePhotoUpload: false,
+      enableEmailDispatch: true,
+      enableSmsDispatch: false,
+      enablePhoneCallback: true,
+      enableEmergencyBanner: true,
+      enableDirectBooking: false,
+      enableCustomBranding: false,
+      planTier: cfg.plan_tier || "trial"
+    }
+  };
 }
 
 function readFrontdeskLeads() {
@@ -3191,7 +3270,7 @@ async function evaluateSiteTrialStatus(site: any, supabaseClient?: any): Promise
     const sb = supabaseClient || (await getSupabase());
     if (sb) {
       try {
-        await sb.from("frontdesk_sites").upsert([site]);
+        await sb.from("frontdesk_sites").upsert([serializeSiteForSupabase(site)]);
       } catch (err) {
         console.warn("⚠️ Supabase site update warning:", err);
       }
@@ -3202,7 +3281,7 @@ async function evaluateSiteTrialStatus(site: any, supabaseClient?: any): Promise
 }
 
 // Background Task: Check for expiring sites & dispatch Day 30 / Day 33 emails every 6 hours
-setInterval(async () => {
+const trialCheckInterval = setInterval(async () => {
   try {
     const sites = readFrontdeskSites();
     for (const site of sites) {
@@ -3214,6 +3293,9 @@ setInterval(async () => {
     console.error("⚠️ Background trial status evaluation error:", err);
   }
 }, 6 * 60 * 60 * 1000);
+if (trialCheckInterval && typeof trialCheckInterval.unref === "function") {
+  trialCheckInterval.unref();
+}
 
 // 3. GET /api/frontdesk/sites/:id - Fetch single site by ID (used by widget.js)
 app.get("/api/frontdesk/sites/:id", async (req, res) => {
@@ -3230,7 +3312,7 @@ app.get("/api/frontdesk/sites/:id", async (req, res) => {
         .eq("id", siteId)
         .single();
       if (!error && data) {
-        site = data;
+        site = hydrateFrontdeskSite(data);
         source = "supabase";
       }
     } catch {
@@ -3330,7 +3412,7 @@ app.post("/api/frontdesk/webhook/lemonsqueezy", async (req: any, res) => {
     const supabase = await getSupabase();
     if (supabase) {
       try {
-        await supabase.from("frontdesk_sites").upsert([targetSite]);
+        await supabase.from("frontdesk_sites").upsert([serializeSiteForSupabase(targetSite)]);
       } catch (err) {
         console.warn("⚠️ Supabase webhook site update warning:", err);
       }
@@ -3418,7 +3500,7 @@ app.post("/api/frontdesk/sites/create", async (req, res) => {
   const supabase = await getSupabase();
   if (supabase) {
     try {
-      await supabase.from("frontdesk_sites").upsert([newSite]);
+      await supabase.from("frontdesk_sites").upsert([serializeSiteForSupabase(newSite)]);
     } catch (err) {
       console.warn("⚠️ Supabase site insert warning (saved locally):", err);
     }
@@ -3429,126 +3511,146 @@ app.post("/api/frontdesk/sites/create", async (req, res) => {
 
 // 4b. POST /api/frontdesk/trial - 30-Day Free Trial Onboarding (Generates script, emails steps, crawls domain)
 app.post("/api/frontdesk/trial", async (req, res) => {
-  const { domain, websiteUrl, email, name, businessName, phone } = req.body;
-  const targetDomain = String(domain || websiteUrl || "").trim();
-  const contactEmail = String(email || "").trim();
-  const contactName = String(name || "").trim();
-  const bName = String(businessName || "").trim();
+  try {
+    const { domain, websiteUrl, email, name, businessName, phone } = req.body || {};
+    const targetDomain = String(domain || websiteUrl || "").trim();
+    const contactEmail = String(email || "").trim();
+    const contactName = String(name || "").trim();
+    const bName = String(businessName || "").trim();
 
-  if (!targetDomain || !contactEmail || !bName) {
-    return res.status(400).json({
-      success: false,
-      error: "Website domain, business email, and business name are required to start a 30-day trial."
-    });
-  }
+    if (!targetDomain || !contactEmail || !bName) {
+      return res.status(400).json({
+        success: false,
+        error: "Website domain, business email, and business name are required to start a 30-day trial."
+      });
+    }
 
-  // Format domain to clean URL
-  let fullUrl = targetDomain;
-  if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://")) {
-    fullUrl = `https://${fullUrl}`;
-  }
+    // Format domain to clean URL
+    let fullUrl = targetDomain;
+    if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://")) {
+      fullUrl = `https://${fullUrl}`;
+    }
 
-  const cleanHost = targetDomain
-    .replace(/^https?:\/\//i, "")
-    .replace(/\/.*$/, "")
-    .replace(/[^a-zA-Z0-9]/g, "_")
-    .toLowerCase()
-    .slice(0, 24);
+    const cleanHost = targetDomain
+      .replace(/^https?:\/\//i, "")
+      .replace(/\/.*$/, "")
+      .replace(/[^a-zA-Z0-9]/g, "_")
+      .toLowerCase()
+      .slice(0, 24);
 
-  const siteId = `trial_${cleanHost}_${Date.now().toString(36)}`;
-  // Expiry timestamp: exactly 30 days from now
-  const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+    const siteId = `trial_${cleanHost}_${Date.now().toString(36)}`;
+    // Expiry timestamp: exactly 30 days from now
+    const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
 
-  const newTrialSite: any = {
-    id: siteId,
-    created_at: new Date().toISOString(),
-    updated_at: new Date().toISOString(),
-    business_name: bName,
-    industry: "home_services",
-    website_url: fullUrl,
-    contact_name: contactName,
-    contact_email: contactEmail,
-    phone: phone ? String(phone).trim() : undefined,
-    is_trial: true,
-    trial_ends_at: trialEndsAt,
-    status: "active",
-    service_radius: { city: "Local Area", radiusMiles: 25, zipCodes: [] },
-    estimate_policy: "Free estimates during normal business hours.",
-    working_hours: { weekday: "7:00 AM - 7:00 PM", weekend: "8:00 AM - 5:00 PM", emergency247: true },
-    widget_config: {
-      themeColor: "#10b981",
-      greeting: `👋 Hi! Need fast assistance or a free estimate for ${bName}?`,
-      speedToLeadCity: "Local Area",
-      quickChips: ["🚨 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]
-    },
-    feature_flags: {
-      enablePhotoUpload: false,
-      enableEmailDispatch: true,
-      enableSmsDispatch: false,
-      enablePhoneCallback: true,
-      enableEmergencyBanner: true,
-      enableDirectBooking: false,
-      enableCustomBranding: false,
-      planTier: "trial"
-    },
-    scraped_knowledge: {}
-  };
+    const newTrialSite: any = {
+      id: siteId,
+      created_at: new Date().toISOString(),
+      updated_at: new Date().toISOString(),
+      business_name: bName,
+      industry: "home_services",
+      website_url: fullUrl,
+      contact_name: contactName,
+      contact_email: contactEmail,
+      phone: phone ? String(phone).trim() : undefined,
+      is_trial: true,
+      trial_ends_at: trialEndsAt,
+      status: "active",
+      service_radius: { city: "Local Area", radiusMiles: 25, zipCodes: [] },
+      estimate_policy: "Free estimates during normal business hours.",
+      working_hours: { weekday: "7:00 AM - 7:00 PM", weekend: "8:00 AM - 5:00 PM", emergency247: true },
+      widget_config: {
+        themeColor: "#10b981",
+        greeting: `👋 Hi! Need fast assistance or a free estimate for ${bName}?`,
+        speedToLeadCity: "Local Area",
+        quickChips: ["🚨 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]
+      },
+      feature_flags: {
+        enablePhotoUpload: false,
+        enableEmailDispatch: true,
+        enableSmsDispatch: false,
+        enablePhoneCallback: true,
+        enableEmergencyBanner: true,
+        enableDirectBooking: false,
+        enableCustomBranding: false,
+        planTier: "trial"
+      },
+      scraped_knowledge: {}
+    };
 
-  // 1. Local JSON persistence
-  const sites = readFrontdeskSites();
-  sites.unshift(newTrialSite);
-  writeFrontdeskSites(sites);
-
-  // 2. Supabase persistence
-  const supabase = await getSupabase();
-  if (supabase) {
+    // 1. Local JSON persistence
     try {
-      await supabase.from("frontdesk_sites").upsert([newTrialSite]);
+      const sites = readFrontdeskSites();
+      sites.unshift(newTrialSite);
+      writeFrontdeskSites(sites);
+    } catch (localErr) {
+      console.warn("⚠️ Local JSON trial site write warning:", localErr);
+    }
+
+    // 2. Supabase persistence
+    try {
+      const supabase = await getSupabase();
+      if (supabase) {
+        const serialized = serializeSiteForSupabase(newTrialSite);
+        const { error: sbError } = await supabase.from("frontdesk_sites").upsert([serialized]);
+        if (sbError) {
+          console.warn("⚠️ Supabase trial site insert error (saved locally):", sbError);
+        }
+      }
     } catch (err) {
       console.warn("⚠️ Supabase trial site insert warning (saved locally):", err);
     }
-  }
 
-  // 3. Asynchronously trigger website crawl so knowledge is ready
-  crawlSiteKnowledge(fullUrl, getGemini, { businessName: bName, deepCrawl: false })
-    .then(async (crawlResult) => {
-      if (crawlResult.success && crawlResult.knowledge) {
-        const currentSites = readFrontdeskSites();
-        const idx = currentSites.findIndex((s: any) => s.id === siteId);
-        if (idx >= 0) {
-          currentSites[idx].scraped_knowledge = crawlResult.knowledge;
-          if (crawlResult.knowledge.businessName) {
-            currentSites[idx].business_name = crawlResult.knowledge.businessName;
+    // 3. Asynchronously trigger website crawl so knowledge is ready
+    crawlSiteKnowledge(fullUrl, getGemini, { businessName: bName, deepCrawl: false })
+      .then(async (crawlResult) => {
+        if (crawlResult.success && crawlResult.knowledge) {
+          const currentSites = readFrontdeskSites();
+          const idx = currentSites.findIndex((s: any) => s.id === siteId);
+          if (idx >= 0) {
+            currentSites[idx].scraped_knowledge = crawlResult.knowledge;
+            if (crawlResult.knowledge.businessName) {
+              currentSites[idx].business_name = crawlResult.knowledge.businessName;
+            }
+            currentSites[idx].updated_at = new Date().toISOString();
+            writeFrontdeskSites(currentSites);
+            const sb = await getSupabase();
+            if (sb) {
+              await sb.from("frontdesk_sites").upsert([serializeSiteForSupabase(currentSites[idx])]).catch(() => {});
+            }
           }
-          currentSites[idx].updated_at = new Date().toISOString();
-          writeFrontdeskSites(currentSites);
         }
-      }
-    })
-    .catch((crawlErr) => {
-      console.warn("⚠️ Background trial website crawl error:", crawlErr);
+      })
+      .catch((crawlErr) => {
+        console.warn("⚠️ Background trial website crawl error:", crawlErr);
+      });
+
+    // 4. Send email with script and setup instructions via Resend
+    dispatchTrialWelcomeEmail(newTrialSite, getResend).catch((emailErr) => {
+      console.warn("⚠️ Trial welcome email dispatch warning:", emailErr);
     });
 
-  // 4. Send email with script and setup instructions via Resend
-  dispatchTrialWelcomeEmail(newTrialSite, getResend).catch((emailErr) => {
-    console.warn("⚠️ Trial welcome email dispatch warning:", emailErr);
-  });
+    const scriptTag = `<script src="https://localsurgeseo.com/widget.js" data-site-id="${siteId}" defer></script>`;
 
-  const scriptTag = `<script src="https://localsurge.com/widget.js" data-site-id="${siteId}" defer></script>`;
-
-  return res.json({
-    success: true,
-    siteId,
-    trialEndsAt,
-    scriptTag,
-    site: newTrialSite,
-    instructions: {
-      wordpress: "1. Install WPCode plugin. 2. Go to Code Snippets > Header & Footer. 3. Paste the script tag into Footer box and Save.",
-      wix: "1. Go to Settings > Custom Code. 2. Click '+ Add Custom Code'. 3. Paste snippet, select 'Body - End', and click Apply.",
-      squarespace: "1. Go to Website > Website Tools > Code Injection. 2. Paste snippet in Footer box and Save.",
-      html: "Paste the snippet right before the closing </body> tag on any website."
-    }
-  });
+    return res.json({
+      success: true,
+      siteId,
+      trialEndsAt,
+      scriptTag,
+      site: newTrialSite,
+      instructions: {
+        wordpress: "1. Install WPCode plugin. 2. Go to Code Snippets > Header & Footer. 3. Paste the script tag into Footer box and Save.",
+        wix: "1. Go to Settings > Custom Code. 2. Click '+ Add Custom Code'. 3. Paste snippet, select 'Body - End', and click Apply.",
+        squarespace: "1. Go to Website > Website Tools > Code Injection. 2. Paste snippet in Footer box and Save.",
+        html: "Paste the snippet right before the closing </body> tag on any website."
+      }
+    });
+  } catch (outerErr: any) {
+    console.error("❌ Critical error in POST /api/frontdesk/trial:", outerErr);
+    return res.status(500).json({
+      success: false,
+      error: outerErr?.message || "An unexpected error occurred while starting your trial. Please try again."
+    });
+  }
 });
 
 // 5. POST /api/frontdesk/crawl - Standalone URL knowledge ingestion
@@ -3600,7 +3702,7 @@ app.post("/api/frontdesk/sites/:id/crawl", async (req, res) => {
     const supabase = await getSupabase();
     if (supabase) {
       try {
-        await supabase.from("frontdesk_sites").upsert([currentSite]);
+        await supabase.from("frontdesk_sites").upsert([serializeSiteForSupabase(currentSite)]);
       } catch (dbErr) {
         console.warn("⚠️ Supabase update warning:", dbErr);
       }
@@ -3757,7 +3859,7 @@ app.post("/api/frontdesk/chat", async (req, res) => {
   if (supabase) {
     try {
       const { data } = await supabase.from("frontdesk_sites").select("*").eq("id", siteId).single();
-      if (data) site = data;
+      if (data) site = hydrateFrontdeskSite(data);
     } catch {
       // Fallback
     }
