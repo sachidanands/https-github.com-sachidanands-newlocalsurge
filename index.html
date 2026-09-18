@@ -3,6 +3,160 @@
   <head>
     <meta charset="UTF-8" />
     <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <meta name="theme-color" content="#f7f6f2" />
+    <meta name="color-scheme" content="light" />
+    <style>
+      :root, html, body {
+        background-color: #f7f6f2;
+        color: #1a1c1a;
+        margin: 0;
+        padding: 0;
+        min-height: 100%;
+        -webkit-font-smoothing: antialiased;
+      }
+      #root {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #f7f6f2;
+      }
+      /* Pre-boot instant app shell silhouette */
+      .preboot-shell {
+        min-height: 100vh;
+        display: flex;
+        flex-direction: column;
+        background-color: #f7f6f2;
+        color: #1a1c1a;
+      }
+      .preboot-header {
+        height: 72px;
+        border-bottom: 1px solid #e6e4dc;
+        display: flex;
+        align-items: center;
+        justify-content: space-between;
+        padding: 0 1.5rem;
+        max-width: 80rem;
+        margin: 0 auto;
+        width: 100%;
+        box-sizing: border-box;
+      }
+      .preboot-logo {
+        display: flex;
+        align-items: center;
+        gap: 0.75rem;
+      }
+      .preboot-logo-icon {
+        width: 38px;
+        height: 38px;
+        border-radius: 10px;
+        background: #123e35;
+        display: flex;
+        align-items: center;
+        justify-content: center;
+      }
+      .preboot-logo-icon svg {
+        width: 20px;
+        height: 20px;
+        fill: none;
+        stroke: #faf9f6;
+        stroke-width: 2;
+      }
+      .preboot-logo-text {
+        font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif;
+        font-size: 1.125rem;
+        font-weight: 700;
+        color: #1a1c1a;
+        letter-spacing: -0.02em;
+      }
+      .preboot-nav-pills {
+        display: none;
+        gap: 1.5rem;
+        align-items: center;
+      }
+      @media (min-width: 768px) {
+        .preboot-nav-pills {
+          display: flex;
+        }
+      }
+      .preboot-nav-item {
+        width: 56px;
+        height: 14px;
+        border-radius: 6px;
+        background: #edeae1;
+      }
+      .preboot-cta {
+        width: 120px;
+        height: 38px;
+        border-radius: 9999px;
+        background: #123e35;
+        opacity: 0.9;
+      }
+      .preboot-hero {
+        max-width: 80rem;
+        margin: 0 auto;
+        width: 100%;
+        padding: 4rem 1.5rem 2rem;
+        box-sizing: border-box;
+        display: flex;
+        flex-direction: column;
+        align-items: center;
+        text-align: center;
+        gap: 1.5rem;
+      }
+      .preboot-pill {
+        width: 190px;
+        height: 28px;
+        border-radius: 9999px;
+        background: #edeae1;
+      }
+      .preboot-title-1 {
+        width: 85%;
+        max-width: 640px;
+        height: 40px;
+        border-radius: 10px;
+        background: #edeae1;
+      }
+      .preboot-title-2 {
+        width: 65%;
+        max-width: 480px;
+        height: 40px;
+        border-radius: 10px;
+        background: #edeae1;
+      }
+      .preboot-desc {
+        width: 75%;
+        max-width: 520px;
+        height: 16px;
+        border-radius: 6px;
+        background: #edeae1;
+        opacity: 0.7;
+      }
+      .preboot-actions {
+        display: flex;
+        gap: 1rem;
+        margin-top: 0.5rem;
+      }
+      .preboot-btn-primary {
+        width: 160px;
+        height: 46px;
+        border-radius: 9999px;
+        background: #123e35;
+        opacity: 0.85;
+      }
+      .preboot-btn-secondary {
+        width: 140px;
+        height: 46px;
+        border-radius: 9999px;
+        background: #edeae1;
+      }
+      @keyframes preboot-shimmer {
+        0%, 100% { opacity: 0.95; }
+        50% { opacity: 0.55; }
+      }
+      .preboot-pulse {
+        animation: preboot-shimmer 1.6s ease-in-out infinite;
+      }
+    </style>
     <meta name="msvalidate.01" content="AE3F1E01C27824CDCEA93C2C421A6095" />
     <meta name="description" content="Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses." />
     <link rel="icon" type="image/svg+xml" href="/favicon.svg" />
@@ -184,6 +338,35 @@
           <a href="/contact">Contact</a>
           <a href="/site-map">Sitemap</a>
         </nav>
+      </div>
+
+      <!-- Instant pre-boot branded shell to eliminate white screen flash before React hydrates -->
+      <div id="app-preboot-skeleton" class="preboot-shell preboot-pulse" aria-hidden="true">
+        <header class="preboot-header">
+          <div class="preboot-logo">
+            <div class="preboot-logo-icon">
+              <svg viewBox="0 0 24 24"><path d="M4.5 16.5c-1.5 1.26-2 5-2 5s3.74-.5 5-2c.71-.84.7-2.13-.09-2.91a2.18 2.18 0 0 0-2.91-.09z"></path><path d="m12 15-3-3a22 22 0 0 1 2-3.95A12.88 12.88 0 0 1 22 2c0 2.72-.78 7.5-6 11a22.35 22.35 0 0 1-4 2z"></path></svg>
+            </div>
+            <span class="preboot-logo-text">Local Surge SEO</span>
+          </div>
+          <div class="preboot-nav-pills">
+            <div class="preboot-nav-item"></div>
+            <div class="preboot-nav-item"></div>
+            <div class="preboot-nav-item"></div>
+            <div class="preboot-nav-item"></div>
+          </div>
+          <div class="preboot-cta"></div>
+        </header>
+        <div class="preboot-hero">
+          <div class="preboot-pill"></div>
+          <div class="preboot-title-1"></div>
+          <div class="preboot-title-2"></div>
+          <div class="preboot-desc"></div>
+          <div class="preboot-actions">
+            <div class="preboot-btn-primary"></div>
+            <div class="preboot-btn-secondary"></div>
+          </div>
+        </div>
       </div>
     </div>
     <script type="module" src="/src/main.tsx"></script>
