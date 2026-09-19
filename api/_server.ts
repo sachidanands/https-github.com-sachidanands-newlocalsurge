@@ -4,20 +4,20 @@ import fs from "fs";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import type { FrontdeskLead, LeadStatus, LeadUrgency } from "../src/types/frontdesk";
-import { crawlSiteKnowledge } from "./services/frontdesk-crawler";
+import { crawlSiteKnowledge } from "./services/frontdesk-crawler.js";
 import {
   buildFrontdeskSystemPrompt,
   formatGeminiContents,
   extractLeadEntitiesFromText,
   generateFallbackStream,
   streamMultiProviderChat
-} from "./services/frontdesk-ai";
+} from "./services/frontdesk-ai.js";
 import {
   dispatchLeadEmail,
   dispatchTrialWelcomeEmail,
   sendTrialExpiryReportEmail,
   sendGracePeriodEndedEmail
-} from "./services/frontdesk-dispatch";
+} from "./services/frontdesk-dispatch.js";
 
 dotenv.config();
 
