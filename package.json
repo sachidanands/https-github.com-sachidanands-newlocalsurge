@@ -5,7 +5,8 @@
   "type": "module",
   "scripts": {
     "dev": "tsx dev-server.ts",
-    "build": "vite build && esbuild prod-server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "build": "vite build && tsx scripts/build-static-prerender.ts && esbuild prod-server.ts --bundle --platform=node --format=cjs --packages=external --sourcemap --outfile=dist/server.cjs",
+    "prerender": "tsx scripts/build-static-prerender.ts",
     "start": "node dist/server.cjs",
     "clean": "rm -rf dist server.js",
     "record-voice": "tsx scripts/voice-studio-server.ts",

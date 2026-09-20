@@ -718,8 +718,8 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
   }
 
   if (cleanPath === '/pricing') {
-    const title = "Transparent Local SEO Pricing & Plans - Local Surge SEO";
-    const description = "Contract-free monthly SEO signal boosters: Single-Page Blast ($0/mo), Starter Boost ($999/mo), and Premium Surge ($1,999/mo). Complete pricing matrix.";
+    const title = "Local SEO Plans & Pricing Packages for Contractors - Local Surge SEO";
+    const description = "Explore straightforward local SEO plans and contractor pricing packages. Contract-free monthly SEO signal boosters with Google Map Pack rankings and transparent ROI.";
     const canonical = "https://localsurgeseo.com/pricing";
     const ogImage = "https://localsurgeseo.com/assets/og-pricing.png";
 
@@ -1063,8 +1063,8 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
   }
 
   if (cleanPath === '/seo-tool') {
-    const title = "Free Local SEO Diagnostic Scanner & Audit Tool - Local Surge";
-    const description = "Scan your local business Google Maps readiness, NAP directory consistency, schema markup, and Core Web Vitals instantly.";
+    const title = "Free Local SEO Audit Tool & Scanner [Instant Report] - Local Surge SEO";
+    const description = "Run a 100% free local SEO audit tool. Scan Google Map Pack rankings, NAP citation consistency, schema markup, and competitor rank with instant results.";
     const canonical = "https://localsurgeseo.com/seo-tool";
     const ogImage = "https://localsurgeseo.com/assets/og-seo-tool.png";
 
@@ -1343,8 +1343,12 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const stateSlugCandidate = pathParts[0];
     const stateData = STATE_DIRECTORY[stateSlugCandidate];
     if (stateData) {
-      const title = `${stateData.name} Local SEO Directory - Local Surge SEO`;
-      const description = stateData.intro;
+      const title = stateSlugCandidate === 'florida'
+        ? "Florida Local SEO Services & Rankings Directory - Local Surge SEO"
+        : `${stateData.name} Local SEO Directory - Local Surge SEO`;
+      const description = stateSlugCandidate === 'florida'
+        ? "Florida local SEO services and contractor ranking directory. Dominate Google Local 3-Pack and map rankings across Miami, Orlando, and Tampa."
+        : stateData.intro;
       const canonical = `https://localsurgeseo.com/${stateData.slug}`;
       const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
 

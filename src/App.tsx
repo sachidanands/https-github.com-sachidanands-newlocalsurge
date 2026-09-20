@@ -302,8 +302,8 @@ export default function App() {
 
   // Dynamic Page Title & Meta Description Handler
   useEffect(() => {
-    let title = 'Local Surge SEO - Dynamic Onboarding & Search Dominance';
-    let description = 'Stop losing customers to neighbors. Local Surge SEO delivers proven Google Map Pack rankings and NAP consistency for California businesses.';
+    let title = 'Local Surge SEO - Surge SEO & Google Local 3-Pack Dominance';
+    let description = 'Dominate the Google Local 3-Pack and organic search. Local Surge SEO delivers proven Surge SEO strategies, NAP citation synchronization, and contractor lead generation nationwide.';
     let ogImage = 'https://localsurgeseo.com/assets/og-home.png';
 
     if (currentPage === 'about') {
@@ -319,12 +319,12 @@ export default function App() {
       description = 'Elevate your business prominence on Google Maps. We optimize Business Profiles, sync directory citations, and deploy professional local schema.';
       ogImage = 'https://localsurgeseo.com/assets/og-local-seo.png';
     } else if (currentPage === 'pricing') {
-      title = 'Local SEO Pricing Plans & Packages - Local Surge SEO';
-      description = 'Get a free website created or your site revamped. Affordable monthly local SEO pricing packages for businesses in the United States. Start today for free!';
+      title = 'Local SEO Plans & Pricing Packages for Contractors - Local Surge SEO';
+      description = 'Explore straightforward local SEO plans and contractor pricing packages. Contract-free monthly SEO signal boosters with Google Map Pack rankings and transparent ROI.';
       ogImage = 'https://localsurgeseo.com/assets/og-pricing.png';
     } else if (currentPage === 'seo-tool') {
-      title = 'Free Local SEO Audit & Scan Tool - Local Surge SEO';
-      description = 'Run an instant website scan. Detect LocalBusiness schema, evaluate NAP consistency, and find regional citation errors for your business.';
+      title = 'Free Local SEO Audit Tool & Scanner [Instant Report] - Local Surge SEO';
+      description = 'Run a 100% free local SEO audit tool. Scan Google Map Pack rankings, NAP citation consistency, schema markup, and competitor rank with instant results.';
       ogImage = 'https://localsurgeseo.com/assets/og-seo-tool.png';
     } else if (currentPage === 'contact') {
       title = 'Contact Team Office - Local Surge SEO';
@@ -368,8 +368,12 @@ export default function App() {
       ogImage = 'https://localsurgeseo.com/assets/og-blog.png';
     } else if (currentPage === 'state-seo' && activeStateSlug) {
       const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
-      title = `${stateName} Local SEO Directory - Local Surge SEO`;
-      description = `Analyze local search performance and citation compliance metrics for service area businesses throughout the state of ${stateName}.`;
+      title = activeStateSlug === 'florida'
+        ? 'Florida Local SEO Services & Rankings Directory - Local Surge SEO'
+        : `${stateName} Local SEO Directory - Local Surge SEO`;
+      description = activeStateSlug === 'florida'
+        ? 'Florida local SEO services and contractor ranking directory. Dominate Google Local 3-Pack and map rankings across Miami, Orlando, and Tampa.'
+        : `Analyze local search performance and citation compliance metrics for service area businesses throughout the state of ${stateName}.`;
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'city-seo' && activeStateSlug && activeCitySlug) {
       const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
