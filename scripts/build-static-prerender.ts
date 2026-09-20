@@ -140,13 +140,14 @@ async function runStaticPrerender() {
         renderedHtml = html;
       }
 
+      const normalized = cleanRoute.replace(/^\/+/, '').replace(/\/+$/, '');
+
       // Determine output path
       let fileRelativePath: string;
       if (isHome) {
         fileRelativePath = 'index.html';
       } else {
         // Strip trailing and leading slashes for folder structure
-        const normalized = cleanRoute.replace(/^\/+/, '').replace(/\/+$/, '');
         fileRelativePath = path.join(normalized, 'index.html');
       }
 
@@ -158,6 +159,16 @@ async function runStaticPrerender() {
       }
 
       fs.writeFileSync(fullOutputPath, renderedHtml, 'utf8');
+
+      // Also write direct .html for servers with cleanUrls matching
+      if (!isHome) {
+        const directHtmlPath = path.join(distPath, `${normalized}.html`);
+        const directDir = path.dirname(directHtmlPath);
+        if (!fs.existsSync(directDir)) {
+          fs.mkdirSync(directDir, { recursive: true });
+        }
+        fs.writeFileSync(directHtmlPath, renderedHtml, 'utf8');
+      }
 
       // Extract title and canonical tag for validation
       const titleMatch = renderedHtml.match(/<title>([^<]*)<\/title>/i);
