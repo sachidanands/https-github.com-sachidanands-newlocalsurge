@@ -28,7 +28,8 @@
     "ga:report": "tsx scripts/ga4_report.ts",
     "youtube:report": "tsx scripts/youtube_report.ts",
     "brave:audit": "tsx scripts/brave_audit.ts",
-    "audit:cwv": "tsx scripts/cwv_scan.ts"
+    "audit:cwv": "tsx scripts/cwv_scan.ts",
+    "trends": "tsx scripts/google_trends.ts"
   },
   "dependencies": {
     "@google/genai": "^2.4.0",
@@ -52,6 +53,7 @@
     "@types/node": "^22.14.0",
     "autoprefixer": "^10.4.21",
     "esbuild": "^0.25.0",
+    "google-trends-api": "^4.9.2",
     "tailwindcss": "^4.1.14",
     "tsx": "^4.21.0",
     "typescript": "~5.8.2",
