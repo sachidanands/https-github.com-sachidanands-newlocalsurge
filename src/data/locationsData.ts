@@ -297,7 +297,7 @@ export const STATES_REGISTRY: Record<string, LocationState> = {
     heroBadge: 'Sunbelt Tourism, Trades & Consumer Search Analytics',
     heroHeadline: 'Florida Local SEO Intelligence & Consumer Digital Adoption 🌴',
     heroSubheadline: 'Analyze tourist and residential local search trends across Miami, Orlando, and Tampa. Capitalize on high mobile intent and seasonal surge traffic.',
-    districts: ['miami'],
+    districts: ['miami', 'tampa'],
     consumerBehavior: {
       title: 'Florida Local Consumer & Visitor Search Behaviors',
       overview: 'Over 89% of Florida residents and seasonal visitors rely on smartphone searches to discover local services, contractors, and hospitality venues. The combination of year-round tourism and booming retiree demographics makes verified digital presence the primary local buying filter.',
@@ -1718,6 +1718,136 @@ export const DISTRICTS_REGISTRY: Record<string, LocationDistrict> = {
     ],
     ogImage: '/assets/og-directory.png',
     ogImageAlt: 'New York City Local SEO Strategy - Local Surge'
+  },
+  tampa: {
+    name: 'Tampa Bay & Hillsborough County',
+    slug: 'tampa',
+    stateSlug: 'florida',
+    stateName: 'Florida',
+    stateCode: 'FL',
+    lat: 27.9506,
+    lng: -82.4572,
+    defaultZoom: 11,
+    population: '1.51 Million (Hillsborough Metro)',
+    smallBusinesses: '98,000+',
+    webUtilizationRate: '88%',
+    mobileSearchShare: '87%',
+    mapPackClickShare: '46.2%',
+    digitalGaps: '31,500 Unoptimized Profiles',
+    heroBadge: 'Gulf Coast Commercial, Tourism & Trade Logistics',
+    heroHeadline: 'Tampa Bay Local SEO & High-Intent Map Pack Domination ⚡',
+    heroSubheadline: 'Capture affluent residential and commercial service demand across Downtown Tampa, Ybor City, Westshore, South Tampa, and Brandon. Outrank distant competitors with verified coordinates.',
+    municipalCities: [
+      'Downtown Tampa',
+      'Ybor City',
+      'South Tampa',
+      'Westshore',
+      'Hyde Park',
+      'Brandon',
+      'Carrollwood',
+      'Temple Terrace',
+      'Town n Country',
+      'Riverview'
+    ],
+    consumerBehavior: {
+      title: 'Tampa Bay Consumer Search Behavior & Local Decision Dynamics',
+      overview: 'With explosive population influx from the Northeast and Midwest, Tampa Bay consumers demonstrate extraordinarily high mobile search reliance. Over 88% of local residents initiate home service, medical, and professional consultations via smartphone Google Maps queries before making contact.',
+      keyFindings: [
+        '87% of local contractor and trade searches originate on mobile smartphones with immediate "near me" or neighborhood-specific intent.',
+        'Over 46% of all organic conversion actions (click-to-call, driving directions) are captured exclusively within the Google Local 3-Pack.',
+        'Waterway and bay transit barriers create strict geographic service silos between Tampa proper, Brandon, and St. Petersburg.'
+      ],
+      searchFrictionPoints: [
+        'Businesses failing to specify exact service radius boundaries across the Howard Frankland and Gandy bridges.',
+        'Inconsistent Google Business Profile primary categories diluted between general trade vs specialized commercial tags.',
+        'Severe lag in acquiring localized customer reviews citing specific Tampa suburbs.'
+      ],
+      decisionFactors: [
+        { factor: 'Google Map Pack Proximity & Reviews', percentage: '79%', impact: 'Determines immediate phone consultation selection' },
+        { factor: 'Transparent Licensing & Verified Insurance', percentage: '68%', impact: 'Builds critical trust for high-ticket home remodeling & trade services' },
+        { factor: 'Mobile Page Speed & Instant Click-to-Call', percentage: '61%', impact: 'Prevents customer bounce during emergency trade inquiries' }
+      ]
+    },
+    businessStrategy: {
+      title: 'Tampa Bay Small Business Search Blueprint',
+      overview: 'Local service businesses across Hillsborough County must build distinct geographic entity authority. By deploying localized schema, claiming high-authority directory profiles, and maintaining active review velocity, Tampa businesses can dominate regional search without paying exorbitant PPC ad rates.',
+      actionSteps: [
+        {
+          title: 'Primary Category & Coordinate Hardening',
+          step: 'Phase 1',
+          detail: 'Set the precise primary Google Business Profile category matching local buyer search terms and verify latitude/longitude coordinate bounds.'
+        },
+        {
+          title: 'Localized Schema & Multi-City Siloing',
+          step: 'Phase 2',
+          detail: 'Deploy structured LocalBusiness JSON-LD markup with explicit serviceArea geo-shapes covering Brandon, South Tampa, and Carrollwood.'
+        },
+        {
+          title: 'Tier-1 Directory & NAP Synchronization',
+          step: 'Phase 3',
+          detail: 'Standardize Name, Address, and Phone details across Apple Maps, Bing Places, Yelp, and local chamber trade directories.'
+        },
+        {
+          title: 'Automated Post-Job Review Generation',
+          step: 'Phase 4',
+          detail: 'Implement automated SMS/email review requests prompting happy clients to mention the specific service performed and their Tampa neighborhood.'
+        }
+      ],
+      neighborhoodFocus: [
+        { name: 'South Tampa & Hyde Park', niche: 'Affluent Residential & Luxury Remodeling', priority: 'High Priority' },
+        { name: 'Westshore Business District', niche: 'Corporate, Commercial IT & Legal Services', priority: 'High Priority' },
+        { name: 'Brandon & Riverview', niche: 'High-Density Residential Trade & HVAC', priority: 'High Priority' }
+      ]
+    },
+    citations: [
+      {
+        id: 'tampa-census-1',
+        title: 'QuickFacts: Tampa city & Hillsborough County, Florida',
+        url: 'https://www.census.gov/quickfacts/tampacityflorida',
+        sourceName: 'U.S. Census Bureau',
+        publishedYear: '2023',
+        finding: 'Hillsborough County features over 1.5 million residents with rapid commercial and residential growth in metropolitan Tampa.',
+        anchorText: 'U.S. Census Bureau Tampa Demographics'
+      },
+      {
+        id: 'tampa-sba-2',
+        title: 'Small Business Economic Profile: Florida',
+        url: 'https://advocacy.sba.gov/wp-content/uploads/2023/11/2023-Small-Business-Economic-Profile-FL.pdf',
+        sourceName: 'U.S. Small Business Administration',
+        publishedYear: '2023',
+        finding: 'Florida small businesses employ 3.6 million workers, with the Tampa-St. Petersburg-Clearwater MSA leading Gulf Coast commercial output.',
+        anchorText: 'SBA Florida Small Business Report'
+      },
+      {
+        id: 'tampa-brightlocal-3',
+        title: 'Local Consumer Review Survey & Map Pack Study',
+        url: 'https://www.brightlocal.com/research/local-consumer-review-survey/',
+        sourceName: 'BrightLocal Search Research',
+        publishedYear: '2024',
+        finding: '87% of consumers read online reviews for local businesses, with 46% of all Google clicks concentrating in the Local 3-Pack.',
+        anchorText: 'BrightLocal Local Search Insights'
+      }
+    ],
+    faqs: [
+      {
+        question: 'How do Tampa consumers find home service contractors and local professionals?',
+        answer: 'Tampa residents rely heavily on mobile Google Maps searches, often filtering by top star ratings and local proximity within a 15-minute drive radius.'
+      },
+      {
+        question: 'Why do national SEO agencies fail to rank businesses in Tampa?',
+        answer: 'National agencies fail to understand the geographic barrier created by Tampa Bay and local municipal distinctions between South Tampa, Carrollwood, and Brandon, diluting local relevance.'
+      },
+      {
+        question: 'How many reviews does a Tampa business need to win the Google Local 3-Pack?',
+        answer: 'In competitive Tampa sectors like HVAC, plumbing, or roofing, top 3 Map Pack leaders maintain 80+ verified 5-star reviews with active owner responses citing specific neighborhood names.'
+      },
+      {
+        question: 'What is the most common local SEO mistake made by Tampa business owners?',
+        answer: 'The most frequent mistake is having inconsistent NAP details between legacy Florida directory citations and modern Google Business Profiles, which lowers Googlebot trust.'
+      }
+    ],
+    ogImage: '/assets/og-directory.png',
+    ogImageAlt: 'Tampa Bay Local SEO Strategy & Map Pack Directory - Local Surge'
   }
 };
 
