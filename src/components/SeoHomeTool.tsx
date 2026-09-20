@@ -141,11 +141,11 @@ export default function SeoHomeTool({
       <div className="space-y-3">
         {!hideTitle && (
           <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-display text-[#123e35] leading-none tracking-tight">
-            Free SEO Analysis Tool
+            Free Local SEO Tools for Small Business
           </h2>
         )}
         <p className="text-[#4e524f] max-w-2xl mx-auto text-xs sm:text-sm font-semibold leading-relaxed">
-          Enter your website URL to get AI-powered recommendations on how to improve your search engine ranking and attract more local customers.
+          Enter your website URL to get AI-powered recommendations on how to improve your Google Map Pack ranking, audit NAP citations, and attract more local customers.
         </p>
       </div>
 

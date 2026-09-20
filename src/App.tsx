@@ -1936,6 +1936,47 @@ export default function App() {
                 </div>
               </div>
 
+              {/* Local SEO Onboarding Process & Setup */}
+              <div className="bg-white border border-[#dfded4] rounded-3xl p-6 sm:p-10 shadow-xs space-y-6">
+                <div className="text-center max-w-xl mx-auto space-y-2">
+                  <span className="text-xs font-bold uppercase tracking-widest text-[#bc5f40] font-mono">Streamlined Workflow</span>
+                  <h3 className="font-extrabold text-2xl text-[#151716] font-display">Our Local SEO Onboarding Process & Setup</h3>
+                  <p className="text-xs text-[#4e524f] font-semibold">
+                    How does SEO onboarding work? From intake audit to Map Pack surge in 4 transparent milestones.
+                  </p>
+                </div>
+                <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-4 gap-5 pt-4">
+                  <div className="bg-[#faf9f6] p-5 rounded-2xl border border-[#dfded4] space-y-2">
+                    <span className="text-[11px] font-black font-mono text-[#bc5f40]">STEP 01</span>
+                    <h4 className="font-extrabold text-sm text-[#151716]">Intake & Business NAP Audit</h4>
+                    <p className="text-xs text-[#4e524f] leading-relaxed">
+                      We audit your primary Google Business Profile category, phone numbers, and physical address consistency across Tier-1 databases.
+                    </p>
+                  </div>
+                  <div className="bg-[#faf9f6] p-5 rounded-2xl border border-[#dfded4] space-y-2">
+                    <span className="text-[11px] font-black font-mono text-[#bc5f40]">STEP 02</span>
+                    <h4 className="font-extrabold text-sm text-[#151716]">Geo-Grid & Competitor Scan</h4>
+                    <p className="text-xs text-[#4e524f] leading-relaxed">
+                      We benchmark your exact coordinates and radius against top 3 ranking local competitors to find citation and review gaps.
+                    </p>
+                  </div>
+                  <div className="bg-[#faf9f6] p-5 rounded-2xl border border-[#dfded4] space-y-2">
+                    <span className="text-[11px] font-black font-mono text-[#bc5f40]">STEP 03</span>
+                    <h4 className="font-extrabold text-sm text-[#151716]">Schema & Citation Sync</h4>
+                    <p className="text-xs text-[#4e524f] leading-relaxed">
+                      We deploy localized JSON-LD schemas and push standardized NAP listings to Apple Maps, Bing, Yelp, and key directories.
+                    </p>
+                  </div>
+                  <div className="bg-[#faf9f6] p-5 rounded-2xl border border-[#dfded4] space-y-2">
+                    <span className="text-[11px] font-black font-mono text-[#bc5f40]">STEP 04</span>
+                    <h4 className="font-extrabold text-sm text-[#151716]">Map Pack Surge & Reporting</h4>
+                    <p className="text-xs text-[#4e524f] leading-relaxed">
+                      Track local phone call surges, direction requests, and ranking velocity directly from your transparent client dashboard.
+                    </p>
+                  </div>
+                </div>
+              </div>
+
               {/* FAQ Section */}
               <FaqSection setCurrentPage={setCurrentPage} />
             </motion.div>

@@ -1,15 +1,15 @@
 {
-  "generatedAt": "2026-09-06T06:55:35.433Z",
+  "generatedAt": "2026-09-20T09:49:01.665Z",
   "isMock": false,
   "siteUrl": "https://localsurgeseo.com/",
   "summary": {
     "totalClicks": 2,
-    "totalImpressions": 12,
-    "avgCtr": 16.67,
-    "avgPosition": 3.6,
-    "dailyQuota": 99,
-    "monthlyQuota": 2499,
-    "totalKeywordsTracked": 5
+    "totalImpressions": 16,
+    "avgCtr": 12.5,
+    "avgPosition": 4.4,
+    "dailyQuota": 100,
+    "monthlyQuota": 1100,
+    "totalKeywordsTracked": 7
   },
   "crawlHealth": {
     "Date": "26/6/2026",
@@ -53,6 +53,24 @@
     },
     {
       "query": "local surge",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 6,
+      "potentialGain": 0,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "local surge",
+      "clicks": 0,
+      "impressions": 2,
+      "ctr": 0,
+      "position": 7,
+      "potentialGain": 0,
+      "recommendation": "Inject exact keyword into H2 header and add 2 internal links with rich anchor text."
+    },
+    {
+      "query": "local surge",
       "clicks": 2,
       "impressions": 1,
       "ctr": 200,
@@ -77,7 +95,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 1,
       "Clicks": 2,
-      "Date": "/Date(1783062000000-0700)/",
+      "Date": "/Date(1783036800000)/",
       "Impressions": 1,
       "Query": "local surge"
     },
@@ -86,7 +104,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 7,
       "Clicks": 0,
-      "Date": "/Date(1787295600000-0700)/",
+      "Date": "/Date(1787270400000)/",
       "Impressions": 6,
       "Query": "local surge"
     },
@@ -95,7 +113,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 3,
       "Clicks": 0,
-      "Date": "/Date(1787295600000-0700)/",
+      "Date": "/Date(1787270400000)/",
       "Impressions": 2,
       "Query": "localsurge cmo \"vp of marketing\" contact"
     },
@@ -104,7 +122,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 1,
       "Clicks": 0,
-      "Date": "/Date(1787295600000-0700)/",
+      "Date": "/Date(1787270400000)/",
       "Impressions": 1,
       "Query": "localsurge marketing director email contact"
     },
@@ -113,7 +131,25 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 6,
       "Clicks": 0,
-      "Date": "/Date(1788505200000-0700)/",
+      "Date": "/Date(1788480000000)/",
+      "Impressions": 2,
+      "Query": "local surge"
+    },
+    {
+      "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+      "AvgClickPosition": -1,
+      "AvgImpressionPosition": 6,
+      "Clicks": 0,
+      "Date": "/Date(1789084800000)/",
+      "Impressions": 2,
+      "Query": "local surge"
+    },
+    {
+      "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+      "AvgClickPosition": -1,
+      "AvgImpressionPosition": 7,
+      "Clicks": 0,
+      "Date": "/Date(1789689600000)/",
       "Impressions": 2,
       "Query": "local surge"
     }
@@ -124,7 +160,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 1,
       "Clicks": 2,
-      "Date": "/Date(1783062000000-0700)/",
+      "Date": "/Date(1783036800000)/",
       "Impressions": 1,
       "Query": "https://localsurgeseo.com/"
     },
@@ -133,7 +169,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 4,
       "Clicks": 0,
-      "Date": "/Date(1787295600000-0700)/",
+      "Date": "/Date(1787270400000)/",
       "Impressions": 5,
       "Query": "https://localsurgeseo.com/"
     },
@@ -142,7 +178,7 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 9,
       "Clicks": 0,
-      "Date": "/Date(1787295600000-0700)/",
+      "Date": "/Date(1787270400000)/",
       "Impressions": 3,
       "Query": "https://localsurgeseo.com/about"
     },
@@ -151,9 +187,45 @@
       "AvgClickPosition": -1,
       "AvgImpressionPosition": 1,
       "Clicks": 0,
-      "Date": "/Date(1787295600000-0700)/",
+      "Date": "/Date(1787270400000)/",
       "Impressions": 1,
       "Query": "https://localsurgeseo.com/contact"
+    },
+    {
+      "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+      "AvgClickPosition": -1,
+      "AvgImpressionPosition": 3,
+      "Clicks": 0,
+      "Date": "/Date(1788480000000)/",
+      "Impressions": 1,
+      "Query": "https://localsurgeseo.com/"
+    },
+    {
+      "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+      "AvgClickPosition": -1,
+      "AvgImpressionPosition": 9,
+      "Clicks": 0,
+      "Date": "/Date(1788480000000)/",
+      "Impressions": 1,
+      "Query": "https://localsurgeseo.com/about"
+    },
+    {
+      "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+      "AvgClickPosition": -1,
+      "AvgImpressionPosition": 3,
+      "Clicks": 0,
+      "Date": "/Date(1789084800000)/",
+      "Impressions": 1,
+      "Query": "https://localsurgeseo.com/"
+    },
+    {
+      "__type": "QueryStats:#Microsoft.Bing.Webmaster.Api",
+      "AvgClickPosition": -1,
+      "AvgImpressionPosition": 9,
+      "Clicks": 0,
+      "Date": "/Date(1789084800000)/",
+      "Impressions": 1,
+      "Query": "https://localsurgeseo.com/about"
     }
   ]
 }

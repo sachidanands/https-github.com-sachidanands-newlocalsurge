@@ -741,6 +741,43 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
             { "@type": "Offer", "name": "Starter Boost", "price": "999", "priceCurrency": "USD", "description": "GBP syncing, localized keyword mapping (10 terms), and 20 top directory citations." },
             { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD", "description": "Full competitor domination, 4 monthly localized articles, and high-authority backlinks." }
           ]
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "Which local SEO services should I pick for my business?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The right local SEO package depends on your business stage and local competition. Solo contractors and newly launched businesses benefit most from our Single-Page Blast ($0/mo) or Starter Boost ($999/mo) to establish Google Business Profile verification, citation synchronization, and foundational Map Pack rankings. Established contractors in competitive metro markets (HVAC, roofing, plumbing, dental) require the Premium Surge ($1,999/mo) plan for coordinate geo-grid expansion, continuous review velocity, and dedicated multi-location domination."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "How much does local SEO cost per month, and what determines the price?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Legitimate local SEO services in the United States typically range from $500 to $3,000 per month depending on geographical market density, competitor count, and citation clean-up scope. Bargain services offering '$99/month' invariably fail because they rely on automated spam blasts that violate Google guidelines. Local Surge SEO offers transparent, contract-free pricing: Single-Page Blast ($0/mo), Starter Boost ($999/mo), and Premium Surge ($1,999/mo), with zero setup fees and proven ROI tracking."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the difference between Local SEO and Organic SEO?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Local SEO focuses on spatial proximity, the Google Local 3-Pack (Google Maps), Google Business Profiles, and localized NAP citations to capture high-intent 'near me' searchers within a specific service radius. Organic SEO focuses on nationwide non-geotargeted website rankings in standard search results based on domain authority, comprehensive content, and backlinks. For service contractors, over 44% of total local search clicks go directly to the Google Map 3-Pack."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Local SEO vs Google Ads (PPC): Which is better for local businesses?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Google Ads (PPC) delivers immediate search visibility by charging you $15 to $80+ for every single click, but leads cease the exact moment ad budget stops. Local SEO and Google Map Pack optimization build permanent, compounding digital equity. Over 44% of local service searchers bypass sponsored ads to click Google Local 3-Pack listings, producing up to 3x higher phone call conversion rates at a fraction of the ongoing customer acquisition cost."
+              }
+            }
+          ]
         }
       ]
     };
@@ -760,6 +797,19 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
         <section>
           <h2>Premium Surge - $1,999 / Month</h2>
           <p>For high-competition contractors, cosmetic practices, and law firms. Includes unlimited pages, 4 localized articles monthly, high-authority backlink development, and bi-weekly strategy calls.</p>
+        </section>
+        <section>
+          <h2>Our 4-Step Local SEO Onboarding Process & Setup</h2>
+          <p>How does SEO onboarding work? Step 1: Business NAP & GBP Category Audit. Step 2: Geo-Grid & Competitor Scan. Step 3: Localized Schema & Citation Synchronization. Step 4: Map Pack Ranking Acceleration & Transparent Reporting.</p>
+        </section>
+        <section>
+          <h2>Frequently Asked Questions on Local SEO Pricing</h2>
+          <h3>Which local SEO services should I pick for my business?</h3>
+          <p>Solo contractors start with Single-Page Blast ($0/mo) or Starter Boost ($999/mo). Competitive tradesmen need Premium Surge ($1,999/mo) for geo-grid expansion.</p>
+          <h3>How much does local SEO cost per month?</h3>
+          <p>Quality local SEO costs between $500 and $3,000 monthly. Beware of $99/mo automated blasts that risk Google algorithmic penalties.</p>
+          <h3>Local SEO vs Google Ads (PPC): Which is better for local businesses?</h3>
+          <p>Google Ads rents temporary clicks at $15 to $80 each. Local SEO builds permanent equity in the Google Local 3-Pack with 3x higher phone call conversions.</p>
         </section>
       </div>
     `;
@@ -1035,6 +1085,35 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
               { "@type": "Offer", "name": "Premium Surge", "price": "1999", "priceCurrency": "USD" }
             ]
           }
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How do I optimize and rank my business in the Google Local 3-Pack?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Ranking in the Google Local 3-Pack requires four core signals: (1) Setting the single most accurate primary Google Business Profile category, (2) Generating consistent, verified customer reviews containing specific service and neighborhood keywords, (3) Deploying structured LocalBusiness and geo-coordinate schema on your website, and (4) Establishing 100% NAP citation consistency across Tier-1 data aggregators."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is the difference between Local SEO and Organic SEO?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Local SEO focuses on spatial proximity, the Google Local 3-Pack (Google Maps), Google Business Profiles, and localized NAP citations to capture high-intent 'near me' searchers within a specific service radius. Organic SEO focuses on nationwide non-geotargeted website rankings in standard search results based on domain authority, comprehensive content, and backlinks. For service contractors, over 44% of total local search clicks go directly to the Google Map 3-Pack."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What is a local citation and why is NAP consistency critical?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "A local citation is any online mention of your business Name, Address, and Phone number (NAP) on platforms such as Apple Maps, Yelp, Bing Places, YellowPages, and industry trade directories. Inconsistent details (such as mismatched suite numbers or outdated phone numbers) fragment search engine trust, causing Googlebot to withhold Map Pack rankings due to uncertain location verification."
+              }
+            }
+          ]
         }
       ]
     };
@@ -1056,6 +1135,13 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
             <li>High-Authority Local Directory Syndication</li>
           </ul>
         </section>
+        <section>
+          <h2>Key Questions Answered About Local SEO</h2>
+          <h3>How do I rank in the Google Local 3-Pack?</h3>
+          <p>Google evaluates relevance, distance, and prominence. Optimize primary GBP categories, maintain 100% NAP consistency, collect verified reviews, and deploy coordinate-anchored LocalBusiness schema.</p>
+          <h3>What is a local citation?</h3>
+          <p>A citation is any online publication of your Name, Address, and Phone number. Consistency across Apple Maps, Yelp, Bing, and directory aggregators builds domain trust.</p>
+        </section>
       </div>
     `;
 
@@ -1063,8 +1149,8 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
   }
 
   if (cleanPath === '/seo-tool') {
-    const title = "Free Local SEO Audit Tool & Scanner [Instant Report] - Local Surge SEO";
-    const description = "Run a 100% free local SEO audit tool. Scan Google Map Pack rankings, NAP citation consistency, schema markup, and competitor rank with instant results.";
+    const title = "Free Local SEO Tools for Small Business & Map Pack Audit - Local Surge SEO";
+    const description = "Access the best free local SEO tools for small business. Audit Google Map Pack rankings, NAP consistency, citation directories, and competitor signals with instant AI analysis.";
     const canonical = "https://localsurgeseo.com/seo-tool";
     const ogImage = "https://localsurgeseo.com/assets/og-seo-tool.png";
 
@@ -1075,12 +1161,12 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
           "@type": "BreadcrumbList",
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Free SEO Scanner", "item": canonical }
+            { "@type": "ListItem", "position": 2, "name": "Free Local SEO Tools", "item": canonical }
           ]
         },
         {
           "@type": "WebApplication",
-          "name": "Local Surge SEO Diagnostic Scanner",
+          "name": "Local Surge Free Local SEO Tools for Small Business",
           "url": canonical,
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "All",
@@ -1098,9 +1184,9 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const crawlMarkup = `
       <main id="ssr-seotool-content" class="max-w-5xl mx-auto px-4 py-8">
         <nav aria-label="Breadcrumb" class="text-sm mb-4">
-          <a href="/">Home</a> &gt; <span>Free Local SEO Diagnostic Scanner</span>
+          <a href="/">Home</a> &gt; <span>Free Local SEO Tools for Small Business</span>
         </nav>
-        <h1 class="text-3xl font-bold text-gray-900 mb-3">Free Local SEO Diagnostic Scanner &amp; Real-Time Audit Suite</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-3">Free Local SEO Tools for Small Business &amp; Real-Time Audit Suite</h1>
         <p class="text-lg text-gray-700 mb-6">${description}</p>
         
         <section class="mb-8">
