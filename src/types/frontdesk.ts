@@ -37,6 +37,8 @@ export interface WidgetConfig {
   phonePrompt?: string;
   position?: 'bottom-right' | 'bottom-left';
   showPoweredBy?: boolean;
+  path_prefix?: string;
+  allowed_paths?: string[];
 }
 
 export interface ScrapedKnowledge {
@@ -61,6 +63,9 @@ export interface FrontdeskSite {
   business_name: string;
   industry: string;
   website_url?: string;
+  target_domain?: string;
+  path_prefix?: string;
+  allowed_paths?: string[];
   phone?: string;
   emergency_phone?: string;
   contact_name?: string;
