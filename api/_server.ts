@@ -928,7 +928,9 @@ function serializeSiteForSupabase(site: any) {
     trial_expiry_email_sent_at: site.trial_expiry_email_sent_at,
     grace_ended_email_sent_at: site.grace_ended_email_sent_at,
     feature_flags: site.feature_flags,
-    plan_tier: site.plan_tier || site.feature_flags?.planTier
+    plan_tier: site.plan_tier || site.feature_flags?.planTier,
+    path_prefix: site.path_prefix,
+    allowed_paths: site.allowed_paths
   };
 
   const payload: any = {};
@@ -954,6 +956,8 @@ function hydrateFrontdeskSite(row: any) {
     grace_ends_at: row.grace_ends_at || cfg.grace_ends_at,
     trial_expiry_email_sent_at: row.trial_expiry_email_sent_at || cfg.trial_expiry_email_sent_at,
     grace_ended_email_sent_at: row.grace_ended_email_sent_at || cfg.grace_ended_email_sent_at,
+    path_prefix: row.path_prefix || cfg.path_prefix,
+    allowed_paths: row.allowed_paths || cfg.allowed_paths,
     feature_flags: row.feature_flags || cfg.feature_flags || {
       enablePhotoUpload: false,
       enableEmailDispatch: true,
@@ -3525,10 +3529,21 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       });
     }
 
-    // Format domain to clean URL
-    let fullUrl = targetDomain;
+    // Format domain to clean URL & detect any franchise/location sub-path (e.g. mrrooter.com/tri-cities)
+    let fullUrl = targetDomain.trim();
     if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://")) {
       fullUrl = `https://${fullUrl}`;
+    }
+
+    let pathPrefix = "";
+    try {
+      const parsedUrl = new URL(fullUrl);
+      if (parsedUrl.pathname && parsedUrl.pathname !== "/" && parsedUrl.pathname.length > 1) {
+        // Strip trailing slash: e.g. "/tri-cities/" -> "/tri-cities"
+        pathPrefix = parsedUrl.pathname.replace(/\/+$/, "").toLowerCase();
+      }
+    } catch {
+      // ignore URL parsing error
     }
 
     const cleanHost = targetDomain
@@ -3538,9 +3553,12 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       .toLowerCase()
       .slice(0, 24);
 
-    const siteId = `trial_${cleanHost}_${Date.now().toString(36)}`;
+    const pathTag = pathPrefix ? `_${pathPrefix.replace(/[^a-zA-Z0-9]/g, "_").slice(0, 12)}` : "";
+    const siteId = `trial_${cleanHost}${pathTag}_${Date.now().toString(36)}`;
     // Expiry timestamp: exactly 30 days from now
     const trialEndsAt = new Date(Date.now() + 30 * 24 * 60 * 60 * 1000).toISOString();
+
+    const allowedPathsList = pathPrefix ? [pathPrefix, `${pathPrefix}/*`] : undefined;
 
     const newTrialSite: any = {
       id: siteId,
@@ -3555,6 +3573,8 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       is_trial: true,
       trial_ends_at: trialEndsAt,
       status: "active",
+      path_prefix: pathPrefix || undefined,
+      allowed_paths: allowedPathsList,
       service_radius: { city: "Local Area", radiusMiles: 25, zipCodes: [] },
       estimate_policy: "Free estimates during normal business hours.",
       working_hours: { weekday: "7:00 AM - 7:00 PM", weekend: "8:00 AM - 5:00 PM", emergency247: true },
@@ -3562,7 +3582,9 @@ app.post("/api/frontdesk/trial", async (req, res) => {
         themeColor: "#10b981",
         greeting: `👋 Hi! Need fast assistance or a free estimate for ${bName}?`,
         speedToLeadCity: "Local Area",
-        quickChips: ["🚨 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]
+        quickChips: ["🚨 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"],
+        path_prefix: pathPrefix || undefined,
+        allowed_paths: allowedPathsList
       },
       feature_flags: {
         enablePhotoUpload: false,
@@ -3600,7 +3622,7 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       console.warn("⚠️ Supabase trial site insert warning (saved locally):", err);
     }
 
-    // 3. Asynchronously trigger website crawl so knowledge is ready
+    // 3. Trigger website crawl (fire and catch safely)
     crawlSiteKnowledge(fullUrl, getGemini, { businessName: bName, deepCrawl: false })
       .then(async (crawlResult) => {
         if (crawlResult.success && crawlResult.knowledge) {
@@ -3625,9 +3647,15 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       });
 
     // 4. Send email with script and setup instructions via Resend
-    dispatchTrialWelcomeEmail(newTrialSite, getResend).catch((emailErr) => {
+    // CRITICAL for Vercel Serverless: Await the email send so the function doesn't freeze prematurely!
+    let emailDispatched = false;
+    try {
+      const emailResult = await dispatchTrialWelcomeEmail(newTrialSite, getResend);
+      emailDispatched = !!emailResult?.success;
+      console.log(`[POST /api/frontdesk/trial] Resend email result for ${contactEmail}:`, emailResult);
+    } catch (emailErr) {
       console.warn("⚠️ Trial welcome email dispatch warning:", emailErr);
-    });
+    }
 
     const scriptTag = `<script src="https://localsurgeseo.com/widget.js" data-site-id="${siteId}" defer></script>`;
 
@@ -3636,9 +3664,14 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       siteId,
       trialEndsAt,
       scriptTag,
+      pathPrefix: pathPrefix || undefined,
+      emailDispatched,
       site: newTrialSite,
       instructions: {
         wordpress: "1. Install WPCode plugin. 2. Go to Code Snippets > Header & Footer. 3. Paste the script tag into Footer box and Save.",
+        gtm: pathPrefix
+          ? `1. Open Google Tag Manager. 2. Add 'Custom HTML' tag with script. 3. Set Trigger to 'Page URL contains ${pathPrefix}'. 4. Publish.`
+          : "1. Open Google Tag Manager. 2. Add 'Custom HTML' tag with script. 3. Set Trigger to 'All Pages - Window Loaded'. 4. Publish.",
         wix: "1. Go to Settings > Custom Code. 2. Click '+ Add Custom Code'. 3. Paste snippet, select 'Body - End', and click Apply.",
         squarespace: "1. Go to Website > Website Tools > Code Injection. 2. Paste snippet in Footer box and Save.",
         html: "Paste the snippet right before the closing </body> tag on any website."

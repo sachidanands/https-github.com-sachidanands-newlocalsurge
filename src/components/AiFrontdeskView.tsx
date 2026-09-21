@@ -25,7 +25,7 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
   const [trialError, setTrialError] = useState<string | null>(null);
   const [trialResult, setTrialResult] = useState<any | null>(null);
   const [trialCopied, setTrialCopied] = useState(false);
-  const [activeTab, setActiveTab] = useState<'wordpress' | 'wix' | 'squarespace' | 'html'>('wordpress');
+  const [activeTab, setActiveTab] = useState<'wordpress' | 'gtm' | 'wix' | 'squarespace' | 'html'>('wordpress');
 
   const handleGenerateTrial = async (e: React.FormEvent) => {
     e.preventDefault();
@@ -769,69 +769,95 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                   </p>
                 </div>
 
-                {/* Platform Installation Tabs */}
-                <div className="space-y-3 pt-2">
-                  <h4 className="text-xs font-black uppercase font-mono tracking-wider text-emerald-200">
-                    Where to Add It on Your Website
-                  </h4>
+                  {/* Franchise Location Path Detection Notice */}
+                  {trialResult.pathPrefix && (
+                    <div className="p-3 bg-emerald-950/60 border border-emerald-400/40 rounded-xl text-xs text-emerald-200 flex items-start gap-2">
+                      <span className="text-base leading-none">📍</span>
+                      <div>
+                        <strong className="text-emerald-100">Franchise / Location Sub-Path Detected: <code>{trialResult.pathPrefix}</code></strong>
+                        <p className="text-[11px] text-emerald-300/90 mt-0.5">
+                          SurgeBot is configured for this specific location. It will automatically sleep on other franchise pages and maintain session persistence when visitors click through to national service pages.
+                        </p>
+                      </div>
+                    </div>
+                  )}
 
-                  <div className="flex flex-wrap gap-2 border-b border-white/10 pb-2">
-                    {[
-                      { id: 'wordpress', name: 'WordPress' },
-                      { id: 'wix', name: 'Wix' },
-                      { id: 'squarespace', name: 'Squarespace' },
-                      { id: 'html', name: 'Shopify / Custom HTML' }
-                    ].map((tab) => (
-                      <button
-                        key={tab.id}
-                        onClick={() => setActiveTab(tab.id as any)}
-                        className={`text-xs font-bold px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
-                          activeTab === tab.id
-                            ? 'bg-emerald-500 text-black shadow-xs'
-                            : 'bg-white/5 text-slate-300 hover:bg-white/10'
-                        }`}
-                      >
-                        {tab.name}
-                      </button>
-                    ))}
-                  </div>
+                  {/* Platform Installation Tabs */}
+                  <div className="space-y-3 pt-2">
+                    <h4 className="text-xs font-black uppercase font-mono tracking-wider text-emerald-200">
+                      Where to Add It on Your Website
+                    </h4>
 
-                  <div className="bg-black/30 border border-white/10 rounded-xl p-4 text-xs text-slate-200 leading-relaxed">
-                    {activeTab === 'wordpress' && (
-                      <ol className="list-decimal pl-4 space-y-1.5">
-                        <li>In your WordPress dashboard, install and activate the free <strong>WPCode</strong> (or <em>Insert Headers and Footers</em>) plugin.</li>
-                        <li>Navigate to <strong>Code Snippets &rarr; Header &amp; Footer</strong>.</li>
-                        <li>Paste your script snippet into the <strong>Footer</strong> box.</li>
-                        <li>Click <strong>Save Changes</strong>. SurgeBot will now appear on your live site!</li>
-                      </ol>
-                    )}
-                    {activeTab === 'wix' && (
-                      <ol className="list-decimal pl-4 space-y-1.5">
-                        <li>In your Wix Dashboard, go to <strong>Settings &rarr; Custom Code</strong>.</li>
-                        <li>Click <strong>+ Add Custom Code</strong> in the top right corner.</li>
-                        <li>Paste your script tag into the code input box.</li>
-                        <li>Under "Place Code in", select <strong>Body - End</strong>.</li>
-                        <li>Under "Add Code to Pages", choose <strong>All Pages</strong> and click <strong>Apply</strong>.</li>
-                      </ol>
-                    )}
-                    {activeTab === 'squarespace' && (
-                      <ol className="list-decimal pl-4 space-y-1.5">
-                        <li>In your Squarespace menu, go to <strong>Website &rarr; Website Tools &rarr; Code Injection</strong>.</li>
-                        <li>Scroll down to the <strong>Footer</strong> field.</li>
-                        <li>Paste your script tag into the field.</li>
-                        <li>Click <strong>Save</strong> at the top left. Your bot is immediately live!</li>
-                      </ol>
-                    )}
-                    {activeTab === 'html' && (
-                      <ol className="list-decimal pl-4 space-y-1.5">
-                        <li>Open your website's main HTML template or theme file (such as <code>theme.liquid</code> in Shopify).</li>
-                        <li>Scroll to the bottom of the template before the closing <code>&lt;/body&gt;</code> tag.</li>
-                        <li>Paste your script tag right above <code>&lt;/body&gt;</code>.</li>
-                        <li>Save and publish changes.</li>
-                      </ol>
-                    )}
+                    <div className="flex flex-wrap gap-2 border-b border-white/10 pb-2">
+                      {[
+                        { id: 'gtm', name: 'Google Tag Manager (GTM)' },
+                        { id: 'wordpress', name: 'WordPress' },
+                        { id: 'wix', name: 'Wix' },
+                        { id: 'squarespace', name: 'Squarespace' },
+                        { id: 'html', name: 'Shopify / Custom HTML' }
+                      ].map((tab) => (
+                        <button
+                          key={tab.id}
+                          onClick={() => setActiveTab(tab.id as any)}
+                          className={`text-xs font-bold px-3.5 py-1.5 rounded-lg transition-colors cursor-pointer ${
+                            activeTab === tab.id
+                              ? 'bg-emerald-500 text-black shadow-xs'
+                              : 'bg-white/5 text-slate-300 hover:bg-white/10'
+                          }`}
+                        >
+                          {tab.name}
+                        </button>
+                      ))}
+                    </div>
+
+                    <div className="bg-black/30 border border-white/10 rounded-xl p-4 text-xs text-slate-200 leading-relaxed">
+                      {activeTab === 'gtm' && (
+                        <ol className="list-decimal pl-4 space-y-1.5">
+                          <li>Open your <strong>Google Tag Manager</strong> workspace and click <strong>Tags &rarr; New</strong>.</li>
+                          <li>Select <strong>Custom HTML</strong> as the Tag Configuration and paste your 1-line script tag.</li>
+                          <li>Under <strong>Triggering</strong>, select <strong>Page View &mdash; Window Loaded</strong>. {trialResult.pathPrefix ? (
+                            <span>Set firing rule to <strong>Some Page Views</strong> &rarr; <strong>Page Path contains <code>{trialResult.pathPrefix}</code></strong>.</span>
+                          ) : (
+                            <span>Leave set to <strong>All Pages</strong>.</span>
+                          )}</li>
+                          <li>Click <strong>Save</strong> and <strong>Submit / Publish</strong>. Your widget goes live with 0 website theme code changes!</li>
+                        </ol>
+                      )}
+                      {activeTab === 'wordpress' && (
+                        <ol className="list-decimal pl-4 space-y-1.5">
+                          <li>In your WordPress dashboard, install and activate the free <strong>WPCode</strong> (or <em>Insert Headers and Footers</em>) plugin.</li>
+                          <li>Navigate to <strong>Code Snippets &rarr; Header &amp; Footer</strong>.</li>
+                          <li>Paste your script snippet into the <strong>Footer</strong> box.</li>
+                          <li>Click <strong>Save Changes</strong>. SurgeBot will now appear on your live site!</li>
+                        </ol>
+                      )}
+                      {activeTab === 'wix' && (
+                        <ol className="list-decimal pl-4 space-y-1.5">
+                          <li>In your Wix Dashboard, go to <strong>Settings &rarr; Custom Code</strong>.</li>
+                          <li>Click <strong>+ Add Custom Code</strong> in the top right corner.</li>
+                          <li>Paste your script tag into the code input box.</li>
+                          <li>Under "Place Code in", select <strong>Body - End</strong>.</li>
+                          <li>Under "Add Code to Pages", choose <strong>All Pages</strong> and click <strong>Apply</strong>.</li>
+                        </ol>
+                      )}
+                      {activeTab === 'squarespace' && (
+                        <ol className="list-decimal pl-4 space-y-1.5">
+                          <li>In your Squarespace menu, go to <strong>Website &rarr; Website Tools &rarr; Code Injection</strong>.</li>
+                          <li>Scroll down to the <strong>Footer</strong> field.</li>
+                          <li>Paste your script tag into the field.</li>
+                          <li>Click <strong>Save</strong> at the top left. Your bot is immediately live!</li>
+                        </ol>
+                      )}
+                      {activeTab === 'html' && (
+                        <ol className="list-decimal pl-4 space-y-1.5">
+                          <li>Open your website's main HTML template or theme file (such as <code>theme.liquid</code> in Shopify).</li>
+                          <li>Scroll to the bottom of the template before the closing <code>&lt;/body&gt;</code> tag.</li>
+                          <li>Paste your script tag right above <code>&lt;/body&gt;</code>.</li>
+                          <li>Save and publish changes.</li>
+                        </ol>
+                      )}
+                    </div>
                   </div>
-                </div>
 
                 {/* Email notice & Action buttons */}
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">

@@ -232,6 +232,16 @@ export async function dispatchTrialWelcomeEmail(
           <!-- Step 2: Where to Add It -->
           <h3 style="font-size: 15px; color: #0f172a; margin: 24px 0 12px 0;">Step 2: Where to Add It on Your Platform</h3>
           
+          <!-- Google Tag Manager / Franchise -->
+          <div style="margin-bottom: 14px; padding: 12px; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0;">
+            <strong style="color: #065f46; font-size: 13px;">Google Tag Manager (GTM) &mdash; Zero Code &amp; Franchise Friendly:</strong>
+            <ol style="margin: 6px 0 0 0; padding-left: 20px; font-size: 13px; color: #047857; line-height: 1.5;">
+              <li>In GTM, create a new <strong>Custom HTML</strong> tag and paste your 1-line script.</li>
+              <li>Set Trigger to <strong>Page View</strong> (Window Loaded). ${site.path_prefix ? `To scope specifically to this location, add filter: <code>Page Path contains ${site.path_prefix}</code>.` : "Leave on 'All Pages' or choose specific landing pages."}</li>
+              <li>Click <strong>Publish</strong>. SurgeBot will go live immediately without needing any theme code edits!</li>
+            </ol>
+          </div>
+
           <!-- WordPress -->
           <div style="margin-bottom: 14px; padding: 12px; background: #f8fafc; border-radius: 8px; border: 1px solid #e2e8f0;">
             <strong style="color: #0f172a; font-size: 13px;">WordPress:</strong>
@@ -270,7 +280,7 @@ export async function dispatchTrialWelcomeEmail(
           </div>
 
           <div style="text-align: center; margin-top: 24px;">
-            <a href="https://localsurge.com/widget-test.html?siteId=${site.id}" style="display: inline-block; background: #123e35; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;">
+            <a href="https://localsurgeseo.com/widget-test.html?siteId=${site.id}" style="display: inline-block; background: #123e35; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;">
               🚀 Test Your Bot Live Right Now
             </a>
           </div>
@@ -281,7 +291,7 @@ export async function dispatchTrialWelcomeEmail(
         </div>
 
         <div style="background: #f8fafc; padding: 14px 24px; border-top: 1px solid #e2e8f0; font-size: 12px; color: #94a3b8; text-align: center;">
-          ⚡ LocalSurge AI FrontDesk • Real-Time Trade Lead Capture • localsurge.com
+          ⚡ LocalSurge AI FrontDesk • Real-Time Trade Lead Capture • localsurgeseo.com
         </div>
       </div>
     </body>
@@ -289,13 +299,18 @@ export async function dispatchTrialWelcomeEmail(
   `;
 
   try {
-    const data = await resend.emails.send({
+    const emailPayload: any = {
       from: "LocalSurge FrontDesk <notifications@localsurgeseo.com>",
       to: [recipientEmail],
-      bcc: [process.env.ADMIN_EMAIL || "leads@localsurgeseo.com"],
       subject: `🚀 Your SurgeBot 30-Day Free Trial Script for ${site.business_name}`,
       html
-    });
+    };
+
+    if (process.env.ADMIN_EMAIL) {
+      emailPayload.bcc = [process.env.ADMIN_EMAIL];
+    }
+
+    const data = await resend.emails.send(emailPayload);
 
     console.log(`🟢 Trial onboarding email sent via Resend to ${recipientEmail}`);
     return { success: true, id: data?.data?.id || "trial_email_sent" };

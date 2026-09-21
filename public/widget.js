@@ -35,6 +35,7 @@
   // 2. Create host container & attach Shadow Root
   const container = document.createElement("div");
   container.id = "localsurge-frontdesk-root";
+  container.style.display = "none"; // Kept invisible until site config and URL path rules pass
   document.body.appendChild(container);
 
   const shadow = container.attachShadow({ mode: "open" });
@@ -822,6 +823,53 @@
       if (data && data.site) {
         siteConfig = data.site;
 
+        // Franchise Sub-Path & Session Persistence Filter
+        // Ensures franchise location bots only appear on their pages (e.g. /tri-cities)
+        // while persisting across general national pages (/services) during that visitor session.
+        const pathPrefix = siteConfig.path_prefix || siteConfig.widget_config?.path_prefix || scriptTag?.getAttribute("data-path");
+        const allowedPaths = siteConfig.allowed_paths || siteConfig.widget_config?.allowed_paths || (pathPrefix ? [pathPrefix, `${pathPrefix}/*`] : null);
+
+        if (allowedPaths && allowedPaths.length > 0) {
+          const currentPath = (window.location.pathname || "/").toLowerCase().replace(/\/+$/, "") || "/";
+          const sessionKey = `ls_franchise_session_${siteId}`;
+
+          const isDirectMatch = allowedPaths.some(p => {
+            const cleanPattern = String(p).replace(/\/\*$/, "").toLowerCase().replace(/\/+$/, "");
+            return currentPath === cleanPattern || currentPath.startsWith(cleanPattern + "/");
+          });
+
+          if (isDirectMatch) {
+            // Direct landing on franchise page -> set or refresh active visitor session (45-min window)
+            try {
+              sessionStorage.setItem(sessionKey, JSON.stringify({
+                active: true,
+                path: currentPath,
+                timestamp: Date.now()
+              }));
+            } catch (e) {}
+          } else {
+            // Visitor on another page -> check if they came from the franchise location (session persistence)
+            let isSessionValid = false;
+            try {
+              const saved = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
+              if (saved && saved.active && saved.timestamp) {
+                const elapsedMin = (Date.now() - saved.timestamp) / (1000 * 60);
+                if (elapsedMin < 45) {
+                  isSessionValid = true;
+                } else {
+                  sessionStorage.removeItem(sessionKey);
+                }
+              }
+            } catch (e) {}
+
+            if (!isSessionValid) {
+              console.info(`[LocalSurge FrontDesk] Current page "${currentPath}" is outside the authorized franchise location paths for site "${siteId}". Widget inactive.`);
+              container.style.display = "none";
+              return;
+            }
+          }
+        }
+
         // 1. Soft-Locked Mode (Day 33+): Render Fallback Direct Contact Card
         if (data.isSoftLocked || data.status === "soft_locked" || siteConfig.status === "soft_locked") {
           console.info(`[LocalSurge FrontDesk] Trial grace period concluded for site "${siteId}". Switched to Fallback Direct Contact Mode.`);
@@ -858,6 +906,8 @@
   }
 
   function applyConfig(site, isSoftLocked = false) {
+    // Show container now that configuration is validated
+    container.style.display = "block";
     const w = site.widget_config || {};
     const flags = site.feature_flags || {};
 
