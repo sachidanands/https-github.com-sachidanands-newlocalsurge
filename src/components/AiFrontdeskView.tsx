@@ -795,11 +795,11 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
 
                     <div className="flex flex-wrap gap-2 border-b border-white/10 pb-2">
                       {[
-                        { id: 'gtm', name: 'Google Tag Manager (GTM)' },
                         { id: 'wordpress', name: 'WordPress' },
                         { id: 'wix', name: 'Wix' },
                         { id: 'squarespace', name: 'Squarespace' },
-                        { id: 'html', name: 'Shopify / Custom HTML' }
+                        { id: 'html', name: 'Shopify / Custom HTML' },
+                        { id: 'gtm', name: 'Google Tag Manager (GTM)' }
                       ].map((tab) => (
                         <button
                           key={tab.id}
