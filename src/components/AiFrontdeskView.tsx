@@ -862,8 +862,17 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                 {/* Email notice & Action buttons */}
                 <div className="pt-2 flex flex-col sm:flex-row items-center justify-between gap-4">
                   <div className="text-xs text-emerald-200 flex items-center gap-1.5">
-                    <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
-                    <span>A copy has been sent to <strong>{trialEmail}</strong>.</span>
+                    {trialResult.emailDispatched === false ? (
+                      <div className="text-amber-300 flex items-center gap-1.5">
+                        <AlertTriangle className="w-4 h-4 text-amber-400 shrink-0" />
+                        <span>Could not dispatch email ({trialResult.emailError || 'mail service issue'}). Your script is ready above!</span>
+                      </div>
+                    ) : (
+                      <>
+                        <Mail className="w-4 h-4 text-emerald-400 shrink-0" />
+                        <span>A copy has been sent to <strong>{trialEmail}</strong>.</span>
+                      </>
+                    )}
                   </div>
 
                   <div className="flex items-center gap-3 w-full sm:w-auto">

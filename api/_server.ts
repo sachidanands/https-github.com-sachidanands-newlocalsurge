@@ -3649,11 +3649,16 @@ app.post("/api/frontdesk/trial", async (req, res) => {
     // 4. Send email with script and setup instructions via Resend
     // CRITICAL for Vercel Serverless: Await the email send so the function doesn't freeze prematurely!
     let emailDispatched = false;
+    let emailError: string | null = null;
     try {
       const emailResult = await dispatchTrialWelcomeEmail(newTrialSite, getResend);
       emailDispatched = !!emailResult?.success;
+      if (!emailResult?.success) {
+        emailError = emailResult?.error || "Resend dispatch failed";
+      }
       console.log(`[POST /api/frontdesk/trial] Resend email result for ${contactEmail}:`, emailResult);
-    } catch (emailErr) {
+    } catch (emailErr: any) {
+      emailError = emailErr?.message || "Email dispatch exception";
       console.warn("⚠️ Trial welcome email dispatch warning:", emailErr);
     }
 
@@ -3666,6 +3671,7 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       scriptTag,
       pathPrefix: pathPrefix || undefined,
       emailDispatched,
+      emailError: emailDispatched ? undefined : emailError,
       site: newTrialSite,
       instructions: {
         wordpress: "1. Install WPCode plugin. 2. Go to Code Snippets > Header & Footer. 3. Paste the script tag into Footer box and Save.",

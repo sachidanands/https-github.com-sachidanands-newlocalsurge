@@ -152,16 +152,21 @@ export async function dispatchLeadEmail(
   `;
 
   try {
-    const data = await resend.emails.send({
-      from: "LocalSurge FrontDesk <notifications@localsurgeseo.com>",
+    const res = await resend.emails.send({
+      from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [targetEmail],
       subject: `${isEmergency ? '🚨 EMERGENCY: ' : isUrgent ? '⚠️ URGENT: ' : '📋 '} Lead for ${site.business_name} (${lead.customer_name} - ${lead.customer_phone})`,
       html
     });
 
-    return { success: true, id: data?.data?.id || "resend_dispatched" };
+    if (res?.error) {
+      console.error("❌ Resend lead dispatch error:", res.error);
+      return { success: false, error: res.error.message || "Failed to dispatch email via Resend" };
+    }
+
+    return { success: true, id: res?.data?.id || "resend_dispatched" };
   } catch (err: any) {
-    console.error("❌ Resend dispatch error:", err);
+    console.error("❌ Resend dispatch exception:", err);
     return { success: false, error: err.message || "Failed to dispatch email via Resend" };
   }
 }
@@ -300,7 +305,7 @@ export async function dispatchTrialWelcomeEmail(
 
   try {
     const emailPayload: any = {
-      from: "LocalSurge FrontDesk <notifications@localsurgeseo.com>",
+      from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [recipientEmail],
       subject: `🚀 Your SurgeBot 30-Day Free Trial Script for ${site.business_name}`,
       html
@@ -310,12 +315,16 @@ export async function dispatchTrialWelcomeEmail(
       emailPayload.bcc = [process.env.ADMIN_EMAIL];
     }
 
-    const data = await resend.emails.send(emailPayload);
+    const res = await resend.emails.send(emailPayload);
+    if (res?.error) {
+      console.error("❌ Resend trial welcome email error:", res.error);
+      return { success: false, error: res.error.message || "Failed to dispatch trial email" };
+    }
 
-    console.log(`🟢 Trial onboarding email sent via Resend to ${recipientEmail}`);
-    return { success: true, id: data?.data?.id || "trial_email_sent" };
+    console.log(`🟢 Trial onboarding email sent via Resend to ${recipientEmail}:`, res?.data?.id);
+    return { success: true, id: res?.data?.id || "trial_email_sent" };
   } catch (err: any) {
-    console.error("❌ Resend trial welcome email error:", err);
+    console.error("❌ Resend trial welcome email exception:", err);
     return { success: false, error: err.message || "Failed to dispatch trial email" };
   }
 }
@@ -439,18 +448,27 @@ export async function sendTrialExpiryReportEmail(
   `;
 
   try {
-    const data = await resend.emails.send({
-      from: "LocalSurge FrontDesk <notifications@localsurgeseo.com>",
+    const emailPayload: any = {
+      from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [recipientEmail],
-      bcc: [process.env.ADMIN_EMAIL || "leads@localsurgeseo.com"],
       subject: `📊 Your 30-Day SurgeBot Results: ${stats.totalLeads} Leads Captured for ${site.business_name}`,
       html
-    });
+    };
 
-    console.log(`🟢 Trial expiry ROI report email sent via Resend to ${recipientEmail}`);
-    return { success: true, id: data?.data?.id || "expiry_report_sent" };
+    if (process.env.ADMIN_EMAIL) {
+      emailPayload.bcc = [process.env.ADMIN_EMAIL];
+    }
+
+    const res = await resend.emails.send(emailPayload);
+    if (res?.error) {
+      console.error("❌ Resend trial expiry ROI report email error:", res.error);
+      return { success: false, error: res.error.message || "Failed to dispatch expiry report email" };
+    }
+
+    console.log(`🟢 Trial expiry ROI report email sent via Resend to ${recipientEmail}:`, res?.data?.id);
+    return { success: true, id: res?.data?.id || "expiry_report_sent" };
   } catch (err: any) {
-    console.error("❌ Resend trial expiry ROI report email error:", err);
+    console.error("❌ Resend trial expiry ROI report email exception:", err);
     return { success: false, error: err.message || "Failed to dispatch expiry report email" };
   }
 }
@@ -533,20 +551,27 @@ export async function sendGracePeriodEndedEmail(
   `;
 
   try {
-    const data = await resend.emails.send({
-      from: "LocalSurge FrontDesk <notifications@localsurgeseo.com>",
+    const emailPayload: any = {
+      from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [recipientEmail],
-      bcc: [process.env.ADMIN_EMAIL || "leads@localsurgeseo.com"],
       subject: `⚠️ SurgeBot Grace Period Expired: AI Answering Paused for ${site.business_name}`,
       html
-    });
+    };
 
-    console.log(`🟢 Grace period expired email sent via Resend to ${recipientEmail}`);
-    return { success: true, id: data?.data?.id || "grace_ended_sent" };
+    if (process.env.ADMIN_EMAIL) {
+      emailPayload.bcc = [process.env.ADMIN_EMAIL];
+    }
+
+    const res = await resend.emails.send(emailPayload);
+    if (res?.error) {
+      console.error("❌ Resend grace ended email error:", res.error);
+      return { success: false, error: res.error.message || "Failed to dispatch grace ended email" };
+    }
+
+    console.log(`🟢 Grace period expired email sent via Resend to ${recipientEmail}:`, res?.data?.id);
+    return { success: true, id: res?.data?.id || "grace_ended_sent" };
   } catch (err: any) {
-    console.error("❌ Resend grace ended email error:", err);
+    console.error("❌ Resend grace ended email exception:", err);
     return { success: false, error: err.message || "Failed to dispatch grace ended email" };
   }
 }
-
-
