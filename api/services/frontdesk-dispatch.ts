@@ -238,12 +238,18 @@ export async function dispatchTrialWelcomeEmail(
           <h3 style="font-size: 15px; color: #0f172a; margin: 24px 0 12px 0;">Step 2: Where to Add It on Your Platform</h3>
           
           <!-- Google Tag Manager / Franchise -->
-          <div style="margin-bottom: 14px; padding: 12px; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0;">
-            <strong style="color: #065f46; font-size: 13px;">Google Tag Manager (GTM) &mdash; Zero Code &amp; Franchise Friendly:</strong>
-            <ol style="margin: 6px 0 0 0; padding-left: 20px; font-size: 13px; color: #047857; line-height: 1.5;">
-              <li>In GTM, create a new <strong>Custom HTML</strong> tag and paste your 1-line script.</li>
-              <li>Set Trigger to <strong>Page View</strong> (Window Loaded). ${site.path_prefix ? `To scope specifically to this location, add filter: <code>Page Path contains ${site.path_prefix}</code>.` : "Leave on 'All Pages' or choose specific landing pages."}</li>
-              <li>Click <strong>Publish</strong>. SurgeBot will go live immediately without needing any theme code edits!</li>
+          <div style="margin-bottom: 16px; padding: 14px 16px; background: #ecfdf5; border-radius: 8px; border: 1px solid #a7f3d0;">
+            <div style="display: flex; align-items: center; justify-content: space-between; margin-bottom: 6px;">
+              <strong style="color: #065f46; font-size: 13.5px;">Google Tag Manager (GTM) &mdash; Zero-Code &amp; Franchise Friendly:</strong>
+              <span style="background: #065f46; color: #ffffff; font-size: 10px; font-weight: 700; padding: 2px 8px; border-radius: 4px; text-transform: uppercase;">Recommended</span>
+            </div>
+            <p style="margin: 0 0 8px 0; font-size: 12.5px; color: #047857; line-height: 1.4;">
+              Ideal for franchise locations, marketing managers, and setups where you do not have direct FTP or theme code access.
+            </p>
+            <ol style="margin: 0; padding-left: 20px; font-size: 12.5px; color: #065f46; line-height: 1.6;">
+              <li><strong>Create Tag:</strong> In GTM, click <em>Tags &rarr; New</em>. Name it <code>SurgeBot AI FrontDesk</code> and select <strong>Custom HTML</strong> as Tag Type. Paste your 1-line script tag into the HTML box.</li>
+              <li><strong>Configure Trigger:</strong> Under <em>Triggering</em>, select <em>Page View (Window Loaded)</em>. ${site.path_prefix ? `To restrict this bot to this location, choose <strong>Some Page Views</strong> &rarr; <code>Page Path contains ${site.path_prefix}</code>. (Built-in session memory keeps the bot active even if visitors navigate to general corporate pages!).` : "Leave set to <strong>All Pages</strong>."}</li>
+              <li><strong>Submit &amp; Publish:</strong> Click <em>Save</em>, then click <em>Submit</em> and <em>Publish</em> in the top-right corner. SurgeBot will go live immediately!</li>
             </ol>
           </div>
 

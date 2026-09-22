@@ -65,6 +65,11 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
       }
 
       setTrialResult(data);
+      if (data.pathPrefix) {
+        setActiveTab('gtm');
+      } else {
+        setActiveTab('wordpress');
+      }
       
       // Smooth scroll to result
       setTimeout(() => {
@@ -812,16 +817,73 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
 
                     <div className="bg-black/30 border border-white/10 rounded-xl p-4 text-xs text-slate-200 leading-relaxed">
                       {activeTab === 'gtm' && (
-                        <ol className="list-decimal pl-4 space-y-1.5">
-                          <li>Open your <strong>Google Tag Manager</strong> workspace and click <strong>Tags &rarr; New</strong>.</li>
-                          <li>Select <strong>Custom HTML</strong> as the Tag Configuration and paste your 1-line script tag.</li>
-                          <li>Under <strong>Triggering</strong>, select <strong>Page View &mdash; Window Loaded</strong>. {trialResult.pathPrefix ? (
-                            <span>Set firing rule to <strong>Some Page Views</strong> &rarr; <strong>Page Path contains <code>{trialResult.pathPrefix}</code></strong>.</span>
-                          ) : (
-                            <span>Leave set to <strong>All Pages</strong>.</span>
-                          )}</li>
-                          <li>Click <strong>Save</strong> and <strong>Submit / Publish</strong>. Your widget goes live with 0 website theme code changes!</li>
-                        </ol>
+                        <div className="space-y-3.5">
+                          <div className="p-2.5 bg-emerald-500/10 border border-emerald-400/25 rounded-lg flex flex-col sm:flex-row sm:items-center justify-between gap-2 text-[11px] text-emerald-300">
+                            <span>⭐ <strong>Zero-Code Injection:</strong> Ideal for franchises, marketing managers, and sites where you don't have direct theme code access.</span>
+                            <span className="font-mono text-[10px] bg-emerald-950/70 border border-emerald-500/30 px-2 py-0.5 rounded text-emerald-300 font-bold uppercase tracking-wider self-start sm:self-auto">Google Tag Manager</span>
+                          </div>
+
+                          <div className="grid grid-cols-1 md:grid-cols-3 gap-3">
+                            {/* Step 1 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 space-y-2">
+                              <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
+                                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-[10px] font-black shrink-0">1</span>
+                                <span>Create Custom Tag</span>
+                              </div>
+                              <p className="text-[11px] text-slate-300 leading-snug">
+                                In your GTM Container, click <strong>Tags &rarr; New</strong>. Name it <code className="text-emerald-300 text-[10px]">SurgeBot AI FrontDesk</code>. Choose <strong>Custom HTML</strong> as the Tag Configuration.
+                              </p>
+                              <div className="text-[10px] text-slate-400 bg-black/40 rounded p-1.5 border border-white/5 font-mono break-all">
+                                Paste your 1-line script tag into the HTML box.
+                              </div>
+                            </div>
+
+                            {/* Step 2 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 space-y-2">
+                              <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
+                                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-[10px] font-black shrink-0">2</span>
+                                <span>Set Firing Trigger</span>
+                              </div>
+                              {trialResult.pathPrefix ? (
+                                <div className="space-y-1.5">
+                                  <p className="text-[11px] text-slate-300 leading-snug">
+                                    Click <strong>Triggering &rarr; (+)</strong> &rarr; select <strong>Page View</strong>. Choose <strong>Some Page Views</strong>:
+                                  </p>
+                                  <div className="text-[10px] font-mono text-emerald-300 bg-black/40 rounded p-1.5 border border-emerald-500/20">
+                                    Page Path &bull; contains &bull; <strong className="text-white">{trialResult.pathPrefix}</strong>
+                                  </div>
+                                  <p className="text-[10px] text-slate-400 leading-tight">
+                                    SurgeBot's session persistence keeps the bot active even when visitors click to general corporate service pages!
+                                  </p>
+                                </div>
+                              ) : (
+                                <div className="space-y-1.5">
+                                  <p className="text-[11px] text-slate-300 leading-snug">
+                                    Click <strong>Triggering</strong> and select <strong>All Pages &mdash; Page View (Window Loaded)</strong>.
+                                  </p>
+                                  <div className="text-[10px] font-mono text-emerald-300 bg-black/40 rounded p-1.5 border border-emerald-500/20">
+                                    Trigger: All Pages (Window Loaded)
+                                  </div>
+                                </div>
+                              )}
+                            </div>
+
+                            {/* Step 3 */}
+                            <div className="bg-white/5 border border-white/10 rounded-xl p-3.5 space-y-2">
+                              <div className="flex items-center gap-1.5 text-emerald-400 font-bold text-xs">
+                                <span className="w-5 h-5 rounded-full bg-emerald-500/20 text-emerald-300 flex items-center justify-center text-[10px] font-black shrink-0">3</span>
+                                <span>Submit &amp; Publish</span>
+                              </div>
+                              <p className="text-[11px] text-slate-300 leading-snug">
+                                Click <strong>Save</strong> on the tag. In the top right of GTM, click <strong>Submit</strong>, enter a version name (e.g. <em>Add SurgeBot</em>), and click <strong>Publish</strong>.
+                              </p>
+                              <div className="text-[10px] text-emerald-300 bg-emerald-950/40 rounded p-1.5 border border-emerald-500/20 flex items-center gap-1.5">
+                                <span>🚀</span>
+                                <span>SurgeBot goes live instantly with 0 code deployments!</span>
+                              </div>
+                            </div>
+                          </div>
+                        </div>
                       )}
                       {activeTab === 'wordpress' && (
                         <ol className="list-decimal pl-4 space-y-1.5">
