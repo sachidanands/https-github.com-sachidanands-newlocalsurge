@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import {
   Bot, Sparkles, Zap, ShieldCheck, Camera, Phone, Mail, MapPin,
   CheckCircle2, ArrowRight, Clock, AlertTriangle, Cpu, Copy, Check,
-  ChevronDown, HelpCircle, Star, Sliders, ExternalLink, RefreshCw, MessageSquare,
+  ChevronDown, HelpCircle, Star, Sliders, RefreshCw, MessageSquare,
   Globe, Building2, User, Code2, Calendar, Loader2
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
@@ -938,19 +938,9 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                   </div>
 
                   <div className="flex items-center gap-3 w-full sm:w-auto">
-                    <a
-                      href={`/widget-test.html?siteId=${trialResult.siteId}`}
-                      target="_blank"
-                      rel="noopener noreferrer"
-                      className="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-emerald-400 hover:bg-emerald-300 text-black font-black text-xs transition-colors flex items-center justify-center gap-1.5 shadow-md"
-                    >
-                      <ExternalLink className="w-3.5 h-3.5" />
-                      <span>Preview Live Widget</span>
-                    </a>
-
                     <button
                       onClick={() => setTrialResult(null)}
-                      className="py-2.5 px-4 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
+                      className="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"
                     >
                       Set Up Another Site
                     </button>

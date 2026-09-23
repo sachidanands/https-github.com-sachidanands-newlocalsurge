@@ -290,12 +290,6 @@ export async function dispatchTrialWelcomeEmail(
             </p>
           </div>
 
-          <div style="text-align: center; margin-top: 24px;">
-            <a href="https://localsurgeseo.com/widget-test.html?siteId=${site.id}" style="display: inline-block; background: #123e35; color: #ffffff; padding: 12px 24px; border-radius: 8px; text-decoration: none; font-weight: 700; font-size: 14px;">
-              🚀 Test Your Bot Live Right Now
-            </a>
-          </div>
-
           <p style="font-size: 13px; color: #64748b; margin-top: 24px; line-height: 1.5;">
             Need help installing or want to customize your bot's answers, phone number, or brand colors? Just reply directly to this email and our engineering team will assist you!
           </p>
