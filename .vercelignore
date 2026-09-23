@@ -8,9 +8,9 @@
 videos/
 videos/**
 
-# 2. Local scripts, voice studio server, and audio synthesizers
-scripts/
-scripts/**
+# 2. Local scripts, voice studio server, and audio synthesizers (keep build-static-prerender.ts for static prerendering)
+scripts/*
+!scripts/build-static-prerender.ts
 
 # 3. Agent skills, python virtual environment, and AI dependencies
 .agents/
