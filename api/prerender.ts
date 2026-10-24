@@ -1164,8 +1164,8 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
   }
 
   if (cleanPath === '/seo-tool') {
-    const title = "Free Local SEO Tools for Small Business & Map Pack Audit - Local Surge SEO";
-    const description = "Access the best free local SEO tools for small business. Audit Google Map Pack rankings, NAP consistency, citation directories, and competitor signals with instant AI analysis.";
+    const title = "Free Local SEO Audit Tool: Instant Map Pack & Site Scan - Local Surge";
+    const description = "Run an instant free local SEO audit in under 60 seconds. Audit Google Map Pack rankings, NAP consistency, local citations, and mobile page speed.";
     const canonical = "https://localsurgeseo.com/seo-tool";
     const ogImage = "https://localsurgeseo.com/assets/og-seo-tool.png";
 
@@ -1176,12 +1176,12 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
           "@type": "BreadcrumbList",
           "itemListElement": [
             { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
-            { "@type": "ListItem", "position": 2, "name": "Free Local SEO Tools", "item": canonical }
+            { "@type": "ListItem", "position": 2, "name": "Free Local SEO Audit Tool", "item": canonical }
           ]
         },
         {
           "@type": "WebApplication",
-          "name": "Local Surge Free Local SEO Tools for Small Business",
+          "name": "Local Surge Free Local SEO Audit Tool",
           "url": canonical,
           "applicationCategory": "BusinessApplication",
           "operatingSystem": "All",
@@ -1192,6 +1192,35 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
             "priceCurrency": "USD"
           },
           "description": description
+        },
+        {
+          "@type": "FAQPage",
+          "mainEntity": [
+            {
+              "@type": "Question",
+              "name": "How does the Free Local SEO Audit Tool work?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Enter your website URL into the free local SEO scanner. Our automated diagnostic engine evaluates live DOM structure, Google Maps 3-Pack signals, schema markup, and mobile Core Web Vitals to deliver a prioritized remediation report in under 60 seconds."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "What ranking factors does the local SEO scan evaluate?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "The tool audits Google Business Profile readiness, NAP (Name, Address, Phone) citation consistency, LocalBusiness JSON-LD structured data, mobile page speed (LCP/CLS), and local search visibility."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is the local SEO audit report completely free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, the local SEO audit tool is 100% free with no credit card required. You receive instant diagnostic scores and actionable SEO steps."
+              }
+            }
+          ]
         }
       ]
     };
@@ -1445,10 +1474,10 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const stateData = STATE_DIRECTORY[stateSlugCandidate];
     if (stateData) {
       const title = stateSlugCandidate === 'florida'
-        ? "Florida Local SEO Services & Rankings Directory - Local Surge SEO"
+        ? "Local SEO Florida: Dominate Google Map Pack & Local 3-Pack - Local Surge"
         : `${stateData.name} Local SEO Directory - Local Surge SEO`;
       const description = stateSlugCandidate === 'florida'
-        ? "Florida local SEO services and contractor ranking directory. Dominate Google Local 3-Pack and map rankings across Miami, Orlando, and Tampa."
+        ? "Florida local SEO services and contractor ranking directory. Dominate Google Local 3-Pack and map rankings across Miami, Orlando, Tampa, and Jacksonville."
         : stateData.intro;
       const canonical = `https://localsurgeseo.com/${stateData.slug}`;
       const ogImage = "https://localsurgeseo.com/assets/og-directory.png";

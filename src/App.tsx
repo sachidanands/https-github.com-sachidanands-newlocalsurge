@@ -323,8 +323,8 @@ export default function App() {
       description = 'Explore straightforward local SEO plans and contractor pricing packages. Contract-free monthly SEO signal boosters with Google Map Pack rankings and transparent ROI.';
       ogImage = 'https://localsurgeseo.com/assets/og-pricing.png';
     } else if (currentPage === 'seo-tool') {
-      title = 'Free Local SEO Audit Tool & Scanner [Instant Report] - Local Surge SEO';
-      description = 'Run a 100% free local SEO audit tool. Scan Google Map Pack rankings, NAP citation consistency, schema markup, and competitor rank with instant results.';
+      title = 'Free Local SEO Audit Tool: Instant Map Pack & Site Scan - Local Surge';
+      description = 'Run an instant free local SEO audit in under 60 seconds. Audit Google Map Pack rankings, NAP consistency, local citations, and mobile page speed.';
       ogImage = 'https://localsurgeseo.com/assets/og-seo-tool.png';
     } else if (currentPage === 'contact') {
       title = 'Contact Team Office - Local Surge SEO';
