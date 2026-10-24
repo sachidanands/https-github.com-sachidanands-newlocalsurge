@@ -49,7 +49,15 @@ All paths resolve relative to the primary root domain:
 ### Specialized SEO Views
 - `/seo-tool` - Dedicated clean workspace containing our local maps tracking, keyword diagnostic, AI citation readiness, and directory analysis tools.
 - `/blog` - Professional editorial guides detailing local ranking guidelines, citation structures, and algorithm updates.
-- `/site-map` - Human-readable hierarchical index of all 91 active pages, city directories, and state-targeted channels.
+- `/blog/fix-duplicate-overlong-meta-descriptions` - Technical guide to diagnosing duplicate meta descriptions and search snippet boundaries.
+- `/blog/seo-url-spaces-uppercase-parameters` - URL hygiene, path cleanliness, query parameter management, and migration integrity.
+- `/blog/robots-txt-noindex-internal-search-pages` - Search engine bot crawl directives vs noindex indexing control.
+- `/blog/fix-internal-external-4xx-errors` - Troubleshooting 404, 410, 403, and 429 HTTP status codes without bad redirect cascades.
+- `/blog/html-document-over-2mb-googlebot` - HTML payload weight, DOM nesting limits, and Googlebot fetch constraints.
+- `/blog/website-security-headers-local-business` - Practical implementation of HSTS, CSP, X-Frame-Options, and Referrer policies.
+- `/blog/improve-thin-content-readability-service-pages` - Eliminating thin copy and structuring high-intent local service landing pages.
+- `/blog/high-external-outlinks-seo-audit` - Outbound link editorial hygiene, sponsored/nofollow tagging, and PageRank flow.
+- `/site-map` - Human-readable hierarchical index of all live pages, city directories, and state-targeted channels.
 
 ### U.S. Consumer Behavior & Research Locations Directory
 - `/locations` - National Locations Index featuring interactive maps and consumer search behavior metrics.

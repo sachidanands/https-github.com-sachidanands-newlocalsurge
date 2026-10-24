@@ -23,6 +23,41 @@ dotenv.config();
 
 const app = express();
 
+// Trust reverse proxy (Cloudflare / Vercel) for accurate client IP resolution & protocol detection
+app.set("trust proxy", true);
+
+/**
+ * Security: Extract real client IP securely.
+ * Prioritizes Cloudflare's verified 'CF-Connecting-IP' header over spoofable client headers.
+ */
+export function getClientIp(req: express.Request): string {
+  const cfIp = req.headers["cf-connecting-ip"];
+  if (typeof cfIp === "string" && cfIp.trim()) {
+    return cfIp.trim();
+  }
+  const xff = req.headers["x-forwarded-for"];
+  if (typeof xff === "string" && xff.trim()) {
+    return xff.split(",")[0].trim();
+  }
+  return req.socket?.remoteAddress || req.ip || "127.0.0.1";
+}
+
+// Origin Shielding: Protect Vercel origin from direct access bypassing Cloudflare
+app.use((req, res, next) => {
+  const originSecret = process.env.CLOUDFLARE_ORIGIN_SECRET;
+  // Enforce origin verification in production if secret is configured
+  if (originSecret && process.env.NODE_ENV === "production") {
+    const incomingSecret = req.headers["x-origin-secret"];
+    if (incomingSecret !== originSecret) {
+      console.warn(`[Security] Direct origin bypass blocked: ${getClientIp(req)} -> ${req.originalUrl}`);
+      return res.status(403).json({
+        error: "Forbidden: Direct origin access is disallowed. Requests must route via Cloudflare."
+      });
+    }
+  }
+  next();
+});
+
 // 301 Canonical Host Redirect: Redirect www.localsurgeseo.com to https://localsurgeseo.com
 app.use((req, res, next) => {
   const host = req.headers.host || "";
@@ -66,28 +101,71 @@ function escapeHtml(text: string): string {
     .replace(/'/g, "&#039;");
 }
 
-// Lightweight memory-based rate limiter to protect public endpoints
-const ipLimits = new Map<string, { count: number; resetTime: number }>();
-const RATE_LIMIT_WINDOW = 15 * 60 * 1000; // 15 minutes
-const MAX_SUBMISSIONS_PER_WINDOW = 5; // Allow max 5 submissions per 15 mins per IP
+// =========================================================================
+// RATE LIMITING ARCHITECTURE (TIERED MEMORY GUARDS & AUTOMATED PRUNING)
+// =========================================================================
 
-function isRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const limit = ipLimits.get(ip);
-  if (!limit) {
-    ipLimits.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
-    return false;
-  }
-  if (now > limit.resetTime) {
-    ipLimits.set(ip, { count: 1, resetTime: now + RATE_LIMIT_WINDOW });
-    return false;
-  }
-  if (limit.count >= MAX_SUBMISSIONS_PER_WINDOW) {
-    return true;
-  }
-  limit.count++;
-  return false;
+interface RateLimitEntry {
+  count: number;
+  resetTime: number;
 }
+
+function createRateLimiter(options: { windowMs: number; maxRequests: number }) {
+  const store = new Map<string, RateLimitEntry>();
+
+  // Prune expired buckets to prevent memory leaks in Node/Vercel instance
+  setInterval(() => {
+    const now = Date.now();
+    for (const [ip, data] of store.entries()) {
+      if (now > data.resetTime) {
+        store.delete(ip);
+      }
+    }
+  }, Math.max(options.windowMs, 60_000)).unref();
+
+  return function checkLimit(ip: string): boolean {
+    const now = Date.now();
+    const entry = store.get(ip);
+    if (!entry || now > entry.resetTime) {
+      store.set(ip, { count: 1, resetTime: now + options.windowMs });
+      return false;
+    }
+    if (entry.count >= options.maxRequests) {
+      return true;
+    }
+    entry.count++;
+    return false;
+  };
+}
+
+// Tier 1: Lead Submissions (PDF Generation + Gemini Strategy + Resend) - 5 req / 15 min
+const isLeadRateLimited = createRateLimiter({ windowMs: 15 * 60 * 1000, maxRequests: 5 });
+function isRateLimited(ip: string): boolean {
+  return isLeadRateLimited(ip);
+}
+
+// Tier 2: AI Frontdesk Chat Stream - 25 messages / 15 min
+const isChatRateLimited = createRateLimiter({ windowMs: 15 * 60 * 1000, maxRequests: 25 });
+
+// Tier 3: Crawler Ingestion (High CPU/Network/Gemini Tokens) - 5 crawls / 10 min
+const isCrawlerRateLimited = createRateLimiter({ windowMs: 10 * 60 * 1000, maxRequests: 5 });
+
+// Tier 4: Heavy Audits (Places API, PageSpeed, SEO Deep Scans) - 10 audits / 10 min
+const isToolRateLimited = createRateLimiter({ windowMs: 10 * 60 * 1000, maxRequests: 10 });
+
+// Tier 5: Global API Baseline - 120 requests / 1 min per IP to block high-frequency hammering
+const isGlobalApiRateLimited = createRateLimiter({ windowMs: 60 * 1000, maxRequests: 120 });
+
+// Global API rate limit guard
+app.use("/api/", (req, res, next) => {
+  const clientIp = getClientIp(req);
+  if (isGlobalApiRateLimited(clientIp)) {
+    return res.status(429).json({
+      error: "Too many API requests. Please slow down your requests."
+    });
+  }
+  next();
+});
 
 // =========================================================================
 // SECURITY & CACHE HELPERS (SSRF DEFENSE, RATE LIMITING, 1-HR IN-MEMORY CACHE)
@@ -163,28 +241,6 @@ function setCachedAnalysis(key: string, data: any) {
   });
 }
 
-// Tool-specific rate limiter (10 audit requests per 10 mins per IP)
-const toolRateLimits = new Map<string, { count: number; resetTime: number }>();
-const TOOL_RATE_WINDOW = 10 * 60 * 1000; // 10 minutes
-const MAX_TOOL_REQUESTS_PER_WINDOW = 10;
-
-function isToolRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const limit = toolRateLimits.get(ip);
-  if (!limit) {
-    toolRateLimits.set(ip, { count: 1, resetTime: now + TOOL_RATE_WINDOW });
-    return false;
-  }
-  if (now > limit.resetTime) {
-    toolRateLimits.set(ip, { count: 1, resetTime: now + TOOL_RATE_WINDOW });
-    return false;
-  }
-  if (limit.count >= MAX_TOOL_REQUESTS_PER_WINDOW) {
-    return true;
-  }
-  limit.count++;
-  return false;
-}
 
 // Admin authorization middleware verifying secure static token
 function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
@@ -1669,7 +1725,7 @@ async function generateServerPDF(planId: string, name: string, email: string): P
 
 app.post("/api/leads/submit", async (req, res) => {
   // 1. IP Rate Limiting Check
-  const clientIp = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+  const clientIp = getClientIp(req);
   if (isRateLimited(clientIp)) {
     return res.status(429).json({ error: "Too many requests. Please try again in 15 minutes." });
   }
@@ -2100,7 +2156,7 @@ app.delete("/api/leads/:id", requireAdmin, async (req, res) => {
 });
 
 app.post("/api/seo-tool/analyze", async (req, res) => {
-  const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "127.0.0.1";
+  const ip = getClientIp(req);
   if (isToolRateLimited(ip)) {
     return res.status(429).json({ error: "Too many audit requests from this IP. Please wait a few minutes and try again." });
   }
@@ -2199,7 +2255,7 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
 
 // Google PageSpeed Insights v5 API Analysis Endpoint
 app.post("/api/pagespeed/analyze", async (req, res) => {
-  const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "127.0.0.1";
+  const ip = getClientIp(req);
   if (isToolRateLimited(ip)) {
     return res.status(429).json({ error: "Too many PageSpeed requests from this IP. Please wait a few minutes and try again." });
   }
@@ -2401,7 +2457,7 @@ function generateSimulatedPageSpeed(targetUrl: string, strategy: 'mobile' | 'des
 // GOOGLE PLACES API (NEW) - GBP & MAP PACK INSPECTOR ENDPOINT
 // =========================================================================
 app.post("/api/places/audit", async (req, res) => {
-  const ip = (req.headers["x-forwarded-for"] as string)?.split(",")[0]?.trim() || req.socket.remoteAddress || "127.0.0.1";
+  const ip = getClientIp(req);
   if (isToolRateLimited(ip)) {
     return res.status(429).json({ error: "Too many audit requests from this IP. Please wait a few minutes and try again." });
   }
@@ -2941,6 +2997,142 @@ app.delete("/api/blog/drafts/:id", requireAdmin, (req, res) => {
 // 9. Published Dynamic Blogs GET Endpoint
 app.get("/api/blog/published", (req, res) => {
   res.json(readPublishedBlogs());
+});
+
+// 9b. Comprehensive Paginated Blogs Endpoint (Supabase with Local Fallback)
+app.get("/api/blogs", async (req, res) => {
+  try {
+    const page = Math.max(1, parseInt(req.query.page as string) || 1);
+    const limit = Math.max(1, Math.min(50, parseInt(req.query.limit as string) || 8));
+    const category = (req.query.category as string) || 'All';
+    const search = ((req.query.search as string) || '').trim().toLowerCase();
+
+    const supabase = await getSupabase();
+    let allPosts: any[] = [];
+
+    if (supabase) {
+      try {
+        let query = supabase
+          .from('blogs')
+          .select('slug, title, category, description, date, read_time, image, author, status')
+          .eq('status', 'published');
+
+        if (category !== 'All') {
+          query = query.ilike('category', `%${category}%`);
+        }
+
+        const { data, error } = await query;
+        if (!error && data && data.length > 0) {
+          allPosts = data.map((d: any) => ({
+            slug: d.slug,
+            title: d.title,
+            category: d.category,
+            description: d.description,
+            date: d.date,
+            readTime: d.read_time,
+            image: d.image,
+            author: d.author
+          }));
+        }
+      } catch (err) {
+        console.warn("Supabase query error, falling back to local blog data:", err);
+      }
+    }
+
+    // Fallback to local blogData if Supabase had no rows or is pending migration
+    if (allPosts.length === 0) {
+      const { BLOG_POSTS } = await import("../src/data/blogData.js");
+      const dynamicBlogs = readPublishedBlogs();
+      const combined = [...dynamicBlogs, ...BLOG_POSTS];
+      allPosts = combined.map(p => ({
+        slug: p.slug,
+        title: p.title,
+        category: p.category,
+        description: p.description,
+        date: p.date,
+        readTime: p.readTime,
+        image: p.image,
+        author: p.author
+      }));
+
+      if (category !== 'All') {
+        allPosts = allPosts.filter(p => p.category.toLowerCase() === category.toLowerCase());
+      }
+    }
+
+    if (search) {
+      allPosts = allPosts.filter(p =>
+        p.title.toLowerCase().includes(search) ||
+        p.description.toLowerCase().includes(search) ||
+        p.category.toLowerCase().includes(search)
+      );
+    }
+
+    const totalPosts = allPosts.length;
+    const totalPages = Math.ceil(totalPosts / limit) || 1;
+    const startIndex = (page - 1) * limit;
+    const paginatedPosts = allPosts.slice(startIndex, startIndex + limit);
+
+    res.json({
+      posts: paginatedPosts,
+      totalPosts,
+      totalPages,
+      currentPage: page,
+      limit
+    });
+  } catch (error: any) {
+    console.error("Error in /api/blogs:", error);
+    res.status(500).json({ error: "Failed to fetch blogs" });
+  }
+});
+
+// 9c. Single Blog Post Detail Endpoint
+app.get("/api/blogs/:slug", async (req, res) => {
+  try {
+    const { slug } = req.params;
+    const supabase = await getSupabase();
+
+    if (supabase) {
+      try {
+        const { data, error } = await supabase
+          .from('blogs')
+          .select('*')
+          .eq('slug', slug)
+          .eq('status', 'published')
+          .single();
+
+        if (!error && data) {
+          return res.json({
+            slug: data.slug,
+            title: data.title,
+            category: data.category,
+            description: data.description,
+            date: data.date,
+            readTime: data.read_time,
+            image: data.image,
+            author: data.author,
+            sections: data.sections
+          });
+        }
+      } catch (err) {
+        console.warn("Supabase single blog query error, falling back to local:", err);
+      }
+    }
+
+    // Local fallback
+    const { BLOG_POSTS } = await import("../src/data/blogData.js");
+    const dynamicBlogs = readPublishedBlogs();
+    const found = [...dynamicBlogs, ...BLOG_POSTS].find(p => p.slug === slug);
+
+    if (found) {
+      return res.json(found);
+    }
+
+    res.status(404).json({ error: "Blog post not found" });
+  } catch (error: any) {
+    console.error("Error in /api/blogs/:slug:", error);
+    res.status(500).json({ error: "Failed to fetch blog post" });
+  }
 });
 
 // ==========================================
@@ -3637,7 +3829,11 @@ app.post("/api/frontdesk/trial", async (req, res) => {
             writeFrontdeskSites(currentSites);
             const sb = await getSupabase();
             if (sb) {
-              await sb.from("frontdesk_sites").upsert([serializeSiteForSupabase(currentSites[idx])]).catch(() => {});
+              try {
+                await sb.from("frontdesk_sites").upsert([serializeSiteForSupabase(currentSites[idx])]);
+              } catch {
+                // ignore
+              }
             }
           }
         }
@@ -3694,6 +3890,11 @@ app.post("/api/frontdesk/trial", async (req, res) => {
 
 // 5. POST /api/frontdesk/crawl - Standalone URL knowledge ingestion
 app.post("/api/frontdesk/crawl", async (req, res) => {
+  const clientIp = getClientIp(req);
+  if (isCrawlerRateLimited(clientIp)) {
+    return res.status(429).json({ success: false, error: "Too many crawl requests from this IP. Please wait a few minutes." });
+  }
+
   const { url, businessName, industry, deepCrawl = true } = req.body;
   if (!url) {
     return res.status(400).json({ success: false, error: "Website URL is required." });
@@ -3705,6 +3906,11 @@ app.post("/api/frontdesk/crawl", async (req, res) => {
 
 // 6. POST /api/frontdesk/sites/:id/crawl - Crawl & update an existing site's knowledge
 app.post("/api/frontdesk/sites/:id/crawl", async (req, res) => {
+  const clientIp = getClientIp(req);
+  if (isCrawlerRateLimited(clientIp)) {
+    return res.status(429).json({ success: false, error: "Too many crawl requests from this IP. Please wait a few minutes." });
+  }
+
   const siteId = String(req.params.id).trim();
   const sites = readFrontdeskSites();
   const siteIdx = sites.findIndex((s: any) => s.id === siteId);
@@ -3857,28 +4063,9 @@ app.get("/api/frontdesk/leads/:siteId", async (req, res) => {
   return res.json({ success: true, siteId, count: filteredLocal.length, leads: filteredLocal, source: "local" });
 });
 
-// Adaptive IP Chat Rate Limiter (25 messages per 15 mins per IP)
-const chatIpLimits = new Map<string, { count: number; resetTime: number }>();
-const CHAT_RATE_WINDOW = 15 * 60 * 1000;
-const MAX_CHAT_PER_WINDOW = 25;
-
-function isChatRateLimited(ip: string): boolean {
-  const now = Date.now();
-  const limit = chatIpLimits.get(ip);
-  if (!limit || now > limit.resetTime) {
-    chatIpLimits.set(ip, { count: 1, resetTime: now + CHAT_RATE_WINDOW });
-    return false;
-  }
-  if (limit.count >= MAX_CHAT_PER_WINDOW) {
-    return true;
-  }
-  limit.count++;
-  return false;
-}
-
 // 9. POST /api/frontdesk/chat - Real-time SSE Chat Stream with Multi-Provider Cascade & Triage
 app.post("/api/frontdesk/chat", async (req, res) => {
-  const clientIp = String(req.headers["x-forwarded-for"] || req.socket.remoteAddress || "unknown").split(",")[0].trim();
+  const clientIp = getClientIp(req);
   if (isChatRateLimited(clientIp)) {
     return res.status(429).json({
       success: false,

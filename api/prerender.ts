@@ -557,7 +557,22 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
                 return "2026-08-01";
               }
             })(),
-            "dateModified": "2026-08-30",
+            "dateModified": [
+              "top-on-page-seo-mistakes-local-businesses-make",
+              "10-second-website-hack-why-meta-titles-matter",
+              "why-canonical-link-tag-checker-is-essential-for-local-seo",
+              "why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo",
+              "why-your-website-jumps-cls-guide",
+              "why-google-pagespeed-insights-matters-for-local-seo",
+              "fix-duplicate-overlong-meta-descriptions",
+              "seo-url-spaces-uppercase-parameters",
+              "robots-txt-noindex-internal-search-pages",
+              "fix-internal-external-4xx-errors",
+              "html-document-over-2mb-googlebot",
+              "website-security-headers-local-business",
+              "improve-thin-content-readability-service-pages",
+              "high-external-outlinks-seo-audit"
+            ].includes(post.slug) ? "2026-10-24" : "2026-08-30",
             "inLanguage": "en-US",
             "articleSection": post.category,
             "author": {

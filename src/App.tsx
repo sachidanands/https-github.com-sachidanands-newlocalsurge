@@ -7,7 +7,7 @@ import SchemaMarkup from './components/SchemaMarkup';
 import FaqSection from './components/FaqSection';
 import WebMcpConsentModal from './components/WebMcpConsentModal';
 import { initWebMcpRuntime, executeWebMcpTool, WebMcpTool } from './utils/webmcp';
-import { BLOG_POSTS } from './data/blogData';
+import { BLOG_METADATA } from './data/blogMetadata';
 import { 
   trackPageView, 
   trackPlanSelection, 
@@ -410,7 +410,7 @@ export default function App() {
     }
 
     if (currentPage === 'blog' && activeArticleSlug) {
-      const post = BLOG_POSTS.find(p => p.slug === activeArticleSlug);
+      const post = BLOG_METADATA.find(p => p.slug === activeArticleSlug);
       if (post) {
         title = `${post.title} | Local Surge Insights`;
         description = post.description;

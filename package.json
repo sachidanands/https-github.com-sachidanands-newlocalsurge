@@ -29,6 +29,7 @@
     "youtube:report": "tsx scripts/youtube_report.ts",
     "brave:audit": "tsx scripts/brave_audit.ts",
     "audit:cwv": "tsx scripts/cwv_scan.ts",
+    "sync:blogs": "tsx scripts/sync-blogs-supabase.ts",
     "trends": "tsx scripts/google_trends.ts"
   },
   "dependencies": {

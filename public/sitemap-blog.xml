@@ -3,8 +3,18 @@
         xmlns:xhtml="http://www.w3.org/1999/xhtml"
         xmlns:image="http://www.google.com/schemas/sitemap-image/1.1">
   <url>
+    <loc>https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/pagespeed-insights-hero.webp</image:loc>
+      <image:title>How to Use Google PageSpeed Insights for a Local Business Website</image:title>
+    </image:image>
+  </url>
+  <url>
     <loc>https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-open-graph-meta-tags-are-essential-for-local-seo" />
     <image:image>
@@ -14,47 +24,47 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo</loc>
-    <lastmod>2026-08-29</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-canonical-link-tag-checker-is-essential-for-local-seo" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/canonical-link-tag-checker-guide.webp</image:loc>
-      <image:title>Why a Canonical Link Tag Checker is Essential for Local SEO (and Duplicate Content Protection)</image:title>
+      <image:title>Why a Canonical Link Tag Checker Matters for Local SEO</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-image-alt-tag-accessibility-scanner-is-essential-for-local-seo" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/image-alt-tag-accessibility-scanner-guide.webp</image:loc>
-      <image:title>Why an Image Alt Tag Accessibility Scanner is Essential for Local SEO (and ADA Compliance)</image:title>
+      <image:title>How to Audit Image Alt Text for Local SEO and Accessibility</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-your-website-jumps-cls-guide" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/cumulative-layout-shift-cls-guide.webp</image:loc>
-      <image:title>Why Does Your Website Jump When You Try to Click? The Silent Conversion Killer Known as CLS (And How to Test Yours)</image:title>
+      <image:title>Why Your Website Jumps and How to Fix Cumulative Layout Shift</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/10-second-website-hack-why-meta-titles-matter" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/meta-title-guide.webp</image:loc>
-      <image:title>The 10-Second Website Hack That Google Loves: Why Your Meta Title is Your Storefront Sign</image:title>
+      <image:title>How to Fix Duplicate and Overlong Title Tags for Local SEO</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead</loc>
-    <lastmod>2026-08-14</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead" />
     <image:image>
@@ -64,7 +74,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/google-business-profile-critical-local-contractors</loc>
-    <lastmod>2026-08-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-business-profile-critical-local-contractors" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-business-profile-critical-local-contractors" />
     <image:image>
@@ -74,7 +84,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/single-page-blueprint-dominate-local-search</loc>
-    <lastmod>2026-08-10</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/single-page-blueprint-dominate-local-search" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/single-page-blueprint-dominate-local-search" />
     <image:image>
@@ -84,7 +94,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/top-on-page-seo-mistakes-local-businesses-make</loc>
-    <lastmod>2026-03-15</lastmod>
+    <lastmod>2026-10-24</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/top-on-page-seo-mistakes-local-businesses-make" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/top-on-page-seo-mistakes-local-businesses-make" />
     <image:image>
@@ -94,7 +104,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/unlocking-the-power-of-local-seo-for-small-businesses</loc>
-    <lastmod>2026-08-08</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/unlocking-the-power-of-local-seo-for-small-businesses" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/unlocking-the-power-of-local-seo-for-small-businesses" />
     <image:image>
@@ -104,7 +114,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/from-zero-to-hero-scaling-your-local-seo-strategy</loc>
-    <lastmod>2026-08-06</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/from-zero-to-hero-scaling-your-local-seo-strategy" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/from-zero-to-hero-scaling-your-local-seo-strategy" />
     <image:image>
@@ -114,7 +124,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/mastering-google-business-profile-optimization</loc>
-    <lastmod>2026-08-04</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/mastering-google-business-profile-optimization" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/mastering-google-business-profile-optimization" />
     <image:image>
@@ -124,7 +134,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now</loc>
-    <lastmod>2026-08-02</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-your-business-needs-local-seo-now" />
     <image:image>
@@ -134,7 +144,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/map-pack-vs-organic-seo-revenue</loc>
-    <lastmod>2026-07-30</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/map-pack-vs-organic-seo-revenue" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/map-pack-vs-organic-seo-revenue" />
     <image:image>
@@ -144,7 +154,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/google-map-pack-optimization-guide</loc>
-    <lastmod>2026-07-28</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-map-pack-optimization-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-map-pack-optimization-guide" />
     <image:image>
@@ -154,7 +164,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/what-is-nap-consistency-citation-guide</loc>
-    <lastmod>2026-07-25</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/what-is-nap-consistency-citation-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/what-is-nap-consistency-citation-guide" />
     <image:image>
@@ -164,7 +174,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/local-seo-vs-ai-2026-survival-guide</loc>
-    <lastmod>2026-07-22</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-seo-vs-ai-2026-survival-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-seo-vs-ai-2026-survival-guide" />
     <image:image>
@@ -174,7 +184,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule</loc>
-    <lastmod>2026-07-18</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/does-local-seo-still-work-80-20-rule" />
     <image:image>
@@ -184,7 +194,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization</loc>
-    <lastmod>2026-07-15</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/what-are-google-local-service-ads-optimization" />
     <image:image>
@@ -194,7 +204,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost</loc>
-    <lastmod>2026-07-10</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/best-local-business-website-builder-franchise-cost" />
     <image:image>
@@ -204,7 +214,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide</loc>
-    <lastmod>2026-07-05</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide" />
     <image:image>
@@ -214,7 +224,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business</loc>
-    <lastmod>2026-08-28</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business" />
     <image:image>
@@ -224,7 +234,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo</loc>
-    <lastmod>2026-08-26</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-breadcrumblist-json-ld-schema-is-essential-for-local-seo" />
     <image:image>
@@ -234,7 +244,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/optimize-local-business-google-ai-overviews-chatgpt-search</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/optimize-local-business-google-ai-overviews-chatgpt-search" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/optimize-local-business-google-ai-overviews-chatgpt-search" />
     <image:image>
@@ -244,7 +254,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/entity-seo-knowledge-graphs-local-business-trust</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/entity-seo-knowledge-graphs-local-business-trust" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/entity-seo-knowledge-graphs-local-business-trust" />
     <image:image>
@@ -254,7 +264,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/conversational-search-local-service-providers-seo</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/conversational-search-local-service-providers-seo" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/conversational-search-local-service-providers-seo" />
     <image:image>
@@ -263,18 +273,8 @@
     </image:image>
   </url>
   <url>
-    <loc>https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo</loc>
-    <lastmod>2026-09-05</lastmod>
-    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo" />
-    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/why-google-pagespeed-insights-matters-for-local-seo" />
-    <image:image>
-      <image:loc>https://localsurgeseo.com/assets/blog_img/pagespeed-insights-hero.webp</image:loc>
-      <image:title>Why Google PageSpeed Insights Matters for Local SEO (And How to Fix Sluggish Load Times)</image:title>
-    </image:image>
-  </url>
-  <url>
     <loc>https://localsurgeseo.com/blog/localbusiness-schema-nested-service-geocoordinates-reviews-guide</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/localbusiness-schema-nested-service-geocoordinates-reviews-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/localbusiness-schema-nested-service-geocoordinates-reviews-guide" />
     <image:image>
@@ -284,7 +284,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/fixing-keyword-cannibalization-multi-location-vs-sab-pages</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/fixing-keyword-cannibalization-multi-location-vs-sab-pages" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/fixing-keyword-cannibalization-multi-location-vs-sab-pages" />
     <image:image>
@@ -294,17 +294,17 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/core-web-vitals-checklist-local-service-landing-pages</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/core-web-vitals-checklist-local-service-landing-pages" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/core-web-vitals-checklist-local-service-landing-pages" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/core-web-vitals-lead-gen-checklist.webp</image:loc>
-      <image:title>Core Web Vitals Checklist for Lead Generation & Local Service Landing Pages</image:title>
+      <image:title>Core Web Vitals Checklist for Lead Generation &amp; Local Service Landing Pages</image:title>
     </image:image>
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/franchise-seo-architecture-multi-location-pages</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/franchise-seo-architecture-multi-location-pages" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/franchise-seo-architecture-multi-location-pages" />
     <image:image>
@@ -314,7 +314,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/multi-fleet-sab-local-seo-counties-guide</loc>
-    <lastmod>2026-09-11</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/multi-fleet-sab-local-seo-counties-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/multi-fleet-sab-local-seo-counties-guide" />
     <image:image>
@@ -324,7 +324,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/managing-multiple-google-business-profiles-bulk-verification</loc>
-    <lastmod>2026-09-10</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/managing-multiple-google-business-profiles-bulk-verification" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/managing-multiple-google-business-profiles-bulk-verification" />
     <image:image>
@@ -334,7 +334,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/service-area-pages-conversion-wireframes-blueprint</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/service-area-pages-conversion-wireframes-blueprint" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/service-area-pages-conversion-wireframes-blueprint" />
     <image:image>
@@ -344,7 +344,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/bofu-local-seo-cost-guides-comparisons-case-studies</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/bofu-local-seo-cost-guides-comparisons-case-studies" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/bofu-local-seo-cost-guides-comparisons-case-studies" />
     <image:image>
@@ -354,7 +354,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/how-to-earn-real-local-backlinks-sponsorships-pr-playbook</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/how-to-earn-real-local-backlinks-sponsorships-pr-playbook" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/how-to-earn-real-local-backlinks-sponsorships-pr-playbook" />
     <image:image>
@@ -364,7 +364,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/google-business-profile-suspended-reinstatement-appeal-guide</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-business-profile-suspended-reinstatement-appeal-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-business-profile-suspended-reinstatement-appeal-guide" />
     <image:image>
@@ -374,7 +374,7 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/how-to-remove-fake-negative-google-reviews-guide</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/how-to-remove-fake-negative-google-reviews-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/how-to-remove-fake-negative-google-reviews-guide" />
     <image:image>
@@ -384,12 +384,92 @@
   </url>
   <url>
     <loc>https://localsurgeseo.com/blog/local-search-ranking-drops-algorithm-update-audit-guide</loc>
-    <lastmod>2026-09-12</lastmod>
+    <lastmod>2026-08-30</lastmod>
     <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-search-ranking-drops-algorithm-update-audit-guide" />
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-search-ranking-drops-algorithm-update-audit-guide" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/ranking-drop-algorithm-update-audit.webp</image:loc>
       <image:title>Local Search Ranking Drop? Step-by-Step Recovery Audit After Google Algorithm Updates</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/fix-duplicate-overlong-meta-descriptions</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/fix-duplicate-overlong-meta-descriptions" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/fix-duplicate-overlong-meta-descriptions" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/fix-duplicate-overlong-meta-descriptions.webp</image:loc>
+      <image:title>How to Fix Duplicate and Overlong Meta Descriptions</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/seo-url-spaces-uppercase-parameters</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/seo-url-spaces-uppercase-parameters" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/seo-url-spaces-uppercase-parameters" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/seo-url-spaces-uppercase-parameters.webp</image:loc>
+      <image:title>How to Review Spaces Uppercase Letters and Parameters in URLs</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/robots-txt-noindex-internal-search-pages</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/robots-txt-noindex-internal-search-pages" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/robots-txt-noindex-internal-search-pages" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/robots-txt-noindex-internal-search-pages.webp</image:loc>
+      <image:title>Crawl Rules and Noindex for Local Business Search Pages</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/fix-internal-external-4xx-errors</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/fix-internal-external-4xx-errors" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/fix-internal-external-4xx-errors" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/fix-internal-external-4xx-errors.webp</image:loc>
+      <image:title>How to Fix Internal and External 4xx Errors Without Bad Redirects</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/html-document-over-2mb-googlebot</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/html-document-over-2mb-googlebot" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/html-document-over-2mb-googlebot" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/html-document-over-2mb-googlebot.webp</image:loc>
+      <image:title>HTML Documents Over 2 MB and What to Fix First</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/website-security-headers-local-business</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/website-security-headers-local-business" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/website-security-headers-local-business" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/website-security-headers-local-business.webp</image:loc>
+      <image:title>Five Security Headers to Review on a Local Business Website</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/improve-thin-content-readability-service-pages</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/improve-thin-content-readability-service-pages" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/improve-thin-content-readability-service-pages" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/improve-thin-content-readability-service-pages.webp</image:loc>
+      <image:title>How to Improve Thin Content and Difficult Service Page Copy</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/high-external-outlinks-seo-audit</loc>
+    <lastmod>2026-10-24</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/high-external-outlinks-seo-audit" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/high-external-outlinks-seo-audit" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/high-external-outlinks-seo-audit.webp</image:loc>
+      <image:title>How to Review Pages With High External Outlinks</image:title>
     </image:image>
   </url>
 </urlset>

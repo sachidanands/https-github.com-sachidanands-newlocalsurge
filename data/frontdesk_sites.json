@@ -1,5 +1,92 @@
 [
   {
+    "id": "trial_testbusiness_com_mue8rw3t",
+    "created_at": "2026-09-23T15:12:24.905Z",
+    "updated_at": "2026-09-23T15:12:38.132Z",
+    "business_name": "Test Business",
+    "industry": "home_services",
+    "website_url": "https://testbusiness.com",
+    "contact_name": "Sachidanand Singh",
+    "contact_email": "testbulocal@yopmail.com",
+    "is_trial": true,
+    "trial_ends_at": "2026-10-23T15:12:24.905Z",
+    "status": "active",
+    "service_radius": {
+      "city": "Local Area",
+      "radiusMiles": 25,
+      "zipCodes": []
+    },
+    "estimate_policy": "Free estimates during normal business hours.",
+    "working_hours": {
+      "weekday": "7:00 AM - 7:00 PM",
+      "weekend": "8:00 AM - 5:00 PM",
+      "emergency247": true
+    },
+    "widget_config": {
+      "themeColor": "#10b981",
+      "greeting": "👋 Hi! Need fast assistance or a free estimate for Test Business?",
+      "speedToLeadCity": "Local Area",
+      "quickChips": [
+        "🚨 Emergency Service",
+        "📍 Check My Zip Code",
+        "💰 Get Free Estimate",
+        "📞 Request 5-Min Callback"
+      ]
+    },
+    "feature_flags": {
+      "enablePhotoUpload": false,
+      "enableEmailDispatch": true,
+      "enableSmsDispatch": false,
+      "enablePhoneCallback": true,
+      "enableEmergencyBanner": true,
+      "enableDirectBooking": false,
+      "enableCustomBranding": false,
+      "planTier": "trial"
+    },
+    "scraped_knowledge": {
+      "businessName": "Test Business",
+      "industry": "General Contractor",
+      "tagline": "=== HOMEPAGE (https://testbusiness.com) ===",
+      "primaryServices": [
+        "Emergency Triage & Diagnostics",
+        "Comprehensive Diagnostics & Repair",
+        "Full System Replacement & Installation",
+        "Preventative Maintenance & Tune-Ups"
+      ],
+      "serviceAreas": [
+        "Primary Metro Service Radius (25 miles)"
+      ],
+      "emergencyPolicy": "Standard response during business hours with priority dispatch queue.",
+      "estimatePolicy": "Free upfront estimates for standard repairs and scheduled installations.",
+      "pricingCues": [
+        "Upfront flat-rate pricing before work begins",
+        "No hidden travel surcharges in core service area",
+        "Financing options available on qualifying replacements"
+      ],
+      "faqs": [
+        {
+          "question": "How fast can you dispatch a technician?",
+          "answer": "We offer priority dispatch within 30-60 minutes for active emergencies, and same-day scheduling for standard service calls."
+        },
+        {
+          "question": "Are your technicians licensed and insured?",
+          "answer": "Yes, 100% of our field technicians are fully state-licensed, background-checked, and carry comprehensive liability insurance."
+        },
+        {
+          "question": "Do you offer free estimates?",
+          "answer": "Yes! We provide free, transparent estimates with zero hidden fees before any work commences."
+        }
+      ],
+      "keyFacts": [
+        "Direct Dispatch Hotline Available",
+        "100% Satisfaction Guarantee",
+        "Licensed, Bonded & Insured Local Professionals"
+      ],
+      "extractedAt": "2026-09-23T15:12:38.132Z",
+      "rawPageCount": 1
+    }
+  },
+  {
     "id": "trial_apexplumbingaustin_com_mu499k3x",
     "created_at": "2026-09-16T15:28:27.405Z",
     "updated_at": "2026-09-16T15:28:27.405Z",

@@ -36,7 +36,14 @@ export default function BlogView({
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCitation, setCopiedCitation] = useState<'markdown' | 'apa' | null>(null);
   const [showAiSummarize, setShowAiSummarize] = useState(false);
-  const [currentPage, setCurrentPage] = useState(1);
+  const [currentPage, setCurrentPage] = useState(() => {
+    if (typeof window !== 'undefined') {
+      const params = new URLSearchParams(window.location.search);
+      const pageParam = parseInt(params.get('page') || '1', 10);
+      return !isNaN(pageParam) && pageParam > 0 ? pageParam : 1;
+    }
+    return 1;
+  });
   const [isGridLoading, setIsGridLoading] = useState(false);
   const summarizeMenuRef = useRef<HTMLDivElement>(null);
   const gridSectionRef = useRef<HTMLDivElement>(null);
@@ -146,6 +153,15 @@ export default function BlogView({
     if (newPage === currentPage || newPage < 1 || newPage > totalPages) return;
     setIsGridLoading(true);
     setCurrentPage(newPage);
+    if (typeof window !== 'undefined') {
+      const url = new URL(window.location.href);
+      if (newPage === 1) {
+        url.searchParams.delete('page');
+      } else {
+        url.searchParams.set('page', newPage.toString());
+      }
+      window.history.pushState(null, '', url.pathname + (url.search ? url.search : '') + url.hash);
+    }
     if (gridSectionRef.current) {
       gridSectionRef.current.scrollIntoView({ behavior: 'smooth', block: 'start' });
     }
