@@ -69,7 +69,7 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-seo-2026-near-me-is-dead" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/local-seo-near-me-evolution.webp</image:loc>
-      <image:title>Why &quot;Near Me&quot; Is Dead: How Conversational AI and Entity Proximity Replaced It</image:title>
+      <image:title>How Near Me and Conversational Searches Connect Customers to Local Businesses</image:title>
     </image:image>
   </url>
   <url>
@@ -229,7 +229,7 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/llmstxt-blueprint-ai-sitemap-local-business" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/llmstxt-blueprint-ai-sitemap-local-business.webp</image:loc>
-      <image:title>The llms.txt Blueprint: Why Every Local Business Needs an AI Sitemap</image:title>
+      <image:title>llms.txt for Local Businesses: Uses and Limits</image:title>
     </image:image>
   </url>
   <url>
@@ -329,7 +329,7 @@
     <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/managing-multiple-google-business-profiles-bulk-verification" />
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/managing-multiple-google-business-profiles-guide.webp</image:loc>
-      <image:title>Managing 10+ Google Business Profiles: Bulk Verification, Review Ops, and Geo-Pages</image:title>
+      <image:title>Managing Multiple Google Business Profiles: Bulk Management, Verification, and Operations</image:title>
     </image:image>
   </url>
   <url>
@@ -470,6 +470,106 @@
     <image:image>
       <image:loc>https://localsurgeseo.com/assets/blog_img/high-external-outlinks-seo-audit.webp</image:loc>
       <image:title>How to Review Pages With High External Outlinks</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/local-seo-cost-small-business</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-seo-cost-small-business" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-seo-cost-small-business" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/local-seo-cost-small-business.webp</image:loc>
+      <image:title>How Much Does Local SEO Cost for a Small Business?</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/track-google-maps-leads-calls-forms</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/track-google-maps-leads-calls-forms" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/track-google-maps-leads-calls-forms" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/track-google-maps-leads-calls-forms.webp</image:loc>
+      <image:title>Track Google Maps Leads with GA4 and Call Tracking</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/google-business-profile-already-claimed-recover-access</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-business-profile-already-claimed-recover-access" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-business-profile-already-claimed-recover-access" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/google-business-profile-already-claimed-recover-access.webp</image:loc>
+      <image:title>Google Business Profile Already Claimed? Recover Access</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/duplicate-google-business-profiles-merge-remove</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/duplicate-google-business-profiles-merge-remove" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/duplicate-google-business-profiles-merge-remove" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/duplicate-google-business-profiles-merge-remove.webp</image:loc>
+      <image:title>Duplicate Google Business Profiles: Merge or Remove?</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/ask-customers-google-reviews-templates</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/ask-customers-google-reviews-templates" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/ask-customers-google-reviews-templates" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/ask-customers-google-reviews-templates.webp</image:loc>
+      <image:title>How to Ask for Google Reviews: Email and Text Templates</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/google-business-profile-video-verification-checklist</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/google-business-profile-video-verification-checklist" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/google-business-profile-video-verification-checklist" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/google-business-profile-video-verification-checklist.webp</image:loc>
+      <image:title>Google Business Profile Video Verification Checklist</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/how-long-local-seo-takes-six-months</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/how-long-local-seo-takes-six-months" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/how-long-local-seo-takes-six-months" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/how-long-local-seo-takes-six-months.webp</image:loc>
+      <image:title>How Long Does Local SEO Take? A Six Month Planning Guide</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/moving-business-google-maps-seo-checklist</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/moving-business-google-maps-seo-checklist" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/moving-business-google-maps-seo-checklist" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/moving-business-google-maps-seo-checklist.webp</image:loc>
+      <image:title>Moving Your Business? A Google Maps and SEO Checklist</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/report-fake-business-listings-google-maps</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/report-fake-business-listings-google-maps" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/report-fake-business-listings-google-maps" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/report-fake-business-listings-google-maps.webp</image:loc>
+      <image:title>How to Report Fake Business Listings on Google Maps</image:title>
+    </image:image>
+  </url>
+  <url>
+    <loc>https://localsurgeseo.com/blog/local-keyword-research-contractors-page-plan</loc>
+    <lastmod>2026-08-30</lastmod>
+    <xhtml:link rel="alternate" hreflang="en-US" href="https://localsurgeseo.com/blog/local-keyword-research-contractors-page-plan" />
+    <xhtml:link rel="alternate" hreflang="x-default" href="https://localsurgeseo.com/blog/local-keyword-research-contractors-page-plan" />
+    <image:image>
+      <image:loc>https://localsurgeseo.com/assets/blog_img/local-keyword-research-contractors-page-plan.webp</image:loc>
+      <image:title>Local Keyword Research for Contractors: A Page Plan</image:title>
     </image:image>
   </url>
 </urlset>

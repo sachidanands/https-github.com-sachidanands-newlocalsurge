@@ -50,7 +50,13 @@ export const TOPIC_CLUSTERS: Record<string, TopicCluster> = {
       "map-pack-vs-organic-seo-revenue",
       "what-are-google-local-service-ads-optimization",
       "google-business-profile-suspended-reinstatement-appeal-guide",
-      "how-to-remove-fake-negative-google-reviews-guide"
+      "how-to-remove-fake-negative-google-reviews-guide",
+      "track-google-maps-leads-calls-forms",
+      "google-business-profile-already-claimed-recover-access",
+      "duplicate-google-business-profiles-merge-remove",
+      "ask-customers-google-reviews-templates",
+      "google-business-profile-video-verification-checklist",
+      "report-fake-business-listings-google-maps"
     ],
     "description": "Master spatial proximity, Google review velocity, primary categories, and coordinates that dictate Local 3-Pack placement.",
     "crossLinkSlug": "what-is-nap-consistency-citation-guide",
@@ -66,7 +72,8 @@ export const TOPIC_CLUSTERS: Record<string, TopicCluster> = {
       "why-your-business-needs-local-seo-now",
       "optimize-local-business-google-ai-overviews-chatgpt-search",
       "entity-seo-knowledge-graphs-local-business-trust",
-      "conversational-search-local-service-providers-seo"
+      "conversational-search-local-service-providers-seo",
+      "local-keyword-research-contractors-page-plan"
     ],
     "description": "Structure local business assets, machine-readable schemas, and agent endpoints for ChatGPT, Claude, and Gemini 3.5.",
     "crossLinkSlug": "google-map-pack-optimization-guide",
@@ -112,7 +119,9 @@ export const TOPIC_CLUSTERS: Record<string, TopicCluster> = {
       "franchise-seo-architecture-multi-location-pages",
       "multi-fleet-sab-local-seo-counties-guide",
       "managing-multiple-google-business-profiles-bulk-verification",
-      "how-to-earn-real-local-backlinks-sponsorships-pr-playbook"
+      "how-to-earn-real-local-backlinks-sponsorships-pr-playbook",
+      "how-long-local-seo-takes-six-months",
+      "moving-business-google-maps-seo-checklist"
     ],
     "description": "Lock in authoritative directory distribution across Tier-1 citation networks to reinforce entity prominence.",
     "crossLinkSlug": "google-map-pack-optimization-guide",
@@ -126,7 +135,8 @@ export const TOPIC_CLUSTERS: Record<string, TopicCluster> = {
       "best-local-business-website-builder-franchise-cost",
       "service-area-pages-conversion-wireframes-blueprint",
       "bofu-local-seo-cost-guides-comparisons-case-studies",
-      "improve-thin-content-readability-service-pages"
+      "improve-thin-content-readability-service-pages",
+      "local-seo-cost-small-business"
     ],
     "description": "Build sub-second, mobile-first single-page web storefronts that turn local search traffic into inbound phone calls.",
     "crossLinkSlug": "top-on-page-seo-mistakes-local-businesses-make",
@@ -1300,7 +1310,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     "slug": "local-seo-2026-near-me-is-dead",
-    "title": "Why \"Near Me\" Is Dead: How Conversational AI and Entity Proximity Replaced It",
+    "title": "How Near Me and Conversational Searches Connect Customers to Local Businesses",
     "category": "Local SEO",
     "author": {
       "name": "Sarah Chen",
@@ -1994,7 +2004,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "paragraph",
-        "content": "Google's local ranking algorithm is dynamic and highly reactive. It continuously evaluates entity completeness, photo upload cadence, review velocity, response latency, and secondary service category associations. To dominate your market, you need a disciplined, practitioner-grade optimization routine."
+        "content": "A useful profile gives customers accurate information about the business, its services, and how to contact it. Review the details regularly and assess inquiries alongside visibility. Avoid assigning fixed ranking weights to individual edits without reliable supporting evidence."
       },
       {
         "type": "heading",
@@ -2931,7 +2941,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     "slug": "llmstxt-blueprint-ai-sitemap-local-business",
-    "title": "The llms.txt Blueprint: Why Every Local Business Needs an AI Sitemap",
+    "title": "llms.txt for Local Businesses: Uses and Limits",
     "category": "AI Search & Automation",
     "author": {
       "name": "Sarah Chen",
@@ -4363,7 +4373,7 @@ export const BLOG_POSTS: BlogPost[] = [
   },
   {
     "slug": "managing-multiple-google-business-profiles-bulk-verification",
-    "title": "Managing 10+ Google Business Profiles: Bulk Verification, Review Ops, and Geo-Pages",
+    "title": "Managing Multiple Google Business Profiles: Bulk Management, Verification, and Operations",
     "category": "Multi-Location GBP",
     "author": {
       "name": "Alex Rivera",
@@ -4984,7 +4994,7 @@ export const BLOG_POSTS: BlogPost[] = [
       },
       {
         "type": "paragraph",
-        "content": "For over seventy percent of reinstatement appeals, Google will require a continuous, unedited 2-minute video verification. Many contractors fail this step because they treat it like a casual selfie video. To guarantee approval, rehearse your route and follow this exact sequence:"
+        "content": "The requirements and outcome depend on the restriction and the business. Submit accurate evidence that addresses the stated issue and follow the status shown in the official process. Complete verification if requested using the method available for the profile. Neither a fixed video sequence nor an agency can guarantee approval or a completion date. For step-by-step recording instructions, see our [Google Business Profile video verification checklist](/blog/google-business-profile-video-verification-checklist). If your issue involves an account access or ownership dispute rather than an enforcement restriction, review our [profile access recovery guide](/blog/google-business-profile-already-claimed-recover-access)."
       },
       {
         "type": "bullet-list",
@@ -6795,6 +6805,2650 @@ export const BLOG_POSTS: BlogPost[] = [
         "items": [
           "[Google link best practices](https://developers.google.com/search/docs/crawling-indexing/links-crawlable)",
           "[Google guidance on qualifying outbound links](https://developers.google.com/search/docs/crawling-indexing/qualify-outbound-links)"
+        ]
+      }
+    ]
+  }  ,
+  {
+    "slug": "local-seo-cost-small-business",
+    "title": "How Much Does Local SEO Cost for a Small Business?",
+    "category": "Growth & Strategy",
+    "author": {
+      "name": "Alex Rivera",
+      "role": "Lead SEO Strategist",
+      "avatar": "AR"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/local-seo-cost-small-business.webp",
+    "description": "Understand local SEO costs, common deliverables, setup fees, and monthly budgets so you can compare agency quotes and choose the right support.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "Local SEO pricing depends on the work your business needs, the market you serve, and who will carry out the changes. A useful quote explains those decisions and connects the fee to clear deliverables."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Separate initial repair and setup work from ongoing monthly services.",
+          "Compare quotes using the same locations, services, and responsibilities.",
+          "Check whether content, website development, software, and reporting are included.",
+          "Estimate the additional profitable jobs needed to justify the budget."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "What Local SEO Usually Costs"
+      },
+      {
+        "type": "paragraph",
+        "content": "Two agencies can quote very different prices for the same plumbing company. One might offer profile maintenance and a monthly report. The other might also rebuild service pages, repair tracking, write content, and improve business listings. The difference becomes easier to understand once the work is written down."
+      },
+      {
+        "type": "paragraph",
+        "content": "For a broad US reference point, [WebFX's published local SEO pricing research](https://www.webfx.com/local-seo/pricing/) reports monthly retainers averaging around $500 to $3,000. That is an external benchmark, not a LocalSurgeSEO quote or a fixed market rate. Specialist campaigns, competitive markets, and businesses with several locations can fall outside it."
+      },
+      {
+        "type": "paragraph",
+        "content": "A business with a sound website and an established profile may need focused maintenance. A business with inaccessible accounts, weak service pages, and no lead tracking has a larger starting job. Before discussing a monthly budget, ask which situation the proposal assumes."
+      },
+      {
+        "type": "paragraph",
+        "content": "It also helps to separate the three common ways of buying support."
+      },
+      {
+        "type": "paragraph",
+        "content": "Payment approach"
+      },
+      {
+        "type": "paragraph",
+        "content": "Work it can suit"
+      },
+      {
+        "type": "paragraph",
+        "content": "Question to ask"
+      },
+      {
+        "type": "paragraph",
+        "content": "One-time project"
+      },
+      {
+        "type": "paragraph",
+        "content": "An audit, a defined repair, or initial setup"
+      },
+      {
+        "type": "paragraph",
+        "content": "What specific outcome and handover are included?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Monthly retainer"
+      },
+      {
+        "type": "paragraph",
+        "content": "Ongoing improvements, content, and monitoring"
+      },
+      {
+        "type": "paragraph",
+        "content": "What work is planned each month and how is it reviewed?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Hourly consulting"
+      },
+      {
+        "type": "paragraph",
+        "content": "Advice for an owner or team doing the implementation"
+      },
+      {
+        "type": "paragraph",
+        "content": "Who makes the changes after the advice is delivered?"
+      },
+      {
+        "type": "heading",
+        "content": "What Changes the Price"
+      },
+      {
+        "type": "heading",
+        "content": "The Starting Condition of the Website"
+      },
+      {
+        "type": "paragraph",
+        "content": "An audit can reveal work that a quick sales conversation misses. Important service pages might be absent, booking forms may fail on phones, or old location information may still appear across the website. Fixing those problems takes implementation time. Ask whether the agency's quote includes that time or only identifies the issues."
+      },
+      {
+        "type": "heading",
+        "content": "The Services and Locations You Need to Promote"
+      },
+      {
+        "type": "paragraph",
+        "content": "A single-location electrician promoting a few core services has a different workload from a regional business with several staffed branches. Extra locations can mean separate pages, profile oversight, tracking checks, and reporting."
+      },
+      {
+        "type": "paragraph",
+        "content": "More pages should have a clear purpose. A proposal that adds dozens of nearly identical city pages needs a better explanation than a promise of wider coverage."
+      },
+      {
+        "type": "heading",
+        "content": "The Competitive Market and Available Evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": "Search results in a busy metro area may include established contractors with substantial websites and local recognition. A realistic plan should explain how your business can improve its own usefulness and credibility. Ask which customer questions are poorly answered and what genuine project evidence you can contribute."
+      },
+      {
+        "type": "heading",
+        "content": "The Work Your Team Will Own"
+      },
+      {
+        "type": "paragraph",
+        "content": "An agency may price content planning separately from writing, or technical recommendations separately from development. Your staff might need to supply photographs, confirm service details, approve copy, and update job outcomes. Agree on these responsibilities before the first invoice."
+      },
+      {
+        "type": "heading",
+        "content": "What a Useful Proposal Should Include"
+      },
+      {
+        "type": "paragraph",
+        "content": "Look for a short list of priorities and a clear explanation of the work behind each one. For a local service business, useful proposal items may include:"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "Google Business Profile review and management within the agreed scope.",
+          "Research into relevant services and the areas actually served.",
+          "Improvements to important website pages and internal links.",
+          "Corrections to significant inaccurate business listings.",
+          "A process for measuring inquiries and checking lead quality.",
+          "Reporting that explains completed work, results, and next priorities."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "Not every business needs every item immediately. The proposal should explain what comes first and why. If a website has a broken inquiry form, repairing it deserves attention before commissioning another general blog."
+      },
+      {
+        "type": "paragraph",
+        "content": "Also check exclusions. Website hosting, paid advertising, call-tracking subscriptions, new development, and additional locations can create separate charges. Written boundaries make the budget easier to manage."
+      },
+      {
+        "type": "heading",
+        "content": "How to Compare Quotes Fairly"
+      },
+      {
+        "type": "paragraph",
+        "content": "Send each agency the same brief: your locations, main services, target customers, website, current account access, and the practical problems you want solved. Then ask for a proposal against that brief."
+      },
+      {
+        "type": "paragraph",
+        "content": "Useful questions include:"
+      },
+      {
+        "type": "numbered-list",
+        "content": "Step-by-Step Guidance:",
+        "items": [
+          "Which changes will you make during the first month?",
+          "Who writes and implements the work?",
+          "What accounts and content will the business own?",
+          "How will you distinguish an inquiry from a booked job?",
+          "What costs sit outside the monthly fee?",
+          "How does the agreement end and what does the handover include?"
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google's advice on hiring an SEO](https://developers.google.com/search/docs/fundamentals/do-i-need-seo) recommends asking about methods, experience, communication, and expected results. Treat a guaranteed first position as a reason to investigate the proposal carefully. A service agreement should make the work reviewable even when rankings fluctuate."
+      },
+      {
+        "type": "heading",
+        "content": "A Simple Budget Calculation"
+      },
+      {
+        "type": "paragraph",
+        "content": "Consider a hypothetical contractor evaluating a $1,200 monthly campaign. Suppose an additional completed job produces $300 after the direct costs of fulfilling that job, before the SEO fee and other overheads."
+      },
+      {
+        "type": "paragraph",
+        "content": "Four additional jobs would produce $1,200 on that basis. If the contractor books and completes one job for every four qualified inquiries, the campaign would need 16 additional qualified inquiries to reach that contribution target."
+      },
+      {
+        "type": "paragraph",
+        "content": "These figures illustrate a calculation; they are not a forecast. Use your own job margins, close rate, repeat business, and capacity. Also allow for the time it takes for improvements to develop. Counting every incoming call as a new customer will make almost any campaign look better than it is."
+      },
+      {
+        "type": "paragraph",
+        "content": "A modest but reliable tracking process makes this conversation much more useful than comparing ranking screenshots alone."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Can a Small Business Do Local SEO Itself"
+      },
+      {
+        "type": "paragraph",
+        "content": "Yes. An owner can maintain accurate business information, improve service descriptions, request honest feedback, and monitor inquiries. Outside help becomes useful when time, technical implementation, or the scale of the work becomes a constraint."
+      },
+      {
+        "type": "heading",
+        "content": "Is a One Time Setup Enough"
+      },
+      {
+        "type": "paragraph",
+        "content": "It can address a defined problem. Ongoing work may still be needed as your services, website, customers, and competitors change. Ask for a maintenance plan proportionate to the business rather than assuming every task needs a permanent retainer."
+      },
+      {
+        "type": "heading",
+        "content": "Does the Monthly Fee Include Google Advertising"
+      },
+      {
+        "type": "paragraph",
+        "content": "Only if the agreement explicitly says so. Ask for advertising spend, management fees, and SEO work to be itemized so you can understand each cost."
+      },
+      {
+        "type": "heading",
+        "content": "How Should I Choose Between Two Similar Quotes"
+      },
+      {
+        "type": "paragraph",
+        "content": "Compare the proposed priorities, implementation responsibilities, account ownership, and reporting. Ask each provider to explain how its plan addresses a real issue on your website."
+      },
+      {
+        "type": "heading",
+        "content": "Choose a Budget You Can Measure"
+      },
+      {
+        "type": "paragraph",
+        "content": "Review [LocalSurgeSEO's pricing plans](/pricing) alongside its [local SEO services](/local-seo). If you are unsure what needs attention first, the [free SEO audit tool](/seo-tool) can provide a starting point for a more specific discussion about scope."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[WebFX local SEO pricing research](https://www.webfx.com/local-seo/pricing/)",
+          "[Google guidance on hiring an SEO](https://developers.google.com/search/docs/fundamentals/do-i-need-seo)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "track-google-maps-leads-calls-forms",
+    "title": "Track Google Maps Leads with GA4 and Call Tracking",
+    "category": "Revenue & Analytics",
+    "author": {
+      "name": "Marcus Vance",
+      "role": "Director of Organic Growth",
+      "avatar": "MV"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/track-google-maps-leads-calls-forms.webp",
+    "description": "Learn how to track Google Maps website visits, calls, and successful form submissions, then connect those inquiries to qualified leads and booked jobs.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "Google Maps can send customers straight to the phone or through your website. To understand its contribution, measure those journeys separately and connect the resulting inquiries to your booking records."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Add consistent tracking parameters to your profile's website link.",
+          "Count successful inquiries separately from button clicks and attempted submissions.",
+          "Use call records and booking outcomes to assess lead quality.",
+          "Expect differences between Google Business Profile, analytics, and customer records."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Decide What Counts as a Lead"
+      },
+      {
+        "type": "paragraph",
+        "content": "A map listing can receive more activity while the number of booked jobs stays flat. That does not automatically mean the campaign has failed. It means the activity needs a closer look."
+      },
+      {
+        "type": "paragraph",
+        "content": "Start by defining the stages that matter to your business. A profile interaction is an early signal. A genuine inquiry is a person asking about your service. A qualified lead fits your service area and the work you accept. A booked job has a confirmed appointment or agreement."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep those definitions in your report. A click on a telephone number does not tell you whether the call connected. A submitted form may contain a sales pitch. Two calls from the same homeowner may concern one job."
+      },
+      {
+        "type": "paragraph",
+        "content": "Google's [Business Profile performance documentation](https://support.google.com/business/answer/9918094?hl=en) defines its Calls metric as clicks on the profile's call button. It also explains that performance data can include organic activity and Google Ads. Treat the report as a source of profile activity, then use other records to investigate inquiries and outcomes."
+      },
+      {
+        "type": "heading",
+        "content": "Identify Visits from Your Business Profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "Add UTM parameters to the website URL on your profile. These small labels help analytics identify the source of a visit. Keep the destination relevant to the location and service represented by the profile."
+      },
+      {
+        "type": "paragraph",
+        "content": "For an illustrative Sacramento branch, the destination might be:"
+      },
+      {
+        "type": "paragraph",
+        "content": "https://example.com/locations/sacramento/"
+      },
+      {
+        "type": "paragraph",
+        "content": "Append the following parameters to that URL:"
+      },
+      {
+        "type": "paragraph",
+        "content": "?utm_source=google&utm_medium=organic&utm_campaign=gbp_sacramento"
+      },
+      {
+        "type": "paragraph",
+        "content": "The source identifies Google, the medium keeps a consistent organic-search convention, and the campaign distinguishes the profile. The campaign name is an internal naming choice, not a special Google Maps setting."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google's URL builder guidance](https://support.google.com/analytics/answer/10917952?hl=en) explains how these parameters populate campaign reporting. Agree on one naming convention before tagging several branches. For example, avoid using GBP_Sacramento, gbp-sacramento, and maps_sac for the same location."
+      },
+      {
+        "type": "paragraph",
+        "content": "Test the complete link on a phone. Check that the correct page opens, redirects preserve the parameters, and analytics receives the visit where measurement is permitted. If the destination already contains a question mark, additional parameters need an ampersand instead of a second question mark."
+      },
+      {
+        "type": "heading",
+        "content": "Measure Successful Website Inquiries"
+      },
+      {
+        "type": "paragraph",
+        "content": "Your most useful form event is a confirmed inquiry accepted by the website. Ask your developer to connect tracking to that success state, such as a reliable confirmation page or a successful application response."
+      },
+      {
+        "type": "paragraph",
+        "content": "GA4's [enhanced measurement](https://support.google.com/analytics/answer/9216061?hl=en) includes form interaction events. Their behavior depends on how the site is built, so test them against the actual form. An event labeled form_submit should not be assumed to prove that your booking system received a lead."
+      },
+      {
+        "type": "paragraph",
+        "content": "A practical test sequence is:"
+      },
+      {
+        "type": "numbered-list",
+        "content": "Step-by-Step Guidance:",
+        "items": [
+          "Send one valid test inquiry and confirm it reaches the business.",
+          "Confirm one appropriate lead event appears in analytics.",
+          "Try submitting with required fields missing.",
+          "Check a controlled failure case with the developer.",
+          "Make sure those unsuccessful attempts do not count as completed leads.",
+          "Refresh the confirmation page and check for duplicate counting."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "Use an event such as generate_lead or a clearly named custom event according to your measurement plan. Mark the relevant event as a key event where appropriate. Keep the event specification simple enough that the website team and the business agree on what it means."
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid putting customer names, email addresses, phone numbers, or inquiry text into analytics labels. Store customer records in the business system designed for them, with appropriate access controls."
+      },
+      {
+        "type": "heading",
+        "content": "Understand Phone Call Measurement"
+      },
+      {
+        "type": "paragraph",
+        "content": "There are two common phone journeys: a call directly from the profile and a call after visiting the website. If you use a call-tracking provider, make sure its setup distinguishes these routes and preserves reliable access to the business."
+      },
+      {
+        "type": "paragraph",
+        "content": "For website visitors, dynamic number insertion can associate a displayed number with a traffic source. For direct profile calls, a dedicated number can help separate that channel. Discuss the configuration with the provider before changing published numbers. Avoid spreading temporary campaign numbers across business directories."
+      },
+      {
+        "type": "paragraph",
+        "content": "Test calls from a real phone. Confirm the routing, opening-hours behavior, missed-call handling, and what the report records. If recording is enabled, review the applicable requirements for your business and customers before using recordings."
+      },
+      {
+        "type": "paragraph",
+        "content": "Call duration can help with triage, but it cannot decide lead quality on its own. A short call might book a familiar customer. A long call might be someone looking for a service you do not provide. Add a simple outcome in your customer record: qualified, outside service area, existing customer, spam, or booked."
+      },
+      {
+        "type": "heading",
+        "content": "Build a Useful Monthly Report"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use consistent dates and compare the same branch or service area. The following hypothetical example shows why the stages matter."
+      },
+      {
+        "type": "paragraph",
+        "content": "Measure"
+      },
+      {
+        "type": "paragraph",
+        "content": "Example monthly count"
+      },
+      {
+        "type": "paragraph",
+        "content": "What to investigate"
+      },
+      {
+        "type": "paragraph",
+        "content": "Website sessions tagged to the profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "180"
+      },
+      {
+        "type": "paragraph",
+        "content": "Whether the visits reached relevant pages"
+      },
+      {
+        "type": "paragraph",
+        "content": "Unique inquiries attributed to the profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "24"
+      },
+      {
+        "type": "paragraph",
+        "content": "Whether attribution and duplicate handling are sound"
+      },
+      {
+        "type": "paragraph",
+        "content": "Qualified inquiries"
+      },
+      {
+        "type": "paragraph",
+        "content": "15"
+      },
+      {
+        "type": "paragraph",
+        "content": "Whether services and geography match the business"
+      },
+      {
+        "type": "paragraph",
+        "content": "Completed jobs from those inquiries"
+      },
+      {
+        "type": "paragraph",
+        "content": "6"
+      },
+      {
+        "type": "paragraph",
+        "content": "Whether follow-up and capacity affected bookings"
+      },
+      {
+        "type": "paragraph",
+        "content": "The numbers are illustrative and do not represent a LocalSurgeSEO client. Add the value of completed work if your records support it. Separate new inquiries from repeat contacts so one customer does not become several apparent leads."
+      },
+      {
+        "type": "paragraph",
+        "content": "The systems will rarely match exactly. Consent choices, ad blockers, attribution settings, different time zones, and customers returning later can all affect measurement. Note significant gaps and investigate them instead of forcing the totals to agree."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Can GA4 Track Every Call from Google Maps"
+      },
+      {
+        "type": "paragraph",
+        "content": "No. Calls placed directly from the profile do not pass through your website. Use profile activity and appropriate phone records alongside website analytics."
+      },
+      {
+        "type": "heading",
+        "content": "Should I Add UTM Parameters to Internal Website Links"
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid using campaign tags for ordinary links between your own pages. Keep them for identifying incoming campaigns and profile links so acquisition reporting stays understandable."
+      },
+      {
+        "type": "heading",
+        "content": "Which Result Deserves the Most Attention"
+      },
+      {
+        "type": "paragraph",
+        "content": "Qualified inquiries and completed jobs are usually more useful for business decisions than clicks alone. Keep early-stage measures because they help explain changes further down the journey."
+      },
+      {
+        "type": "heading",
+        "content": "Is Tracking Useful for a Small Contractor"
+      },
+      {
+        "type": "paragraph",
+        "content": "Yes. A tagged website link, a tested inquiry event, and consistent booking notes can answer useful questions without an elaborate dashboard."
+      },
+      {
+        "type": "heading",
+        "content": "Make the Next Report Easier to Use"
+      },
+      {
+        "type": "paragraph",
+        "content": "Start with one location and test its customer journey. For related website improvements, read the [service-area page conversion guide](/blog/service-area-pages-conversion-wireframes-blueprint). [LocalSurgeSEO's local SEO services](/local-seo) provide a place to discuss measurement alongside the wider campaign."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google Business Profile performance definitions](https://support.google.com/business/answer/9918094?hl=en)",
+          "[Google Analytics campaign URL guidance](https://support.google.com/analytics/answer/10917952?hl=en)",
+          "[GA4 enhanced measurement events](https://support.google.com/analytics/answer/9216061?hl=en)",
+          "[Google guidance on measuring lead form key events](https://support.google.com/analytics/answer/12946393?hl=en)",
+          "[GA4 recommended lead generation events](https://support.google.com/analytics/answer/9267735?hl=en)",
+          "[Google Analytics guidance on avoiding personally identifiable information](https://support.google.com/analytics/answer/6366371?hl=en)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "google-business-profile-already-claimed-recover-access",
+    "title": "Google Business Profile Already Claimed? Recover Access",
+    "category": "Google Business Profile",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/google-business-profile-already-claimed-recover-access.webp",
+    "description": "Recover access to a Google Business Profile managed by a former agency, employee, or unknown account, and put a clear ownership process in place.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "An existing Google Business Profile can keep appearing to customers even when the current business owner cannot manage it. Start by identifying the account or ownership issue, then use the appropriate recovery route for that same profile."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Check the business's existing Google Accounts before requesting ownership.",
+          "Ask a cooperative current owner to arrange a proper handover.",
+          "Follow Google's access request or support process when necessary.",
+          "Keep business ownership separate from day-to-day agency access."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Work Out Who Currently Has Access"
+      },
+      {
+        "type": "paragraph",
+        "content": "The problem often surfaces during an ordinary update. You need to change holiday hours, but the account you use for the website cannot edit the profile. A former employee remembers setting it up, and the previous agency thinks another address owns it."
+      },
+      {
+        "type": "paragraph",
+        "content": "Before starting a recovery request, search your business name and location and save the public profile link. Confirm that you are looking at the correct branch. Similar trading names can make this less obvious than it sounds."
+      },
+      {
+        "type": "paragraph",
+        "content": "Then check the Google Accounts the business legitimately controls. Search their inboxes for earlier verification, access, or ownership emails. A Google Account can use a company email address; it does not have to end in Gmail."
+      },
+      {
+        "type": "paragraph",
+        "content": "Distinguish these situations:"
+      },
+      {
+        "type": "paragraph",
+        "content": "Situation"
+      },
+      {
+        "type": "paragraph",
+        "content": "Sensible first action"
+      },
+      {
+        "type": "paragraph",
+        "content": "You recognise the owning account but cannot sign in"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the Google Account recovery process"
+      },
+      {
+        "type": "paragraph",
+        "content": "A current colleague or agency controls the profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "Ask for an access and ownership handover"
+      },
+      {
+        "type": "paragraph",
+        "content": "The owning account is unfamiliar or unavailable"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use Google's ownership request or support route"
+      },
+      {
+        "type": "paragraph",
+        "content": "You can manage the profile but it is suspended"
+      },
+      {
+        "type": "paragraph",
+        "content": "Investigate the restriction and appeals route"
+      },
+      {
+        "type": "paragraph",
+        "content": "Save screenshots of the message you see. An access problem and a profile restriction can require different work, even if both prevent the update you wanted to make."
+      },
+      {
+        "type": "heading",
+        "content": "Arrange a Handover Where Possible"
+      },
+      {
+        "type": "paragraph",
+        "content": "A cooperative handover is usually easier to organize than a disputed recovery. Send a specific request that identifies the profile and the account that should receive access."
+      },
+      {
+        "type": "paragraph",
+        "content": "Here is a template you can adapt:"
+      },
+      {
+        "type": "paragraph",
+        "content": "Hello [Name], we are updating access to the Google Business Profile for [Business name and location]. Please add [Company-controlled Google Account] with the ownership access needed for the handover. We would also like primary ownership transferred to the business when the account is eligible. The public profile is [Profile link]. Please let us know which account currently holds primary ownership and whether any access restrictions affect the transfer. Thank you."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use individual account access rather than asking someone to send a password. [Google's primary ownership guidance](https://support.google.com/business/answer/3415281?hl=en) explains the transfer process and the seven-day limits affecting certain actions by new owners and managers. If the transfer option is unavailable immediately, check those limits before assuming that something has gone wrong."
+      },
+      {
+        "type": "paragraph",
+        "content": "After the handover, confirm the access from your own account. A message saying the transfer was completed is useful, but a successful sign-in and visible permissions give you a firmer record."
+      },
+      {
+        "type": "heading",
+        "content": "Request Ownership Through Google"
+      },
+      {
+        "type": "paragraph",
+        "content": "For a storefront profile owned by someone else, [Google's current ownership instructions](https://support.google.com/business/answer/4566671) describe finding the business, selecting Request Access, and submitting the ownership form. Use an account you intend to keep under business control."
+      },
+      {
+        "type": "paragraph",
+        "content": "The existing owner has three days to respond. Approval gives access; a denial may be appealed. If no response arrives, Google may offer a claim and verification option, but that option is not available in every case. Keep the confirmation email so you can check the request rather than starting again from memory."
+      },
+      {
+        "type": "paragraph",
+        "content": "Service-area businesses without a physical shop or office have a different route. Google's guidance directs them to support using the issue description \u201cTransfer ownership of listing.\u201d Follow that route for an eligible mobile business rather than publishing a home address or creating another profile to force a workaround."
+      },
+      {
+        "type": "paragraph",
+        "content": "When the old business account belongs to your organization but its login has been lost, work through the account recovery process as well. Recovering that account can matter beyond Maps if it also controls analytics or other business services."
+      },
+      {
+        "type": "heading",
+        "content": "Prepare a Useful Support Record"
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep the evidence focused on the profile and your authority to represent the business. A concise record can include:"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "The public profile link and business name.",
+          "The account you want to use for management.",
+          "The access message or error and when it appeared.",
+          "Previous request confirmations and case references.",
+          "Relevant business documents if the official process asks for them."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "Send sensitive evidence through Google's official support process. Public community posts should describe the issue without publishing account recovery details or customer information."
+      },
+      {
+        "type": "paragraph",
+        "content": "Write a short timeline. For example: the business changed agency in May, the old agency confirmed it controls the profile, and the company requested access on a particular date. That is easier to review than several screenshots without context."
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid repeated, conflicting requests while an existing case is active. Keep the correspondence together and answer the questions raised in that case."
+      },
+      {
+        "type": "heading",
+        "content": "Prevent Another Access Problem"
+      },
+      {
+        "type": "paragraph",
+        "content": "Treat the profile like other important business accounts. Record who has primary ownership, who can manage daily updates, and how access is removed when someone leaves."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep a company-controlled owner account and an appropriate backup owner. Give outside partners the access they need for their role, with a named contact responsible for reviewing it. An agency relationship can change without requiring the business to rebuild its public presence."
+      },
+      {
+        "type": "paragraph",
+        "content": "At a handover, check more than whether the profile is visible. Confirm the company can edit it, identify all current users, review recovery arrangements, and store the profile link with the rest of the business's digital records."
+      },
+      {
+        "type": "paragraph",
+        "content": "This is also a useful time to review website, analytics, domain, and advertising access. They may have been created during the same engagement and can cause similar problems later."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Should I Create a New Profile If I Cannot Access the Old One"
+      },
+      {
+        "type": "paragraph",
+        "content": "Start with the existing profile's access problem. A second profile can create a separate duplicate-listing issue while leaving the original account problem unresolved."
+      },
+      {
+        "type": "heading",
+        "content": "Can an Agency Manage the Profile Without Owning the Business Account"
+      },
+      {
+        "type": "paragraph",
+        "content": "Yes. Use the appropriate profile permissions instead of shared login details. Agree on the business's ownership and the agency's responsibilities in writing."
+      },
+      {
+        "type": "heading",
+        "content": "Will Google Automatically Transfer It After Three Days"
+      },
+      {
+        "type": "paragraph",
+        "content": "No. A further claim or verification option may become available after a request receives no response. Check the confirmation email and the options shown for your case."
+      },
+      {
+        "type": "heading",
+        "content": "What If the Profile Is Also Suspended"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record both issues. Access recovery does not itself resolve the restriction. Review the stated policy issue and use the appropriate appeals process once you can manage the case."
+      },
+      {
+        "type": "heading",
+        "content": "Keep Control of Your Business Information"
+      },
+      {
+        "type": "paragraph",
+        "content": "Once access is restored, use the [Google Business Profile optimization checklist](/blog/mastering-google-business-profile-optimization) to review the details customers see. For a separate restriction issue, refer to the [profile suspension and appeal guide](/blog/google-business-profile-suspended-reinstatement-appeal-guide). You can also [contact LocalSurgeSEO](/contact) to discuss profile management support."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google instructions for requesting profile ownership](https://support.google.com/business/answer/4566671)",
+          "[Google instructions for transferring primary ownership](https://support.google.com/business/answer/3415281?hl=en)",
+          "[Google Account recovery](https://accounts.google.com/signin/recovery)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "duplicate-google-business-profiles-merge-remove",
+    "title": "Duplicate Google Business Profiles: Merge or Remove?",
+    "category": "Google Business Profile",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/duplicate-google-business-profiles-merge-remove.webp",
+    "description": "Work out whether two Google Business Profiles are duplicates, choose the right resolution route, and protect important business details and reviews.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "Two similar listings can represent an accidental duplicate, an old location, or two separate businesses. Establish which situation you have before asking Google to merge or remove anything."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Record both public profiles before making changes.",
+          "Check whether they represent the same business and location.",
+          "Keep ownership disputes separate from duplicate resolution.",
+          "Confirm what happened to reviews, links, and business details afterward."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Confirm Whether the Listings Are Duplicates"
+      },
+      {
+        "type": "paragraph",
+        "content": "A customer calls the number on an old listing and reaches a disconnected line. Another customer leaves a review on the newer profile. The business is still operating, but customers are encountering two different versions of it."
+      },
+      {
+        "type": "paragraph",
+        "content": "That is worth investigating. It does not mean every pair of similar listings should be merged."
+      },
+      {
+        "type": "paragraph",
+        "content": "Start with both public Maps links. Record each name, address or visible service area, phone number, website, and approximate review count. Note which profile your business can manage. Save dated screenshots so you can describe the original situation if details change."
+      },
+      {
+        "type": "paragraph",
+        "content": "Ask what each listing represents in the real world. A second branch with its own eligible operation is different from an accidental second listing for the same branch. A practitioner profile can also need separate assessment. The shared address alone does not settle the question."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use a simple working record:"
+      },
+      {
+        "type": "paragraph",
+        "content": "Detail"
+      },
+      {
+        "type": "paragraph",
+        "content": "Profile A"
+      },
+      {
+        "type": "paragraph",
+        "content": "Profile B"
+      },
+      {
+        "type": "paragraph",
+        "content": "Public Maps link"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record the link"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record the link"
+      },
+      {
+        "type": "paragraph",
+        "content": "Real business represented"
+      },
+      {
+        "type": "paragraph",
+        "content": "Describe it"
+      },
+      {
+        "type": "paragraph",
+        "content": "Describe it"
+      },
+      {
+        "type": "paragraph",
+        "content": "Address or service base"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record current facts"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record current facts"
+      },
+      {
+        "type": "paragraph",
+        "content": "Current phone and website"
+      },
+      {
+        "type": "paragraph",
+        "content": "Check both"
+      },
+      {
+        "type": "paragraph",
+        "content": "Check both"
+      },
+      {
+        "type": "paragraph",
+        "content": "Access and recent activity"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record what is known"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record what is known"
+      },
+      {
+        "type": "heading",
+        "content": "Choose a Resolution Route"
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google's duplicate profile guidance](https://support.google.com/business/answer/12756178?hl=en) covers different situations rather than prescribing one fix for every pair of listings. Two distinct eligible businesses may keep separate profiles. Profiles for the same business may need a duplicate correction or merge review."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the business facts to decide your next step:"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "For the same business at the same location, investigate the duplicate or merge route.",
+          "For a normal relocation, update the existing business record rather than treating the move as a new business launch.",
+          "For someone else's control of the correct profile, address ownership first.",
+          "For a genuinely separate eligible branch, preserve the distinction and clarify its details.",
+          "For an incorrect merge of separate businesses, contact support with evidence of the separate operations."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "These are starting points for assessment, not approval guarantees. Follow the instructions available for the actual profiles."
+      },
+      {
+        "type": "paragraph",
+        "content": "Be careful with any option that removes a profile from your Google Account. Losing your ability to manage a listing and removing a public place from Maps are different outcomes. Read the on-screen explanation before confirming an action, particularly if the profile has content or users you need to retain."
+      },
+      {
+        "type": "heading",
+        "content": "Prepare the Information Google Needs"
+      },
+      {
+        "type": "paragraph",
+        "content": "A useful request explains the situation in a few sentences. Include both Maps links, the correct current details, the relationship between the profiles, and the change you are requesting."
+      },
+      {
+        "type": "paragraph",
+        "content": "For example, a hypothetical repair company might write:"
+      },
+      {
+        "type": "paragraph",
+        "content": "We operate one appliance repair business from one service base. These two public profiles appear to represent the same operation: [Link A] and [Link B]. The current business website is [URL] and the current phone number is [Number]. Profile B appears to have been created during our website relaunch. Please review the profiles and advise on the appropriate duplicate resolution. Both have customer reviews, so please also confirm the review implications."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep the description factual. A requested outcome is easier to assess when it does not rely on guesses about Google's internal systems."
+      },
+      {
+        "type": "paragraph",
+        "content": "For two separate businesses at a shared site, explain how customers distinguish them. Submit relevant evidence through the official process if asked. Do not change names or invent suite numbers simply to make the profiles look different."
+      },
+      {
+        "type": "heading",
+        "content": "Understand the Review Implications"
+      },
+      {
+        "type": "paragraph",
+        "content": "Reviews are one reason to investigate carefully before removing anything. Google's duplicate guidance says that reviews are combined when profiles are merged, while review replies may be lost. Merge requests are reviewed; submitting one does not guarantee that the profiles qualify."
+      },
+      {
+        "type": "paragraph",
+        "content": "For a move or ownership change, Google's separate [review transfer guidance](https://support.google.com/business/answer/3098204?hl=en) explains when reviews may remain or transfer and when exceptions apply."
+      },
+      {
+        "type": "paragraph",
+        "content": "Record the reviews and replies you need to check after the case is resolved. Screenshots can help with follow-up, although they do not guarantee restoration or substitute for Google's review record."
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid promising a customer or colleague that every item will transfer exactly as it appears today. State the requested correction, keep the case reference, and verify the outcome."
+      },
+      {
+        "type": "heading",
+        "content": "Check the Result After Resolution"
+      },
+      {
+        "type": "paragraph",
+        "content": "Once Google acts on the case, view the business as a customer would. Search the name, open the public result, and test the phone and website links. Check the address or service information against your real operation."
+      },
+      {
+        "type": "paragraph",
+        "content": "Then inspect the business's own links. Your website, booking confirmation, review-request messages, and social profiles may still point to the old Maps URL. Correct references that now send customers to the wrong place."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use this final checklist:"
+      },
+      {
+        "type": "numbered-list",
+        "content": "Step-by-Step Guidance:",
+        "items": [
+          "The intended business profile is accessible to the right company account.",
+          "Current contact details and opening hours are accurate.",
+          "The website link leads to the relevant page.",
+          "Expected reviews and important replies have been checked.",
+          "Review-request links open the appropriate profile.",
+          "Any unresolved discrepancy is documented in the same support case."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep a short note of what caused the duplicate. A new agency, a branch launch, or an account handover can otherwise recreate the same issue later."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Can Two Businesses at the Same Address Have Separate Profiles"
+      },
+      {
+        "type": "paragraph",
+        "content": "They can in eligible circumstances. Investigate whether they are genuinely distinct businesses and review the applicable guidelines. An address match alone is insufficient grounds for a merge request."
+      },
+      {
+        "type": "heading",
+        "content": "Should Each Service Have Its Own Profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "Creating separate profiles for different services offered by the same business can create duplicates. Represent services within the appropriate business profile and website structure."
+      },
+      {
+        "type": "heading",
+        "content": "Can I Choose Which Reviews Survive a Merge"
+      },
+      {
+        "type": "paragraph",
+        "content": "Do not assume you can select reviews individually. Ask about the appropriate resolution and check the result against Google's current guidance."
+      },
+      {
+        "type": "heading",
+        "content": "What If My Correct Profile Was Marked as a Duplicate"
+      },
+      {
+        "type": "paragraph",
+        "content": "Document which real business it represents and why the duplicate status appears incorrect. Use the support route for that situation rather than creating another replacement listing."
+      },
+      {
+        "type": "heading",
+        "content": "Resolve the Listing and Its References Together"
+      },
+      {
+        "type": "paragraph",
+        "content": "Review the wider account arrangement using the [multi-location profile management guide](/blog/managing-multiple-google-business-profiles-bulk-verification). For help reviewing a confusing profile setup, [contact LocalSurgeSEO](/contact) with the public links and a concise description of the issue."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google guidance on duplicate profiles and ownership issues](https://support.google.com/business/answer/12756178?hl=en)",
+          "[Google guidance on moving reviews between profiles](https://support.google.com/business/answer/3098204?hl=en)",
+          "[Google business representation guidelines](https://support.google.com/business/answer/3038177?hl=en)",
+          "[Google guidance on removing a profile from an account](https://support.google.com/business/answer/4669092?hl=en)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "ask-customers-google-reviews-templates",
+    "title": "How to Ask for Google Reviews: Email and Text Templates",
+    "category": "Reputation Management",
+    "author": {
+      "name": "Alex Rivera",
+      "role": "Lead SEO Strategist",
+      "avatar": "AR"
+    },
+    "date": "October 27, 2026",
+    "readTime": "6 min read",
+    "image": "/assets/blog_img/ask-customers-google-reviews-templates.webp",
+    "description": "Build a practical Google review request process with neutral email and text templates, sensible follow-ups, and guidance for your service team.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "A review request works best when it is easy to understand and easy to decline. Invite customers to describe their actual experience, provide the correct link, and make the request part of a consistent service process."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Ask for honest feedback without suggesting a rating or specific wording.",
+          "Use a direct review link or QR code for the correct location.",
+          "Apply the same invitation process across customer experiences.",
+          "Respect communication preferences and avoid repeated reminders."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Choose the Right Moment to Ask"
+      },
+      {
+        "type": "paragraph",
+        "content": "Once the work is complete, many customers are happy to share an opinion. The request becomes awkward when it feels like another condition of the service or arrives before the customer has had a chance to assess the result."
+      },
+      {
+        "type": "paragraph",
+        "content": "Choose a sensible point in your workflow. For a routine plumbing repair, that may be after completion and the service summary. For a longer installation, allow time for the customer to use the equipment. The timing should reflect the job, not a claim that one exact hour produces better rankings."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the same invitation rule for comparable completed jobs. A private satisfaction question should not decide who receives access to the public review link. Someone reporting a problem can be offered support and still have the same opportunity to leave public feedback."
+      },
+      {
+        "type": "paragraph",
+        "content": "Google's [Maps contribution policy](https://support.google.com/contributionpolicy/answer/7400114?hl=en) prohibits incentives, selective requests for positive reviews, pressure over ratings, and requests for specific review content. Keep the invitation neutral. Customers should choose whether to respond and what to say."
+      },
+      {
+        "type": "heading",
+        "content": "Make the Review Link Easy to Use"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the review-request link or QR code provided for your Business Profile. Google's [review guidance](https://support.google.com/business/answer/3474122?hl=en) explains that customers can follow a link or scan a code to leave feedback."
+      },
+      {
+        "type": "paragraph",
+        "content": "Before adding the link to an invoice, email, or automation, test it on a phone. Check that it opens the correct business and location. Repeat that check after a profile move or duplicate-listing correction."
+      },
+      {
+        "type": "paragraph",
+        "content": "A QR code can be useful on a receipt or leave-behind card. Include a short description such as \u201cShare your experience on Google\u201d so the customer knows where it leads. Do not require customers to complete a review while staff wait beside them."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep the invitation separate from any discount or promotional offer. A service offer that happens to sit next to a review request can make the message confusing, even when the business did not intend to exchange a reward for feedback."
+      },
+      {
+        "type": "heading",
+        "content": "Adapt the Email and Text Templates"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use these examples as starting points. Replace the bracketed fields and keep the wording consistent with the communication the customer already expects from your business."
+      },
+      {
+        "type": "heading",
+        "content": "Email After a Completed Service"
+      },
+      {
+        "type": "paragraph",
+        "content": "Subject: How was your experience with [Business name]?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Hi [First name],"
+      },
+      {
+        "type": "paragraph",
+        "content": "Thank you for choosing [Business name] for your recent [Service]. If you would like to share your experience, you can leave an honest Google review here: [Review link]."
+      },
+      {
+        "type": "paragraph",
+        "content": "Your feedback helps other customers understand what to expect. If you need help with the work we completed, you can also reach us at [Support contact]."
+      },
+      {
+        "type": "paragraph",
+        "content": "Thank you, [Team or sender name]"
+      },
+      {
+        "type": "heading",
+        "content": "Short Text Message"
+      },
+      {
+        "type": "paragraph",
+        "content": "Hi [First name], thank you for choosing [Business name]. If you would like to share your experience, here is our Google review link: [Link]. For help with your service, contact [Support contact]."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use text messages only through a communication process appropriate to your customer permissions and applicable requirements. Keep ordinary service support available whether or not the customer leaves a review."
+      },
+      {
+        "type": "heading",
+        "content": "Optional Single Reminder"
+      },
+      {
+        "type": "paragraph",
+        "content": "Hi [First name], a quick follow-up on our invitation to review [Business name]. If you would like to share your experience, the link is [Link]. If you have already responded, thank you. No further action is needed."
+      },
+      {
+        "type": "paragraph",
+        "content": "A reminder is optional. Some customers prefer not to review, and some may have already posted under a name you do not recognise. Avoid a sequence that keeps asking until it gets an answer."
+      },
+      {
+        "type": "heading",
+        "content": "A Natural Verbal Invitation"
+      },
+      {
+        "type": "paragraph",
+        "content": "Thank you for having us today. We include a link in the service follow-up if you would like to leave an honest review. If you have questions about the work, our contact details are there too."
+      },
+      {
+        "type": "paragraph",
+        "content": "This leaves the decision with the customer and lets the technician finish the visit without waiting for a rating."
+      },
+      {
+        "type": "heading",
+        "content": "Give Your Team a Workable Process"
+      },
+      {
+        "type": "paragraph",
+        "content": "Start with a small written process that names the person responsible for the message and the point at which it is sent. Use job completion and agreed communication preferences to determine eligibility, rather than whether the customer seemed pleased."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep review requests separate from technician performance targets. Ask staff to follow the communication process, rather than to obtain a certain number of reviews or persuade customers to mention an employee by name."
+      },
+      {
+        "type": "paragraph",
+        "content": "For a small business, the process can be straightforward:"
+      },
+      {
+        "type": "numbered-list",
+        "content": "Step-by-Step Guidance:",
+        "items": [
+          "Confirm the job is complete and the contact details are correct.",
+          "Send the approved service follow-up and neutral review invitation.",
+          "Record that the invitation was sent to avoid duplicate requests.",
+          "Route service concerns to the person who can resolve them.",
+          "Review incoming feedback and reply where useful."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "If a field-service platform sends messages automatically, read the actual message customers receive. Check the link, sender identity, support route, and reminder settings. A correctly configured template is more useful than a complicated automation nobody has tested."
+      },
+      {
+        "type": "heading",
+        "content": "Handle Feedback and Follow Up"
+      },
+      {
+        "type": "paragraph",
+        "content": "Reviews can reveal repeated questions about appointment windows, pricing explanations, or how the property was left after the job. Discuss those patterns with the team. The request process should help the business learn as well as help prospective customers choose."
+      },
+      {
+        "type": "paragraph",
+        "content": "For replies, use the customer's actual comments as the starting point. A short thank-you may be enough for a straightforward positive review. For a complaint, acknowledge the concern and offer a suitable private support route without publishing personal job details."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google's review management guidance](https://support.google.com/business/answer/3474050?hl=en) describes reading and replying to reviews. If a review appears to violate policy, use the reporting process. An unfamiliar reviewer name or an unhappy opinion alone is insufficient to establish that the review is fake."
+      },
+      {
+        "type": "paragraph",
+        "content": "Measure whether invitations are delivered reliably and whether the feedback identifies service improvements. Treat review volume as an observation, not a guarantee of a particular search position."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Can We Offer a Discount for Leaving Any Review"
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid exchanging a reward for a Google review, including a reward offered regardless of rating. Keep offers and feedback requests separate."
+      },
+      {
+        "type": "heading",
+        "content": "Should We Ask Customers to Mention a Service Keyword"
+      },
+      {
+        "type": "paragraph",
+        "content": "Let customers describe the experience in their own words. Do not prescribe review content or ask them to include ranking phrases."
+      },
+      {
+        "type": "heading",
+        "content": "Can We Ask Again If Someone Has Not Replied"
+      },
+      {
+        "type": "paragraph",
+        "content": "One respectful reminder may fit your communication process. Honour preferences, avoid repeated requests, and do not make service support conditional on feedback."
+      },
+      {
+        "type": "heading",
+        "content": "Can We Remove a Genuine Negative Review"
+      },
+      {
+        "type": "paragraph",
+        "content": "A negative opinion is not automatically a policy violation. Respond professionally and address the underlying concern. Report content only when there is a relevant policy basis."
+      },
+      {
+        "type": "heading",
+        "content": "Make Honest Feedback Easier"
+      },
+      {
+        "type": "paragraph",
+        "content": "For a separate suspected policy violation, see the [fake review reporting guide](/blog/how-to-remove-fake-negative-google-reviews-guide). To review how your profile supports the wider customer journey, explore [LocalSurgeSEO's local SEO services](/local-seo)."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google Maps prohibited and restricted content policy](https://support.google.com/contributionpolicy/answer/7400114?hl=en)",
+          "[Google tips for obtaining reviews](https://support.google.com/business/answer/3474122?hl=en)",
+          "[Google instructions for managing review replies](https://support.google.com/business/answer/3474050?hl=en)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "google-business-profile-video-verification-checklist",
+    "title": "Google Business Profile Video Verification Checklist",
+    "category": "Google Business Profile",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/google-business-profile-video-verification-checklist.webp",
+    "description": "Prepare for Google Business Profile video verification with storefront and service-area examples, a filming checklist, and practical troubleshooting.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "Prepare your verification video around the evidence Google needs for your type of business. A storefront and a mobile contractor can prove a real operation in different ways."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Use the verification method offered for your profile.",
+          "Plan a clear route that shows the location and genuine business activity.",
+          "Demonstrate that you are authorized to manage the business.",
+          "Follow the specific feedback if the video is not accepted."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Understand What Verification Is Checking"
+      },
+      {
+        "type": "paragraph",
+        "content": "The difficulty is often knowing what to film. An owner can show a van full of tools yet omit any clear indication of the location. A shop manager can film the front sign without showing access to the business."
+      },
+      {
+        "type": "paragraph",
+        "content": "Google's [video verification guidance](https://support.google.com/business/answer/14271705?hl=en) asks for evidence of the business location, the business itself, and the person's authority to manage it. The details differ for storefronts and service-area operations. Read the requirements shown for your profile before planning the route."
+      },
+      {
+        "type": "paragraph",
+        "content": "Verification methods are selected by Google. The [general verification guidance](https://support.google.com/business/answer/7107242?hl=en) lists several possible methods, whose availability depends on the business and other factors. A business cannot assume it can replace the offered method with its preferred option."
+      },
+      {
+        "type": "paragraph",
+        "content": "Plan for an honest record of an operating business. Borrowed signage, a temporary location, or an address chosen only to obtain a listing can create a separate eligibility problem that a better camera will not fix."
+      },
+      {
+        "type": "heading",
+        "content": "Prepare a Storefront Route"
+      },
+      {
+        "type": "paragraph",
+        "content": "Walk through the route once before recording. Start where the surrounding area can be identified, move to the premises, and finish with evidence of your access to the operation."
+      },
+      {
+        "type": "paragraph",
+        "content": "For a hypothetical flooring showroom, a sensible route could connect the street context and permanent shop sign to the showroom, stock, and an employee-only area. The viewer should be able to understand how those details belong to the same business."
+      },
+      {
+        "type": "paragraph",
+        "content": "Think about practical obstacles. A locked entrance, a busy loading area, or signage hidden behind a parked vehicle can interrupt the route. Arrange for someone authorized to have the relevant keys, then film at a time when the business can be shown clearly."
+      },
+      {
+        "type": "paragraph",
+        "content": "The aim is a coherent record. A long tour of unrelated rooms can make the important evidence harder to follow. Equally, a close-up of one document may leave the location and operation unexplained."
+      },
+      {
+        "type": "heading",
+        "content": "Prepare a Service Area Business Route"
+      },
+      {
+        "type": "paragraph",
+        "content": "A plumber operating from home does not need to imitate a customer-facing showroom. Google's guidance provides for service-area businesses and identifies appropriate evidence such as the operating location, professional equipment, and access to business assets."
+      },
+      {
+        "type": "paragraph",
+        "content": "For example, a mobile electrician could plan a route that establishes the operating location, shows equipment used for the work, and demonstrates authorized access to the service vehicle or workspace. Select evidence that is real and relevant to that business."
+      },
+      {
+        "type": "paragraph",
+        "content": "Do not turn a private home into a publicly advertised shop for the sake of filming. If customers are not served at the business address, review the [address visibility guidance](https://support.google.com/business/answer/2853879?hl=en) and configure the profile appropriately."
+      },
+      {
+        "type": "paragraph",
+        "content": "Before recording, put away customer paperwork and unrelated personal material. Use suitable business evidence without exposing private customer information or account credentials. A work dashboard full of customer addresses is a poor filming choice when access can be demonstrated more simply."
+      },
+      {
+        "type": "heading",
+        "content": "Record and Submit the Video"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the recording process inside your Business Profile on the supported device. Follow the instructions displayed there, including any camera, microphone, or location permissions needed for the process."
+      },
+      {
+        "type": "paragraph",
+        "content": "Google requires a continuous, unedited recording through its verification flow. Prepare the route before starting rather than relying on editing afterward. Follow the current on-screen duration requirements; a specific length is not an approval trick."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use this preparation checklist:"
+      },
+      {
+        "type": "numbered-list",
+        "content": "Step-by-Step Guidance:",
+        "items": [
+          "The profile details reflect the actual business.",
+          "You know which verification method is available.",
+          "The route connects the location to the business activity.",
+          "The person filming can demonstrate authorized access.",
+          "Needed keys or suitable business evidence are ready.",
+          "Private information and uninvolved people can be avoided.",
+          "The phone has sufficient power and a reliable connection."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "Once submitted, keep a note of the date and account used. Google's general guidance says verification reviews can take up to five business days, with some cases taking longer. Check the profile for the result and any instructions."
+      },
+      {
+        "type": "heading",
+        "content": "Troubleshoot Rejection or Upload Problems"
+      },
+      {
+        "type": "paragraph",
+        "content": "First identify what happened. A recording that failed to upload and a video rejected after review are different problems."
+      },
+      {
+        "type": "paragraph",
+        "content": "For an upload failure, check the connection, device permissions, and any error shown in the flow. Retry through the official process. Record the error if it continues so you can describe it accurately to support."
+      },
+      {
+        "type": "paragraph",
+        "content": "For a reviewed video that was not accepted, look for the issues Google identifies. Compare the feedback with your planned route. If the missing evidence concerns the location, adding more footage of tools will not address it. If the problem is authority, another exterior shot may leave the same gap."
+      },
+      {
+        "type": "paragraph",
+        "content": "For changes that trigger reverification, check whether the profile's information still accurately describes the business. Follow the verification options available for that profile. Avoid repeated speculative edits while trying to diagnose the case."
+      },
+      {
+        "type": "paragraph",
+        "content": "If the process remains blocked, keep a short support record: profile link, account used, submission date, exact message, and previous case reference. Follow the official support route and provide the evidence requested there."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Can I Upload a Video Recorded Earlier in My Camera App"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use Google's verification recording flow and follow its current instructions. Do not assume an edited or previously recorded clip will meet the requirements."
+      },
+      {
+        "type": "heading",
+        "content": "Does Every Business Need a Public Shop Sign"
+      },
+      {
+        "type": "paragraph",
+        "content": "Storefront and service-area businesses have different evidence requirements. Show an accurate picture of your operation rather than creating a temporary storefront for verification."
+      },
+      {
+        "type": "heading",
+        "content": "Does Passing Verification Guarantee Better Rankings"
+      },
+      {
+        "type": "paragraph",
+        "content": "Verification establishes management of an eligible profile. It does not promise a particular search position, service radius, or volume of inquiries."
+      },
+      {
+        "type": "heading",
+        "content": "What If I Am Asked to Verify Again"
+      },
+      {
+        "type": "paragraph",
+        "content": "Review the details and the method offered for the profile. Changes to business information can lead to another verification request. Respond to the stated requirement rather than creating a replacement listing."
+      },
+      {
+        "type": "heading",
+        "content": "Prepare Once and Keep a Clear Record"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the [Business Profile optimization checklist](/blog/mastering-google-business-profile-optimization) to review the surrounding setup. If the profile is suspended, read the separate [appeal guide](/blog/google-business-profile-suspended-reinstatement-appeal-guide), since verification and an appeal are different processes. For support with the wider local-search plan, [contact LocalSurgeSEO](/contact)."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google video verification requirements](https://support.google.com/business/answer/14271705?hl=en)",
+          "[Google business verification methods and review process](https://support.google.com/business/answer/7107242?hl=en)",
+          "[Google business address guidance](https://support.google.com/business/answer/2853879?hl=en)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "how-long-local-seo-takes-six-months",
+    "title": "How Long Does Local SEO Take? A Six Month Planning Guide",
+    "category": "Growth & Strategy",
+    "author": {
+      "name": "Alex Rivera",
+      "role": "Lead SEO Strategist",
+      "avatar": "AR"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/how-long-local-seo-takes-six-months.webp",
+    "description": "Understand what affects local SEO progress, plan useful milestones for the first six months, and measure inquiries alongside rankings and traffic.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "Local SEO does not develop on one fixed schedule. Use the first six months as a planning and review period, with milestones based on the starting condition of your business and website."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Separate completed work from changes in visibility and business results.",
+          "Establish a baseline before making major changes.",
+          "Review qualified inquiries alongside search activity.",
+          "Investigate weak progress rather than simply extending the same plan."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Understand Why Timelines Differ"
+      },
+      {
+        "type": "paragraph",
+        "content": "An established electrician with an inaccurate phone number has a different starting problem from a new business entering a competitive city. Correcting contact information may help customers reach the first company quickly. Building useful pages and recognition for the second involves a broader program of work."
+      },
+      {
+        "type": "paragraph",
+        "content": "That difference matters when someone asks how soon SEO will work. What result are they expecting: a corrected listing, more visibility for a service, additional qualified calls, or enough profitable jobs to cover the fee?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Google's [SEO starter guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide) explains that changes can be reflected at different speeds, from hours to several months, and recommends allowing time to assess their effect. There is no official six-month guarantee for local rankings."
+      },
+      {
+        "type": "paragraph",
+        "content": "The framework below is a proposed management schedule. Use it to organize work and review decisions, then adjust it to the business's starting point and the evidence you collect."
+      },
+      {
+        "type": "heading",
+        "content": "Establish the First Month Baseline"
+      },
+      {
+        "type": "paragraph",
+        "content": "Begin with account access, accurate business information, and an inquiry journey that works. Record the services you want to grow, the areas you genuinely serve, and the jobs you have capacity to accept."
+      },
+      {
+        "type": "paragraph",
+        "content": "Save a baseline covering a meaningful period. Include website search activity, profile interactions, inquiries, and bookings where the data is available. Note unusual conditions such as a phone outage, a recent move, or a seasonal surge."
+      },
+      {
+        "type": "paragraph",
+        "content": "Agree on what your campaign will count as progress. A useful first-month plan might cover:"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "Access to the relevant profile, website, and reporting accounts.",
+          "Testing important forms and telephone links.",
+          "Reviewing core service pages and significant technical issues.",
+          "Recording current business details and important listings.",
+          "Prioritizing a manageable set of improvements."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "The output should be visible in a work record. Keep a short explanation of each change and the problem it addresses. \u201cOptimization completed\u201d is less useful than a note that the service page was rewritten to explain emergency availability and the inquiry form was repaired."
+      },
+      {
+        "type": "heading",
+        "content": "Look for Useful Signals in Months Two and Three"
+      },
+      {
+        "type": "paragraph",
+        "content": "During the next review period, check whether implemented improvements are being discovered and whether the customer journey is performing properly. Do not assume that publishing a page means it is already attracting the intended audience."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Search Console's performance report](https://support.google.com/webmasters/answer/7576553?hl=en) can show which queries and pages receive impressions and clicks in website search. Use it to examine service-level progress rather than relying only on total traffic."
+      },
+      {
+        "type": "paragraph",
+        "content": "For example, a roofing business may begin receiving more impressions for repair-related searches after improving its repair page. Investigate whether the queries match the work it accepts. If the traffic concerns materials it does not sell, the headline number needs context."
+      },
+      {
+        "type": "paragraph",
+        "content": "Review the quality of incoming inquiries as well. More requests outside the service area suggest a targeting or communication issue. More suitable inquiries with weak bookings may indicate missed calls, delayed responses, or limited appointment availability."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep a log of significant changes. If several pages, contact details, and tracking settings change at once, explain that the later result cannot confidently be attributed to one edit."
+      },
+      {
+        "type": "heading",
+        "content": "Review Business Outcomes in Months Four to Six"
+      },
+      {
+        "type": "paragraph",
+        "content": "By this stage, the campaign should have a substantial work history to review. Use it to compare the original problems, the actions taken, and the outcomes observed. The date itself does not establish that a target ranking should have been achieved."
+      },
+      {
+        "type": "paragraph",
+        "content": "Review area"
+      },
+      {
+        "type": "paragraph",
+        "content": "Question to answer"
+      },
+      {
+        "type": "paragraph",
+        "content": "Useful evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": "Delivery"
+      },
+      {
+        "type": "paragraph",
+        "content": "Did the agreed work happen?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Change log and completed page updates"
+      },
+      {
+        "type": "paragraph",
+        "content": "Visibility"
+      },
+      {
+        "type": "paragraph",
+        "content": "Are relevant services being discovered?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Comparable query, page, and profile reports"
+      },
+      {
+        "type": "paragraph",
+        "content": "Lead quality"
+      },
+      {
+        "type": "paragraph",
+        "content": "Are inquiries suitable for the business?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Source notes and inquiry outcomes"
+      },
+      {
+        "type": "paragraph",
+        "content": "Bookings"
+      },
+      {
+        "type": "paragraph",
+        "content": "Are suitable inquiries becoming jobs?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Appointment and completed-job records"
+      },
+      {
+        "type": "paragraph",
+        "content": "Economics"
+      },
+      {
+        "type": "paragraph",
+        "content": "Is the added work contributing enough value?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Job margins and campaign costs"
+      },
+      {
+        "type": "paragraph",
+        "content": "Compare equivalent periods where possible. A heating contractor should consider seasonality before treating a winter increase as evidence that one new article caused all the growth. Also note changes in staffing, prices, advertising, and service availability."
+      },
+      {
+        "type": "paragraph",
+        "content": "The next plan should follow the findings. A profitable service with improving visibility might deserve more useful project evidence. A page attracting unsuitable searches may need clearer scope. A strong inquiry flow with missed bookings may require an operational fix."
+      },
+      {
+        "type": "heading",
+        "content": "Investigate a Campaign That Is Not Progressing"
+      },
+      {
+        "type": "paragraph",
+        "content": "If the evidence is weak, ask specific questions. Have the priority changes been implemented? Can customers reach the business? Are the intended pages accessible? Does the profile accurately represent the operation? Is the measurement setup working?"
+      },
+      {
+        "type": "paragraph",
+        "content": "Then check whether the target is realistic. Google's [local ranking guidance](https://support.google.com/business/answer/7091) explains the importance of relevance, distance, and how well known the business is. A campaign cannot make distance irrelevant simply by listing more towns."
+      },
+      {
+        "type": "paragraph",
+        "content": "Ask the provider to connect its next recommendation to the evidence. More blog posts are useful when they address relevant customer needs. They are a poor default response to every stalled campaign, particularly if the core service pages or inquiry process still need work."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use an agreed review date to decide whether to continue, narrow the scope, or change the approach. That decision should be possible from the records rather than from a promise that results are always just one more month away."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Can Local SEO Produce Inquiries Quickly"
+      },
+      {
+        "type": "paragraph",
+        "content": "Some businesses may benefit quickly from a useful correction or improved customer journey. That does not establish a dependable timetable for every business or every search term."
+      },
+      {
+        "type": "heading",
+        "content": "Is Six Months Enough to Judge the Campaign"
+      },
+      {
+        "type": "paragraph",
+        "content": "It is a useful review point when there has been time to implement meaningful work. Judge the starting condition, delivery, measurement quality, market, and outcomes together."
+      },
+      {
+        "type": "heading",
+        "content": "Should Rankings Improve Every Month"
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid expecting a straight line. Compare consistent searches and locations over time and investigate important changes in context."
+      },
+      {
+        "type": "heading",
+        "content": "Should We Stop SEO Once We Reach a Goal"
+      },
+      {
+        "type": "paragraph",
+        "content": "Review the work still needed. Maintenance, new service information, and ongoing measurement may remain useful, but the scope should reflect the business's current needs."
+      },
+      {
+        "type": "heading",
+        "content": "Agree on Milestones Before the Campaign Starts"
+      },
+      {
+        "type": "paragraph",
+        "content": "Read the [local SEO ROI guide](/blog/does-local-seo-still-work-80-20-rule) alongside the [pricing plans](/pricing). For a campaign discussion, ask [LocalSurgeSEO](/contact) which early milestones and business outcomes would suit your starting position."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google SEO starter guide](https://developers.google.com/search/docs/fundamentals/seo-starter-guide)",
+          "[Search Console performance reporting](https://support.google.com/webmasters/answer/7576553?hl=en)",
+          "[Google explanation of local ranking](https://support.google.com/business/answer/7091)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "moving-business-google-maps-seo-checklist",
+    "title": "Moving Your Business? A Google Maps and SEO Checklist",
+    "category": "Citations & Architecture",
+    "author": {
+      "name": "Sarah Chen",
+      "role": "Head of Technical SEO",
+      "avatar": "SC"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/moving-business-google-maps-seo-checklist.webp",
+    "description": "Plan your business move with a checklist for your Google Business Profile, website, directory listings, customer links, and post-move monitoring.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "A move needs one accurate set of business details and a coordinated update across the places customers use. Record the old setup, update the existing business presence, and check the result after the move."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Keep a record of the current profile, website pages, and important listings.",
+          "Use the real new address and the appropriate address visibility settings.",
+          "Check customer-facing links, forms, and directions after the update.",
+          "Allow for verification and changes in the market around the new location."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Prepare One Record Before the Move"
+      },
+      {
+        "type": "paragraph",
+        "content": "The moving date is often fixed before anyone checks where the old address appears online. By then, the booking platform, website footer, social profiles, and directory accounts may all be managed by different people."
+      },
+      {
+        "type": "paragraph",
+        "content": "Create a shared record early. Include the current and new business details, who owns each account, when customers should use the new location, and who will confirm each update."
+      },
+      {
+        "type": "paragraph",
+        "content": "Record the Google Maps profile link, website URLs, review-request link, and important booking destinations. Keep screenshots of the existing profile and note any current account or verification issue. A move is harder to manage if access has already been lost."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use a simple tracker:"
+      },
+      {
+        "type": "paragraph",
+        "content": "Place to update"
+      },
+      {
+        "type": "paragraph",
+        "content": "Responsible person"
+      },
+      {
+        "type": "paragraph",
+        "content": "What to check"
+      },
+      {
+        "type": "paragraph",
+        "content": "Business Profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "Named account owner"
+      },
+      {
+        "type": "paragraph",
+        "content": "Address, visibility, pin, and current status"
+      },
+      {
+        "type": "paragraph",
+        "content": "Website"
+      },
+      {
+        "type": "paragraph",
+        "content": "Website editor"
+      },
+      {
+        "type": "paragraph",
+        "content": "Contact details, location copy, map, and forms"
+      },
+      {
+        "type": "paragraph",
+        "content": "Booking system"
+      },
+      {
+        "type": "paragraph",
+        "content": "Office or operations team"
+      },
+      {
+        "type": "paragraph",
+        "content": "Confirmation messages and arrival instructions"
+      },
+      {
+        "type": "paragraph",
+        "content": "Important directories"
+      },
+      {
+        "type": "paragraph",
+        "content": "Listing owner"
+      },
+      {
+        "type": "paragraph",
+        "content": "Current public details and login access"
+      },
+      {
+        "type": "paragraph",
+        "content": "Customer communications"
+      },
+      {
+        "type": "paragraph",
+        "content": "Service team"
+      },
+      {
+        "type": "paragraph",
+        "content": "Move date and directions customers receive"
+      },
+      {
+        "type": "paragraph",
+        "content": "Check the new premises against the way the business will operate. A public showroom, an office that receives customers, and a private service base can need different presentation."
+      },
+      {
+        "type": "heading",
+        "content": "Update the Google Business Profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "For a normal relocation of the same business, work with its existing profile. Google's [review transfer guidance](https://support.google.com/business/answer/3098204?hl=en) says not to create a new profile simply because the business changes physical location or ownership."
+      },
+      {
+        "type": "paragraph",
+        "content": "Google's [address instructions](https://support.google.com/business/answer/2853879?hl=en) describe editing the location and adjusting the map pin. Enter the real address accurately, including a genuine suite or unit where relevant. Check that the pin corresponds to the correct premises rather than a nearby road or another entrance."
+      },
+      {
+        "type": "paragraph",
+        "content": "If customers do not visit the business address, review whether it should be hidden and represented by service-area information instead. Update the underlying operating details through the correct process without advertising a private base as a walk-in shop."
+      },
+      {
+        "type": "paragraph",
+        "content": "Prepare for possible reverification after an address change. Keep appropriate access to the new premises and suitable business evidence available. Avoid describing an unoccupied future address as an established operating branch."
+      },
+      {
+        "type": "paragraph",
+        "content": "For an unusual move, a combined rebrand, or a complicated profile history, confirm the appropriate approach through official support. Creating several new listings can add confusion to an already complex case."
+      },
+      {
+        "type": "heading",
+        "content": "Revise Website Information and Customer Journeys"
+      },
+      {
+        "type": "paragraph",
+        "content": "Find the old address in the website's visible pages and reusable components. Common places include the footer, contact page, location page, embedded map, appointment instructions, and downloadable brochures. Check relevant structured business data as well."
+      },
+      {
+        "type": "paragraph",
+        "content": "Preserve a useful existing page URL where possible. If a URL genuinely needs to change, arrange an appropriate redirect from the old page to its relevant replacement. Avoid leaving an old page that implies the closed premises is still an active branch."
+      },
+      {
+        "type": "paragraph",
+        "content": "Review service-area claims. Moving the office does not necessarily change where technicians work, but a new dispatch base may affect travel times and appointment availability. Publish what the business can actually deliver."
+      },
+      {
+        "type": "paragraph",
+        "content": "Test the inquiry journey after the updates:"
+      },
+      {
+        "type": "numbered-list",
+        "content": "Step-by-Step Guidance:",
+        "items": [
+          "Open the contact page on a phone.",
+          "Follow the directions link and inspect the destination.",
+          "Call the published number.",
+          "Send a valid test inquiry through the agreed testing process.",
+          "Read the confirmation page and customer email.",
+          "Check whether reminders or calendar invitations still show the old address."
+        ]
+      },
+      {
+        "type": "paragraph",
+        "content": "This final step catches a common problem: the website looks correct while automated messages keep sending people to the previous premises."
+      },
+      {
+        "type": "heading",
+        "content": "Correct Important Directory Listings"
+      },
+      {
+        "type": "paragraph",
+        "content": "Start with the listings customers actually use and those the business already maintains. That may include other map platforms, major business directories, trade bodies, local chambers, and industry-specific sites."
+      },
+      {
+        "type": "paragraph",
+        "content": "Update the existing record where possible and keep the login details in the business's account inventory. Record the submission date and whether the public listing has changed."
+      },
+      {
+        "type": "paragraph",
+        "content": "Focus on meaningful agreement: the correct business, address where displayed, telephone number, website, and current operating details. Cosmetic differences in punctuation should not distract from a wrong postcode or disconnected phone line."
+      },
+      {
+        "type": "paragraph",
+        "content": "Some directories may take time to review updates, while others obtain data from another source. Note unresolved records and follow their correction process. Avoid creating additional profiles just because an old record has not changed immediately."
+      },
+      {
+        "type": "heading",
+        "content": "Monitor the New Location"
+      },
+      {
+        "type": "paragraph",
+        "content": "Once the move is complete, search for the business name and open the public result. Check the information from an account that is viewing the business as a customer. Ask someone unfamiliar with the new premises to test the directions."
+      },
+      {
+        "type": "paragraph",
+        "content": "Compare inquiries and visibility using consistent dates and locations. A new physical location can change which nearby searches are relevant. A short-term change should be investigated alongside verification status, inaccurate details, seasonality, and the actual move."
+      },
+      {
+        "type": "paragraph",
+        "content": "Check reviews separately. Google says reviews generally transfer automatically when a business moves and keeps the same name, with exceptions for certain categories. If the result looks wrong, document the issue and use the official support process rather than assuming a new listing is necessary."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep the tracker open until the important customer routes work. A submitted edit is a task in progress; the public result and functioning links are what customers experience."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Should We Mark the Business Permanently Closed Before Moving"
+      },
+      {
+        "type": "paragraph",
+        "content": "A continuing business that is relocating needs its move represented accurately. Do not treat a normal address update as the closure of the entire business. Review the official process for your circumstances."
+      },
+      {
+        "type": "heading",
+        "content": "Will Our Reviews Always Stay Exactly the Same"
+      },
+      {
+        "type": "paragraph",
+        "content": "Review handling depends on the change and business category. Record the current profile and check Google's review transfer guidance for your case."
+      },
+      {
+        "type": "heading",
+        "content": "Can We Keep the Old Address to Preserve Visibility"
+      },
+      {
+        "type": "paragraph",
+        "content": "Business information should describe the real operation. Do not retain an address as an active location after the business no longer operates there in an eligible way."
+      },
+      {
+        "type": "heading",
+        "content": "Do We Need a New Website Domain"
+      },
+      {
+        "type": "paragraph",
+        "content": "A physical move alone does not usually create a reason to replace a suitable domain. Update the business information and relevant pages first."
+      },
+      {
+        "type": "heading",
+        "content": "Make the Move Easier for Customers to Follow"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the [NAP consistency guide](/blog/what-is-nap-consistency-citation-guide) to review the wider listing record. For a move involving several branches or a new service market, discuss the scope through [LocalSurgeSEO's local SEO services](/local-seo)."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google business address guidance](https://support.google.com/business/answer/2853879?hl=en)",
+          "[Google review transfer guidance](https://support.google.com/business/answer/3098204?hl=en)",
+          "[Google business verification guidance](https://support.google.com/business/answer/7107242?hl=en)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "report-fake-business-listings-google-maps",
+    "title": "How to Report Fake Business Listings on Google Maps",
+    "category": "Google Maps & Local Pack",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/report-fake-business-listings-google-maps.webp",
+    "description": "Assess suspected Google Maps listing spam, document the relevant facts, and choose the appropriate route for reporting misleading business information.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "When a listing looks misleading, investigate the facts before reporting it. Different routes apply to an ordinary factual correction, a potentially fraudulent business listing, and an individual review."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Compare the claim on the profile with reliable public business information.",
+          "Record the listing URL, the disputed detail, and dated evidence.",
+          "Choose the reporting route that matches the issue.",
+          "Expect a review process rather than a guaranteed removal or ranking gain."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Distinguish Suspicious Details from Evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": "A new competitor appears above your business with a long service-filled name and a location you do not recognise. It may deserve investigation. Its position in the results does not itself show that the listing is ineligible."
+      },
+      {
+        "type": "paragraph",
+        "content": "Start with the actual claim. Is the business name inconsistent with its own branding? Does the listed phone number lead somewhere unrelated? Does the website describe a different operation? Separate a question you want answered from a fact you can document."
+      },
+      {
+        "type": "paragraph",
+        "content": "A descriptive name is not automatically false. Some businesses legitimately include their trade or location in their real-world name. Similarly, a hidden address can be appropriate for a mobile service business. A shared building can contain several distinct businesses."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google's business representation guidelines](https://support.google.com/business/answer/3038177?hl=en) provide the basis for assessing names, addresses, eligibility, and other profile details. Match your concern to a specific requirement instead of assuming that an unusual-looking listing must be fake."
+      },
+      {
+        "type": "paragraph",
+        "content": "Avoid treating old photographs or a single incomplete directory record as conclusive. Public information can be out of date, and your evidence should acknowledge that possibility."
+      },
+      {
+        "type": "heading",
+        "content": "Build a Concise Factual Record"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use information that is publicly available or that your business is authorized to use. Save the full public Maps URL so the reviewer can identify the exact place."
+      },
+      {
+        "type": "paragraph",
+        "content": "A short record should make the concern easy to check:"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record item"
+      },
+      {
+        "type": "paragraph",
+        "content": "Useful detail"
+      },
+      {
+        "type": "paragraph",
+        "content": "Profile"
+      },
+      {
+        "type": "paragraph",
+        "content": "Exact public Maps link"
+      },
+      {
+        "type": "paragraph",
+        "content": "Disputed claim"
+      },
+      {
+        "type": "paragraph",
+        "content": "The specific name, number, URL, or other detail"
+      },
+      {
+        "type": "paragraph",
+        "content": "Observation"
+      },
+      {
+        "type": "paragraph",
+        "content": "What you found, stated without speculation"
+      },
+      {
+        "type": "paragraph",
+        "content": "Evidence"
+      },
+      {
+        "type": "paragraph",
+        "content": "Relevant public page or dated screenshot"
+      },
+      {
+        "type": "paragraph",
+        "content": "Date"
+      },
+      {
+        "type": "paragraph",
+        "content": "When the information was checked"
+      },
+      {
+        "type": "paragraph",
+        "content": "Requested review"
+      },
+      {
+        "type": "paragraph",
+        "content": "The issue you want Google to assess"
+      },
+      {
+        "type": "paragraph",
+        "content": "For example, distinguish \u201cthe listed number redirected to an unrelated business when checked on this date\u201d from \u201cthis company is stealing all our leads.\u201d The first statement identifies something a reviewer can investigate. The second alleges motives without establishing what happened."
+      },
+      {
+        "type": "paragraph",
+        "content": "Do not publish personal information about owners or employees to strengthen a complaint. Keep the evidence about the listing and the relevant policy issue."
+      },
+      {
+        "type": "heading",
+        "content": "Select the Correct Reporting Route"
+      },
+      {
+        "type": "heading",
+        "content": "An Ordinary Information Correction"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the Maps information-editing process when the issue is a factual correction, such as outdated public details. Describe the correction accurately. A typo does not need to be escalated into an allegation of fraud."
+      },
+      {
+        "type": "heading",
+        "content": "A Potentially Misleading or Ineligible Listing"
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google Maps reporting guidance](https://support.google.com/maps/answer/16109801?hl=en) describes using Suggest an edit and the appropriate reporting options for misleading listings. Follow the labels and choices currently shown in the interface."
+      },
+      {
+        "type": "paragraph",
+        "content": "Google's separate [profile removal guidance](https://support.google.com/business/answer/16043467?hl=en) explains the route for a business that never existed or is not eligible. Choose the reason that matches the evidence. Do not mark an operating business permanently closed simply because you disagree with a detail on its listing."
+      },
+      {
+        "type": "heading",
+        "content": "Suspected Fraud Involving the Name Phone Number or Website"
+      },
+      {
+        "type": "paragraph",
+        "content": "The [Business Redressal Complaint Form](https://support.google.com/business/contact/business_redressal_form) is intended for suspected misleading information or fraudulent activity concerning a business name, phone number, or URL. Google says this form is not the route for a simple correction and does not guarantee action or status updates."
+      },
+      {
+        "type": "paragraph",
+        "content": "Read the form's current scope before submitting. If the problem concerns another Maps feature, use the reporting route Google identifies for that feature."
+      },
+      {
+        "type": "heading",
+        "content": "An Individual Review or Review Incentive Scheme"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use the review reporting process for a specific review. Reporting business conduct, such as an incentive scheme, can require a different route from reporting the review itself. Google's Maps help explains those distinctions."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep these cases separate in your records. A profile may be eligible even when a particular piece of content needs review."
+      },
+      {
+        "type": "heading",
+        "content": "Write a Clear Complaint"
+      },
+      {
+        "type": "paragraph",
+        "content": "Organize the explanation around the disputed detail, the evidence, and the requested assessment. A short, specific account is usually easier to understand than a long history of competitive frustration."
+      },
+      {
+        "type": "paragraph",
+        "content": "Here is an illustrative structure for a website-related concern:"
+      },
+      {
+        "type": "paragraph",
+        "content": "Profile URL: [Public Maps URL]"
+      },
+      {
+        "type": "paragraph",
+        "content": "Concern: The profile links to [Displayed URL], which appeared to describe a different business when checked on [Date]."
+      },
+      {
+        "type": "paragraph",
+        "content": "Evidence: [Relevant public page and screenshot]. The attached material identifies the business shown at that destination and the inconsistency with this profile."
+      },
+      {
+        "type": "paragraph",
+        "content": "Request: Please review whether the profile's website information is misleading under the applicable business guidelines."
+      },
+      {
+        "type": "paragraph",
+        "content": "Adapt that structure to facts you can support. Avoid pre-written accusations that assume every case involves the same violation."
+      },
+      {
+        "type": "paragraph",
+        "content": "Before submitting, check that the URL works, the screenshots include enough context, and the explanation corresponds to the form you selected. Keep a copy of what you sent."
+      },
+      {
+        "type": "heading",
+        "content": "Monitor the Result Responsibly"
+      },
+      {
+        "type": "paragraph",
+        "content": "Record the submission date and any acknowledgement the chosen process provides. Some routes may not provide progress updates. Check the public result periodically without assuming that silence means approval or rejection."
+      },
+      {
+        "type": "paragraph",
+        "content": "If you find new, relevant evidence, consider the appropriate follow-up route. Repeated identical submissions or asking other people to mass-report a competitor does not improve the underlying evidence."
+      },
+      {
+        "type": "paragraph",
+        "content": "Continue improving your own business presence while the issue is reviewed. Accurate details, useful service information, and a working inquiry journey remain worthwhile regardless of the complaint outcome. Removing a misleading listing would not guarantee a particular position for your business."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Is a Business Name with Keywords Automatically Spam"
+      },
+      {
+        "type": "paragraph",
+        "content": "No. Compare the name with how the business is represented in the real world and the applicable guidelines. The presence of a service word alone is insufficient."
+      },
+      {
+        "type": "heading",
+        "content": "Can a Business Hide Its Address Legitimately"
+      },
+      {
+        "type": "paragraph",
+        "content": "Yes. Service-area businesses can have valid reasons to hide an address where customers are not served. Evaluate the business model before reporting it."
+      },
+      {
+        "type": "heading",
+        "content": "Can Google Guarantee Removal After a Complaint"
+      },
+      {
+        "type": "paragraph",
+        "content": "No. The relevant team reviews the information against the applicable requirements. Keep your request factual and avoid making promises about the outcome."
+      },
+      {
+        "type": "heading",
+        "content": "Should We Report a Competitor Because It Ranks Above Us"
+      },
+      {
+        "type": "paragraph",
+        "content": "A better ranking is not a reporting reason. Submit concerns about an identifiable factual problem or suspected violation supported by evidence."
+      },
+      {
+        "type": "heading",
+        "content": "Keep the Focus on Accurate Business Information"
+      },
+      {
+        "type": "paragraph",
+        "content": "For review-specific concerns, see the [fake review reporting guide](/blog/how-to-remove-fake-negative-google-reviews-guide). If your own visibility has changed, the [local ranking recovery audit](/blog/local-search-ranking-drops-algorithm-update-audit-guide) provides a separate diagnostic path. [Contact LocalSurgeSEO](/contact) to discuss the wider profile setup."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Google business representation guidelines](https://support.google.com/business/answer/3038177?hl=en)",
+          "[Google Maps business reporting routes](https://support.google.com/maps/answer/16109801?hl=en)",
+          "[Google profile removal guidance](https://support.google.com/business/answer/16043467?hl=en)",
+          "[Google Business Redressal Complaint Form](https://support.google.com/business/contact/business_redressal_form)"
+        ]
+      }
+    ]
+  },
+  {
+    "slug": "local-keyword-research-contractors-page-plan",
+    "title": "Local Keyword Research for Contractors: A Page Plan",
+    "category": "Local Content Strategy",
+    "author": {
+      "name": "Sarah Chen",
+      "role": "Head of Technical SEO",
+      "avatar": "SC"
+    },
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/local-keyword-research-contractors-page-plan.webp",
+    "description": "Find useful local keywords for your contracting business, group related searches, and map them to service pages, location pages, and practical blog topics.",
+    "sections": [
+      {
+        "type": "paragraph",
+        "content": "Good keyword research connects the services you actually provide with the questions customers ask. Its useful output is a clear page plan, with related searches grouped around the same customer need."
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Takeaways:",
+        "items": [
+          "Begin with real services, customer language, and the areas you serve.",
+          "Use local data carefully and distinguish advertising metrics from organic difficulty.",
+          "Give each important search intent a suitable main destination.",
+          "Improve existing pages before creating overlapping alternatives."
+        ]
+      },
+      {
+        "type": "heading",
+        "content": "Begin with the Work You Want to Win"
+      },
+      {
+        "type": "paragraph",
+        "content": "A plumbing company can attract inquiries for work it does not want. It may install water heaters but receive repeated requests to buy spare parts, or cover one county while its website suggests statewide availability."
+      },
+      {
+        "type": "paragraph",
+        "content": "Start the research with the business, not a long exported keyword list. Write down the services you provide, the locations you realistically cover, emergency availability, and the work you have capacity to accept."
+      },
+      {
+        "type": "paragraph",
+        "content": "Separate services that sound similar but lead to different customer decisions. A blocked kitchen drain, a main sewer problem, and a replacement water heater may require different explanations. At the same time, several phrases can describe the same service and belong on one useful page."
+      },
+      {
+        "type": "paragraph",
+        "content": "Ask the people who answer calls what customers say. A homeowner may describe a symptom rather than name the technical service. Those phrases can improve the page's clarity even when they never become a separate target keyword."
+      },
+      {
+        "type": "heading",
+        "content": "Collect Customer Search Language"
+      },
+      {
+        "type": "paragraph",
+        "content": "Use several sources rather than relying on one tool. Suitable starting points include anonymized inquiry themes, existing website search performance, Google's suggestions, and relevant search results."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Search Console's performance report](https://support.google.com/webmasters/answer/7576553?hl=en) can help identify queries and pages already receiving search impressions or clicks. Existing visibility is useful evidence when deciding whether to improve a page or start a new one."
+      },
+      {
+        "type": "paragraph",
+        "content": "[Google Keyword Planner](https://support.google.com/google-ads/answer/7337243) can suggest related searches and provide estimates. It is built for advertising research, so use its figures in that context. Google currently requires account setup, including billing information, to access basic keyword discovery features."
+      },
+      {
+        "type": "paragraph",
+        "content": "Collect phrases into a working list with a note explaining why each matters. Avoid copying customer contact details or private job information into the research file."
+      },
+      {
+        "type": "paragraph",
+        "content": "For an illustrative plumbing business, useful groups might include emergency repairs, drain clearing, water heater replacement, and questions about call-out charges. Keep a separate list of irrelevant searches, such as training courses or retail products the business does not sell."
+      },
+      {
+        "type": "heading",
+        "content": "Assess Local Demand and Search Intent"
+      },
+      {
+        "type": "paragraph",
+        "content": "Set research tools to the geography relevant to the campaign. [Google's Keyword Planner refinement guidance](https://support.google.com/google-ads/answer/6325025?hl=en) explains location settings and other filters. A national estimate should not be presented as the number of potential customers in one suburb."
+      },
+      {
+        "type": "paragraph",
+        "content": "Small local estimates can be incomplete or grouped. A low reported number is one input, not proof that nobody needs the service. Consider the value of the job, relevance to the business, existing inquiry evidence, and the search results themselves."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep advertising competition and organic difficulty separate. A Keyword Planner competition label concerns advertisers. It does not directly measure how difficult it will be to rank a website organically."
+      },
+      {
+        "type": "paragraph",
+        "content": "Inspect representative results. Does the query bring up local businesses, shopping pages, instructional articles, or several kinds of result? Note the location and date of your check because local results can vary by where the search happens."
+      },
+      {
+        "type": "paragraph",
+        "content": "Include plain service searches, service-plus-city phrases, questions, and implicit local intent. Treat \u201cnear me\u201d as a way people express a need for nearby help. Repeating that phrase across headings is not a substitute for accurate service and location information."
+      },
+      {
+        "type": "heading",
+        "content": "Map Searches to the Right Pages"
+      },
+      {
+        "type": "paragraph",
+        "content": "Group searches by the task the customer wants to complete. Then choose the most useful existing or proposed page for that task."
+      },
+      {
+        "type": "paragraph",
+        "content": "Example search group"
+      },
+      {
+        "type": "paragraph",
+        "content": "Likely customer need"
+      },
+      {
+        "type": "paragraph",
+        "content": "Suitable main page"
+      },
+      {
+        "type": "paragraph",
+        "content": "Emergency plumber and urgent plumbing repair"
+      },
+      {
+        "type": "paragraph",
+        "content": "Find available help"
+      },
+      {
+        "type": "paragraph",
+        "content": "Emergency plumbing service page"
+      },
+      {
+        "type": "paragraph",
+        "content": "Water heater replacement and hot water heater installation"
+      },
+      {
+        "type": "paragraph",
+        "content": "Compare a replacement service"
+      },
+      {
+        "type": "paragraph",
+        "content": "Water heater replacement page"
+      },
+      {
+        "type": "paragraph",
+        "content": "Plumber in a genuinely served nearby city"
+      },
+      {
+        "type": "paragraph",
+        "content": "Confirm service coverage"
+      },
+      {
+        "type": "paragraph",
+        "content": "Useful location or service-area page"
+      },
+      {
+        "type": "paragraph",
+        "content": "What affects a plumber's call-out charge"
+      },
+      {
+        "type": "paragraph",
+        "content": "Understand likely costs"
+      },
+      {
+        "type": "paragraph",
+        "content": "Pricing explanation or cost article"
+      },
+      {
+        "type": "paragraph",
+        "content": "How to prepare for a plumbing appointment"
+      },
+      {
+        "type": "paragraph",
+        "content": "Prepare for a booked visit"
+      },
+      {
+        "type": "paragraph",
+        "content": "Practical customer guide"
+      },
+      {
+        "type": "paragraph",
+        "content": "The examples are illustrative, not search-volume findings. The correct destination depends on the business's actual offering and what the searcher needs to know."
+      },
+      {
+        "type": "paragraph",
+        "content": "Use a main page for close variations of the same intent. Creating separate articles for every synonym can split useful information across thin, overlapping pages. Before adding a page, check whether an existing one can answer the need properly."
+      },
+      {
+        "type": "paragraph",
+        "content": "For a location page, add information that is genuinely useful for that area and service. A place-name swap does not create a helpful new resource. Google's [people-first content guidance](https://developers.google.com/search/docs/fundamentals/creating-helpful-content) is a useful reference when deciding whether a page adds substance."
+      },
+      {
+        "type": "heading",
+        "content": "Prioritize a Manageable Publishing Plan"
+      },
+      {
+        "type": "paragraph",
+        "content": "Score opportunities using business relevance, customer value, existing page quality, and the work needed to publish something useful. Search volume can inform the choice, but it should not make it alone."
+      },
+      {
+        "type": "paragraph",
+        "content": "An established service page that omits appointment availability may be a better first task than a broad article with a larger estimated audience. An important pricing question may deserve a new guide if customers repeatedly ask it and the website does not answer it."
+      },
+      {
+        "type": "paragraph",
+        "content": "Keep the plan small enough to execute. For each priority, record the intended page, the main customer question, supporting information required, and how you will assess the result. Ask the service team for factual details before writing."
+      },
+      {
+        "type": "paragraph",
+        "content": "After publication, look at relevant queries, inquiries, and customer feedback. Update the page when the evidence suggests a clearer explanation is needed. Avoid repeatedly changing the target because of one ranking fluctuation."
+      },
+      {
+        "type": "heading",
+        "content": "Frequently Asked Questions"
+      },
+      {
+        "type": "heading",
+        "content": "Should Every Keyword Have Its Own Page"
+      },
+      {
+        "type": "paragraph",
+        "content": "No. Related phrases often belong together when they represent the same need. Separate pages should have distinct purposes and enough useful information to support them."
+      },
+      {
+        "type": "heading",
+        "content": "Are Keywords with Low Reported Volume Worth Considering"
+      },
+      {
+        "type": "paragraph",
+        "content": "They can be. Consider service relevance, job value, local demand evidence, and whether the page helps customers make a decision."
+      },
+      {
+        "type": "heading",
+        "content": "Should We Include Every Nearby City"
+      },
+      {
+        "type": "paragraph",
+        "content": "Only represent areas the business actually serves. Decide whether a separate page adds useful information rather than assuming each city needs one."
+      },
+      {
+        "type": "heading",
+        "content": "Do We Need Separate Pages for Conversational Questions"
+      },
+      {
+        "type": "paragraph",
+        "content": "Often a clear section on a service page or an existing article is enough. Create a separate guide when the question needs a substantial answer of its own."
+      },
+      {
+        "type": "heading",
+        "content": "Turn the Research into Useful Pages"
+      },
+      {
+        "type": "paragraph",
+        "content": "Review the [service-area page blueprint](/blog/service-area-pages-conversion-wireframes-blueprint) and the [guide to overlapping location and service-area pages](/blog/fixing-keyword-cannibalization-multi-location-vs-sab-pages). For a broader content plan, discuss your services and coverage through [LocalSurgeSEO's local SEO services](/local-seo)."
+      },
+      {
+        "type": "heading",
+        "content": "Sources and Further Reading"
+      },
+      {
+        "type": "bullet-list",
+        "content": "Key Details:",
+        "items": [
+          "[Search Console performance reporting](https://support.google.com/webmasters/answer/7576553?hl=en)",
+          "[Google Keyword Planner overview](https://support.google.com/google-ads/answer/7337243)",
+          "[Google Keyword Planner location and refinement guidance](https://support.google.com/google-ads/answer/6325025?hl=en)",
+          "[Google guidance on helpful people-first content](https://developers.google.com/search/docs/fundamentals/creating-helpful-content)"
         ]
       }
     ]

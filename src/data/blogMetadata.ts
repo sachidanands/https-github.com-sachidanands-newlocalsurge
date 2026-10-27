@@ -100,12 +100,12 @@ export const BLOG_METADATA: BlogMetaItem[] = [
   },
   {
     "slug": "local-seo-2026-near-me-is-dead",
-    "title": "Why \"Near Me\" Is Dead: How Conversational AI and Entity Proximity Replaced It",
+    "title": "How Near Me and Conversational Searches Connect Customers to Local Businesses",
     "category": "Local SEO",
     "date": "August 14, 2026",
     "readTime": "11 min read",
     "image": "/assets/blog_img/local-seo-near-me-evolution.webp",
-    "description": "Why static \"near me\" keyword stuffing is obsolete, and how conversational AI engines, entity spatial mapping, and structured citations determine modern local rankings.",
+    "description": "How near me, conversational queries, and local intent connect customers to businesses, and how to build useful service and location pages without repetitive keyword stuffing.",
     "author": {
       "name": "Sarah Chen",
       "role": "Chief SEO Architect",
@@ -324,7 +324,7 @@ export const BLOG_METADATA: BlogMetaItem[] = [
   },
   {
     "slug": "llmstxt-blueprint-ai-sitemap-local-business",
-    "title": "The llms.txt Blueprint: Why Every Local Business Needs an AI Sitemap",
+    "title": "llms.txt for Local Businesses: Uses and Limits",
     "category": "AI Search & Automation",
     "date": "August 28, 2026",
     "readTime": "12 min read",
@@ -464,7 +464,7 @@ export const BLOG_METADATA: BlogMetaItem[] = [
   },
   {
     "slug": "managing-multiple-google-business-profiles-bulk-verification",
-    "title": "Managing 10+ Google Business Profiles: Bulk Verification, Review Ops, and Geo-Pages",
+    "title": "Managing Multiple Google Business Profiles: Bulk Management, Verification, and Operations",
     "category": "Multi-Location GBP",
     "date": "September 10, 2026",
     "readTime": "9 min read",
@@ -670,6 +670,146 @@ export const BLOG_METADATA: BlogMetaItem[] = [
       "name": "Alex Rivera",
       "role": "Lead SEO Strategist",
       "avatar": "AR"
+    }
+  }  ,
+  {
+    "slug": "local-seo-cost-small-business",
+    "title": "How Much Does Local SEO Cost for a Small Business?",
+    "category": "Growth & Strategy",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/local-seo-cost-small-business.webp",
+    "description": "Understand local SEO costs, common deliverables, setup fees, and monthly budgets so you can compare agency quotes and choose the right support.",
+    "author": {
+      "name": "Alex Rivera",
+      "role": "Lead SEO Strategist",
+      "avatar": "AR"
+    }
+  },
+  {
+    "slug": "track-google-maps-leads-calls-forms",
+    "title": "Track Google Maps Leads with GA4 and Call Tracking",
+    "category": "Revenue & Analytics",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/track-google-maps-leads-calls-forms.webp",
+    "description": "Learn how to track Google Maps website visits, calls, and successful form submissions, then connect those inquiries to qualified leads and booked jobs.",
+    "author": {
+      "name": "Marcus Vance",
+      "role": "Director of Organic Growth",
+      "avatar": "MV"
+    }
+  },
+  {
+    "slug": "google-business-profile-already-claimed-recover-access",
+    "title": "Google Business Profile Already Claimed? Recover Access",
+    "category": "Google Business Profile",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/google-business-profile-already-claimed-recover-access.webp",
+    "description": "Recover access to a Google Business Profile managed by a former agency, employee, or unknown account, and put a clear ownership process in place.",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    }
+  },
+  {
+    "slug": "duplicate-google-business-profiles-merge-remove",
+    "title": "Duplicate Google Business Profiles: Merge or Remove?",
+    "category": "Google Business Profile",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/duplicate-google-business-profiles-merge-remove.webp",
+    "description": "Work out whether two Google Business Profiles are duplicates, choose the right resolution route, and protect important business details and reviews.",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    }
+  },
+  {
+    "slug": "ask-customers-google-reviews-templates",
+    "title": "How to Ask for Google Reviews: Email and Text Templates",
+    "category": "Reputation Management",
+    "date": "October 27, 2026",
+    "readTime": "6 min read",
+    "image": "/assets/blog_img/ask-customers-google-reviews-templates.webp",
+    "description": "Build a practical Google review request process with neutral email and text templates, sensible follow-ups, and guidance for your service team.",
+    "author": {
+      "name": "Alex Rivera",
+      "role": "Lead SEO Strategist",
+      "avatar": "AR"
+    }
+  },
+  {
+    "slug": "google-business-profile-video-verification-checklist",
+    "title": "Google Business Profile Video Verification Checklist",
+    "category": "Google Business Profile",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/google-business-profile-video-verification-checklist.webp",
+    "description": "Prepare for Google Business Profile video verification with storefront and service-area examples, a filming checklist, and practical troubleshooting.",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    }
+  },
+  {
+    "slug": "how-long-local-seo-takes-six-months",
+    "title": "How Long Does Local SEO Take? A Six Month Planning Guide",
+    "category": "Growth & Strategy",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/how-long-local-seo-takes-six-months.webp",
+    "description": "Understand what affects local SEO progress, plan useful milestones for the first six months, and measure inquiries alongside rankings and traffic.",
+    "author": {
+      "name": "Alex Rivera",
+      "role": "Lead SEO Strategist",
+      "avatar": "AR"
+    }
+  },
+  {
+    "slug": "moving-business-google-maps-seo-checklist",
+    "title": "Moving Your Business? A Google Maps and SEO Checklist",
+    "category": "Citations & Architecture",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/moving-business-google-maps-seo-checklist.webp",
+    "description": "Plan your business move with a checklist for your Google Business Profile, website, directory listings, customer links, and post-move monitoring.",
+    "author": {
+      "name": "Sarah Chen",
+      "role": "Head of Technical SEO",
+      "avatar": "SC"
+    }
+  },
+  {
+    "slug": "report-fake-business-listings-google-maps",
+    "title": "How to Report Fake Business Listings on Google Maps",
+    "category": "Google Maps & Local Pack",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/report-fake-business-listings-google-maps.webp",
+    "description": "Assess suspected Google Maps listing spam, document the relevant facts, and choose the appropriate route for reporting misleading business information.",
+    "author": {
+      "name": "David Sterling",
+      "role": "Local Search Architect",
+      "avatar": "DS"
+    }
+  },
+  {
+    "slug": "local-keyword-research-contractors-page-plan",
+    "title": "Local Keyword Research for Contractors: A Page Plan",
+    "category": "Local Content Strategy",
+    "date": "October 27, 2026",
+    "readTime": "5 min read",
+    "image": "/assets/blog_img/local-keyword-research-contractors-page-plan.webp",
+    "description": "Find useful local keywords for your contracting business, group related searches, and map them to service pages, location pages, and practical blog topics.",
+    "author": {
+      "name": "Sarah Chen",
+      "role": "Head of Technical SEO",
+      "avatar": "SC"
     }
   }
 ];
