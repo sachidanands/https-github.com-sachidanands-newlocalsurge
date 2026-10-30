@@ -1,5 +1,114 @@
 [
   {
+    "id": "site_localsurge",
+    "created_at": "2026-10-30T18:00:00.000Z",
+    "updated_at": "2026-10-30T18:00:00.000Z",
+    "business_name": "Local Surge SEO",
+    "industry": "Local SEO & AI FrontDesk Agency",
+    "website_url": "https://localsurgeseo.com",
+    "phone": "+1 (909) 707-5075",
+    "emergency_phone": "+1 (909) 707-5075",
+    "contact_name": "Local Surge Team",
+    "contact_email": "contact@localsurgeseo.com",
+    "service_radius": {
+      "city": "United States & Canada",
+      "radiusMiles": 5000,
+      "zipCodes": []
+    },
+    "estimate_policy": "Free Preliminary Local SEO Strategy Audit, complimentary Single-Page website consultation, and instant 30-Day Free Trial for AI FrontDesk.",
+    "working_hours": {
+      "weekday": "8:00 AM - 7:00 PM EST",
+      "weekend": "9:00 AM - 5:00 PM EST",
+      "emergency247": true,
+      "holidayNote": "SurgeBot 24/7 AI answering active continuously."
+    },
+    "widget_config": {
+      "themeColor": "#10b981",
+      "greeting": "👋 Hi there! I'm SurgeBot, your Local Surge AI SEO Strategist. How can I help you grow your local business today?",
+      "speedToLeadCity": "Nationwide",
+      "quickChips": [
+        "🚀 Free Single-Page Website",
+        "📍 Boost My Google Ranking",
+        "⚡ Test AI FrontDesk (30-Day Free)",
+        "📞 Book 15-Min Strategy Call"
+      ],
+      "phonePrompt": "Tell me about your business or enter your website/phone, and I'll prepare a custom local ranking strategy.",
+      "position": "bottom-right",
+      "showPoweredBy": true
+    },
+    "custom_instructions": "You represent Local Surge SEO (localsurgeseo.com). Help local businesses, home service contractors, healthcare clinics, and service professionals rank #1 in the Google Local 3-Pack and capture missed calls using AI FrontDesk. Highlight our Free Single-Page Blast website promotion, Starter Boost ($999/mo), Premium Surge ($1999/mo), and the 30-Day Free Trial for SurgeBot AI FrontDesk. Actively collect their Business Name, Website/GBP link, Target City, and best Contact Phone or Email to deliver their custom SEO Strategy Audit.",
+    "status": "active_paid",
+    "feature_flags": {
+      "enablePhotoUpload": false,
+      "enableEmailDispatch": true,
+      "enableSmsDispatch": false,
+      "enablePhoneCallback": true,
+      "enableEmergencyBanner": true,
+      "enableDirectBooking": false,
+      "enableCustomBranding": false,
+      "planTier": "standard_paid"
+    },
+    "scraped_knowledge": {
+      "businessName": "Local Surge SEO",
+      "industry": "Local SEO & AI Dispatch",
+      "tagline": "Turn Google Local Searches & Missed Calls into Booked Revenue",
+      "primaryServices": [
+        "Google Business Profile (GBP) & Map Pack Domination",
+        "Free Single-Page Blast High-Converting Websites",
+        "SurgeBot 24/7 Autonomous AI FrontDesk Dispatcher",
+        "Multi-Location District & State SEO Landing Pages",
+        "NAP Consistency & High-Authority Local Citation Building",
+        "On-Page Keyword Optimization & Schema Markup"
+      ],
+      "serviceAreas": [
+        "United States",
+        "Canada",
+        "California",
+        "Texas",
+        "Florida",
+        "New York",
+        "Nationwide Metro Areas"
+      ],
+      "emergencyPolicy": "24/7 AI lead capture and instant dispatch notification to local business owners within 60 seconds.",
+      "estimatePolicy": "100% Free preliminary strategy review, local competitor rank audit, and free single-page layout consultation.",
+      "pricingCues": [
+        "Single-Page Blast: $0 / Free Promotional Plan (High-converting local storefront, delivered in 2-3 business days)",
+        "Starter Boost: $999/month (Complete GBP synchronization, citation cleanup, core local keyword rankings)",
+        "Premium Surge: $1999/month (Multi-location dominance, advanced schema, programmatic location pages, aggressive citation velocity)",
+        "AI FrontDesk SurgeBot: 30-Day Free Trial, then $99-$199/month with instant setup across WordPress, Wix, Squarespace, Shopify, or GTM"
+      ],
+      "faqs": [
+        {
+          "question": "What is the Single-Page Blast Free Plan?",
+          "answer": "We provide a complimentary, high-performance single-page storefront website blueprint designed specifically for Google Local 3-Pack rankings and fast phone call conversions, delivered in 2 to 3 business days."
+        },
+        {
+          "question": "How does the AI FrontDesk work for contractors and local businesses?",
+          "answer": "SurgeBot is an embeddable 24/7 AI assistant that lives on your site, answers customer inquiries about services, pricing, and emergency procedures, qualifies homeowner leads, and instantly dispatches customer details to your phone and email."
+        },
+        {
+          "question": "How long does it take to rank on Google Maps?",
+          "answer": "Initial citation synchronization and GBP profile optimization typically yield visible visibility gains within 2 to 4 weeks, with top-3 local pack dominance solidifying over 60 to 90 days."
+        },
+        {
+          "question": "Can I test the AI FrontDesk on my own website first?",
+          "answer": "Yes! You can generate a 30-Day Free Trial instantly on our /ai-frontdesk page by entering your domain. You'll get a single line of script to add via Google Tag Manager, WordPress, Wix, Squarespace, or HTML."
+        }
+      ],
+      "keyFacts": [
+        "Serving over 500+ local contractors and service businesses across North America",
+        "Direct Phone: +1 (909) 707-5075",
+        "Official Email: contact@localsurgeseo.com",
+        "Headquarters: San Jose, California"
+      ],
+      "extractedAt": "2026-10-30T18:00:00.000Z",
+      "rawPageCount": 25
+    },
+    "is_trial": false,
+    "is_expired": false,
+    "plan_tier": "standard_paid"
+  },
+  {
     "id": "trial_testbusiness_com_mue8rw3t",
     "created_at": "2026-09-23T15:12:24.905Z",
     "updated_at": "2026-09-23T15:12:38.132Z",

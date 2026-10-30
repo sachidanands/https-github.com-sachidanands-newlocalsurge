@@ -486,6 +486,115 @@ function initDb() {
     if (!fs.existsSync(FRONTDESK_SITES_FILE)) {
       const initialSites = [
         {
+          id: "site_localsurge",
+          created_at: new Date().toISOString(),
+          updated_at: new Date().toISOString(),
+          business_name: "Local Surge SEO",
+          industry: "Local SEO & AI FrontDesk Agency",
+          website_url: "https://localsurgeseo.com",
+          phone: "+1 (909) 707-5075",
+          emergency_phone: "+1 (909) 707-5075",
+          contact_name: "Local Surge Team",
+          contact_email: "contact@localsurgeseo.com",
+          service_radius: {
+            city: "United States & Canada",
+            radiusMiles: 5000,
+            zipCodes: []
+          },
+          estimate_policy: "Free Preliminary Local SEO Strategy Audit, complimentary Single-Page website consultation, and instant 30-Day Free Trial for AI FrontDesk.",
+          working_hours: {
+            weekday: "8:00 AM - 7:00 PM EST",
+            weekend: "9:00 AM - 5:00 PM EST",
+            emergency247: true,
+            holidayNote: "SurgeBot 24/7 AI answering active continuously."
+          },
+          widget_config: {
+            themeColor: "#10b981",
+            greeting: "👋 Hi there! I'm SurgeBot, your Local Surge AI SEO Strategist. How can I help you grow your local business today?",
+            speedToLeadCity: "Nationwide",
+            quickChips: [
+              "🚀 Free Single-Page Website",
+              "📍 Boost My Google Ranking",
+              "⚡ Test AI FrontDesk (30-Day Free)",
+              "📞 Book 15-Min Strategy Call"
+            ],
+            phonePrompt: "Tell me about your business or enter your website/phone, and I'll prepare a custom local ranking strategy.",
+            position: "bottom-right",
+            showPoweredBy: true
+          },
+          custom_instructions: "You represent Local Surge SEO (localsurgeseo.com). Help local businesses, home service contractors, healthcare clinics, and service professionals rank #1 in the Google Local 3-Pack and capture missed calls using AI FrontDesk. Highlight our Free Single-Page Blast website promotion, Starter Boost ($999/mo), Premium Surge ($1999/mo), and the 30-Day Free Trial for SurgeBot AI FrontDesk. Actively collect their Business Name, Website/GBP link, Target City, and best Contact Phone or Email to deliver their custom SEO Strategy Audit.",
+          status: "active_paid",
+          feature_flags: {
+            enablePhotoUpload: false,
+            enableEmailDispatch: true,
+            enableSmsDispatch: false,
+            enablePhoneCallback: true,
+            enableEmergencyBanner: true,
+            enableDirectBooking: false,
+            enableCustomBranding: false,
+            planTier: "standard_paid"
+          },
+          scraped_knowledge: {
+            businessName: "Local Surge SEO",
+            industry: "Local SEO & AI Dispatch",
+            tagline: "Turn Google Local Searches & Missed Calls into Booked Revenue",
+            primaryServices: [
+              "Google Business Profile (GBP) & Map Pack Domination",
+              "Free Single-Page Blast High-Converting Websites",
+              "SurgeBot 24/7 Autonomous AI FrontDesk Dispatcher",
+              "Multi-Location District & State SEO Landing Pages",
+              "NAP Consistency & High-Authority Local Citation Building",
+              "On-Page Keyword Optimization & Schema Markup"
+            ],
+            serviceAreas: [
+              "United States",
+              "Canada",
+              "California",
+              "Texas",
+              "Florida",
+              "New York",
+              "Nationwide Metro Areas"
+            ],
+            emergencyPolicy: "24/7 AI lead capture and instant dispatch notification to local business owners within 60 seconds.",
+            estimatePolicy: "100% Free preliminary strategy review, local competitor rank audit, and free single-page layout consultation.",
+            pricingCues: [
+              "Single-Page Blast: $0 / Free Promotional Plan (High-converting local storefront, delivered in 2-3 business days)",
+              "Starter Boost: $999/month (Complete GBP synchronization, citation cleanup, core local keyword rankings)",
+              "Premium Surge: $1999/month (Multi-location dominance, advanced schema, programmatic location pages, aggressive citation velocity)",
+              "AI FrontDesk SurgeBot: 30-Day Free Trial, then $99-$199/month with instant setup across WordPress, Wix, Squarespace, Shopify, or GTM"
+            ],
+            faqs: [
+              {
+                question: "What is the Single-Page Blast Free Plan?",
+                answer: "We provide a complimentary, high-performance single-page storefront website blueprint designed specifically for Google Local 3-Pack rankings and fast phone call conversions, delivered in 2 to 3 business days."
+              },
+              {
+                question: "How does the AI FrontDesk work for contractors and local businesses?",
+                answer: "SurgeBot is an embeddable 24/7 AI assistant that lives on your site, answers customer inquiries about services, pricing, and emergency procedures, qualifies homeowner leads, and instantly dispatches customer details to your phone and email."
+              },
+              {
+                question: "How long does it take to rank on Google Maps?",
+                answer: "Initial citation synchronization and GBP profile optimization typically yield visible visibility gains within 2 to 4 weeks, with top-3 local pack dominance solidifying over 60 to 90 days."
+              },
+              {
+                question: "Can I test the AI FrontDesk on my own website first?",
+                answer: "Yes! You can generate a 30-Day Free Trial instantly on our /ai-frontdesk page by entering your domain. You'll get a single line of script to add via Google Tag Manager, WordPress, Wix, Squarespace, or HTML."
+              }
+            ],
+            keyFacts: [
+              "Serving over 500+ local contractors and service businesses across North America",
+              "Direct Phone: +1 (909) 707-5075",
+              "Official Email: contact@localsurgeseo.com",
+              "Headquarters: San Jose, California"
+            ],
+            extractedAt: "2026-10-30T18:00:00.000Z",
+            rawPageCount: 25
+          },
+          is_trial: false,
+          is_expired: false,
+          plan_tier: "standard_paid"
+        },
+        {
           id: "site_apex_plumbing",
           created_at: new Date(Date.now() - 30 * 86400 * 1000).toISOString(),
           updated_at: new Date().toISOString(),
@@ -4123,6 +4232,81 @@ app.post("/api/frontdesk/sites/:id/crawl", async (req, res) => {
   return res.json({ success: crawlResult.success, siteId, result: crawlResult });
 });
 
+// Helper: Dual-sync FrontDesk leads for site_localsurge into primary leads pipeline
+async function syncFrontdeskLeadToMainPipeline(lead: any, site: any) {
+  if (site.id !== "site_localsurge") return;
+
+  const email = lead.customer_email;
+  const phone = lead.customer_phone;
+  const businessName = lead.customer_name ? `${lead.customer_name}` : "Local Business Lead";
+  const contactName = lead.customer_name || "Prospective Client";
+  const location = lead.service_address || site.service_radius?.city || "Local Market";
+
+  // Check if lead already exists in main leads by phone or email
+  const existingLeads = readLeads();
+  const alreadySynced = existingLeads.some((l: any) =>
+    (email && l.input?.email?.toLowerCase() === email.toLowerCase()) ||
+    (phone && l.input?.phone === phone)
+  );
+  if (alreadySynced) {
+    return;
+  }
+
+  const cleanLeadInput = {
+    planId: "single-page",
+    planName: "SurgeBot AI Inbound Lead",
+    businessName: businessName,
+    contactName: contactName,
+    email: email || `${phone ? phone.replace(/\D/g, "") : "inquiry"}@inbound.localsurgeseo.com`,
+    phone: phone || "Not provided",
+    website: "",
+    hasWebsite: false,
+    industry: "Local Business / Home Services",
+    location: location,
+    keywords: lead.issue_description || "Local SEO & AI FrontDesk Consultation",
+    hasGBP: false,
+    gbpLink: ""
+  };
+
+  const newLeadId = "lead_sb_" + Math.random().toString(36).substr(2, 9);
+  const newLead: any = {
+    id: newLeadId,
+    createdAt: new Date().toISOString(),
+    status: "pending",
+    notes: `SurgeBot Inbound Chat Lead from ${site.business_name}. Inquiry: ${lead.issue_description || 'General Inquiry'}`,
+    input: cleanLeadInput,
+    aiAudit: createFallbackAudit(cleanLeadInput)
+  };
+
+  existingLeads.unshift(newLead);
+  writeLeads(existingLeads);
+
+  const supabase = await getSupabase();
+  if (supabase) {
+    try {
+      await supabase.from("leads").insert([{
+        id: newLead.id,
+        created_at: newLead.createdAt,
+        status: newLead.status,
+        notes: newLead.notes,
+        business_name: cleanLeadInput.businessName,
+        contact_name: cleanLeadInput.contactName,
+        email: cleanLeadInput.email,
+        phone: cleanLeadInput.phone,
+        website: cleanLeadInput.website,
+        industry: cleanLeadInput.industry,
+        location: cleanLeadInput.location,
+        keywords: cleanLeadInput.keywords,
+        plan_id: cleanLeadInput.planId,
+        plan_name: cleanLeadInput.planName,
+        ai_audit: newLead.aiAudit || null
+      }]);
+    } catch (err) {
+      console.warn("⚠️ Supabase dual lead sync fallback:", err);
+    }
+  }
+}
+
 // 7. POST /api/frontdesk/leads/create - Capture qualified lead from chat widget
 app.post("/api/frontdesk/leads/create", async (req, res) => {
   const {
@@ -4193,6 +4377,12 @@ app.post("/api/frontdesk/leads/create", async (req, res) => {
     dispatchLeadEmail(newLead, site, getResend).catch((err) => {
       console.warn("⚠️ Lead email alert dispatch error:", err);
     });
+
+    if (site.id === "site_localsurge") {
+      syncFrontdeskLeadToMainPipeline(newLead, site).catch((err) => {
+        console.warn("⚠️ Dual lead sync error:", err);
+      });
+    }
   }
 
   return res.json({
@@ -4324,9 +4514,14 @@ app.post("/api/frontdesk/chat", async (req, res) => {
 
     // If phone or email captured, record lead & trigger dispatch
     let savedLeadId: string | undefined = undefined;
-    if (extracted.isComplete && extracted.customerPhone) {
+    if (extracted.isComplete && (extracted.customerPhone || extracted.customerEmail)) {
       const leads = readFrontdeskLeads();
-      const existingLeadIdx = leads.findIndex((l: any) => l.site_id === site.id && l.customer_phone === extracted.customerPhone);
+      const existingLeadIdx = leads.findIndex((l: any) =>
+        l.site_id === site.id && (
+          (extracted.customerPhone && l.customer_phone === extracted.customerPhone) ||
+          (extracted.customerEmail && l.customer_email === extracted.customerEmail)
+        )
+      );
 
       // Collect photo attachments from transcript
       const photoUrls: string[] = [];
@@ -4341,7 +4536,7 @@ app.post("/api/frontdesk/chat", async (req, res) => {
         status: existingLeadIdx >= 0 ? leads[existingLeadIdx].status : "new",
         urgency: extracted.urgency,
         customer_name: extracted.customerName || "Website Lead",
-        customer_phone: extracted.customerPhone,
+        customer_phone: extracted.customerPhone || "Not provided",
         customer_email: extracted.customerEmail || null,
         service_address: extracted.serviceAddress || null,
         issue_description: extracted.issueDescription || fullAssistantText.slice(0, 150),
@@ -4377,6 +4572,13 @@ app.post("/api/frontdesk/chat", async (req, res) => {
       if (flags.enableEmailDispatch !== false) {
         dispatchLeadEmail(leadPayload, site, getResend).catch((err) => {
           console.warn("⚠️ Lead email alert background dispatch error:", err);
+        });
+      }
+
+      // Dual Sync: If lead is for LocalSurge, sync into main leads pipeline
+      if (site.id === "site_localsurge") {
+        syncFrontdeskLeadToMainPipeline(leadPayload, site).catch((err) => {
+          console.warn("⚠️ Dual lead sync error:", err);
         });
       }
 

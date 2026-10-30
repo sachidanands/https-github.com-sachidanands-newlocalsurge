@@ -815,7 +815,94 @@
     }
   }
 
-  // 7. Fetch Site Configuration & Evaluate Lifecycle
+  // 7. Route Filtering & SPA Route Observer
+  function isPathAllowed() {
+    const currentPath = (window.location.pathname || "/").toLowerCase().replace(/\/+$/, "") || "/";
+
+    // 1. Never show on admin dashboard
+    if (currentPath === "/admin" || currentPath.startsWith("/admin/")) {
+      return false;
+    }
+
+    // 2. Disallowed paths check
+    const disallowed = siteConfig?.disallowed_paths || siteConfig?.widget_config?.disallowed_paths || scriptTag?.getAttribute("data-disallowed-paths");
+    if (disallowed) {
+      const list = Array.isArray(disallowed) ? disallowed : String(disallowed).split(",").map((s) => s.trim());
+      const isDisallowed = list.some((p) => {
+        const cleanPattern = String(p).replace(/\/\*$/, "").toLowerCase().replace(/\/+$/, "");
+        return currentPath === cleanPattern || currentPath.startsWith(cleanPattern + "/");
+      });
+      if (isDisallowed) return false;
+    }
+
+    // 3. Franchise Sub-Path & Session Persistence Filter
+    const pathPrefix = siteConfig?.path_prefix || siteConfig?.widget_config?.path_prefix || scriptTag?.getAttribute("data-path");
+    const allowedPaths = siteConfig?.allowed_paths || siteConfig?.widget_config?.allowed_paths || (pathPrefix ? [pathPrefix, `${pathPrefix}/*`] : null);
+
+    if (allowedPaths && allowedPaths.length > 0) {
+      const sessionKey = `ls_franchise_session_${siteId}`;
+      const isDirectMatch = allowedPaths.some((p) => {
+        const cleanPattern = String(p).replace(/\/\*$/, "").toLowerCase().replace(/\/+$/, "");
+        return currentPath === cleanPattern || currentPath.startsWith(cleanPattern + "/");
+      });
+
+      if (isDirectMatch) {
+        try {
+          sessionStorage.setItem(sessionKey, JSON.stringify({ active: true, path: currentPath, timestamp: Date.now() }));
+        } catch (e) {}
+        return true;
+      } else {
+        try {
+          const saved = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
+          if (saved && saved.active && saved.timestamp) {
+            const elapsedMin = (Date.now() - saved.timestamp) / (1000 * 60);
+            if (elapsedMin < 45) return true;
+            sessionStorage.removeItem(sessionKey);
+          }
+        } catch (e) {}
+        return false;
+      }
+    }
+
+    return true;
+  }
+
+  function evaluateRouteVisibility() {
+    if (!siteConfig) return;
+    if (isPathAllowed()) {
+      container.style.display = "block";
+    } else {
+      container.style.display = "none";
+      if (drawer.classList.contains("active")) {
+        closeDrawer();
+      }
+      teaser.style.display = "none";
+    }
+  }
+
+  function setupSpaRouteObserver() {
+    window.addEventListener("popstate", evaluateRouteVisibility);
+
+    const originalPushState = history.pushState;
+    if (typeof originalPushState === "function") {
+      history.pushState = function () {
+        const result = originalPushState.apply(this, arguments);
+        evaluateRouteVisibility();
+        return result;
+      };
+    }
+
+    const originalReplaceState = history.replaceState;
+    if (typeof originalReplaceState === "function") {
+      history.replaceState = function () {
+        const result = originalReplaceState.apply(this, arguments);
+        evaluateRouteVisibility();
+        return result;
+      };
+    }
+  }
+
+  // 8. Fetch Site Configuration & Evaluate Lifecycle
   async function loadSiteConfig() {
     try {
       const resp = await fetch(`${baseUrl}/api/frontdesk/sites/${encodeURIComponent(siteId)}`);
@@ -823,51 +910,10 @@
       if (data && data.site) {
         siteConfig = data.site;
 
-        // Franchise Sub-Path & Session Persistence Filter
-        // Ensures franchise location bots only appear on their pages (e.g. /tri-cities)
-        // while persisting across general national pages (/services) during that visitor session.
-        const pathPrefix = siteConfig.path_prefix || siteConfig.widget_config?.path_prefix || scriptTag?.getAttribute("data-path");
-        const allowedPaths = siteConfig.allowed_paths || siteConfig.widget_config?.allowed_paths || (pathPrefix ? [pathPrefix, `${pathPrefix}/*`] : null);
-
-        if (allowedPaths && allowedPaths.length > 0) {
-          const currentPath = (window.location.pathname || "/").toLowerCase().replace(/\/+$/, "") || "/";
-          const sessionKey = `ls_franchise_session_${siteId}`;
-
-          const isDirectMatch = allowedPaths.some(p => {
-            const cleanPattern = String(p).replace(/\/\*$/, "").toLowerCase().replace(/\/+$/, "");
-            return currentPath === cleanPattern || currentPath.startsWith(cleanPattern + "/");
-          });
-
-          if (isDirectMatch) {
-            // Direct landing on franchise page -> set or refresh active visitor session (45-min window)
-            try {
-              sessionStorage.setItem(sessionKey, JSON.stringify({
-                active: true,
-                path: currentPath,
-                timestamp: Date.now()
-              }));
-            } catch (e) {}
-          } else {
-            // Visitor on another page -> check if they came from the franchise location (session persistence)
-            let isSessionValid = false;
-            try {
-              const saved = JSON.parse(sessionStorage.getItem(sessionKey) || "null");
-              if (saved && saved.active && saved.timestamp) {
-                const elapsedMin = (Date.now() - saved.timestamp) / (1000 * 60);
-                if (elapsedMin < 45) {
-                  isSessionValid = true;
-                } else {
-                  sessionStorage.removeItem(sessionKey);
-                }
-              }
-            } catch (e) {}
-
-            if (!isSessionValid) {
-              console.info(`[LocalSurge FrontDesk] Current page "${currentPath}" is outside the authorized franchise location paths for site "${siteId}". Widget inactive.`);
-              container.style.display = "none";
-              return;
-            }
-          }
+        if (!isPathAllowed()) {
+          console.info(`[LocalSurge FrontDesk] Current page "${window.location.pathname}" is outside the authorized paths for site "${siteId}". Widget inactive.`);
+          container.style.display = "none";
+          return;
         }
 
         // 1. Soft-Locked Mode (Day 33+): Render Fallback Direct Contact Card
@@ -906,15 +952,24 @@
   }
 
   function applyConfig(site, isSoftLocked = false) {
+    if (!isPathAllowed()) {
+      container.style.display = "none";
+      return;
+    }
     // Show container now that configuration is validated
     container.style.display = "block";
     const w = site.widget_config || {};
     const flags = site.feature_flags || {};
 
-    // Apply Theme Color
+    // Apply Theme Color (Deep Emerald Gradient for #10b981 / site_localsurge)
     if (w.themeColor) {
-      container.style.setProperty("--primary", w.themeColor);
-      container.style.setProperty("--primary-dark", w.themeColor);
+      if (w.themeColor === "#10b981" || site.id === "site_localsurge") {
+        container.style.setProperty("--primary", "#10b981");
+        container.style.setProperty("--primary-dark", "#123e35");
+      } else {
+        container.style.setProperty("--primary", w.themeColor);
+        container.style.setProperty("--primary-dark", w.themeColor);
+      }
     }
 
     if (site.business_name) {
@@ -1247,6 +1302,7 @@
     getConfig: () => siteConfig,
   };
 
-  // 12. Kick off initial configuration loader
+  // 12. Setup SPA route observer & kick off initial configuration loader
+  setupSpaRouteObserver();
   loadSiteConfig();
 })();
