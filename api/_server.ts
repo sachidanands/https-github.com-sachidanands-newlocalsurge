@@ -18,6 +18,7 @@ import {
   sendTrialExpiryReportEmail,
   sendGracePeriodEndedEmail
 } from "./services/frontdesk-dispatch.js";
+import { BLOG_POSTS } from "../src/data/blogData.js";
 
 dotenv.config();
 
@@ -2963,6 +2964,124 @@ app.get("/api/blog/drafts", requireAdmin, (req, res) => {
   res.json(readBlogDrafts());
 });
 
+// =========================================================================
+// Hybrid Zero-Egress Blog Architecture & In-Memory Edge Cache Layer
+// =========================================================================
+
+// 1. Static Core Posts Lookup Map (O(1) in-memory lookup, zero Supabase egress)
+const staticBlogMap = new Map(BLOG_POSTS.map(p => [p.slug, p]));
+const staticBlogSummaries = BLOG_POSTS.map(p => ({
+  slug: p.slug,
+  title: p.title,
+  category: p.category,
+  description: p.description,
+  date: p.date,
+  readTime: p.readTime,
+  image: p.image,
+  author: p.author
+}));
+
+interface DynamicBlogSummary {
+  slug: string;
+  title: string;
+  category: string;
+  description: string;
+  date: string;
+  readTime: string;
+  image: string;
+  author: any;
+}
+
+interface BlogCacheStore {
+  allSummaries: DynamicBlogSummary[] | null;
+  summariesExpiry: number;
+  slugDetails: Map<string, { data: any; expiry: number }>;
+}
+
+const blogCache: BlogCacheStore = {
+  allSummaries: null,
+  summariesExpiry: 0,
+  slugDetails: new Map()
+};
+
+// 30-minute in-memory TTL to eliminate repeated database roundtrips
+const BLOG_CACHE_TTL_MS = 30 * 60 * 1000;
+
+// Universal Edge & Browser Cache-Control Header
+const BLOG_CACHE_CONTROL_HEADER = "public, max-age=1800, s-maxage=3600, stale-while-revalidate=86400";
+
+export function purgeBlogCaches() {
+  blogCache.allSummaries = null;
+  blogCache.summariesExpiry = 0;
+  blogCache.slugDetails.clear();
+  console.log("[BlogCache] In-memory blog caches purged successfully.");
+}
+
+async function getCachedCombinedBlogSummaries(): Promise<DynamicBlogSummary[]> {
+  const now = Date.now();
+  if (blogCache.allSummaries && now < blogCache.summariesExpiry) {
+    return blogCache.allSummaries;
+  }
+
+  // Seed with compiled static summaries (instant, zero egress)
+  const combinedMap = new Map<string, DynamicBlogSummary>();
+  for (const s of staticBlogSummaries) {
+    combinedMap.set(s.slug, s);
+  }
+
+  // Merge local dynamic file blogs
+  const localDynamic = readPublishedBlogs();
+  for (const d of localDynamic) {
+    if (d && d.slug && !combinedMap.has(d.slug)) {
+      combinedMap.set(d.slug, {
+        slug: d.slug,
+        title: d.title,
+        category: d.category,
+        description: d.description,
+        date: d.date,
+        readTime: d.readTime || d.read_time,
+        image: d.image,
+        author: d.author
+      });
+    }
+  }
+
+  // Query Supabase ONLY for lightweight summary fields (NO heavy sections)
+  try {
+    const supabase = await getSupabase();
+    if (supabase) {
+      const { data, error } = await supabase
+        .from('blogs')
+        .select('slug, title, category, description, date, read_time, image, author, status')
+        .eq('status', 'published');
+
+      if (!error && data && data.length > 0) {
+        for (const row of data) {
+          if (!combinedMap.has(row.slug)) {
+            combinedMap.set(row.slug, {
+              slug: row.slug,
+              title: row.title,
+              category: row.category,
+              description: row.description,
+              date: row.date,
+              readTime: row.read_time,
+              image: row.image,
+              author: row.author
+            });
+          }
+        }
+      }
+    }
+  } catch (err) {
+    console.warn("[BlogCache] Supabase query error, relying on local blogs:", err);
+  }
+
+  const result = Array.from(combinedMap.values());
+  blogCache.allSummaries = result;
+  blogCache.summariesExpiry = now + BLOG_CACHE_TTL_MS;
+  return result;
+}
+
 app.post("/api/blog/approve/:id", requireAdmin, (req, res) => {
   const { id } = req.params;
   const drafts = readBlogDrafts();
@@ -2983,6 +3102,9 @@ app.post("/api/blog/approve/:id", requireAdmin, (req, res) => {
   published.unshift(approvedItem);
   writePublishedBlogs(published);
 
+  // Invalidate in-memory blog caches so new post is immediately accessible
+  purgeBlogCaches();
+
   res.json({ success: true, approvedItem });
 });
 
@@ -2991,80 +3113,101 @@ app.delete("/api/blog/drafts/:id", requireAdmin, (req, res) => {
   const drafts = readBlogDrafts();
   const filtered = drafts.filter(d => d.id !== id);
   writeBlogDrafts(filtered);
+
+  // Invalidate in-memory cache
+  purgeBlogCaches();
+
   res.json({ success: true });
 });
 
-// 9. Published Dynamic Blogs GET Endpoint
-app.get("/api/blog/published", (req, res) => {
-  res.json(readPublishedBlogs());
+// Cache purge endpoint: accessible via admin auth or optional secret header / query param
+app.all("/api/blog/purge-cache", (req, res) => {
+  const authHeader = req.headers.authorization;
+  const secretHeader = req.headers["x-purge-secret"];
+  const secretQuery = req.query.secret;
+  const configuredSecret = process.env.BLOG_PURGE_SECRET || "surge_purge_secret_2026";
+
+  const isAuthorized =
+    authHeader === "Bearer surge_fake_secure_token_2026" ||
+    secretHeader === configuredSecret ||
+    secretQuery === configuredSecret;
+
+  if (!isAuthorized) {
+    return res.status(401).json({ error: "Unauthorized: Invalid or missing purge secret." });
+  }
+
+  purgeBlogCaches();
+  res.json({ success: true, message: "Blog caches successfully purged." });
 });
 
-// 9b. Comprehensive Paginated Blogs Endpoint (Supabase with Local Fallback)
+// Cache status endpoint for observability
+app.get("/api/blog/cache-status", (req, res) => {
+  const authHeader = req.headers.authorization;
+  const isAuthorized = authHeader === "Bearer surge_fake_secure_token_2026";
+  if (!isAuthorized) {
+    return res.status(401).json({ error: "Unauthorized access." });
+  }
+
+  const now = Date.now();
+  const isSummariesCached = Boolean(blogCache.allSummaries && now < blogCache.summariesExpiry);
+  const ttlSecondsRemaining = isSummariesCached
+    ? Math.max(0, Math.round((blogCache.summariesExpiry - now) / 1000))
+    : 0;
+
+  res.json({
+    status: "ok",
+    staticCoreBlogsCount: staticBlogSummaries.length,
+    isSummariesCached,
+    cachedSummariesCount: blogCache.allSummaries ? blogCache.allSummaries.length : 0,
+    ttlSecondsRemaining,
+    cachedSlugDetailsCount: blogCache.slugDetails.size
+  });
+});
+
+// 9. Published Dynamic Blogs GET Endpoint (Cached with Edge Headers)
+app.get("/api/blog/published", async (req, res) => {
+  res.setHeader("Cache-Control", BLOG_CACHE_CONTROL_HEADER);
+  res.setHeader("Vary", "Accept-Encoding");
+
+  const localDynamic = readPublishedBlogs();
+  // Also merge any dynamic blogs from cached summaries that aren't in local static posts
+  const allSummaries = await getCachedCombinedBlogSummaries();
+  const dynamicOnly = allSummaries.filter(s => !staticBlogMap.has(s.slug));
+
+  // Merge avoiding duplicates
+  const finalDynamicMap = new Map();
+  for (const d of localDynamic) {
+    if (d && d.slug) finalDynamicMap.set(d.slug, d);
+  }
+  for (const d of dynamicOnly) {
+    if (!finalDynamicMap.has(d.slug)) finalDynamicMap.set(d.slug, d);
+  }
+
+  res.json(Array.from(finalDynamicMap.values()));
+});
+
+// 9b. Comprehensive Paginated Blogs Endpoint (Hybrid Cached with Local First + Supabase)
 app.get("/api/blogs", async (req, res) => {
   try {
+    res.setHeader("Cache-Control", BLOG_CACHE_CONTROL_HEADER);
+    res.setHeader("Vary", "Accept-Encoding");
+
     const page = Math.max(1, parseInt(req.query.page as string) || 1);
     const limit = Math.max(1, Math.min(50, parseInt(req.query.limit as string) || 8));
     const category = (req.query.category as string) || 'All';
     const search = ((req.query.search as string) || '').trim().toLowerCase();
 
-    const supabase = await getSupabase();
-    let allPosts: any[] = [];
+    let allPosts = await getCachedCombinedBlogSummaries();
 
-    if (supabase) {
-      try {
-        let query = supabase
-          .from('blogs')
-          .select('slug, title, category, description, date, read_time, image, author, status')
-          .eq('status', 'published');
-
-        if (category !== 'All') {
-          query = query.ilike('category', `%${category}%`);
-        }
-
-        const { data, error } = await query;
-        if (!error && data && data.length > 0) {
-          allPosts = data.map((d: any) => ({
-            slug: d.slug,
-            title: d.title,
-            category: d.category,
-            description: d.description,
-            date: d.date,
-            readTime: d.read_time,
-            image: d.image,
-            author: d.author
-          }));
-        }
-      } catch (err) {
-        console.warn("Supabase query error, falling back to local blog data:", err);
-      }
-    }
-
-    // Fallback to local blogData if Supabase had no rows or is pending migration
-    if (allPosts.length === 0) {
-      const { BLOG_POSTS } = await import("../src/data/blogData.js");
-      const dynamicBlogs = readPublishedBlogs();
-      const combined = [...dynamicBlogs, ...BLOG_POSTS];
-      allPosts = combined.map(p => ({
-        slug: p.slug,
-        title: p.title,
-        category: p.category,
-        description: p.description,
-        date: p.date,
-        readTime: p.readTime,
-        image: p.image,
-        author: p.author
-      }));
-
-      if (category !== 'All') {
-        allPosts = allPosts.filter(p => p.category.toLowerCase() === category.toLowerCase());
-      }
+    if (category !== 'All') {
+      allPosts = allPosts.filter(p => p.category && p.category.toLowerCase().includes(category.toLowerCase()));
     }
 
     if (search) {
       allPosts = allPosts.filter(p =>
-        p.title.toLowerCase().includes(search) ||
-        p.description.toLowerCase().includes(search) ||
-        p.category.toLowerCase().includes(search)
+        (p.title && p.title.toLowerCase().includes(search)) ||
+        (p.description && p.description.toLowerCase().includes(search)) ||
+        (p.category && p.category.toLowerCase().includes(search))
       );
     }
 
@@ -3078,7 +3221,8 @@ app.get("/api/blogs", async (req, res) => {
       totalPosts,
       totalPages,
       currentPage: page,
-      limit
+      limit,
+      cached: true
     });
   } catch (error: any) {
     console.error("Error in /api/blogs:", error);
@@ -3086,12 +3230,35 @@ app.get("/api/blogs", async (req, res) => {
   }
 });
 
-// 9c. Single Blog Post Detail Endpoint
+// 9c. Single Blog Post Detail Endpoint (Local-First Zero Egress + In-Memory Slug Cache)
 app.get("/api/blogs/:slug", async (req, res) => {
   try {
     const { slug } = req.params;
-    const supabase = await getSupabase();
+    res.setHeader("Cache-Control", BLOG_CACHE_CONTROL_HEADER);
+    res.setHeader("Vary", "Accept-Encoding");
 
+    // 1. Check local static post map first (0 egress, 0 Supabase calls!)
+    const staticPost = staticBlogMap.get(slug);
+    if (staticPost) {
+      return res.json({ ...staticPost, source: "static_core" });
+    }
+
+    // 2. Check local dynamic blogs file
+    const dynamicBlogs = readPublishedBlogs();
+    const foundLocal = dynamicBlogs.find(p => p.slug === slug);
+    if (foundLocal) {
+      return res.json({ ...foundLocal, source: "local_dynamic" });
+    }
+
+    // 3. Check in-memory slug cache
+    const now = Date.now();
+    const cachedDetail = blogCache.slugDetails.get(slug);
+    if (cachedDetail && now < cachedDetail.expiry) {
+      return res.json({ ...cachedDetail.data, source: "memory_cache" });
+    }
+
+    // 4. Cache-miss: Query Supabase only once, then store in memory
+    const supabase = await getSupabase();
     if (supabase) {
       try {
         const { data, error } = await supabase
@@ -3099,10 +3266,10 @@ app.get("/api/blogs/:slug", async (req, res) => {
           .select('*')
           .eq('slug', slug)
           .eq('status', 'published')
-          .single();
+          .maybeSingle();
 
         if (!error && data) {
-          return res.json({
+          const formatted = {
             slug: data.slug,
             title: data.title,
             category: data.category,
@@ -3112,20 +3279,19 @@ app.get("/api/blogs/:slug", async (req, res) => {
             image: data.image,
             author: data.author,
             sections: data.sections
+          };
+
+          // Store in in-memory cache for 30 minutes
+          blogCache.slugDetails.set(slug, {
+            data: formatted,
+            expiry: now + BLOG_CACHE_TTL_MS
           });
+
+          return res.json({ ...formatted, source: "supabase_cached" });
         }
       } catch (err) {
-        console.warn("Supabase single blog query error, falling back to local:", err);
+        console.warn("[BlogCache] Supabase single blog query error:", err);
       }
-    }
-
-    // Local fallback
-    const { BLOG_POSTS } = await import("../src/data/blogData.js");
-    const dynamicBlogs = readPublishedBlogs();
-    const found = [...dynamicBlogs, ...BLOG_POSTS].find(p => p.slug === slug);
-
-    if (found) {
-      return res.json(found);
     }
 
     res.status(404).json({ error: "Blog post not found" });
