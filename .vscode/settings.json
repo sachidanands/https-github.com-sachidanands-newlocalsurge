@@ -1,3 +1,18 @@
 {
-  "css.lint.unknownAtRules": "ignore"
+  "css.lint.unknownAtRules": "ignore",
+  "git.openRepositoryInParentFolders": "never",
+  "git.ignoredRepositories": [
+    "../local-tools",
+    "../local-tools/FossFLOW",
+    "../local-tools/hyperframes",
+    "../local-tools/openwhispr",
+    "../local-tools/recordly",
+    "../local-tools/voicebox",
+    "/home/ved/Websites/local-tools",
+    "/home/ved/Websites/local-tools/FossFLOW",
+    "/home/ved/Websites/local-tools/hyperframes",
+    "/home/ved/Websites/local-tools/openwhispr",
+    "/home/ved/Websites/local-tools/recordly",
+    "/home/ved/Websites/local-tools/voicebox"
+  ]
 }
