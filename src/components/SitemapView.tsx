@@ -73,7 +73,7 @@ export default function SitemapView({
     if (setActiveCitySlug) setActiveCitySlug(null);
     setCurrentPage('locations-state' as any);
     if (typeof window !== 'undefined') {
-      window.history.pushState({}, '', `/locations/${slug}/`);
+      window.history.pushState({}, '', `/locations/${slug}`);
       window.scrollTo({ top: 0, behavior: 'smooth' });
     }
   };
@@ -376,7 +376,7 @@ export default function SitemapView({
                   <div key={state.slug} className="space-y-3.5 bg-[#faf9f6]/75 border border-[#dfded4]/70 p-4.5 rounded-2xl">
                     <div className="flex items-center justify-between border-b border-[#dfded4]/40 pb-2">
                       <a 
-                        href={`/locations/${state.slug}/`}
+                        href={`/locations/${state.slug}`}
                         onClick={(e) => handleNavLocationState(e, state.slug)}
                         className="text-xs font-black text-[#123e35] hover:text-[#bc5f40] hover:underline transition-colors flex items-center gap-1 font-display"
                       >

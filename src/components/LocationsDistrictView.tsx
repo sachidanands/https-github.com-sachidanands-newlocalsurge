@@ -51,7 +51,7 @@ export default function LocationsDistrictView({
             '@type': 'ListItem',
             'position': 3,
             'name': `${districtData.stateName}`,
-            'item': `https://localsurgeseo.com/locations/${districtData.stateSlug}/`
+            'item': `https://localsurgeseo.com/locations/${districtData.stateSlug}`
           },
           {
             '@type': 'ListItem',
@@ -123,7 +123,7 @@ export default function LocationsDistrictView({
           <button 
             type="button" 
             className="hover:text-[#bc5f40] cursor-pointer focus-visible:outline-2 focus-visible:outline-[#123e35]" 
-            onClick={() => onNavigateToLocation(`/locations/${districtData.stateSlug}/`)}
+            onClick={() => onNavigateToLocation(`/locations/${districtData.stateSlug}`)}
           >
             {districtData.stateName}
           </button>
@@ -439,10 +439,10 @@ export default function LocationsDistrictView({
               </p>
             </div>
             <a
-              href={`/locations/${districtData.stateSlug}/`}
+              href={`/locations/${districtData.stateSlug}`}
               onClick={(e) => {
                 e.preventDefault();
-                onNavigateToLocation(`/locations/${districtData.stateSlug}/`);
+                onNavigateToLocation(`/locations/${districtData.stateSlug}`);
               }}
               className="text-xs font-bold text-[#123e35] hover:text-[#bc5f40] flex items-center gap-1 focus-visible:underline"
             >

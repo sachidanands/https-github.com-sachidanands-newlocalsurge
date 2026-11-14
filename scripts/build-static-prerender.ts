@@ -42,7 +42,6 @@ function getAllRoutesToPrerender(): string[] {
   // 2. Programmatic Location State pages (/locations/:state)
   Object.values(STATES_REGISTRY).forEach(state => {
     routes.add(`/locations/${state.slug}`);
-    routes.add(`/locations/${state.slug}/`);
   });
 
   // 3. Programmatic Location District pages (/locations/:state/:district)
@@ -195,7 +194,7 @@ async function runStaticPrerender() {
   }
 
   // Verification samples
-  const sampleRoutes = ['/', '/pricing', '/florida', '/seo-tool', '/locations/california/los-angeles', '/blog'];
+  const sampleRoutes = ['/', '/pricing', '/florida', '/seo-tool', '/locations/california', '/locations/washington', '/new-york/buffalo-seo', '/locations/california/los-angeles', '/blog'];
   console.log(`\n\x1b[1mSample Verification (Canonical & Title Accuracy):\x1b[0m`);
   console.log(`┌──────────────────────────────────────────────┬──────────────────────────────────────────────────────────────────┐`);
   console.log(`│ Route                                        │ Verified Canonical URL                                           │`);

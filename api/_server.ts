@@ -1191,7 +1191,15 @@ function writeFrontdeskLeads(leads: any) {
 
 // 301 Permanent Redirects for legacy routes to preserve SEO ranking equity
 app.get(["/california", "/california/"], (req, res) => {
-  res.redirect(301, "/locations/california/");
+  res.redirect(301, "/locations/california");
+});
+
+app.get(/^\/locations\/([a-z0-9-]+)\/$/, (req, res) => {
+  res.redirect(301, `/locations/${req.params[0]}`);
+});
+
+app.get(/^\/locations\/([a-z0-9-]+)\/([a-z0-9-]+)\/$/, (req, res) => {
+  res.redirect(301, `/locations/${req.params[0]}/${req.params[1]}`);
 });
 
 app.get(["/los-angeles-seo", "/los-angeles-seo/"], (req, res) => {
@@ -1262,7 +1270,7 @@ function getDynamicSitemapPages(): string[] {
         const slugRegex = /slug:\s*['"]([^'"]+)['"]/g;
         let sm;
         while ((sm = slugRegex.exec(stateMatch[1])) !== null) {
-          pages.push(`/locations/${sm[1]}/`);
+          pages.push(`/locations/${sm[1]}`);
         }
       }
       // Extract district slugs

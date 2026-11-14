@@ -137,15 +137,15 @@ export default function SeoHomeTool({
   return (
     <div id="free-seo-tool-home" className="w-full bg-[#faf9f6]/95 rounded-3xl border border-[#dfded4] p-6 sm:p-10 text-center space-y-8 max-w-4xl mx-auto shadow-sm">
       
-      {/* Title block exactly matching the screenshot */}
+      {/* Title block */}
       <div className="space-y-3">
         {!hideTitle && (
-          <h2 className="text-3xl sm:text-4xl md:text-5xl font-black font-display text-[#123e35] leading-none tracking-tight">
-            Free Local SEO Audit Tool &amp; Scanner
-          </h2>
+          <h1 className="text-3xl sm:text-4xl md:text-5xl font-black font-display text-[#123e35] leading-none tracking-tight">
+            Free Local SEO Audit Tool &amp; Instant Checkup
+          </h1>
         )}
         <p className="text-[#4e524f] max-w-2xl mx-auto text-xs sm:text-sm font-semibold leading-relaxed">
-          Enter your website URL to get AI-powered recommendations on how to improve your Google Map Pack ranking, audit NAP citations, and attract more local customers.
+          Run a 100% free local SEO audit and 60-second local SEO scan for your domain or client sites. Generate an actionable free local SEO report covering Google Map Pack rankings, NAP citations, LocalBusiness schema, and agency-grade technical checkups.
         </p>
       </div>
 
@@ -352,16 +352,16 @@ export default function SeoHomeTool({
 
       {/* Explanatory content for SEO analysis tool */}
       {!isHomePage && (
-        <div className="border-t border-[#dfded4] pt-10 text-left space-y-8 mt-6">
+        <div className="border-t border-[#dfded4] pt-10 text-left space-y-10 mt-6">
           <div className="space-y-2 max-w-3xl">
             <span className="text-[10px] font-bold font-mono tracking-widest text-[#bc5f40] uppercase">
-              Understanding Local Search Signals
+              60-Second Free Local SEO Checkup &amp; Report
             </span>
-            <h3 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight">
-              What Our Free SEO Audit Tool Evaluates
-            </h3>
+            <h2 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight">
+              What Our Free Local SEO Audit Tool, Scan &amp; Checkup Evaluates
+            </h2>
             <p className="text-xs sm:text-sm text-[#4e524f] font-semibold leading-relaxed">
-              Google's algorithm weights spatial coordinates, review trust, and domain markup compatibility differently for local intent queries compared to standard organic web searches. Our automated crawler scans the following pillars to evaluate your regional standing:
+              Google weights geographic proximity, review trust, and domain markup differently for local queries than broad organic searches. Every free local SEO report scans these four pillars to surface immediate Map Pack improvements:
             </p>
           </div>
 
@@ -370,7 +370,7 @@ export default function SeoHomeTool({
               <div className="w-9 h-9 rounded-lg bg-[#123e35]/5 flex items-center justify-center text-[#123e35]">
                 <Bot className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-black font-display text-[#151716]">Structured LocalBusiness Schema</h4>
+              <h3 className="text-sm font-black font-display text-[#151716]">Structured LocalBusiness Schema</h3>
               <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
                 We check for the presence of microdata formats (specifically JSON-LD Organization and ProfessionalService nodes). Structured schema tells crawlers your exact coordinates, operating hours, categories, and service region matrices directly.
               </p>
@@ -380,7 +380,7 @@ export default function SeoHomeTool({
               <div className="w-9 h-9 rounded-lg bg-[#bc5f40]/5 flex items-center justify-center text-[#bc5f40]">
                 <ShieldCheck className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-black font-display text-[#151716]">NAP Citation Integrity & Mappings</h4>
+              <h3 className="text-sm font-black font-display text-[#151716]">NAP Citation Integrity &amp; Mappings</h3>
               <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
                 Consistency of your Name, Address, and Phone number (NAP) across indices like Yelp, Apple Maps, and Bing is critical. Discrepancies in office suites, zip codes, or names generate duplicate node flags that dilute your authority score.
               </p>
@@ -390,7 +390,7 @@ export default function SeoHomeTool({
               <div className="w-9 h-9 rounded-lg bg-[#123e35]/5 flex items-center justify-center text-[#123e35]">
                 <Star className="w-5 h-5 text-[#bc5f40]" />
               </div>
-              <h4 className="text-sm font-black font-display text-[#151716]">Review Proximity & Velocity</h4>
+              <h3 className="text-sm font-black font-display text-[#151716]">Review Proximity &amp; Velocity</h3>
               <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
                 Proximity determines whether you render in the Map Pack, but Review Velocity (the frequency of incoming user reviews) determines your prominence. Our tool evaluates how active your feedback streams are compared to competitor benchmarks.
               </p>
@@ -400,10 +400,86 @@ export default function SeoHomeTool({
               <div className="w-9 h-9 rounded-lg bg-[#bc5f40]/5 flex items-center justify-center text-[#bc5f40]">
                 <HelpCircle className="w-5 h-5" />
               </div>
-              <h4 className="text-sm font-black font-display text-[#151716]">Organic Prominence Anchors</h4>
+              <h3 className="text-sm font-black font-display text-[#151716]">Organic Prominence Anchors</h3>
               <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
-                Local search queries are heavily influenced by your overall organic search visibility. We scan your website's baseline speed indices, on-page heading tags, and title relevance to ensure they support local keywords.
+                Local search queries are heavily influenced by your overall organic search visibility. We scan your website&apos;s baseline speed indices, on-page heading tags, and title relevance to ensure they support local keywords.
               </p>
+            </div>
+          </div>
+
+          {/* Dedicated Section: Local SEO Audit Tools for Agencies & Multi-Location Brands */}
+          <div className="bg-white border border-[#dfded4] rounded-2xl p-6 sm:p-8 space-y-5 shadow-2xs">
+            <div className="space-y-2 max-w-3xl">
+              <span className="text-[10px] font-bold font-mono tracking-widest text-[#123e35] uppercase">
+                Agency &amp; Multi-Location Workflows
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight">
+                Local SEO Audit Tools for Agencies &amp; Multi-Location Brands
+              </h2>
+              <p className="text-xs sm:text-sm text-[#4e524f] font-semibold leading-relaxed">
+                Designed for marketing agencies, SEO consultants, and multi-location contractors who need fast, zero-login diagnostic checkups without per-seat SaaS lock-in. Run unlimited scans to benchmark client websites during sales calls or onboarding audits.
+              </p>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-3 gap-4">
+              <div className="bg-[#faf9f6] border border-[#dfded4]/80 p-4 rounded-xl space-y-1.5">
+                <h3 className="text-xs font-black font-display text-[#151716] uppercase tracking-wide">Discovery Call Checkups</h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Audit a prospect domain live in under 60 seconds and immediately highlight missing LocalBusiness JSON-LD, meta gaps, and mobile LCP issues.
+                </p>
+              </div>
+              <div className="bg-[#faf9f6] border border-[#dfded4]/80 p-4 rounded-xl space-y-1.5">
+                <h3 className="text-xs font-black font-display text-[#151716] uppercase tracking-wide">Location Page Benchmarks</h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Evaluate city-specific landing URLs across regional offices to verify NAP consistency, schema accuracy, and Local 3-Pack readiness.
+                </p>
+              </div>
+              <div className="bg-[#faf9f6] border border-[#dfded4]/80 p-4 rounded-xl space-y-1.5">
+                <h3 className="text-xs font-black font-display text-[#151716] uppercase tracking-wide">AI &amp; WebMCP Readiness</h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Verify extractable answer passages and structured citations so client businesses surface accurately in ChatGPT, Perplexity, and Google AI Overviews.
+                </p>
+              </div>
+            </div>
+          </div>
+
+          {/* Visible FAQ Grid matching schema */}
+          <div className="space-y-4">
+            <h2 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight">
+              Frequently Asked Questions About Free Local SEO Audits
+            </h2>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-1.5 shadow-2xs">
+                <h3 className="text-xs sm:text-sm font-black font-display text-[#151716]">
+                  How does the Free Local SEO Audit Tool &amp; Checkup work?
+                </h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Enter any business domain into the scanner to run an instant local SEO checkup. Within 60 seconds, our crawler evaluates live DOM structure, Google Maps 3-Pack relevance signals, LocalBusiness JSON-LD schema, NAP consistency, and Core Web Vitals.
+                </p>
+              </div>
+              <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-1.5 shadow-2xs">
+                <h3 className="text-xs sm:text-sm font-black font-display text-[#151716]">
+                  What is included in the free local SEO report and scan?
+                </h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Every free local SEO report scores your site across 4 core pillars: LocalBusiness &amp; Service Schema, NAP Citation Integrity, Review Proximity &amp; Velocity benchmarks, and Organic On-Page Prominence, along with prioritized step-by-step fixes.
+                </p>
+              </div>
+              <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-1.5 shadow-2xs">
+                <h3 className="text-xs sm:text-sm font-black font-display text-[#151716]">
+                  Can marketing agencies use this among their local SEO audit tools for clients?
+                </h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Yes. Consultants and agencies use Local Surge alongside traditional local SEO audit tools to run unlimited 60-second client checkups, uncover Map Pack gaps on discovery calls, and benchmark multi-location websites without per-seat software fees.
+                </p>
+              </div>
+              <div className="bg-white border border-[#dfded4] p-5 rounded-2xl space-y-1.5 shadow-2xs">
+                <h3 className="text-xs sm:text-sm font-black font-display text-[#151716]">
+                  Is this local SEO audit completely free?
+                </h3>
+                <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                  Yes, the local SEO audit tool and instant website scan are 100% free with no credit card or account required. You receive immediate diagnostic scores and actionable local ranking recommendations.
+                </p>
+              </div>
             </div>
           </div>
 

@@ -66,7 +66,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
         <section>
           <h2>Statewide SEO Strategy Blueprints</h2>
           <ul>
-            ${states.map(s => `<li><a href="/locations/${s.slug}/">${s.name} Local Search Strategy Guide</a> (${s.totalBusinesses} Enterprises)</li>`).join('\n')}
+            ${states.map(s => `<li><a href="/locations/${s.slug}">${s.name} Local Search Strategy Guide</a> (${s.totalBusinesses} Enterprises)</li>`).join('\n')}
           </ul>
         </section>
       </div>
@@ -304,7 +304,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
       if (stateData) {
         const title = `${stateData.name} Local Search Behavior & Small Business SEO Guide - Local Surge`;
         const description = stateData.heroSubheadline;
-        const canonical = `https://localsurgeseo.com/locations/${stateData.slug}/`;
+        const canonical = `https://localsurgeseo.com/locations/${stateData.slug}`;
         const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
 
         const schemaJson = {
@@ -391,7 +391,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
               "itemListElement": [
                 { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
                 { "@type": "ListItem", "position": 2, "name": "Locations", "item": "https://localsurgeseo.com/locations" },
-                { "@type": "ListItem", "position": 3, "name": `${districtData.stateName}`, "item": `https://localsurgeseo.com/locations/${districtData.stateSlug}/` },
+                { "@type": "ListItem", "position": 3, "name": `${districtData.stateName}`, "item": `https://localsurgeseo.com/locations/${districtData.stateSlug}` },
                 { "@type": "ListItem", "position": 4, "name": `${districtData.name} Local SEO`, "item": canonical }
               ]
             },
@@ -429,7 +429,7 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
         const crawlMarkup = `
           <div id="ssr-locations-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
             <nav aria-label="Breadcrumb">
-              <a href="/">Home</a> / <a href="/locations">Locations</a> / <a href="/locations/${districtData.stateSlug}/">${districtData.stateName}</a> / <span>${districtData.name} District SEO</span>
+              <a href="/">Home</a> / <a href="/locations">Locations</a> / <a href="/locations/${districtData.stateSlug}">${districtData.stateName}</a> / <span>${districtData.name} District SEO</span>
             </nav>
             <h1>${districtData.heroHeadline}</h1>
             <p>${districtData.heroSubheadline}</p>
@@ -1164,8 +1164,8 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
   }
 
   if (cleanPath === '/seo-tool') {
-    const title = "Free Local SEO Audit Tool: Instant Map Pack & Site Scan - Local Surge";
-    const description = "Run an instant free local SEO audit in under 60 seconds. Audit Google Map Pack rankings, NAP consistency, local citations, and mobile page speed.";
+    const title = "Free Local SEO Audit Tool | Instant Local SEO Checkup, Scan & Agency Report";
+    const description = "Run a 100% free local SEO audit and instant local SEO checkup in 60 seconds. Scan Google Business Profile signals, Local 3-Pack gaps, NAP citations, schema, and white-label local SEO audit reports for agencies.";
     const canonical = "https://localsurgeseo.com/seo-tool";
     const ogImage = "https://localsurgeseo.com/assets/og-seo-tool.png";
 
@@ -1198,26 +1198,34 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
           "mainEntity": [
             {
               "@type": "Question",
-              "name": "How does the Free Local SEO Audit Tool work?",
+              "name": "How does the Free Local SEO Audit Tool & Checkup work?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Enter your website URL into the free local SEO scanner. Our automated diagnostic engine evaluates live DOM structure, Google Maps 3-Pack signals, schema markup, and mobile Core Web Vitals to deliver a prioritized remediation report in under 60 seconds."
+                "text": "Enter any business domain into the scanner to run an instant local SEO checkup. Within 60 seconds, our crawler evaluates live DOM structure, Google Maps 3-Pack relevance signals, LocalBusiness JSON-LD schema, NAP consistency, and Core Web Vitals."
               }
             },
             {
               "@type": "Question",
-              "name": "What ranking factors does the local SEO scan evaluate?",
+              "name": "What is included in the free local SEO report and scan?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "The tool audits Google Business Profile readiness, NAP (Name, Address, Phone) citation consistency, LocalBusiness JSON-LD structured data, mobile page speed (LCP/CLS), and local search visibility."
+                "text": "Every free local SEO report scores your site across 4 core pillars: LocalBusiness & Service Schema, NAP Citation Integrity, Review Proximity & Velocity benchmarks, and Organic On-Page Prominence, along with prioritized step-by-step fixes."
               }
             },
             {
               "@type": "Question",
-              "name": "Is the local SEO audit report completely free?",
+              "name": "Can marketing agencies use this among their local SEO audit tools for clients?",
               "acceptedAnswer": {
                 "@type": "Answer",
-                "text": "Yes, the local SEO audit tool is 100% free with no credit card required. You receive instant diagnostic scores and actionable SEO steps."
+                "text": "Yes. Consultants and agencies use Local Surge alongside traditional local SEO audit tools to run unlimited 60-second client checkups, uncover Map Pack gaps on discovery calls, and benchmark multi-location websites without per-seat software fees."
+              }
+            },
+            {
+              "@type": "Question",
+              "name": "Is this local SEO audit completely free?",
+              "acceptedAnswer": {
+                "@type": "Answer",
+                "text": "Yes, the local SEO audit tool and instant website scan are 100% free with no credit card or account required. You receive immediate diagnostic scores and actionable local ranking recommendations."
               }
             }
           ]
@@ -1228,38 +1236,54 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const crawlMarkup = `
       <main id="ssr-seotool-content" class="max-w-5xl mx-auto px-4 py-8">
         <nav aria-label="Breadcrumb" class="text-sm mb-4">
-          <a href="/">Home</a> &gt; <span>Free Local SEO Tools for Small Business</span>
+          <a href="/">Home</a> &gt; <span>Free Local SEO Audit Tool &amp; Checkup</span>
         </nav>
-        <h1 class="text-3xl font-bold text-gray-900 mb-3">Free Local SEO Tools for Small Business &amp; Real-Time Audit Suite</h1>
+        <h1 class="text-3xl font-bold text-gray-900 mb-3">Free Local SEO Audit Tool &amp; Instant Local SEO Checkup</h1>
         <p class="text-lg text-gray-700 mb-6">${description}</p>
         
         <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-3">Instant Search Readiness &amp; Local 3-Pack Diagnostic</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-3">What Our Free Local SEO Scan &amp; Report Checks in 60 Seconds</h2>
           <p class="text-gray-700 leading-relaxed mb-4">
-            Evaluate your business website's technical health, keyword relevance, Core Web Vitals performance, and Google Business Profile signal readiness in under 60 seconds. Our diagnostic engine evaluates live DOM structure, Schema.org structured data, mobile viewport speed, and local NAP consistency.
+            Run a free local SEO audit to evaluate your business website's technical health, keyword relevance, Core Web Vitals speed, and Google Business Profile readiness in under 60 seconds. Every free local SEO checkup and report inspects live DOM signals, Schema.org structured data, mobile viewport stability, and NAP consistency.
           </p>
           <ul class="list-disc pl-5 space-y-2 text-gray-700">
-            <li><strong>Core Web Vitals &amp; Mobile Speed:</strong> Analyze LCP, CLS, and FID metrics to ensure high rankings on mobile devices.</li>
-            <li><strong>Local Schema &amp; JSON-LD Markup:</strong> Verify LocalBusiness, BreadcrumbList, and FAQPage structured data implementations.</li>
-            <li><strong>On-Page Meta &amp; Open Graph Tags:</strong> Validate title lengths, meta descriptions, and social card preview dimensions.</li>
-            <li><strong>NAP &amp; Directory Consistency:</strong> Benchmark Name, Address, and Phone accuracy against top-ranking local competitors.</li>
+            <li><strong>Structured LocalBusiness Schema Audit:</strong> Verify LocalBusiness, BreadcrumbList, FAQPage, and service-area JSON-LD markup.</li>
+            <li><strong>NAP &amp; Directory Citation Integrity:</strong> Benchmark Name, Address, and Phone accuracy against reigning Google Local 3-Pack leaders.</li>
+            <li><strong>Core Web Vitals &amp; Mobile Local SEO Checkup:</strong> Scan LCP, CLS, and mobile rendering bottlenecks affecting Map Pack conversions.</li>
+            <li><strong>AI Citation &amp; GEO Readiness Score:</strong> Check whether ChatGPT, Perplexity, and Google AI Overviews can extract clean local entity facts.</li>
           </ul>
         </section>
 
         <section class="mb-8">
-          <h2 class="text-2xl font-bold text-gray-900 mb-3">Frequently Asked Questions About Local SEO Audits</h2>
+          <h2 class="text-2xl font-bold text-gray-900 mb-3">Local SEO Audit Tools for Agencies &amp; Multi-Location Contractors</h2>
+          <p class="text-gray-700 leading-relaxed mb-4">
+            Most legacy local SEO audit tools lock multi-client scans behind expensive monthly seat licenses. Local Surge provides agencies, freelancers, and multi-location brands with unlimited instant domain checkups for discovery calls, client onboarding benchmarks, and technical Local 3-Pack troubleshooting.
+          </p>
+          <ul class="list-disc pl-5 space-y-2 text-gray-700">
+            <li><strong>Rapid Agency Prospect Scans:</strong> Generate an actionable free local SEO report during sales calls in under 60 seconds.</li>
+            <li><strong>Multi-Location Benchmark Audits:</strong> Compare city-specific landing pages for schema completeness, local keywords, and citation alignment.</li>
+            <li><strong>WebMCP &amp; Automated Diagnostic API:</strong> Integrate deterministic local SEO checks directly into modern agency workflows.</li>
+          </ul>
+        </section>
+
+        <section class="mb-8">
+          <h2 class="text-2xl font-bold text-gray-900 mb-3">Frequently Asked Questions About Free Local SEO Audits</h2>
           <div class="space-y-4">
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">How does the Free Local SEO Scanner work?</h3>
-              <p class="text-gray-700">Enter your website URL into the scanner. Our automated engine analyzes key on-page ranking factors, response headers, structured data markup, and mobile friendliness, generating an actionable report with prioritized optimization steps.</p>
+              <h3 class="text-lg font-semibold text-gray-900">How does the Free Local SEO Audit Tool &amp; Checkup work?</h3>
+              <p class="text-gray-700">Enter any business domain into the scanner to run an instant local SEO checkup. Within 60 seconds, our crawler evaluates live DOM structure, Google Maps 3-Pack relevance signals, LocalBusiness JSON-LD schema, NAP consistency, and Core Web Vitals.</p>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">What is the difference between general SEO and Local SEO?</h3>
-              <p class="text-gray-700">General SEO focuses on broad national keyword rankings, while Local SEO optimizes your digital entity for geographic proximity, Google Maps 3-Pack rankings, localized NAP citations, and geo-targeted consumer intent.</p>
+              <h3 class="text-lg font-semibold text-gray-900">What is included in the free local SEO report and scan?</h3>
+              <p class="text-gray-700">Every free local SEO report scores your site across 4 core pillars: LocalBusiness &amp; Service Schema, NAP Citation Integrity, Review Proximity &amp; Velocity benchmarks, and Organic On-Page Prominence, along with prioritized step-by-step fixes.</p>
             </div>
             <div>
-              <h3 class="text-lg font-semibold text-gray-900">Is this audit completely free?</h3>
-              <p class="text-gray-700">Yes, the instant diagnostic scanner is 100% free with no credit card required. You receive instant scores and actionable optimization recommendations.</p>
+              <h3 class="text-lg font-semibold text-gray-900">Can marketing agencies use this among their local SEO audit tools for clients?</h3>
+              <p class="text-gray-700">Yes. Consultants and agencies use Local Surge alongside traditional local SEO audit tools to run unlimited 60-second client checkups, uncover Map Pack gaps on discovery calls, and benchmark multi-location websites without per-seat software fees.</p>
+            </div>
+            <div>
+              <h3 class="text-lg font-semibold text-gray-900">Is this local SEO audit completely free?</h3>
+              <p class="text-gray-700">Yes, the local SEO audit tool and instant website scan are 100% free with no credit card or account required. You receive immediate diagnostic scores and actionable local ranking recommendations.</p>
             </div>
           </div>
         </section>
@@ -1381,55 +1405,70 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
     const [stateSlugCandidate, citySlugCandidate] = pathParts;
     const cityData = CITY_DIRECTORY[citySlugCandidate];
     if (cityData && cityData.stateSlug === stateSlugCandidate) {
-      const title = `${cityData.name} Rankings & Local Maps Blueprint - Local Surge`;
-      const description = cityData.intro;
+      const cleanCityName = cityData.name.replace(/\s+SEO$/i, '');
+      const title = cityData.customTitle || `${cleanCityName}, ${cityData.stateCode} Local SEO & Maps Rankings Blueprint - Local Surge`;
+      const description = cityData.customDescription || cityData.intro;
+      const h1Text = cityData.customH1 || `${cleanCityName} Local SEO & Maps Rankings`;
       const canonical = `https://localsurgeseo.com/${cityData.stateSlug}/${cityData.slug}`;
       const ogImage = "https://localsurgeseo.com/assets/og-directory.png";
 
+      const schemaGraph: any[] = [
+        {
+          "@type": "BreadcrumbList",
+          "itemListElement": [
+            { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
+            { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": "https://localsurgeseo.com/site-map" },
+            { "@type": "ListItem", "position": 3, "name": cityData.stateName, "item": `https://localsurgeseo.com/${cityData.stateSlug}` },
+            { "@type": "ListItem", "position": 4, "name": cleanCityName, "item": canonical }
+          ]
+        },
+        {
+          "@type": "LocalBusiness",
+          "name": `Local Surge SEO - ${cleanCityName}`,
+          "description": description,
+          "url": canonical,
+          "telephone": "+1-909-707-5075",
+          "priceRange": "$$",
+          "currenciesAccepted": "USD",
+          "paymentAccepted": "Credit Card, Debit Card, Invoice",
+          "address": {
+            "@type": "PostalAddress",
+            "addressLocality": cleanCityName,
+            "addressRegion": cityData.stateCode,
+            "addressCountry": "US"
+          },
+          "areaServed": {
+            "@type": "City",
+            "name": cleanCityName
+          }
+        }
+      ];
+
+      if (cityData.faqs && cityData.faqs.length > 0) {
+        schemaGraph.push({
+          "@type": "FAQPage",
+          "mainEntity": cityData.faqs.map(f => ({
+            "@type": "Question",
+            "name": f.question,
+            "acceptedAnswer": { "@type": "Answer", "text": f.answer }
+          }))
+        });
+      }
+
       const schemaJson = {
         "@context": "https://schema.org",
-        "@graph": [
-          {
-            "@type": "BreadcrumbList",
-            "itemListElement": [
-              { "@type": "ListItem", "position": 1, "name": "Home", "item": "https://localsurgeseo.com/" },
-              { "@type": "ListItem", "position": 2, "name": "Sitemap", "item": "https://localsurgeseo.com/site-map" },
-              { "@type": "ListItem", "position": 3, "name": cityData.stateName, "item": `https://localsurgeseo.com/${cityData.stateSlug}` },
-              { "@type": "ListItem", "position": 4, "name": cityData.name, "item": canonical }
-            ]
-          },
-          {
-            "@type": "LocalBusiness",
-            "name": `Local Surge SEO - ${cityData.name}`,
-            "description": cityData.intro,
-            "url": canonical,
-            "telephone": "+1-909-707-5075",
-            "priceRange": "$$",
-            "currenciesAccepted": "USD",
-            "paymentAccepted": "Credit Card, Debit Card, Invoice",
-            "address": {
-              "@type": "PostalAddress",
-              "addressLocality": cityData.name,
-              "addressRegion": cityData.stateCode,
-              "addressCountry": "US"
-            },
-            "areaServed": {
-              "@type": "City",
-              "name": cityData.name
-            }
-          }
-        ]
+        "@graph": schemaGraph
       };
 
       const crawlMarkup = `
         <div id="ssr-city-content" style="position: absolute; width: 1px; height: 1px; padding: 0; margin: -1px; overflow: hidden; clip: rect(0, 0, 0, 0); border: 0;">
           <nav aria-label="Breadcrumb">
-            <a href="/">Home</a> / <a href="/site-map">Sitemap</a> / <a href="/${cityData.stateSlug}">${cityData.stateName}</a> / <span>${cityData.name}</span>
+            <a href="/">Home</a> / <a href="/site-map">Sitemap</a> / <a href="/${cityData.stateSlug}">${cityData.stateName}</a> / <span>${cleanCityName}</span>
           </nav>
-          <h1>${cityData.name} Local SEO & Maps Rankings</h1>
+          <h1>${h1Text}</h1>
           <p>${cityData.intro}</p>
           <section>
-            <h2>${cityData.name} Economic Projections & Demographics</h2>
+            <h2>${cleanCityName} Economic Projections & Demographics</h2>
             <ul>
               <li>Population: ${cityData.population}</li>
               <li>Small Businesses: ${cityData.businessCount}</li>
@@ -1438,19 +1477,19 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
             </ul>
           </section>
           <section>
-            <h2>Key Statistics for ${cityData.name} Local Businesses</h2>
+            <h2>Key Statistics for ${cleanCityName} Local Businesses</h2>
             <ul>
               ${cityData.keyStatsList.map(s => `<li>${s}</li>`).join('\n')}
             </ul>
           </section>
           <section>
-            <h2>Local Neighborhood Authority Nodes in ${cityData.name}</h2>
+            <h2>Local Neighborhood Authority Nodes in ${cleanCityName}</h2>
             <ul>
               ${cityData.neighborhoods.map(n => `<li><strong>${n.name} (${n.tag})</strong>: Focused on ${n.focus} (Schema: ${n.schema})</li>`).join('\n')}
             </ul>
           </section>
           <section>
-            <h2>Market Realities for ${cityData.name} Owners</h2>
+            <h2>Market Realities for ${cleanCityName} Owners</h2>
             <ul>
               ${cityData.realityPoints.map(r => `<li>${r}</li>`).join('\n')}
             </ul>
@@ -1461,6 +1500,16 @@ export function prerenderLocationHtml(rawHtml: string, requestPath: string): str
               ${cityData.advantagePoints.map(a => `<li>${a}</li>`).join('\n')}
             </ul>
           </section>
+          ${cityData.faqs && cityData.faqs.length > 0 ? `
+          <section>
+            <h2>Frequently Asked Questions About ${cleanCityName} Local SEO</h2>
+            ${cityData.faqs.map(f => `
+              <div>
+                <h3>${f.question}</h3>
+                <p>${f.answer}</p>
+              </div>
+            `).join('\n')}
+          </section>` : ''}
         </div>
       `;
 

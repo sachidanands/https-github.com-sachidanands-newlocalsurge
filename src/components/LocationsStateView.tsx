@@ -53,7 +53,7 @@ export default function LocationsStateView({
             '@type': 'ListItem',
             'position': 3,
             'name': `${stateData.name} Local SEO Guide`,
-            'item': `https://localsurgeseo.com/locations/${stateData.slug}/`
+            'item': `https://localsurgeseo.com/locations/${stateData.slug}`
           }
         ]
       },
@@ -401,7 +401,7 @@ export default function LocationsStateView({
                       if (hasDistricts) {
                         setSelectedOtherStateSlug(isSelected ? null : st.slug);
                       } else {
-                        onNavigateToLocation(`/locations/${st.slug}/`);
+                        onNavigateToLocation(`/locations/${st.slug}`);
                       }
                     }}
                     className={`px-3.5 py-2 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-1.5 border focus-visible:outline-2 focus-visible:outline-[#123e35] ${
@@ -435,7 +435,7 @@ export default function LocationsStateView({
                   </h4>
                   <button
                     type="button"
-                    onClick={() => onNavigateToLocation(`/locations/${selectedOtherState.slug}/`)}
+                    onClick={() => onNavigateToLocation(`/locations/${selectedOtherState.slug}`)}
                     className="text-xs font-bold text-[#bc5f40] hover:underline flex items-center gap-1 cursor-pointer"
                   >
                     <span>Go to {selectedOtherState.name} Guide</span>

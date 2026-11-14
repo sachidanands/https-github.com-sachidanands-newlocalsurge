@@ -201,7 +201,7 @@ export default function InteractiveLocationsMap({
     if (currentLevel === 'national') {
       states.forEach((state) => {
         const isCurrent = false;
-        const targetUrl = `/locations/${state.slug}/`;
+        const targetUrl = `/locations/${state.slug}`;
 
         const marker = L.marker([state.lat, state.lng], {
           icon: createPinIcon(isCurrent, false, `${state.name} Statewide Market`),

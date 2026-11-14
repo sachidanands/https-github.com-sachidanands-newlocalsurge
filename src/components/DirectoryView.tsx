@@ -86,7 +86,8 @@ export default function DirectoryView({
 
   // Determine standard variables based on state or city focus
   const isCity = !!cityData;
-  const name = isCity ? cityData!.name : `${stateData!.name} Local SEO Guide`;
+  const cleanCityName = isCity ? cityData!.name.replace(/\s+SEO$/i, '') : '';
+  const name = isCity ? (cityData!.customH1 || cityData!.name) : `${stateData!.name} Local SEO Guide`;
   const code = isCity ? cityData!.stateCode : stateData!.code;
   const emoji = isCity ? cityData!.emoji : stateData!.emoji;
   const intro = isCity ? cityData!.intro : stateData!.intro;
@@ -129,8 +130,8 @@ export default function DirectoryView({
       ...(isCity && cityData ? [
         {
           "@type": "LocalBusiness",
-          "name": `Local Surge SEO - ${cityData.name}`,
-          "description": cityData.intro,
+          "name": `Local Surge SEO - ${cleanCityName}`,
+          "description": cityData.customDescription || cityData.intro,
           "url": `https://localsurgeseo.com/${cityData.stateSlug}/${cityData.slug}`,
           "telephone": "+1-909-707-5075",
           "priceRange": "$$",
@@ -138,14 +139,27 @@ export default function DirectoryView({
           "paymentAccepted": "Credit Card, Debit Card, Invoice",
           "address": {
             "@type": "PostalAddress",
-            "addressLocality": cityData.name,
+            "addressLocality": cleanCityName,
             "addressRegion": cityData.stateCode,
             "addressCountry": "US"
           },
           "areaServed": {
             "@type": "City",
-            "name": cityData.name
+            "name": cleanCityName
           }
+        }
+      ] : []),
+      ...(isCity && cityData?.faqs && cityData.faqs.length > 0 ? [
+        {
+          "@type": "FAQPage",
+          "mainEntity": cityData.faqs.map(faq => ({
+            "@type": "Question",
+            "name": faq.question,
+            "acceptedAnswer": {
+              "@type": "Answer",
+              "text": faq.answer
+            }
+          }))
         }
       ] : [])
     ]
@@ -516,6 +530,33 @@ export default function DirectoryView({
             </div>
           </div>
         </div>
+
+        {/* City FAQ section if defined */}
+        {isCity && cityData?.faqs && cityData.faqs.length > 0 && (
+          <section className="bg-white border border-[#dfded4] rounded-3xl p-6 sm:p-10 space-y-6 shadow-xs">
+            <div className="space-y-1.5">
+              <span className="text-[10px] font-bold font-mono tracking-widest text-[#bc5f40] uppercase block">
+                Regional Local SEO Answers
+              </span>
+              <h2 className="text-xl sm:text-2xl font-black font-display text-[#151716] flex items-center gap-2">
+                <HelpCircle className="w-5 h-5 text-[#123e35]" />
+                Frequently Asked Questions: {cleanCityName} &amp; {cityData.stateCode} Local SEO
+              </h2>
+            </div>
+            <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              {cityData.faqs.map((faq, idx) => (
+                <div key={idx} className="bg-[#faf9f6] border border-[#dfded4]/80 rounded-2xl p-5 space-y-2">
+                  <h3 className="text-xs sm:text-sm font-black font-display text-[#151716] leading-snug">
+                    {faq.question}
+                  </h3>
+                  <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                    {faq.answer}
+                  </p>
+                </div>
+              ))}
+            </div>
+          </section>
+        )}
 
         {/* CTA banner card */}
         <div className="bg-amber-50 border border-amber-300/60 rounded-3xl p-8 text-center space-y-5">

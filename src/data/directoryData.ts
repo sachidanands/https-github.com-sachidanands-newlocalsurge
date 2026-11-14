@@ -30,12 +30,16 @@ export interface CityData {
   digitalOpportunity: string;
   creativeSector?: string;
   emoji: string;
+  customTitle?: string;
+  customDescription?: string;
+  customH1?: string;
   intro: string;
   compareMetrics: { metric: string; count: string; width: string; active?: boolean; desc: string }[];
   keyStatsList: string[];
   realityPoints: string[];
   advantagePoints: string[];
   neighborhoods: { name: string; tag: string; focus: string; schema: string }[];
+  faqs?: { question: string; answer: string }[];
 }
 
 export const STATE_DIRECTORY: Record<string, StateData> = {
@@ -1483,37 +1487,62 @@ export const CITY_DIRECTORY: Record<string, CityData> = {
     revenue: '$22 billion',
     digitalOpportunity: '5,800',
     emoji: '🦬',
-    intro: 'Buffalo is a high-growth industrial and trade hub in Upstate New York. Local contractors, emergency services, and wellness clinics use localized citations to capture surrounding traffic in Amherst, Cheektowaga, and Niagara Falls.',
+    customTitle: 'Local SEO Buffalo NY | Erie County, Amherst & WNY Map Pack Rankings',
+    customDescription: 'Dominate Google Maps & Local 3-Pack rankings with Local SEO in Buffalo NY, Erie County, and WNY—covering Amherst, East Amherst, Williamsville, Cheektowaga & East Aurora.',
+    customH1: 'Local SEO Buffalo NY & Erie County Map Pack Rankings',
+    intro: 'Dominate Google Maps and Local 3-Pack search results with Local SEO in Buffalo, NY, across Erie County, NY, and throughout Western New York (WNY). We engineer localized schema, Google Business Profile signals, and suburb authority nodes so Buffalo contractors, medical clinics, and local businesses rank across Amherst, East Amherst, Williamsville, Cheektowaga, and East Aurora.',
     compareMetrics: [
-      { metric: 'Market Commerce', count: '$22B', width: '100%', active: true, desc: 'Total yearly commerce in the Buffalo market' },
-      { metric: 'City Population', count: '275k', width: '70%', active: false, desc: 'Active residents in the municipal Buffalo layout' },
-      { metric: 'Active Businesses', count: '19k', width: '53%', active: false, desc: 'Registered small businesses operating inside Buffalo' },
-      { metric: 'Digital Opportunity', count: '5.8k', width: '31%', active: false, desc: 'Firms currently lacking professional maps indexing' }
+      { metric: 'Market Commerce', count: '$22B', width: '100%', active: true, desc: 'Total yearly commerce in the Buffalo & Erie County WNY market' },
+      { metric: 'Metro Erie Population', count: '954k', width: '78%', active: false, desc: 'Erie County NY residents searching local services across WNY' },
+      { metric: 'Active Businesses', count: '19k', width: '53%', active: false, desc: 'Registered small businesses operating across Buffalo & Erie County' },
+      { metric: 'Digital Opportunity', count: '5.8k', width: '31%', active: false, desc: 'Firms currently lacking professional Local SEO & Maps indexing' }
     ],
     keyStatsList: [
-      '19,000 independent small companies drive the Buffalo marketplace',
-      'Buffalo small business sectors process over $22 billion in commerce',
-      '275,000 residents look to local maps for home services, medical, and legal needs',
-      'Construction, electrical, and plumbing repair represent 4,800 businesses',
-      '5,800 local active listings operate without verified geographic Schema'
+      'Over 954,000 Erie County, NY residents and 19,000+ small businesses drive local WNY search demand',
+      'Buffalo and Western New York small business sectors process over $22 billion in annual commerce',
+      'High-intent suburban searches cluster heavily across Amherst, East Amherst, Williamsville, Cheektowaga, and East Aurora, NY',
+      'Construction, HVAC, roofing, electrical, and plumbing trades represent 4,800+ Erie County service businesses',
+      'Over 5,800 local Buffalo & WNY active listings operate without verified GeoCoordinates or LocalBusiness schema'
     ],
     realityPoints: [
-      'Strong local pride makes national brands perform poorly without local SEO',
-      'HVAC and plumbing trades face extreme competition during cold winter spikes',
-      'Suburbs like Amherst pull organic queries away from downtown spots',
-      'Average 32 direct local competitors per trade business listing'
+      'Suburban customers in Amherst, East Amherst, Williamsville, and East Aurora expect hyper-local relevance rather than generic downtown ads',
+      'Erie County NY HVAC, roofing, and emergency plumbing queries surge intensely during Lake Erie winter storms and spring thaws',
+      'Cheektowaga and Walden Ave commercial corridors trigger overlapping Map Pack radius filters against legacy franchises',
+      'Average 32 direct local competitors per trade query across Buffalo NY and Western New York (WNY)'
     ],
     advantagePoints: [
-      '5,800 local businesses operate with basic, unverified listings',
-      'Dynamic local schema markup outranks expensive national advertising bids',
-      'Neighborhood nodes isolate high-value northern properties',
-      'Coordinated local business listings build early authority shields'
+      'Over 5,800 Erie County local businesses still rely on unoptimized directories, giving Local SEO Buffalo NY early movers fast Map Pack wins',
+      'Town-specific schema markup helps single-office brands rank for SEO in Amherst NY, East Amherst, Williamsville, Cheektowaga & East Aurora',
+      'Coordinate-aligned LocalBusiness JSON-LD and service-area signals beat national lead aggregators on WNY high-intent keywords',
+      'Coordinated Erie County NY NAP citations and geo-tagged review velocity build durable Top-3 Google Maps authority'
     ],
     neighborhoods: [
-      { name: 'Allentown', tag: 'Aesthetic Node', focus: 'Retail / Restaurants / Professional', schema: 'Active ✓' },
-      { name: 'Elmwood Village', tag: 'Luxury Corridor', focus: 'Boutiques / Wellness / Professional', schema: 'Active ✓' },
-      { name: 'North Buffalo', tag: 'Residential Suburb', focus: 'Home Services / Contractors / Retail', schema: 'Active ✓' },
-      { name: 'Downtown Buffalo', tag: 'Corporate Core', focus: 'Legal / Real Estate / Professional', schema: 'Active ✓' }
+      { name: 'Amherst & East Amherst, NY', tag: 'Northtowns Hub', focus: 'Medical / Dental / Home Services on Transit Rd & Sheridan Dr', schema: 'Active ✓' },
+      { name: 'Williamsville, NY', tag: 'Affluent Village', focus: 'Legal / Boutique Clinics / High-Ticket Remodeling on Main St', schema: 'Active ✓' },
+      { name: 'Cheektowaga, NY', tag: 'Commercial Corridor', focus: 'HVAC / Plumbing / Roofing & Auto Trades near Walden Ave', schema: 'Active ✓' },
+      { name: 'East Aurora, NY', tag: 'Southtowns Node', focus: 'Custom Contractors / Specialty Retail / Regional Services', schema: 'Active ✓' },
+      { name: 'Elmwood Village & Allentown', tag: 'Urban Core', focus: 'Hospitality / Wellness / Professional Practices', schema: 'Active ✓' },
+      { name: 'North Buffalo & Hertel Ave', tag: 'Residential Grid', focus: 'Emergency Trades / Residential Contractors / Retail', schema: 'Active ✓' },
+      { name: 'Downtown Buffalo & Canalside', tag: 'Corporate Center', focus: 'B2B / Legal / Real Estate / Commercial Services', schema: 'Active ✓' },
+      { name: 'Orchard Park, West Seneca & WNY', tag: 'Erie County Ring', focus: 'Multi-Town Service Area Business (SAB) Map Pack Coverage', schema: 'Active ✓' }
+    ],
+    faqs: [
+      {
+        question: 'How does Local SEO in Buffalo, NY and Erie County work for service-area businesses?',
+        answer: 'Local SEO in Buffalo, NY combines an optimized Google Business Profile, exact Erie County NAP citation consistency, geo-anchored LocalBusiness schema, and town-level service pages so your business appears in the Google Map Pack even across multiple WNY zip codes without multiple physical storefronts.'
+      },
+      {
+        question: 'Can a single Buffalo business rank in Amherst, East Amherst, Williamsville, Cheektowaga, and East Aurora?',
+        answer: 'Yes. By structuring explicit Service Area declarations, dedicated corridor landing sections covering Transit Rd, Sheridan Dr, Main St, Walden Ave, and East Aurora / Southtowns postal codes, and locally contextualized project proof, local businesses capture Map Pack and organic queries across both the Northtowns and Southtowns.'
+      },
+      {
+        question: 'How long does it take to see Google Maps 3-Pack movement in Western New York (WNY)?',
+        answer: 'Most Buffalo and Erie County NY businesses see measurable Map Pack impression lifts within 30 to 45 days after fixing schema gaps, Google Business Profile categories, and citation mismatches, with top-3 placement gains compounding between 60 and 90 days as review velocity grows.'
+      },
+      {
+        question: 'Why invest in specialized Local Business SEO in Erie County NY over national directories?',
+        answer: 'National directories charge recurring pay-per-lead commissions and share every homeowner inquiry with 4 to 8 competing WNY contractors. Building direct organic and Map Pack visibility across Buffalo NY makes your website and phone line an owned asset with higher conversion margins.'
+      }
     ]
   },
   'toronto-seo': {

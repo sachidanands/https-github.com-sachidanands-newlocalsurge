@@ -236,11 +236,11 @@ export default function App() {
     else if (currentPage === 'case-studies') path = '/case-studies';
     else if (currentPage === 'privacy-policy') path = '/privacy-policy';
     else if (currentPage === 'terms-of-service') path = '/terms-of-service';
-    else if (currentPage === 'california') path = '/locations/california/';
+    else if (currentPage === 'california') path = '/locations/california';
     else if (currentPage === 'los-angeles-seo') path = '/locations/california/los-angeles';
     else if (currentPage === 'locations-index') path = '/locations';
     else if (currentPage === 'locations-state') {
-      path = activeStateSlug ? `/locations/${activeStateSlug}/` : '/locations';
+      path = activeStateSlug ? `/locations/${activeStateSlug}` : '/locations';
     } else if (currentPage === 'locations-district') {
       path = (activeStateSlug && activeCitySlug) ? `/locations/${activeStateSlug}/${activeCitySlug}` : '/locations';
     } else if (currentPage === 'blog') {
@@ -323,8 +323,8 @@ export default function App() {
       description = 'Explore straightforward local SEO plans and contractor pricing packages. Contract-free monthly SEO signal boosters with Google Map Pack rankings and transparent ROI.';
       ogImage = 'https://localsurgeseo.com/assets/og-pricing.png';
     } else if (currentPage === 'seo-tool') {
-      title = 'Free Local SEO Audit Tool: Instant Map Pack & Site Scan - Local Surge';
-      description = 'Run an instant free local SEO audit in under 60 seconds. Audit Google Map Pack rankings, NAP consistency, local citations, and mobile page speed.';
+      title = 'Free Local SEO Audit Tool | Instant Local SEO Checkup, Scan & Agency Report';
+      description = 'Run a 100% free local SEO audit and instant local SEO checkup in 60 seconds. Scan Google Business Profile signals, Local 3-Pack gaps, NAP citations, schema, and white-label local SEO audit reports for agencies.';
       ogImage = 'https://localsurgeseo.com/assets/og-seo-tool.png';
     } else if (currentPage === 'contact') {
       title = 'Contact Team Office - Local Surge SEO';
@@ -376,10 +376,17 @@ export default function App() {
         : `Analyze local search performance and citation compliance metrics for service area businesses throughout the state of ${stateName}.`;
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'city-seo' && activeStateSlug && activeCitySlug) {
-      const stateName = activeStateSlug.charAt(0).toUpperCase() + activeStateSlug.slice(1);
-      const cityName = activeCitySlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
-      title = `${cityName}, ${stateName} Local SEO Rankings - Local Surge`;
-      description = `Local maps optimization, search volumes, and competitor density listings in ${cityName}, ${stateName} for neighborhood contractors and practices.`;
+      const cityObj = CITY_DIRECTORY[activeCitySlug];
+      if (cityObj) {
+        const cleanCity = cityObj.name.replace(/\s+SEO$/i, '');
+        title = cityObj.customTitle || `${cleanCity}, ${cityObj.stateName} Local SEO Rankings - Local Surge`;
+        description = cityObj.customDescription || cityObj.intro;
+      } else {
+        const stateName = activeStateSlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        const cityName = activeCitySlug.split('-').map(word => word.charAt(0).toUpperCase() + word.slice(1)).join(' ');
+        title = `${cityName}, ${stateName} Local SEO Rankings - Local Surge`;
+        description = `Local maps optimization, search volumes, and competitor density listings in ${cityName}, ${stateName} for neighborhood contractors and practices.`;
+      }
       ogImage = 'https://localsurgeseo.com/assets/og-directory.png';
     } else if (currentPage === 'demo') {
       const demoTitles: Record<string, { title: string; desc: string }> = {

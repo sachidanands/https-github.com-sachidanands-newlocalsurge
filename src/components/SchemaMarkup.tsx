@@ -160,14 +160,14 @@ export default function SchemaMarkup({
       addBreadcrumb('Locations & Market Studies', '/locations');
       const stSlug = activeStateSlug || 'california';
       const stateObj = getStateBySlug(stSlug);
-      addBreadcrumb(stateObj ? stateObj.name : stSlug.charAt(0).toUpperCase() + stSlug.slice(1), `/locations/${stSlug}/`);
+      addBreadcrumb(stateObj ? stateObj.name : stSlug.charAt(0).toUpperCase() + stSlug.slice(1), `/locations/${stSlug}`);
     } else if (currentPage === 'locations-district' || currentPage === 'los-angeles-seo') {
       addBreadcrumb('Locations & Market Studies', '/locations');
       const stSlug = activeStateSlug || 'california';
       const cSlug = activeCitySlug || 'los-angeles';
       const stateObj = getStateBySlug(stSlug);
       const distObj = getDistrictBySlug(cSlug);
-      addBreadcrumb(stateObj ? stateObj.name : stSlug.charAt(0).toUpperCase() + stSlug.slice(1), `/locations/${stSlug}/`);
+      addBreadcrumb(stateObj ? stateObj.name : stSlug.charAt(0).toUpperCase() + stSlug.slice(1), `/locations/${stSlug}`);
       addBreadcrumb(distObj ? `${distObj.name} Local SEO` : cSlug.split('-').map(w => w.charAt(0).toUpperCase() + w.slice(1)).join(' '), `/locations/${stSlug}/${cSlug}`);
     } else if (currentPage === 'demo') {
       addBreadcrumb('Solutions & Demos', '/pricing');
@@ -528,7 +528,7 @@ export default function SchemaMarkup({
       schemas.push(getCoreLocalSeoFAQSchema());
     }
 
-    if (currentPage === 'home' || currentPage === 'why-us' || currentPage === 'seo-tool') {
+    if (currentPage === 'home' || currentPage === 'why-us') {
       schemas.push(getFAQSchema());
     }
 
@@ -626,7 +626,7 @@ export default function SchemaMarkup({
       schemas.push({
         '@context': 'https://schema.org',
         '@type': 'SoftwareApplication',
-        'name': 'Local Surge SEO Diagnostic & AI Readiness Suite',
+        'name': 'Local Surge Free Local SEO Audit Tool',
         'operatingSystem': 'All',
         'applicationCategory': 'BusinessApplication',
         'offers': {
@@ -634,7 +634,45 @@ export default function SchemaMarkup({
           'price': '0',
           'priceCurrency': 'USD'
         },
-        'description': 'Automated real-time local search signal diagnostic, citation audit, and AI search readiness scanner.'
+        'description': 'Run a 100% free local SEO audit and instant local SEO checkup in 60 seconds. Scan Google Business Profile signals, Local 3-Pack gaps, NAP citations, schema, and agency-ready audit reports.'
+      });
+      schemas.push({
+        '@context': 'https://schema.org',
+        '@type': 'FAQPage',
+        'mainEntity': [
+          {
+            '@type': 'Question',
+            'name': 'How does the Free Local SEO Audit Tool & Checkup work?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Enter any business domain into the scanner to run an instant local SEO checkup. Within 60 seconds, our crawler evaluates live DOM structure, Google Maps 3-Pack relevance signals, LocalBusiness JSON-LD schema, NAP consistency, and Core Web Vitals.'
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': 'What is included in the free local SEO report and scan?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Every free local SEO report scores your site across 4 core pillars: LocalBusiness & Service Schema, NAP Citation Integrity, Review Proximity & Velocity benchmarks, and Organic On-Page Prominence, along with prioritized step-by-step fixes.'
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': 'Can marketing agencies use this among their local SEO audit tools for clients?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Yes. Consultants and agencies use Local Surge alongside traditional local SEO audit tools to run unlimited 60-second client checkups, uncover Map Pack gaps on discovery calls, and benchmark multi-location websites without per-seat software fees.'
+            }
+          },
+          {
+            '@type': 'Question',
+            'name': 'Is this local SEO audit completely free?',
+            'acceptedAnswer': {
+              '@type': 'Answer',
+              'text': 'Yes, the local SEO audit tool and instant website scan are 100% free with no credit card or account required. You receive immediate diagnostic scores and actionable local ranking recommendations.'
+            }
+          }
+        ]
       });
     }
 

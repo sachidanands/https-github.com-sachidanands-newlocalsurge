@@ -287,10 +287,10 @@ export default function LocationsIndexView({
                   {matchingStates.map((st) => (
                     <a
                       key={`search-st-${st.slug}`}
-                      href={`/locations/${st.slug}/`}
+                      href={`/locations/${st.slug}`}
                       onClick={(e) => {
                         e.preventDefault();
-                        onNavigateToLocation(`/locations/${st.slug}/`);
+                        onNavigateToLocation(`/locations/${st.slug}`);
                       }}
                       className="bg-white border border-[#dfded4] hover:border-[#bc5f40] p-3 rounded-xl flex items-center justify-between text-xs font-bold text-[#151716] group transition-all shadow-2xs hover:shadow-xs"
                     >
@@ -324,7 +324,7 @@ export default function LocationsIndexView({
                     if (hasDistricts) {
                       setSelectedStateSlug(isSelected ? null : state.slug);
                     } else {
-                      onNavigateToLocation(`/locations/${state.slug}/`);
+                      onNavigateToLocation(`/locations/${state.slug}`);
                     }
                   }}
                   className={`px-4 py-2.5 rounded-xl text-xs font-bold transition-all cursor-pointer flex items-center gap-2 border focus-visible:outline-2 focus-visible:outline-[#123e35] ${
@@ -365,7 +365,7 @@ export default function LocationsIndexView({
                 </div>
                 <button
                   type="button"
-                  onClick={() => onNavigateToLocation(`/locations/${selectedState.slug}/`)}
+                  onClick={() => onNavigateToLocation(`/locations/${selectedState.slug}`)}
                   className="text-xs font-bold text-[#bc5f40] hover:underline flex items-center gap-1 cursor-pointer"
                 >
                   <span>Explore Complete {selectedState.name} Statewide Guide</span>

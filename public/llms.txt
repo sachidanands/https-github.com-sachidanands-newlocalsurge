@@ -61,12 +61,12 @@ All paths resolve relative to the primary root domain:
 
 ### U.S. Consumer Behavior & Research Locations Directory
 - `/locations` - National Locations Index featuring interactive maps and consumer search behavior metrics.
-- `/locations/california/` - California state market intelligence hub.
-- `/locations/texas/` - Texas enterprise and commercial search study hub.
-- `/locations/florida/` - Florida regional consumer search hub.
-- `/locations/new-york/` - New York high-density urban search corridor hub.
-- `/locations/illinois/` - Illinois Midwest regional search hub.
-- `/locations/washington/` - Washington Pacific Northwest commercial search hub.
+- `/locations/california` - California state market intelligence hub.
+- `/locations/texas` - Texas enterprise and commercial search study hub.
+- `/locations/florida` - Florida regional consumer search hub.
+- `/locations/new-york` - New York high-density urban search corridor hub.
+- `/locations/illinois` - Illinois Midwest regional search hub.
+- `/locations/washington` - Washington Pacific Northwest commercial search hub.
 - `/locations/california/los-angeles` - Los Angeles metro district consumer search study.
 - `/locations/california/san-jose` - Silicon Valley & San Jose district study.
 - `/locations/california/oakland` - East Bay & Oakland district study.

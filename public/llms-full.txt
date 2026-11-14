@@ -48,21 +48,21 @@ Google's Local algorithm weighs spatial proximity, entity prominence, and techni
 Local Surge SEO publishes open research studies examining municipal search friction, mobile utilization rates, and Google Map Pack click distributions:
 
 - **National Locations Hub:** https://localsurgeseo.com/locations
-- **California:** https://localsurgeseo.com/locations/california/ (4.2M small businesses, 88.4% web utilization)
+- **California:** https://localsurgeseo.com/locations/california (4.2M small businesses, 88.4% web utilization)
   - **Los Angeles District:** https://localsurgeseo.com/locations/california/los-angeles (9.86M residents, 84% mobile search share, 76% map pack click share)
   - **San Jose & Silicon Valley:** https://localsurgeseo.com/locations/california/san-jose (1.93M residents, 86% mobile search share, 74% map pack click share)
   - **Oakland & East Bay:** https://localsurgeseo.com/locations/california/oakland (1.68M residents, 82% mobile search share, 71% map pack click share)
   - **San Diego District:** https://localsurgeseo.com/locations/california/san-diego (3.30M residents, 83% mobile search share, 73% map pack click share)
-- **Texas:** https://localsurgeseo.com/locations/texas/ (3.1M small businesses, 86.1% web utilization)
+- **Texas:** https://localsurgeseo.com/locations/texas (3.1M small businesses, 86.1% web utilization)
   - **Austin Metro:** https://localsurgeseo.com/locations/texas/austin (2.28M residents, 85% mobile search share, 75% map pack click share)
   - **Houston District:** https://localsurgeseo.com/locations/texas/houston (4.73M residents, 81% mobile search share, 70% map pack click share)
   - **Dallas-Fort Worth:** https://localsurgeseo.com/locations/texas/dallas (7.63M residents, 83% mobile search share, 72% map pack click share)
-- **Florida:** https://localsurgeseo.com/locations/florida/ (2.5M small businesses, 87.2% web utilization)
+- **Florida:** https://localsurgeseo.com/locations/florida (2.5M small businesses, 87.2% web utilization)
   - **Miami Metro:** https://localsurgeseo.com/locations/florida/miami (2.70M residents, 87% mobile search share, 77% map pack click share)
-- **New York:** https://localsurgeseo.com/locations/new-york/ (2.1M small businesses, 89.0% web utilization)
+- **New York:** https://localsurgeseo.com/locations/new-york (2.1M small businesses, 89.0% web utilization)
   - **New York City:** https://localsurgeseo.com/locations/new-york/new-york-city (8.33M residents, 89% mobile search share, 79% map pack click share)
-- **Illinois:** https://localsurgeseo.com/locations/illinois/ (1.2M small businesses, 85.5% web utilization)
-- **Washington:** https://localsurgeseo.com/locations/washington/ (650k small businesses, 88.0% web utilization)
+- **Illinois:** https://localsurgeseo.com/locations/illinois (1.2M small businesses, 85.5% web utilization)
+- **Washington:** https://localsurgeseo.com/locations/washington (650k small businesses, 88.0% web utilization)
 
 ---
 
