@@ -1,4 +1,73 @@
+import dns from "dns";
+import net from "net";
 import type { ScrapedKnowledge, CrawlResult } from "../../src/types/frontdesk";
+
+function isPrivateOrReservedIp(rawIp: string): boolean {
+  const ip = String(rawIp || "")
+    .trim()
+    .toLowerCase()
+    .replace(/^\[|\]$/g, "")
+    .split("%")[0];
+
+  if (!ip) return true;
+
+  if (net.isIPv4(ip)) {
+    const octets = ip.split(".").map(Number);
+    if (octets.length !== 4 || octets.some((n) => !Number.isInteger(n) || n < 0 || n > 255)) {
+      return true;
+    }
+    const [a, b, c] = octets;
+    if (a === 0) return true; // 0.0.0.0/8
+    if (a === 10) return true; // 10.0.0.0/8
+    if (a === 100 && b >= 64 && b <= 127) return true; // 100.64.0.0/10 CGNAT
+    if (a === 127) return true; // 127.0.0.0/8 loopback
+    if (a === 169 && b === 254) return true; // 169.254.0.0/16 link-local / metadata
+    if (a === 172 && b >= 16 && b <= 31) return true; // 172.16.0.0/12
+    if (a === 192 && b === 0 && (c === 0 || c === 2)) return true; // 192.0.0.0/24, 192.0.2.0/24
+    if (a === 192 && b === 168) return true; // 192.168.0.0/16
+    if (a === 198 && (b === 18 || b === 19)) return true; // 198.18.0.0/15
+    if (a === 198 && b === 51 && c === 100) return true; // 198.51.100.0/24
+    if (a === 203 && b === 0 && c === 113) return true; // 203.0.113.0/24
+    if (a >= 224) return true; // Multicast & reserved 224.0.0.0/4
+    return false;
+  }
+
+  if (net.isIPv6(ip)) {
+    if (
+      ip === "::" ||
+      ip === "::1" ||
+      ip === "0:0:0:0:0:0:0:1" ||
+      ip === "0:0:0:0:0:0:0:0"
+    ) {
+      return true;
+    }
+
+    // Check IPv4-mapped IPv6 (e.g. ::ffff:127.0.0.1 or ::ffff:7f00:1 or 0:0:0:0:0:ffff:...)
+    const mappedMatch = ip.match(/^(?:::|(?:0{1,4}:){5})ffff:(.+)$/);
+    if (mappedMatch) {
+      const suffix = mappedMatch[1];
+      if (net.isIPv4(suffix)) {
+        return isPrivateOrReservedIp(suffix);
+      }
+      const hexPair = suffix.match(/^([0-9a-f]{1,4}):([0-9a-f]{1,4})$/);
+      if (hexPair) {
+        const hi = parseInt(hexPair[1], 16);
+        const lo = parseInt(hexPair[2], 16);
+        const mappedV4 = `${(hi >> 8) & 0xff}.${hi & 0xff}.${(lo >> 8) & 0xff}.${lo & 0xff}`;
+        return isPrivateOrReservedIp(mappedV4);
+      }
+      return true;
+    }
+
+    if (/^f[cd][0-9a-f]{2}:/.test(ip)) return true; // fc00::/7 Unique Local
+    if (/^fe[89ab][0-9a-f]{1,2}:/.test(ip)) return true; // fe80::/10 Link-Local
+    if (ip.startsWith("ff")) return true; // ff00::/8 Multicast
+    if (ip.startsWith("2001:db8:")) return true; // Documentation prefix
+    return false;
+  }
+
+  return true;
+}
 
 // SSRF Prevention: Validate that the target URL is a safe, publicly resolvable web domain
 export function isSafePublicUrl(inputUrl: string): boolean {
@@ -7,34 +76,37 @@ export function isSafePublicUrl(inputUrl: string): boolean {
     if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
       return false;
     }
-    const hostname = parsed.hostname.toLowerCase();
+    if (parsed.username || parsed.password) {
+      return false;
+    }
+    const hostname = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, "");
 
-    // Block loopback, localhost, and internal names
+    // Block loopback, localhost, internal names, and wildcard DNS reflectors
     if (
+      !hostname ||
       hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname === "0.0.0.0" ||
-      hostname === "::1" ||
       hostname.endsWith(".localhost") ||
       hostname.endsWith(".local") ||
       hostname.endsWith(".internal") ||
-      hostname.endsWith(".lan")
+      hostname.endsWith(".lan") ||
+      hostname.endsWith(".nip.io") ||
+      hostname.endsWith(".sslip.io") ||
+      hostname.endsWith(".xip.io")
     ) {
       return false;
     }
 
-    // Block private IPv4 ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16
-    if (
-      /^10\./.test(hostname) ||
-      /^192\.168\./.test(hostname) ||
-      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
-      /^169\.254\./.test(hostname)
-    ) {
+    if (net.isIP(hostname) !== 0) {
+      return !isPrivateOrReservedIp(hostname);
+    }
+
+    // Reject numeric-only/octal/hex hostnames that did not parse cleanly as IPv4
+    if (/^[0-9.]+$/.test(hostname)) {
       return false;
     }
 
     // Require valid top-level or sub-domain structure
-    if (!hostname.includes(".") && hostname !== "localhost") {
+    if (!hostname.includes(".")) {
       return false;
     }
 
@@ -42,6 +114,126 @@ export function isSafePublicUrl(inputUrl: string): boolean {
   } catch {
     return false;
   }
+}
+
+export async function assertSafePublicUrl(inputUrl: string): Promise<boolean> {
+  if (!isSafePublicUrl(inputUrl)) {
+    return false;
+  }
+  try {
+    const parsed = new URL(inputUrl);
+    const hostname = parsed.hostname.toLowerCase().replace(/^\[|\]$/g, "");
+    if (net.isIP(hostname) !== 0) {
+      return !isPrivateOrReservedIp(hostname);
+    }
+    const records = await dns.promises.lookup(hostname, { all: true, verbatim: true });
+    return records.length > 0 && records.every((r) => !isPrivateOrReservedIp(r.address));
+  } catch {
+    return false;
+  }
+}
+
+async function readBoundedResponseText(resp: Response, maxBytes: number): Promise<string> {
+  if (!resp.body || typeof resp.body.getReader !== "function") {
+    return (await resp.text()).slice(0, maxBytes);
+  }
+  const reader = resp.body.getReader();
+  const chunks: Uint8Array[] = [];
+  let totalBytes = 0;
+
+  while (true) {
+    const { done, value } = await reader.read();
+    if (done) break;
+    if (value) {
+      const remaining = maxBytes - totalBytes;
+      if (remaining <= 0) {
+        await reader.cancel();
+        break;
+      }
+      if (value.byteLength > remaining) {
+        chunks.push(value.subarray(0, remaining));
+        totalBytes += remaining;
+        await reader.cancel();
+        break;
+      }
+      chunks.push(value);
+      totalBytes += value.byteLength;
+    }
+  }
+
+  return Buffer.concat(chunks.map((c) => Buffer.from(c))).toString("utf-8");
+}
+
+async function safeFetchHtml(
+  inputUrl: string,
+  headers: Record<string, string>,
+  timeoutMs = 12000,
+  maxRedirects = 3,
+  maxBytes = 1024 * 1024
+): Promise<{ html: string; finalUrl: string } | null> {
+  let currentUrl = inputUrl;
+
+  for (let hop = 0; hop <= maxRedirects; hop++) {
+    if (!(await assertSafePublicUrl(currentUrl))) {
+      return null;
+    }
+
+    const resp = await fetch(currentUrl, {
+      headers,
+      redirect: "manual",
+      signal: AbortSignal.timeout(timeoutMs)
+    });
+
+    if (resp.status >= 300 && resp.status < 400) {
+      const location = resp.headers.get("location");
+      if (!location || hop === maxRedirects) {
+        return null;
+      }
+      currentUrl = new URL(location, currentUrl).toString();
+      continue;
+    }
+
+    if (!resp.ok) {
+      return null;
+    }
+
+    const html = await readBoundedResponseText(resp, maxBytes);
+    return { html, finalUrl: currentUrl };
+  }
+
+  return null;
+}
+
+function sanitizeKnowledgeText(val: unknown, maxLen = 280): string {
+  if (val === null || val === undefined) return "";
+  return String(val)
+    .replace(/[\x00-\x08\x0B\x0C\x0E-\x1F\x7F]/g, " ")
+    .replace(/[<>]/g, "")
+    .replace(/\s+/g, " ")
+    .trim()
+    .slice(0, maxLen);
+}
+
+function sanitizeScrapedKnowledge(k: ScrapedKnowledge): ScrapedKnowledge {
+  return {
+    ...k,
+    businessName: sanitizeKnowledgeText(k.businessName, 120),
+    industry: sanitizeKnowledgeText(k.industry, 100),
+    tagline: k.tagline ? sanitizeKnowledgeText(k.tagline, 200) : undefined,
+    emergencyPolicy: sanitizeKnowledgeText(k.emergencyPolicy, 300),
+    estimatePolicy: sanitizeKnowledgeText(k.estimatePolicy, 300),
+    primaryServices: (k.primaryServices || []).map((s) => sanitizeKnowledgeText(s, 140)).filter(Boolean).slice(0, 12),
+    serviceAreas: (k.serviceAreas || []).map((a) => sanitizeKnowledgeText(a, 100)).filter(Boolean).slice(0, 20),
+    pricingCues: (k.pricingCues || []).map((p) => sanitizeKnowledgeText(p, 180)).filter(Boolean).slice(0, 10),
+    faqs: (k.faqs || [])
+      .map((f) => ({
+        question: sanitizeKnowledgeText(f.question, 180),
+        answer: sanitizeKnowledgeText(f.answer, 400)
+      }))
+      .filter((f) => f.question && f.answer)
+      .slice(0, 8),
+    keyFacts: (k.keyFacts || []).map((kf) => sanitizeKnowledgeText(kf, 180)).filter(Boolean).slice(0, 10)
+  };
 }
 
 /**
@@ -193,13 +385,15 @@ export async function crawlSiteKnowledge(
   options: { businessName?: string; industry?: string; deepCrawl?: boolean } = {}
 ): Promise<CrawlResult> {
   const sanitizedUrl = targetUrl.trim();
-  if (!isSafePublicUrl(sanitizedUrl)) {
+  if (!(await assertSafePublicUrl(sanitizedUrl))) {
     return {
       success: false,
       url: sanitizedUrl,
       pagesScraped: [],
       error: "Invalid or restricted URL. Must be a safe, public HTTP/HTTPS web domain.",
-      knowledge: extractHeuristicKnowledge("", options.businessName, options.industry)
+      knowledge: sanitizeScrapedKnowledge(
+        extractHeuristicKnowledge("", options.businessName, options.industry)
+      )
     };
   }
 
@@ -207,38 +401,30 @@ export async function crawlSiteKnowledge(
   const textCorpus: string[] = [];
 
   try {
-    // 1. Fetch Homepage
+    // 1. Fetch Homepage safely (manual redirect validation + private IP check + 1MB limit)
     const headers = {
       "User-Agent": "LocalSurge-FrontDesk-Crawler/1.0 (+https://localsurgeseo.com/ai-frontdesk)",
       "Accept": "text/html,application/xhtml+xml,text/plain"
     };
 
-    const homeResp = await fetch(sanitizedUrl, {
-      headers,
-      signal: AbortSignal.timeout(9000)
-    });
-
-    if (!homeResp.ok) {
-      throw new Error(`Target returned HTTP status ${homeResp.status}`);
+    const homeResult = await safeFetchHtml(sanitizedUrl, headers, 9000, 3, 1024 * 1024);
+    if (!homeResult) {
+      throw new Error("Target website could not be reached or failed safety validation.");
     }
 
-    const homeHtml = await homeResp.text();
-    scrapedPages.push(sanitizedUrl);
-    textCorpus.push(`=== HOMEPAGE (${sanitizedUrl}) ===\n` + cleanHtmlToText(homeHtml));
+    const homeHtml = homeResult.html;
+    scrapedPages.push(homeResult.finalUrl);
+    textCorpus.push(`=== HOMEPAGE (${homeResult.finalUrl}) ===\n` + cleanHtmlToText(homeHtml));
 
     // 2. Discover and fetch top 2 sublinks if requested
     if (options.deepCrawl !== false) {
-      const sublinks = extractKeySublinks(homeHtml, sanitizedUrl);
+      const sublinks = extractKeySublinks(homeHtml, homeResult.finalUrl);
       for (const subUrl of sublinks.slice(0, 2)) {
         try {
-          const subResp = await fetch(subUrl, {
-            headers,
-            signal: AbortSignal.timeout(6000)
-          });
-          if (subResp.ok) {
-            const subHtml = await subResp.text();
-            scrapedPages.push(subUrl);
-            textCorpus.push(`=== PAGE: ${subUrl} ===\n` + cleanHtmlToText(subHtml));
+          const subResult = await safeFetchHtml(subUrl, headers, 6000, 2, 1024 * 1024);
+          if (subResult) {
+            scrapedPages.push(subResult.finalUrl);
+            textCorpus.push(`=== PAGE: ${subResult.finalUrl} ===\n` + cleanHtmlToText(subResult.html));
           }
         } catch {
           // Continue if sublink times out
@@ -347,7 +533,7 @@ The chatbot must know exact services, emergency availability, service areas, est
       success: true,
       url: sanitizedUrl,
       pagesScraped: scrapedPages,
-      knowledge
+      knowledge: sanitizeScrapedKnowledge(knowledge)
     };
   } catch (err: any) {
     console.error("❌ Crawler execution error:", err);
@@ -356,7 +542,9 @@ The chatbot must know exact services, emergency availability, service areas, est
       url: sanitizedUrl,
       pagesScraped: scrapedPages,
       error: err.message || "Failed to crawl target website",
-      knowledge: extractHeuristicKnowledge("", options.businessName, options.industry)
+      knowledge: sanitizeScrapedKnowledge(
+        extractHeuristicKnowledge("", options.businessName, options.industry)
+      )
     };
   }
 }

@@ -4,7 +4,7 @@ import fs from "fs";
 import crypto from "crypto";
 import dotenv from "dotenv";
 import type { FrontdeskLead, LeadStatus, LeadUrgency } from "../src/types/frontdesk";
-import { crawlSiteKnowledge } from "./services/frontdesk-crawler.js";
+import { crawlSiteKnowledge, assertSafePublicUrl } from "./services/frontdesk-crawler.js";
 import {
   buildFrontdeskSystemPrompt,
   formatGeminiContents,
@@ -27,18 +27,42 @@ const app = express();
 // Trust reverse proxy (Cloudflare / Vercel) for accurate client IP resolution & protocol detection
 app.set("trust proxy", true);
 
+function safeEqualStrings(a: string, b: string): boolean {
+  const hashA = crypto.createHash("sha256").update(String(a)).digest();
+  const hashB = crypto.createHash("sha256").update(String(b)).digest();
+  return crypto.timingSafeEqual(hashA, hashB) && String(a).length === String(b).length;
+}
+
+function isVerifiedCloudflareRequest(req: express.Request): boolean {
+  const originSecret = process.env.CLOUDFLARE_ORIGIN_SECRET;
+  const incomingSecret = req.headers["x-origin-secret"];
+  if (originSecret && typeof incomingSecret === "string") {
+    return safeEqualStrings(incomingSecret, originSecret);
+  }
+  return false;
+}
+
 /**
  * Security: Extract real client IP securely.
- * Prioritizes Cloudflare's verified 'CF-Connecting-IP' header over spoofable client headers.
+ * Only trusts CF-Connecting-IP when verified via Origin Shield (or CF-Ray if secret is unset),
+ * otherwise uses platform proxy headers or the rightmost proxy-appended X-Forwarded-For hop.
  */
 export function getClientIp(req: express.Request): string {
   const cfIp = req.headers["cf-connecting-ip"];
-  if (typeof cfIp === "string" && cfIp.trim()) {
+  const trustCf = isVerifiedCloudflareRequest(req) || (!process.env.CLOUDFLARE_ORIGIN_SECRET && Boolean(req.headers["cf-ray"]));
+  if (trustCf && typeof cfIp === "string" && cfIp.trim()) {
     return cfIp.trim();
+  }
+  const vercelIp = req.headers["x-vercel-forwarded-for"] || req.headers["x-real-ip"];
+  if (typeof vercelIp === "string" && vercelIp.trim()) {
+    return vercelIp.split(",")[0].trim();
   }
   const xff = req.headers["x-forwarded-for"];
   if (typeof xff === "string" && xff.trim()) {
-    return xff.split(",")[0].trim();
+    const hops = xff.split(",").map((s) => s.trim()).filter(Boolean);
+    if (hops.length > 0) {
+      return hops[hops.length - 1];
+    }
   }
   return req.socket?.remoteAddress || req.ip || "127.0.0.1";
 }
@@ -49,7 +73,7 @@ app.use((req, res, next) => {
   // Enforce origin verification in production if secret is configured
   if (originSecret && process.env.NODE_ENV === "production") {
     const incomingSecret = req.headers["x-origin-secret"];
-    if (incomingSecret !== originSecret) {
+    if (typeof incomingSecret !== "string" || !safeEqualStrings(incomingSecret, originSecret)) {
       console.warn(`[Security] Direct origin bypass blocked: ${getClientIp(req)} -> ${req.originalUrl}`);
       return res.status(403).json({
         error: "Forbidden: Direct origin access is disallowed. Requests must route via Cloudflare."
@@ -61,11 +85,11 @@ app.use((req, res, next) => {
 
 // 301 Canonical Host Redirect: Redirect www.localsurgeseo.com to https://localsurgeseo.com
 app.use((req, res, next) => {
-  const host = req.headers.host || "";
-  if (host.startsWith("www.")) {
-    const canonicalHost = host.replace(/^www\./, "");
-    const protocol = req.headers["x-forwarded-proto"] || "https";
-    return res.redirect(301, `https://${canonicalHost}${req.originalUrl || req.url}`);
+  const host = (req.headers.host || "").toLowerCase().trim();
+  if (host === "www.localsurgeseo.com") {
+    const rawPath = req.originalUrl || req.url || "/";
+    const safePath = rawPath.startsWith("/") && !rawPath.startsWith("//") ? rawPath : "/";
+    return res.redirect(301, `https://localsurgeseo.com${safePath}`);
   }
   next();
 });
@@ -76,7 +100,7 @@ app.use((req, res, next) => {
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://www.clarity.ms https://scripts.clarity.ms https://*.clarity.ms https://static.cloudflareinsights.com https://www.googletagmanager.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://images.unsplash.com https://localsurgeseo.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://www.facebook.com https://www.google-analytics.com https://shield.sitelock.com https://*.sitelock.com https://c.bing.com; connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://api.allorigins.win; frame-src 'self' https://www.googletagmanager.com;"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://*.clarity.ms https://static.cloudflareinsights.com https://www.googletagmanager.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://images.unsplash.com https://localsurgeseo.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://www.facebook.com https://www.google-analytics.com https://shield.sitelock.com https://*.sitelock.com https://c.bing.com; connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://api.allorigins.win; frame-src 'self' https://www.googletagmanager.com;"
   );
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
@@ -113,6 +137,7 @@ interface RateLimitEntry {
 
 function createRateLimiter(options: { windowMs: number; maxRequests: number }) {
   const store = new Map<string, RateLimitEntry>();
+  const MAX_BUCKETS = 10_000;
 
   // Prune expired buckets to prevent memory leaks in Node/Vercel instance
   setInterval(() => {
@@ -128,6 +153,10 @@ function createRateLimiter(options: { windowMs: number; maxRequests: number }) {
     const now = Date.now();
     const entry = store.get(ip);
     if (!entry || now > entry.resetTime) {
+      if (!entry && store.size >= MAX_BUCKETS) {
+        const oldest = store.keys().next().value;
+        if (oldest !== undefined) store.delete(oldest);
+      }
       store.set(ip, { count: 1, resetTime: now + options.windowMs });
       return false;
     }
@@ -157,6 +186,9 @@ const isToolRateLimited = createRateLimiter({ windowMs: 10 * 60 * 1000, maxReque
 // Tier 5: Global API Baseline - 120 requests / 1 min per IP to block high-frequency hammering
 const isGlobalApiRateLimited = createRateLimiter({ windowMs: 60 * 1000, maxRequests: 120 });
 
+// Tier 6: Admin Login Guard - 10 attempts / 15 min
+const isAdminLoginRateLimited = createRateLimiter({ windowMs: 15 * 60 * 1000, maxRequests: 10 });
+
 // Global API rate limit guard
 app.use("/api/", (req, res, next) => {
   const clientIp = getClientIp(req);
@@ -169,52 +201,8 @@ app.use("/api/", (req, res, next) => {
 });
 
 // =========================================================================
-// SECURITY & CACHE HELPERS (SSRF DEFENSE, RATE LIMITING, 1-HR IN-MEMORY CACHE)
+// SECURITY & CACHE HELPERS (1-HR IN-MEMORY CACHE + ADMIN HMAC AUTH)
 // =========================================================================
-
-// SSRF Prevention: Validate that the target URL is a safe, publicly resolvable web domain
-function isSafePublicUrl(inputUrl: string): boolean {
-  try {
-    const parsed = new URL(inputUrl);
-    if (parsed.protocol !== "http:" && parsed.protocol !== "https:") {
-      return false;
-    }
-    const hostname = parsed.hostname.toLowerCase();
-
-    // Block loopback, localhost, and unspecified addresses
-    if (
-      hostname === "localhost" ||
-      hostname === "127.0.0.1" ||
-      hostname === "0.0.0.0" ||
-      hostname === "::1" ||
-      hostname.endsWith(".localhost") ||
-      hostname.endsWith(".local") ||
-      hostname.endsWith(".internal") ||
-      hostname.endsWith(".lan")
-    ) {
-      return false;
-    }
-
-    // Block private IPv4 ranges: 10.0.0.0/8, 172.16.0.0/12, 192.168.0.0/16, 169.254.0.0/16
-    if (
-      /^10\./.test(hostname) ||
-      /^192\.168\./.test(hostname) ||
-      /^172\.(1[6-9]|2[0-9]|3[0-1])\./.test(hostname) ||
-      /^169\.254\./.test(hostname)
-    ) {
-      return false;
-    }
-
-    // Require valid top-level or sub-domain structure
-    if (!hostname.includes(".") && hostname !== "localhost") {
-      return false;
-    }
-
-    return true;
-  } catch (err) {
-    return false;
-  }
-}
 
 // In-Memory 1-Hour LRU Cache for PageSpeed & SEO analysis results
 const analysisCache = new Map<string, { data: any; expiresAt: number }>();
@@ -243,10 +231,53 @@ function setCachedAnalysis(key: string, data: any) {
 }
 
 
-// Admin authorization middleware verifying secure static token
-function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+// Stateless HMAC-SHA256 Admin Token Verification (12h TTL)
+const ADMIN_TOKEN_TTL_MS = 12 * 60 * 60 * 1000;
+
+function getAdminSigningSecret(): string | null {
+  if (process.env.ADMIN_TOKEN_SECRET) return process.env.ADMIN_TOKEN_SECRET;
+  const adminUser = process.env.ADMIN_USER;
+  const adminPass = process.env.ADMIN_PASSWORD;
+  if (!adminUser || !adminPass) return null;
+  return crypto
+    .createHmac("sha256", "localsurge_admin_token_v1")
+    .update(`${adminUser}:${adminPass}:${process.env.CLOUDFLARE_ORIGIN_SECRET || ""}`)
+    .digest("hex");
+}
+
+function issueAdminToken(): string | null {
+  const secret = getAdminSigningSecret();
+  if (!secret) return null;
+  const exp = Date.now() + ADMIN_TOKEN_TTL_MS;
+  const nonce = crypto.randomBytes(16).toString("hex");
+  const payload = `${exp}.${nonce}`;
+  const sig = crypto.createHmac("sha256", secret).update(payload).digest("hex");
+  return `${payload}.${sig}`;
+}
+
+function verifyAdminToken(token: string): boolean {
+  const secret = getAdminSigningSecret();
+  if (!secret || !token || typeof token !== "string") return false;
+  const parts = token.split(".");
+  if (parts.length !== 3) return false;
+  const [expStr, nonce, sig] = parts;
+  const exp = Number(expStr);
+  if (!Number.isFinite(exp) || Date.now() > exp || !/^[a-f0-9]{32}$/.test(nonce)) {
+    return false;
+  }
+  const expectedSig = crypto.createHmac("sha256", secret).update(`${expStr}.${nonce}`).digest("hex");
+  return safeEqualStrings(sig, expectedSig);
+}
+
+function isAdminRequest(req: express.Request): boolean {
   const authHeader = req.headers.authorization;
-  if (authHeader === "Bearer surge_fake_secure_token_2026") {
+  if (typeof authHeader !== "string" || !authHeader.startsWith("Bearer ")) return false;
+  const token = authHeader.slice(7).trim();
+  return verifyAdminToken(token);
+}
+
+function requireAdmin(req: express.Request, res: express.Response, next: express.NextFunction) {
+  if (isAdminRequest(req)) {
     return next();
   }
   res.status(401).json({ error: "Unauthorized access: Invalid or missing token" });
@@ -1315,18 +1346,24 @@ app.get("/sitemap_index.xml", (req, res) => {
 });
 
 app.get("/sitemap-:section.xml", (req, res) => {
-  res.type("application/xml");
-  res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
-  const fileName = `sitemap-${req.params.section}.xml`;
+  const section = String(req.params.section || "");
+  if (!/^[a-z0-9-]+$/i.test(section)) {
+    return res.status(400).type("text/plain").send("Invalid sitemap section");
+  }
+  const fileName = `sitemap-${section}.xml`;
   const sitemapPath = path.join(process.cwd(), "public", fileName);
   if (fs.existsSync(sitemapPath)) {
+    res.type("application/xml");
+    res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
     return res.send(fs.readFileSync(sitemapPath, "utf-8"));
   }
   const distPath = path.join(process.cwd(), "dist", fileName);
   if (fs.existsSync(distPath)) {
+    res.type("application/xml");
+    res.setHeader("Cache-Control", "public, max-age=3600, s-maxage=86400, stale-while-revalidate=604800");
     return res.send(fs.readFileSync(distPath, "utf-8"));
   }
-  res.status(404).send(`Sitemap ${fileName} not found`);
+  return res.status(404).type("text/plain").send("Sitemap not found");
 });
 
 app.get("/sitemap.xml", (req, res) => {
@@ -1361,14 +1398,28 @@ ${urlEntries}
 });
 
 app.post("/api/admin/login", (req, res) => {
-  const { username, password } = req.body;
-  const adminUser = process.env.ADMIN_USER || "admin";
-  const adminPass = process.env.ADMIN_PASSWORD || "SurgeAdmin2026!";
-  if (username === adminUser && password === adminPass) {
-    res.json({ success: true, token: "surge_fake_secure_token_2026" });
-  } else {
-    res.status(401).json({ success: false, error: "Invalid username or password" });
+  if (isAdminLoginRateLimited(getClientIp(req))) {
+    return res.status(429).json({ success: false, error: "Too many login attempts. Please wait 15 minutes." });
   }
+  const { username, password } = req.body || {};
+  const adminUser = process.env.ADMIN_USER;
+  const adminPass = process.env.ADMIN_PASSWORD;
+  if (!adminUser || !adminPass) {
+    return res.status(503).json({ success: false, error: "Admin authentication is not configured." });
+  }
+  if (
+    typeof username === "string" &&
+    typeof password === "string" &&
+    safeEqualStrings(username, adminUser) &&
+    safeEqualStrings(password, adminPass)
+  ) {
+    const token = issueAdminToken();
+    if (!token) {
+      return res.status(503).json({ success: false, error: "Admin token signing unavailable." });
+    }
+    return res.json({ success: true, token });
+  }
+  return res.status(401).json({ success: false, error: "Invalid username or password" });
 });
 
 
@@ -1459,8 +1510,8 @@ app.post("/api/indexnow/submit", requireAdmin, async (req, res) => {
     return res.status(400).json({ error: "Missing or invalid 'urls' array in request body" });
   }
 
-  // Derive target host URL
-  const rawUrl = process.env.APP_URL || `http://${req.headers.host}`;
+  // Derive target host URL from trusted config
+  const rawUrl = getSafeBaseUrl();
   const hostUrl = rawUrl.replace(/\/$/, "");
 
   // Format all entries into absolute URLs
@@ -2281,7 +2332,7 @@ app.post("/api/seo-tool/analyze", async (req, res) => {
     targetUrl = `https://${targetUrl}`;
   }
 
-  if (!isSafePublicUrl(targetUrl)) {
+  if (!(await assertSafePublicUrl(targetUrl))) {
     return res.status(400).json({ error: "Invalid or restricted domain. Please enter a valid public website URL." });
   }
 
@@ -2381,7 +2432,7 @@ app.post("/api/pagespeed/analyze", async (req, res) => {
     targetUrl = `https://${targetUrl}`;
   }
 
-  if (!isSafePublicUrl(targetUrl)) {
+  if (!(await assertSafePublicUrl(targetUrl))) {
     return res.status(400).json({ error: "Invalid or restricted domain. Please enter a valid public website URL." });
   }
 
@@ -3229,17 +3280,18 @@ app.delete("/api/blog/drafts/:id", requireAdmin, (req, res) => {
   res.json({ success: true });
 });
 
-// Cache purge endpoint: accessible via admin auth or optional secret header / query param
+// Cache purge endpoint: accessible via admin auth or configured secret header / query param
 app.all("/api/blog/purge-cache", (req, res) => {
-  const authHeader = req.headers.authorization;
   const secretHeader = req.headers["x-purge-secret"];
   const secretQuery = req.query.secret;
-  const configuredSecret = process.env.BLOG_PURGE_SECRET || "surge_purge_secret_2026";
+  const configuredSecret = process.env.BLOG_PURGE_SECRET;
 
-  const isAuthorized =
-    authHeader === "Bearer surge_fake_secure_token_2026" ||
-    secretHeader === configuredSecret ||
-    secretQuery === configuredSecret;
+  const hasValidPurgeSecret =
+    Boolean(configuredSecret) &&
+    ((typeof secretHeader === "string" && safeEqualStrings(secretHeader, configuredSecret!)) ||
+      (typeof secretQuery === "string" && safeEqualStrings(secretQuery, configuredSecret!)));
+
+  const isAuthorized = isAdminRequest(req) || hasValidPurgeSecret;
 
   if (!isAuthorized) {
     return res.status(401).json({ error: "Unauthorized: Invalid or missing purge secret." });
@@ -3250,12 +3302,7 @@ app.all("/api/blog/purge-cache", (req, res) => {
 });
 
 // Cache status endpoint for observability
-app.get("/api/blog/cache-status", (req, res) => {
-  const authHeader = req.headers.authorization;
-  const isAuthorized = authHeader === "Bearer surge_fake_secure_token_2026";
-  if (!isAuthorized) {
-    return res.status(401).json({ error: "Unauthorized access." });
-  }
+app.get("/api/blog/cache-status", requireAdmin, (req, res) => {
 
   const now = Date.now();
   const isSummariesCached = Boolean(blogCache.allSummaries && now < blogCache.summariesExpiry);
@@ -3540,18 +3587,21 @@ app.post("/api/webmcp/invoke", async (req, res) => {
   }
 
   if (toolName === "submit_onboarding_lead") {
+    if (isLeadRateLimited(getClientIp(req))) {
+      return res.status(429).json({ success: false, error: "Too many lead submissions. Please try again later." });
+    }
     const leadInput = {
       planId: "webmcp-ai-agent-lead",
       planName: "WebMCP AI Agent Lead Submission",
-      businessName: params.businessName || "WebMCP Client",
-      contactName: params.contactName || "AI Agent Delegate",
-      email: params.email,
-      phone: params.phone || "+1 (909) 707-5075",
-      website: params.website || "https://localsurgeseo.com",
+      businessName: String(params.businessName || "WebMCP Client").trim().slice(0, 100),
+      contactName: String(params.contactName || "AI Agent Delegate").trim().slice(0, 100),
+      email: String(params.email || "").trim().slice(0, 100),
+      phone: String(params.phone || "+1 (909) 707-5075").trim().slice(0, 30),
+      website: String(params.website || "https://localsurgeseo.com").trim().slice(0, 200),
       hasWebsite: true,
-      industry: params.niche || "Local Business",
-      location: params.location || "United States",
-      keywords: params.keywords || "Local SEO",
+      industry: String(params.niche || "Local Business").trim().slice(0, 100),
+      location: String(params.location || "United States").trim().slice(0, 100),
+      keywords: String(params.keywords || "Local SEO").trim().slice(0, 500),
       hasGBP: true,
       gbpLink: ""
     };
@@ -3587,7 +3637,7 @@ app.post("/api/webmcp/invoke", async (req, res) => {
 // =========================================================================
 
 // 1. GET /api/frontdesk/schema.sql - Serve raw Supabase SQL DDL
-app.get("/api/frontdesk/schema.sql", (_req, res) => {
+app.get("/api/frontdesk/schema.sql", requireAdmin, (_req, res) => {
   const schemaPath = path.join(process.cwd(), "scripts", "frontdesk_schema.sql");
   if (fs.existsSync(schemaPath)) {
     res.type("text/plain");
@@ -3597,7 +3647,7 @@ app.get("/api/frontdesk/schema.sql", (_req, res) => {
 });
 
 // 2. GET /api/frontdesk/sites - List all registered FrontDesk sites
-app.get("/api/frontdesk/sites", async (_req, res) => {
+app.get("/api/frontdesk/sites", requireAdmin, async (_req, res) => {
   const supabase = await getSupabase();
   if (supabase) {
     try {
@@ -3768,6 +3818,33 @@ if (trialCheckInterval && typeof trialCheckInterval.unref === "function") {
   trialCheckInterval.unref();
 }
 
+function toPublicWidgetSite(site: any) {
+  if (!site) return site;
+  const {
+    contact_name: _cn,
+    contact_email: _ce,
+    custom_instructions: _ci,
+    scraped_knowledge: _sk,
+    trial_expiry_email_sent_at: _te,
+    grace_ended_email_sent_at: _ge,
+    widget_config,
+    ...publicFields
+  } = site;
+
+  if (widget_config && typeof widget_config === "object") {
+    const {
+      contact_name: _wcn,
+      contact_email: _wce,
+      trial_expiry_email_sent_at: _wte,
+      grace_ended_email_sent_at: _wge,
+      ...publicWidgetConfig
+    } = widget_config;
+    publicFields.widget_config = publicWidgetConfig;
+  }
+
+  return publicFields;
+}
+
 // 3. GET /api/frontdesk/sites/:id - Fetch single site by ID (used by widget.js)
 app.get("/api/frontdesk/sites/:id", async (req, res) => {
   const siteId = String(req.params.id).trim();
@@ -3807,7 +3884,7 @@ app.get("/api/frontdesk/sites/:id", async (req, res) => {
 
   return res.json({
     success: true,
-    site: evaluation.site,
+    site: isAdminRequest(req) ? evaluation.site : toPublicWidgetSite(evaluation.site),
     status: currentStatus,
     isGracePeriod: currentStatus === "grace_period",
     isSoftLocked: currentStatus === "soft_locked",
@@ -3897,7 +3974,7 @@ app.post("/api/frontdesk/webhook/lemonsqueezy", async (req: any, res) => {
 });
 
 // 4. POST /api/frontdesk/sites/create - Register new contractor profile
-app.post("/api/frontdesk/sites/create", async (req, res) => {
+app.post("/api/frontdesk/sites/create", requireAdmin, async (req, res) => {
   const {
     id,
     businessName,
@@ -3983,11 +4060,19 @@ app.post("/api/frontdesk/sites/create", async (req, res) => {
 // 4b. POST /api/frontdesk/trial - 30-Day Free Trial Onboarding (Generates script, emails steps, crawls domain)
 app.post("/api/frontdesk/trial", async (req, res) => {
   try {
+    if (isLeadRateLimited(getClientIp(req))) {
+      return res.status(429).json({
+        success: false,
+        error: "Too many trial requests from this IP. Please try again in 15 minutes."
+      });
+    }
+
     const { domain, websiteUrl, email, name, businessName, phone } = req.body || {};
-    const targetDomain = String(domain || websiteUrl || "").trim();
-    const contactEmail = String(email || "").trim();
-    const contactName = String(name || "").trim();
-    const bName = String(businessName || "").trim();
+    const targetDomain = String(domain || websiteUrl || "").trim().slice(0, 250);
+    const contactEmail = String(email || "").trim().slice(0, 100);
+    const contactName = String(name || "").trim().slice(0, 100);
+    const bName = String(businessName || "").trim().slice(0, 100);
+    const safePhone = phone ? String(phone).trim().slice(0, 30) : undefined;
 
     if (!targetDomain || !contactEmail || !bName) {
       return res.status(400).json({
@@ -3996,10 +4081,24 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       });
     }
 
+    if (!/^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(contactEmail)) {
+      return res.status(400).json({
+        success: false,
+        error: "Please enter a valid business email address."
+      });
+    }
+
     // Format domain to clean URL & detect any franchise/location sub-path (e.g. mrrooter.com/tri-cities)
-    let fullUrl = targetDomain.trim();
-    if (!fullUrl.startsWith("http://") && !fullUrl.startsWith("https://")) {
+    let fullUrl = targetDomain;
+    if (!/^https?:\/\//i.test(fullUrl)) {
       fullUrl = `https://${fullUrl}`;
+    }
+
+    if (!(await assertSafePublicUrl(fullUrl))) {
+      return res.status(400).json({
+        success: false,
+        error: "Please enter a valid public website domain."
+      });
     }
 
     let pathPrefix = "";
@@ -4036,7 +4135,7 @@ app.post("/api/frontdesk/trial", async (req, res) => {
       website_url: fullUrl,
       contact_name: contactName,
       contact_email: contactEmail,
-      phone: phone ? String(phone).trim() : undefined,
+      phone: safePhone,
       is_trial: true,
       trial_ends_at: trialEndsAt,
       status: "active",
@@ -4164,7 +4263,7 @@ app.post("/api/frontdesk/trial", async (req, res) => {
 });
 
 // 5. POST /api/frontdesk/crawl - Standalone URL knowledge ingestion
-app.post("/api/frontdesk/crawl", async (req, res) => {
+app.post("/api/frontdesk/crawl", requireAdmin, async (req, res) => {
   const clientIp = getClientIp(req);
   if (isCrawlerRateLimited(clientIp)) {
     return res.status(429).json({ success: false, error: "Too many crawl requests from this IP. Please wait a few minutes." });
@@ -4180,7 +4279,7 @@ app.post("/api/frontdesk/crawl", async (req, res) => {
 });
 
 // 6. POST /api/frontdesk/sites/:id/crawl - Crawl & update an existing site's knowledge
-app.post("/api/frontdesk/sites/:id/crawl", async (req, res) => {
+app.post("/api/frontdesk/sites/:id/crawl", requireAdmin, async (req, res) => {
   const clientIp = getClientIp(req);
   if (isCrawlerRateLimited(clientIp)) {
     return res.status(429).json({ success: false, error: "Too many crawl requests from this IP. Please wait a few minutes." });
@@ -4309,6 +4408,10 @@ async function syncFrontdeskLeadToMainPipeline(lead: any, site: any) {
 
 // 7. POST /api/frontdesk/leads/create - Capture qualified lead from chat widget
 app.post("/api/frontdesk/leads/create", async (req, res) => {
+  if (isLeadRateLimited(getClientIp(req))) {
+    return res.status(429).json({ success: false, error: "Too many lead requests from this IP. Please try again in 15 minutes." });
+  }
+
   const {
     siteId,
     customerName,
@@ -4321,26 +4424,30 @@ app.post("/api/frontdesk/leads/create", async (req, res) => {
     transcript = [],
     qualificationSummary = {},
     dispatchChannel = "email"
-  } = req.body;
+  } = req.body || {};
 
   if (!siteId || !customerName || !customerPhone) {
     return res.status(400).json({ success: false, error: "Missing required fields (siteId, customerName, customerPhone)." });
   }
 
+  const sanitizedPhotos = Array.isArray(photoUrls)
+    ? photoUrls.filter((u: unknown) => typeof u === "string").slice(0, 3)
+    : [];
+
   const newLeadId = `flead_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`;
   const newLead: FrontdeskLead = {
     id: newLeadId,
-    site_id: String(siteId).trim(),
+    site_id: String(siteId).trim().slice(0, 100),
     created_at: new Date().toISOString(),
     status: "new" as LeadStatus,
     urgency: (["emergency", "urgent", "standard", "inquiry"].includes(urgency) ? urgency : "standard") as LeadUrgency,
-    customer_name: String(customerName).trim(),
-    customer_phone: String(customerPhone).trim(),
-    customer_email: customerEmail ? String(customerEmail).trim() : undefined,
-    service_address: serviceAddress ? String(serviceAddress).trim() : undefined,
-    issue_description: issueDescription ? String(issueDescription).trim() : undefined,
-    photo_urls: Array.isArray(photoUrls) ? photoUrls : [],
-    transcript: Array.isArray(transcript) ? transcript : [],
+    customer_name: String(customerName).trim().slice(0, 100),
+    customer_phone: String(customerPhone).trim().slice(0, 30),
+    customer_email: customerEmail ? String(customerEmail).trim().slice(0, 100) : undefined,
+    service_address: serviceAddress ? String(serviceAddress).trim().slice(0, 200) : undefined,
+    issue_description: issueDescription ? String(issueDescription).trim().slice(0, 500) : undefined,
+    photo_urls: sanitizedPhotos,
+    transcript: Array.isArray(transcript) ? transcript.slice(0, 50) : [],
     qualification_summary: qualificationSummary || {},
     dispatched_at: new Date().toISOString(),
     dispatch_channel: dispatchChannel
@@ -4395,7 +4502,7 @@ app.post("/api/frontdesk/leads/create", async (req, res) => {
 });
 
 // 8. GET /api/frontdesk/leads/:siteId - Retrieve leads for a specific contractor
-app.get("/api/frontdesk/leads/:siteId", async (req, res) => {
+app.get("/api/frontdesk/leads/:siteId", requireAdmin, async (req, res) => {
   const siteId = String(req.params.siteId).trim();
   const localLeads = readFrontdeskLeads();
   const filteredLocal = localLeads.filter((l: any) => l.site_id === siteId);
@@ -4516,8 +4623,12 @@ app.post("/api/frontdesk/chat", async (req, res) => {
     let savedLeadId: string | undefined = undefined;
     if (extracted.isComplete && (extracted.customerPhone || extracted.customerEmail)) {
       const leads = readFrontdeskLeads();
+      const fifteenMinAgo = Date.now() - 15 * 60 * 1000;
       const existingLeadIdx = leads.findIndex((l: any) =>
-        l.site_id === site.id && (
+        l.site_id === site.id &&
+        l.status === "new" &&
+        l.created_at &&
+        new Date(l.created_at).getTime() >= fifteenMinAgo && (
           (extracted.customerPhone && l.customer_phone === extracted.customerPhone) ||
           (extracted.customerEmail && l.customer_email === extracted.customerEmail)
         )

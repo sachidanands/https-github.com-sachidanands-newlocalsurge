@@ -733,6 +733,24 @@
   let isStreaming = false;
 
   // 6. Grace Period & Fallback Contact Card Handlers
+  function escapeHtml(str) {
+    if (!str) return "";
+    return String(str)
+      .replace(/&/g, "&amp;")
+      .replace(/</g, "&lt;")
+      .replace(/>/g, "&gt;")
+      .replace(/"/g, "&quot;")
+      .replace(/'/g, "&#039;");
+  }
+
+  function sanitizeHref(url) {
+    if (!url || typeof url !== "string") return "#";
+    const trimmed = url.trim();
+    if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return escapeHtml(trimmed);
+    if (/^https?:\/\//i.test(trimmed)) return escapeHtml(trimmed);
+    return "#";
+  }
+
   function renderGracePeriodBanner(checkoutUrl) {
     let graceBanner = shadow.getElementById("lsGraceBanner");
     if (!graceBanner) {
@@ -746,7 +764,7 @@
     }
     graceBanner.innerHTML = `
       <span>⚠️ 3-day courtesy grace period active.</span>
-      <a href="${checkoutUrl || '#'}" target="_blank" rel="noopener">Renew for $10/mo &rarr;</a>
+      <a href="${sanitizeHref(checkoutUrl)}" target="_blank" rel="noopener">Renew for $10/mo &rarr;</a>
     `;
   }
 
@@ -788,9 +806,9 @@
       <div class="ls-fallback-icon">📞</div>
       <h3 class="ls-fallback-title">Direct Contractor Dispatch</h3>
       <p class="ls-fallback-desc">Need immediate emergency service, scheduling, or a fast diagnostic estimate? Call our on-duty technicians directly:</p>
-      <a href="tel:${phoneClean}" class="ls-fallback-phone-btn">
+      <a href="tel:${escapeHtml(phoneClean)}" class="ls-fallback-phone-btn">
         <svg viewBox="0 0 24 24" width="20" height="20" fill="currentColor"><path d="M6.62 10.79c1.44 2.83 3.76 5.14 6.59 6.59l2.2-2.2c.27-.27.67-.36 1.02-.24 1.12.37 2.33.57 3.57.57.55 0 1 .45 1 1V20c0 .55-.45 1-1 1-9.39 0-17-7.61-17-17 0-.55.45-1 1-1h3.5c.55 0 1 .45 1 1 0 1.25.2 2.45.57 3.57.11.35.03.74-.25 1.02l-2.2 2.2z"/></svg>
-        <span>Call ${phone} Now</span>
+        <span>Call ${escapeHtml(phone)} Now</span>
       </a>
       <div class="ls-fallback-hours">
         <span>⏱️ Available 24/7 for active emergencies & service</span>
@@ -798,7 +816,7 @@
       <div class="ls-fallback-owner-notice">
         <div class="ls-fallback-owner-tag">Site Owner Notice</div>
         <p>SurgeBot 24/7 AI Receptionist is paused.</p>
-        <a href="${checkoutUrl || '#'}" target="_blank" rel="noopener" class="ls-fallback-renew-btn">
+        <a href="${sanitizeHref(checkoutUrl)}" target="_blank" rel="noopener" class="ls-fallback-renew-btn">
           ⚡ Reactivate SurgeBot for $10/mo &rarr;
         </a>
       </div>
@@ -806,7 +824,7 @@
 
     // Update teaser tooltip
     if (teaser) {
-      teaser.innerHTML = `<span>📞 Call Dispatch: ${phone}</span>`;
+      teaser.innerHTML = `<span>📞 Call Dispatch: ${escapeHtml(phone)}</span>`;
       setTimeout(() => {
         if (!drawer.classList.contains("active")) {
           teaser.style.display = "flex";
@@ -849,7 +867,7 @@
       if (isDirectMatch) {
         try {
           sessionStorage.setItem(sessionKey, JSON.stringify({ active: true, path: currentPath, timestamp: Date.now() }));
-        } catch (e) {}
+        } catch (e) { }
         return true;
       } else {
         try {
@@ -859,7 +877,7 @@
             if (elapsedMin < 45) return true;
             sessionStorage.removeItem(sessionKey);
           }
-        } catch (e) {}
+        } catch (e) { }
         return false;
       }
     }
@@ -1262,8 +1280,8 @@
     card.className = "ls-lead-card";
     card.innerHTML = `
       <h5>✅ Dispatch Alert Prepared</h5>
-      <p>Contact: <strong>${lead.customerPhone}</strong></p>
-      ${lead.serviceAddress ? `<p>Location: ${lead.serviceAddress}</p>` : ""}
+      <p>Contact: <strong>${escapeHtml(lead.customerPhone)}</strong></p>
+      ${lead.serviceAddress ? `<p>Location: ${escapeHtml(lead.serviceAddress)}</p>` : ""}
       <p style="margin-top: 4px; font-size: 11px;">Our dispatch technician is reviewing your request now.</p>
     `;
     messagesEl.appendChild(card);

@@ -10,6 +10,41 @@ function escapeHtml(text: string): string {
     .replace(/'/g, "&#039;");
 }
 
+function cleanHeaderLine(text: string, maxLen = 180): string {
+  if (!text) return "";
+  return String(text).replace(/[\r\n]+/g, " ").trim().slice(0, maxLen);
+}
+
+function isSafePhotoUrl(url: string): boolean {
+  if (!url || typeof url !== "string") return false;
+  const trimmed = url.trim();
+  if (trimmed.length > 700_000) return false;
+  if (/^data:image\/(jpeg|jpg|png|webp);base64,[A-Za-z0-9+/=]+$/i.test(trimmed)) {
+    return true;
+  }
+  try {
+    const parsed = new URL(trimmed);
+    return parsed.protocol === "https:";
+  } catch {
+    return false;
+  }
+}
+
+function sanitizeEmailHref(url: string): string {
+  if (!url || typeof url !== "string") return "#";
+  const trimmed = url.trim();
+  if (trimmed.startsWith("/") && !trimmed.startsWith("//")) return escapeHtml(trimmed);
+  try {
+    const parsed = new URL(trimmed);
+    if (parsed.protocol === "https:" || parsed.protocol === "http:") {
+      return escapeHtml(trimmed);
+    }
+  } catch {
+    // fall through
+  }
+  return "#";
+}
+
 export async function dispatchLeadEmail(
   lead: FrontdeskLead,
   site: FrontdeskSite,
@@ -57,16 +92,23 @@ export async function dispatchLeadEmail(
     })
     .join("");
 
-  const photoHtml = (lead.photo_urls && lead.photo_urls.length > 0 && flags?.enablePhotoUpload !== false)
+  const safePhotoUrls = (lead.photo_urls || []).filter(isSafePhotoUrl).slice(0, 3);
+  const photoHtml = (safePhotoUrls.length > 0 && flags?.enablePhotoUpload !== false)
     ? `
       <div style="margin-top: 20px; padding: 15px; border-radius: 8px; background-color: #f8fafc; border: 1px solid #e2e8f0;">
         <h4 style="margin: 0 0 10px 0; color: #0f172a; font-size: 14px;">📸 Attached Customer Photos:</h4>
         <div style="display: flex; gap: 10px; flex-wrap: wrap;">
-          ${lead.photo_urls.map(url => `
-            <a href="${escapeHtml(url)}" target="_blank" style="display: inline-block;">
-              <img src="${escapeHtml(url)}" alt="Customer Damage Attachment" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" />
+          ${safePhotoUrls.map(url => {
+            const safeSrc = escapeHtml(url);
+            if (url.startsWith("data:")) {
+              return `<img src="${safeSrc}" alt="Customer Damage Attachment" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" />`;
+            }
+            return `
+            <a href="${safeSrc}" target="_blank" rel="noopener noreferrer" style="display: inline-block;">
+              <img src="${safeSrc}" alt="Customer Damage Attachment" style="width: 120px; height: 120px; object-fit: cover; border-radius: 6px; border: 1px solid #cbd5e1;" />
             </a>
-          `).join("")}
+          `;
+          }).join("")}
         </div>
       </div>
     `
@@ -155,7 +197,7 @@ export async function dispatchLeadEmail(
     const res = await resend.emails.send({
       from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [targetEmail],
-      subject: `${isEmergency ? '🚨 EMERGENCY: ' : isUrgent ? '⚠️ URGENT: ' : '📋 '} Lead for ${site.business_name} (${lead.customer_name} - ${lead.customer_phone})`,
+      subject: cleanHeaderLine(`${isEmergency ? '🚨 EMERGENCY: ' : isUrgent ? '⚠️ URGENT: ' : '📋 '} Lead for ${site.business_name} (${lead.customer_name} - ${lead.customer_phone})`),
       html
     });
 
@@ -248,7 +290,7 @@ export async function dispatchTrialWelcomeEmail(
             </p>
             <ol style="margin: 0; padding-left: 20px; font-size: 12.5px; color: #065f46; line-height: 1.6;">
               <li><strong>Create Tag:</strong> In GTM, click <em>Tags &rarr; New</em>. Name it <code>SurgeBot AI FrontDesk</code> and select <strong>Custom HTML</strong> as Tag Type. Paste your 1-line script tag into the HTML box.</li>
-              <li><strong>Configure Trigger:</strong> Under <em>Triggering</em>, select <em>Page View (Window Loaded)</em>. ${site.path_prefix ? `To restrict this bot to this location, choose <strong>Some Page Views</strong> &rarr; <code>Page Path contains ${site.path_prefix}</code>. (Built-in session memory keeps the bot active even if visitors navigate to general corporate pages!).` : "Leave set to <strong>All Pages</strong>."}</li>
+              <li><strong>Configure Trigger:</strong> Under <em>Triggering</em>, select <em>Page View (Window Loaded)</em>. ${site.path_prefix ? `To restrict this bot to this location, choose <strong>Some Page Views</strong> &rarr; <code>Page Path contains ${escapeHtml(site.path_prefix)}</code>. (Built-in session memory keeps the bot active even if visitors navigate to general corporate pages!).` : "Leave set to <strong>All Pages</strong>."}</li>
               <li><strong>Submit &amp; Publish:</strong> Click <em>Save</em>, then click <em>Submit</em> and <em>Publish</em> in the top-right corner. SurgeBot will go live immediately!</li>
             </ol>
           </div>
@@ -307,7 +349,7 @@ export async function dispatchTrialWelcomeEmail(
     const emailPayload: any = {
       from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [recipientEmail],
-      subject: `🚀 Your SurgeBot 30-Day Free Trial Script for ${site.business_name}`,
+      subject: cleanHeaderLine(`🚀 Your SurgeBot 30-Day Free Trial Script for ${site.business_name}`),
       html
     };
 
@@ -375,7 +417,7 @@ export async function sendTrialExpiryReportEmail(
             30-DAY PERFORMANCE REPORT
           </div>
           <h1 style="margin: 0; font-size: 22px; font-weight: 800; letter-spacing: -0.5px;">
-            📊 SurgeBot Results for ${site.business_name}
+            📊 SurgeBot Results for ${escapeHtml(site.business_name)}
           </h1>
           <p style="margin: 6px 0 0 0; color: #a7f3d0; font-size: 13px;">
             Your 30-day free trial has completed. Here is how your AI frontdesk performed:
@@ -426,7 +468,7 @@ export async function sendTrialExpiryReportEmail(
             <div style="font-size: 32px; font-weight: 900; color: #0f172a; margin-bottom: 16px;">
               $10 <span style="font-size: 14px; color: #64748b; font-weight: 500;">/ month (only 33¢ a day)</span>
             </div>
-            <a href="${checkoutUrl}" style="display: inline-block; background: #bc5f40; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px; box-shadow: 0 4px 6px -1px rgba(188,95,64,0.3);">
+            <a href="${sanitizeEmailHref(checkoutUrl)}" style="display: inline-block; background: #bc5f40; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px; box-shadow: 0 4px 6px -1px rgba(188,95,64,0.3);">
               ⚡ Keep SurgeBot Active for $10/mo &rarr;
             </a>
             <p style="font-size: 11px; color: #94a3b8; margin-top: 10px;">
@@ -451,7 +493,7 @@ export async function sendTrialExpiryReportEmail(
     const emailPayload: any = {
       from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [recipientEmail],
-      subject: `📊 Your 30-Day SurgeBot Results: ${stats.totalLeads} Leads Captured for ${site.business_name}`,
+      subject: cleanHeaderLine(`📊 Your 30-Day SurgeBot Results: ${stats.totalLeads} Leads Captured for ${site.business_name}`),
       html
     };
 
@@ -508,14 +550,14 @@ export async function sendGracePeriodEndedEmail(
             STATUS UPDATE: GRACE PERIOD CONCLUDED
           </div>
           <h1 style="margin: 0; font-size: 20px; font-weight: 800; letter-spacing: -0.5px;">
-            ⚠️ SurgeBot Switched to Fallback Contact Mode for ${site.business_name}
+            ⚠️ SurgeBot Switched to Fallback Contact Mode for ${escapeHtml(site.business_name)}
           </h1>
         </div>
 
         <!-- Body -->
         <div style="padding: 24px;">
           <p style="font-size: 14px; color: #334155; line-height: 1.5; margin-top: 0;">
-            The 3-day grace period for your SurgeBot 30-day free trial on <strong>${site.website_url || site.business_name}</strong> has now ended.
+            The 3-day grace period for your SurgeBot 30-day free trial on <strong>${escapeHtml(site.website_url || site.business_name)}</strong> has now ended.
           </p>
 
           <div style="background: #f8fafc; border-left: 4px solid #f59e0b; border-radius: 0 8px 8px 0; padding: 14px; margin: 20px 0;">
@@ -529,7 +571,7 @@ export async function sendGracePeriodEndedEmail(
             <p style="font-size: 14px; color: #0f172a; font-weight: 700; margin-bottom: 12px;">
               Reactivate full 24/7 AI answering & emergency dispatch in under 30 seconds:
             </p>
-            <a href="${checkoutUrl}" style="display: inline-block; background: #123e35; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px;">
+            <a href="${sanitizeEmailHref(checkoutUrl)}" style="display: inline-block; background: #123e35; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px;">
               ⚡ Reactivate SurgeBot for $10/mo &rarr;
             </a>
             <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
@@ -554,7 +596,7 @@ export async function sendGracePeriodEndedEmail(
     const emailPayload: any = {
       from: "Local Surge SEO <contact@localsurgeseo.com>",
       to: [recipientEmail],
-      subject: `⚠️ SurgeBot Grace Period Expired: AI Answering Paused for ${site.business_name}`,
+      subject: cleanHeaderLine(`⚠️ SurgeBot Grace Period Expired: AI Answering Paused for ${site.business_name}`),
       html
     };
 
