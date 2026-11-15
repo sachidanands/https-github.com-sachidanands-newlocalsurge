@@ -51,20 +51,38 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
     ]
   },
   {
-    name: 'calculate_seo_quote',
-    description: 'Calculates custom monthly Local SEO pricing tier recommendations and deliverable scopes based on business goals.',
+    name: 'get_plans_and_benefits',
+    description: 'Lists all Local Surge SEO plans ($0 Free Trial, $999/mo Starter Boost, $1,999/mo Premium Surge, Custom), including exact deliverables (what users receive upon subscribing), timelines, next action items, and consultative recommendation rules.',
     endpoint: '/api/webmcp/invoke',
     method: 'POST',
     riskLevel: 'low',
-    requiresUserConsent: true,
+    requiresUserConsent: false,
     parameters: [
-      { name: 'targetLocationCount', type: 'number', description: 'Number of target cities to dominate in map pack', required: true, example: '3' },
-      { name: 'hasExistingWebsite', type: 'boolean', description: 'Whether business currently has a live website', required: true, example: 'true' }
+      { name: 'planId', type: 'string', description: 'Optional filter: single-page, starter, premium, or custom', required: false, example: 'single-page' }
+    ]
+  },
+  {
+    name: 'calculate_seo_quote',
+    description: 'Evaluates business complexity and website status: proposes $0 Free Trial (starting simple without payment gateways + catchy .com domain suggestions) for simple businesses without a website; inspects existing sites against 2026 standards and proposes Starter Boost ($999/mo) revamp + contract lock-in; proposes Premium Surge ($1,999/mo) for multi-page, blogs, or 3rd-party API integrations.',
+    endpoint: '/api/webmcp/invoke',
+    method: 'POST',
+    riskLevel: 'low',
+    requiresUserConsent: false,
+    parameters: [
+      { name: 'businessName', type: 'string', description: 'Business name for domain suggestions', required: false, example: 'Apex Plumbing' },
+      { name: 'industry', type: 'string', description: 'Business niche or trade', required: false, example: 'Plumbing' },
+      { name: 'location', type: 'string', description: 'Target city and state', required: false, example: 'San Jose, CA' },
+      { name: 'targetLocationCount', type: 'number', description: 'Number of target cities to dominate in map pack', required: true, example: '1' },
+      { name: 'hasExistingWebsite', type: 'boolean', description: 'Whether business currently has a live website', required: true, example: 'false' },
+      { name: 'website', type: 'string', description: 'Existing website URL to inspect against modern 2026 standards', required: false, example: 'https://apexplumbing.com' },
+      { name: 'hasMultiplePagesOrBlog', type: 'boolean', description: 'Requires multiple service pages or monthly SEO blog', required: false, example: 'false' },
+      { name: 'needsThirdPartyApiIntegrations', type: 'boolean', description: 'Requires 3rd-party API, CRM, or webhook integrations', required: false, example: 'false' },
+      { name: 'needsPaymentGateway', type: 'boolean', description: 'Asked about accepting online payments / checkout', required: false, example: 'false' }
     ]
   },
   {
     name: 'submit_onboarding_lead',
-    description: 'Submits a complete Local SEO strategy onboarding request to receive a custom ranking roadmap and domain allocation.',
+    description: 'Confirms and submits a complete Local SEO onboarding lead directly from AI chat. Emails Strategy Growth Brief PDF and returns full deliverables ("What You Will Get Upon Subscribing") and next action items.',
     endpoint: '/api/webmcp/invoke',
     method: 'POST',
     riskLevel: 'medium',
@@ -75,7 +93,11 @@ export const WEBMCP_TOOLS: WebMcpTool[] = [
       { name: 'email', type: 'string', description: 'Business contact email address', required: true, example: 'contact@apexdental.com' },
       { name: 'phone', type: 'string', description: 'Primary phone number', required: true, example: '+1 (909) 707-5075' },
       { name: 'location', type: 'string', description: 'Target city or region', required: true, example: 'San Jose, CA' },
-      { name: 'keywords', type: 'string', description: 'Primary target keywords or services', required: true, example: 'emergency dentist, cosmetic dentistry' }
+      { name: 'keywords', type: 'string', description: 'Primary target keywords or services', required: true, example: 'emergency dentist, cosmetic dentistry' },
+      { name: 'planId', type: 'string', description: 'Target plan ID: single-page, starter, premium, custom, or auto', required: false, example: 'single-page' },
+      { name: 'website', type: 'string', description: 'Existing website URL (if any)', required: false, example: 'https://apexdental.com' },
+      { name: 'chosenDomain', type: 'string', description: 'Chosen domain name for new $0 website build', required: false, example: 'apexdentalpros.com' },
+      { name: 'hasWebsite', type: 'boolean', description: 'Whether the business already has a website', required: false, example: 'false' }
     ]
   }
 ];

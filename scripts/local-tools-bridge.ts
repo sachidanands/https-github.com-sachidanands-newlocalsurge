@@ -134,10 +134,12 @@ export function listInstalledTools(): ToolEntry[] {
   const regMap = new Map(registry.tools.map((entry) => [entry.name, entry]));
   const results: ToolEntry[] = [];
 
+  const NON_TOOL_DIRS = new Set(['documents', 'blog-drafts', 'voicebox-data', 'node_modules']);
+
   if (fs.existsSync(baseDir)) {
     const entries = fs.readdirSync(baseDir, { withFileTypes: true });
     for (const dirent of entries) {
-      if (!dirent.isDirectory() || dirent.name.startsWith('.')) continue;
+      if (!dirent.isDirectory() || dirent.name.startsWith('.') || NON_TOOL_DIRS.has(dirent.name)) continue;
       const toolDir = path.join(baseDir, dirent.name);
       const regEntry = regMap.get(dirent.name);
       results.push({

@@ -78,6 +78,26 @@ export default function SchemaMarkup({
     'potentialAction': [
       {
         '@type': 'Action',
+        'name': 'get_plans_and_benefits',
+        'description': 'Retrieve all Local Surge SEO website & local SEO plans ($0 Free Trial, $999/mo Starter Boost, $1,999/mo Premium Surge), deliverables, timelines, and next action items',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': `${siteUrl}/api/webmcp/plans`,
+          'actionPlatform': ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform']
+        }
+      },
+      {
+        '@type': 'Action',
+        'name': 'calculate_seo_quote',
+        'description': 'Consultative AI evaluation recommending $0 Free Trial (with catchy domain ideas & start-simple guidance), Starter Boost revamp ($999/mo), or Premium Surge ($1,999/mo)',
+        'target': {
+          '@type': 'EntryPoint',
+          'urlTemplate': `${siteUrl}/api/webmcp/invoke`,
+          'actionPlatform': ['https://schema.org/DesktopWebPlatform', 'https://schema.org/MobileWebPlatform']
+        }
+      },
+      {
+        '@type': 'Action',
         'name': 'audit_local_seo',
         'description': 'Execute automated Local SEO audit on target domain',
         'target': {
@@ -99,7 +119,7 @@ export default function SchemaMarkup({
       {
         '@type': 'Action',
         'name': 'submit_onboarding_lead',
-        'description': 'Submit local business SEO strategy onboarding request',
+        'description': 'Submit local business SEO strategy onboarding request directly from AI chat via WebMCP or Remote MCP (/api/mcp)',
         'target': {
           '@type': 'EntryPoint',
           'urlTemplate': `${siteUrl}/api/webmcp/invoke`,

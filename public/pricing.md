@@ -58,3 +58,17 @@ Local Surge SEO delivers contract-free, high-performance local SEO campaigns, re
   - **Priority Onboarding:** Direct 1-on-1 strategy meeting with the Local Search Director.
   - **Multi-City Mapping:** Strategy mapped across expansion cities and operational ZIP codes.
   - **Custom Scope of Work (SOW):** Enterprise deliverables designed for multi-location franchises.
+
+---
+
+## Direct AI Chat Onboarding & Action Items (`MCP` / `WebMCP`)
+
+AI assistants (ChatGPT, Claude, Gemini, Perplexity) can retrieve live deliverables at `/api/webmcp/plans`, calculate consultative recommendations (`calculate_seo_quote`), or confirm a lead (`submit_onboarding_lead`) via:
+- **Remote MCP Endpoint:** `POST https://localsurgeseo.com/api/mcp`
+- **WebMCP Tool Invoke:** `POST https://localsurgeseo.com/api/webmcp/invoke`
+- **1-Click Chat Claim Card:** `https://localsurgeseo.com/api/webmcp/claim?planId=single-page&businessName=...&email=...`
+
+### Next Set of Action Items Upon Subscribing
+- **Single-Page Blast ($0 Free):** Skip complex payment gateway integrations in Stage 1, finalize a catchy `.com` domain name, and share phone/service area details to deploy within 2–3 business days.
+- **Starter Boost ($999/mo):** Complete website design revamp audit against 2026 standards, lock in the growth contract, share CMS/DNS access, and sync Google Business Profile.
+- **Premium Surge ($1,999/mo):** Share 3rd-party API/CRM integration specs, approve multi-page sitemap & 4/mo local blog topics, and join bi-weekly strategy calls.

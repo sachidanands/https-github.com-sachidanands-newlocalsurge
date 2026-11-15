@@ -1892,13 +1892,408 @@ async function generateServerPDF(planId: string, name: string, email: string): P
   return Buffer.from(arrayBuffer);
 }
 
-app.post("/api/leads/submit", async (req, res) => {
-  // 1. IP Rate Limiting Check
-  const clientIp = getClientIp(req);
-  if (isRateLimited(clientIp)) {
-    return res.status(429).json({ error: "Too many requests. Please try again in 15 minutes." });
+type CanonicalPlanId = "single-page" | "starter" | "premium" | "custom";
+
+const VALID_PLAN_IDS = ["single-page", "starter", "premium", "custom", "custom-inquiry"];
+
+const PLAN_NAMES: Record<string, string> = {
+  "single-page": "Single-Page Blast (Free Plan)",
+  "starter": "Starter Boost Plan",
+  "premium": "Premium Surge Plan",
+  "custom": "Custom Configuration / Enterprise Setup",
+  "custom-inquiry": "Custom Configuration / Enterprise Setup"
+};
+
+const PLAN_CATALOG_METADATA: Record<CanonicalPlanId, {
+  title: string;
+  shortName: string;
+  price: string;
+  billingCycle: string;
+  idealFor: string;
+  contractTerm: string;
+}> = {
+  "single-page": {
+    title: "Single-Page Blast (Free Plan)",
+    shortName: "$0 Free Website Trial",
+    price: "$0",
+    billingCycle: "Free Promotion / No Setup Fee",
+    idealFor: "New or simple local businesses without a website starting lean without complex payment gateways",
+    contractTerm: "No long-term lock-in ($0 promotional launch)"
+  },
+  "starter": {
+    title: "Starter Boost Plan",
+    shortName: "Starter Boost ($999/mo)",
+    price: "$999/mo",
+    billingCycle: "Monthly",
+    idealFor: "Businesses with an existing website needing a modern 2026 conversion revamp (up to 10 pages), GBP sync, and contract lock-in",
+    contractTerm: "Standard growth contract lock-in for compounding local map-pack rankings"
+  },
+  "premium": {
+    title: "Premium Surge Plan",
+    shortName: "Premium Surge ($1,999/mo)",
+    price: "$1,999/mo",
+    billingCycle: "Monthly",
+    idealFor: "Businesses needing multiple/unlimited pages, monthly local SEO blogs, custom calculators, and 3rd-party API/CRM integrations",
+    contractTerm: "Full-stack multi-city growth & integration agreement"
+  },
+  "custom": {
+    title: "Custom Configuration / Enterprise Setup",
+    shortName: "Custom Enterprise",
+    price: "Custom Quote",
+    billingCycle: "Bespoke Engagement",
+    idealFor: "Multi-region franchises (10+ locations) or bespoke architecture",
+    contractTerm: "Tailored enterprise SLA"
+  }
+};
+
+function normalizePlanId(rawPlanId?: unknown): string {
+  const cleaned = String(rawPlanId || "").trim().toLowerCase();
+  if (!cleaned || cleaned === "auto" || cleaned === "recommended") return "";
+  if (["single-page", "free", "free-trial", "free_trial", "free-plan", "free-website", "trial", "blast"].includes(cleaned)) {
+    return "single-page";
+  }
+  if (["starter", "starter-boost", "growth", "growth-accelerator", "revamp", "simple-starter"].includes(cleaned)) {
+    return "starter";
+  }
+  if (["premium", "premium-surge", "dominance", "multi-page", "enterprise-blog", "pro"].includes(cleaned)) {
+    return "premium";
+  }
+  if (["custom", "custom-inquiry", "enterprise"].includes(cleaned)) {
+    return cleaned === "custom-inquiry" ? "custom-inquiry" : "custom";
+  }
+  return cleaned;
+}
+
+function getPlanSummary(planId: string) {
+  const templates = readTemplates();
+  const templateKey: CanonicalPlanId =
+    planId === "single-page" || planId === "starter" || planId === "premium" ? planId : "custom";
+  const templateConfig = templates[templateKey] || templates["custom"] || {
+    timeline: "Bespoke Schedule Based on Requirements",
+    deliverables: ["Finalize scope and next steps immediately after the kickoff call."],
+    actions: ["Conduct priority 1-on-1 strategy session with Local Surge SEO Director."]
+  };
+  const meta = PLAN_CATALOG_METADATA[templateKey];
+
+  return {
+    planId: templateKey,
+    planName: PLAN_NAMES[planId] || meta.title,
+    shortName: meta.shortName,
+    price: meta.price,
+    billingCycle: meta.billingCycle,
+    idealFor: meta.idealFor,
+    contractTerm: meta.contractTerm,
+    timeline: String(templateConfig.timeline || "Fast Onboarding"),
+    whatYouWillGet: Array.isArray(templateConfig.deliverables) ? [...templateConfig.deliverables] : [],
+    nextActionItems: Array.isArray(templateConfig.actions) ? [...templateConfig.actions] : []
+  };
+}
+
+function buildPlansCatalog() {
+  const planIds: CanonicalPlanId[] = ["single-page", "starter", "premium", "custom"];
+  return {
+    provider: "Local Surge SEO",
+    homepage: "https://localsurgeseo.com",
+    claimUrl: "https://localsurgeseo.com/api/webmcp/claim",
+    consultativeSelectionRules: [
+      "No website + simple business: recommend single-page ($0 Free Trial), advise starting simple without complex online payment gateways, and suggest 3-5 catchy .com domain names to finalize.",
+      "Has an existing website: check whether it matches 2026 modern design/conversion standards; recommend revamping via starter ($999/mo) up to 10 pages and locking in the contract.",
+      "Multiple pages, ongoing blogs, or 3rd-party API/CRM integrations: recommend premium ($1,999/mo) for unlimited pages, 4 monthly blog articles, and API integrations."
+    ],
+    plans: planIds.map((id) => getPlanSummary(id))
+  };
+}
+
+function slugToken(value?: unknown): string {
+  return String(value || "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean)
+    .join("");
+}
+
+function generateCatchyDomainSuggestions(businessName?: string, industry?: string, location?: string): string[] {
+  const genericWords = new Set(["llc", "inc", "corp", "co", "ltd", "the", "services", "service", "solutions", "group", "company"]);
+  const bizTokens = String(businessName || "")
+    .toLowerCase()
+    .replace(/&/g, "and")
+    .replace(/[^a-z0-9\s]/g, " ")
+    .trim()
+    .split(/\s+/)
+    .filter(Boolean);
+  const coreBizTokens = bizTokens.filter((w) => !genericWords.has(w));
+  const bizSlug = (coreBizTokens.length > 0 ? coreBizTokens : bizTokens).join("").slice(0, 18) || "localpro";
+  const firstWord = (coreBizTokens[0] || bizTokens[0] || "local").slice(0, 12);
+
+  const locCity = String(location || "").split(",")[0];
+  const locSlug = slugToken(locCity).slice(0, 12);
+  const nicheFirst = slugToken(String(industry || "").split(/[,/]/)[0]).slice(0, 12);
+
+  const candidates = [
+    `${bizSlug}.com`,
+    locSlug ? `${bizSlug}${locSlug}.com` : `${bizSlug}pros.com`,
+    nicheFirst && !bizSlug.includes(nicheFirst) ? `${firstWord}${nicheFirst}.com` : `get${bizSlug}.com`,
+    locSlug ? `${locSlug}${firstWord}.com` : `call${bizSlug}.com`,
+    `go${bizSlug}.com`
+  ];
+
+  const unique: string[] = [];
+  for (const raw of candidates) {
+    const clean = raw.replace(/[^a-z0-9.]/g, "");
+    if (clean.length > 5 && !unique.includes(clean)) {
+      unique.push(clean);
+    }
+  }
+  return unique.slice(0, 5);
+}
+
+async function inspectWebsiteForModernRevamp(rawUrl?: string) {
+  const trimmed = String(rawUrl || "").trim().slice(0, 200);
+  if (!trimmed) {
+    return {
+      provided: false,
+      checkedLive: false,
+      matchesLatest2026Standards: false,
+      revampRecommended: true,
+      findings: [
+        "No live URL was supplied for real-time inspection. Most legacy local websites lack mobile-first sticky CTAs, LocalBusiness JSON-LD schema, and modern 2026 conversion architecture — review or revamp on the Starter Boost plan ($999/mo)."
+      ],
+      signals: {}
+    };
   }
 
+  const normalizedUrl = /^https?:\/\//i.test(trimmed) ? trimmed : `https://${trimmed}`;
+  let safe = false;
+  try {
+    safe = await assertSafePublicUrl(normalizedUrl);
+  } catch {
+    safe = false;
+  }
+
+  if (!safe) {
+    return {
+      provided: true,
+      normalizedUrl,
+      checkedLive: false,
+      matchesLatest2026Standards: false,
+      revampRecommended: true,
+      findings: [
+        "The provided URL could not be verified as a public HTTP/HTTPS domain. A clean modern rebuild with verified SSL and LocalBusiness schema is recommended."
+      ],
+      signals: {}
+    };
+  }
+
+  const controller = new AbortController();
+  const timeout = setTimeout(() => controller.abort(), 3500);
+  const start = Date.now();
+  try {
+    const resp = await fetch(normalizedUrl, {
+      method: "GET",
+      redirect: "follow",
+      signal: controller.signal,
+      headers: { "User-Agent": "LocalSurge-WebMCP-Audit/1.0" }
+    });
+    const elapsedMs = Date.now() - start;
+    const html = (await resp.text()).slice(0, 65536);
+    const usesHttps = (resp.url || normalizedUrl).toLowerCase().startsWith("https://");
+    const hasViewportMeta = /<meta[^>]+name=["']viewport["']/i.test(html);
+    const hasTitleTag = /<title[^>]*>[^<]+<\/title>/i.test(html);
+    const hasJsonLdSchema = /application\/ld\+json/i.test(html);
+    const hasOpenGraph = /property=["']og:/i.test(html);
+
+    const findings: string[] = [];
+    if (!resp.ok) findings.push(`HTTP status ${resp.status} returned when fetching homepage.`);
+    if (!usesHttps) findings.push("Missing enforced HTTPS/SSL security certificate.");
+    if (!hasViewportMeta) findings.push("Missing mobile viewport meta tag (hurts mobile Core Web Vitals & conversion).");
+    if (!hasTitleTag) findings.push("Missing or empty <title> tag for local keyword targeting.");
+    if (!hasJsonLdSchema) findings.push("No JSON-LD LocalBusiness/Service structured data detected for Google & AI search citation.");
+    if (!hasOpenGraph) findings.push("Missing Open Graph social/AI preview metadata.");
+    if (elapsedMs > 2000) findings.push(`Slow initial server response (${elapsedMs}ms) — modern edge rendering converts significantly better.`);
+
+    const matchesLatest2026Standards = findings.length === 0;
+    if (matchesLatest2026Standards) {
+      findings.push("Baseline HTTPS, mobile viewport, and JSON-LD markup detected — lock in the Starter Boost plan ($999/mo) to modernize conversion UI, add localized city pages, sync GBP, and build 20 citations.");
+    } else {
+      findings.push("Website does not meet latest 2026 local SEO & conversion design standards — we recommend revamping with the Starter Boost Plan ($999/mo) and locking in the contract.");
+    }
+
+    return {
+      provided: true,
+      normalizedUrl,
+      checkedLive: true,
+      matchesLatest2026Standards,
+      revampRecommended: !matchesLatest2026Standards,
+      findings,
+      signals: {
+        httpStatus: resp.status,
+        responseTimeMs: elapsedMs,
+        usesHttps,
+        hasViewportMeta,
+        hasTitleTag,
+        hasJsonLdSchema,
+        hasOpenGraph
+      }
+    };
+  } catch {
+    return {
+      provided: true,
+      normalizedUrl,
+      checkedLive: false,
+      matchesLatest2026Standards: false,
+      revampRecommended: true,
+      findings: [
+        "Live site fetch timed out or refused automated inspection — check SSL/hosting speed and consider a modern Starter Boost ($999/mo) conversion revamp."
+      ],
+      signals: {}
+    };
+  } finally {
+    clearTimeout(timeout);
+  }
+}
+
+function parseBoolFlag(val: unknown): boolean | undefined {
+  if (typeof val === "boolean") return val;
+  const s = String(val || "").trim().toLowerCase();
+  if (s === "true" || s === "1" || s === "yes") return true;
+  if (s === "false" || s === "0" || s === "no") return false;
+  return undefined;
+}
+
+async function evaluateConsultativePlanRecommendation(params: {
+  businessName?: string;
+  industry?: string;
+  businessType?: string;
+  location?: string;
+  targetLocationCount?: number;
+  hasExistingWebsite?: boolean;
+  website?: string;
+  businessComplexity?: string;
+  hasMultiplePagesOrBlog?: boolean;
+  needsThirdPartyApiIntegrations?: boolean;
+  needsPaymentGateway?: boolean;
+}) {
+  const websiteStr = String(params.website || "").trim();
+  const hasExistingWebsite = Boolean(parseBoolFlag(params.hasExistingWebsite)) || websiteStr.length > 0;
+  const targetLocationCount = Math.max(1, Number(params.targetLocationCount || 1) || 1);
+  const hasMultiplePagesOrBlog = Boolean(parseBoolFlag(params.hasMultiplePagesOrBlog));
+  const needsThirdPartyApiIntegrations = Boolean(parseBoolFlag(params.needsThirdPartyApiIntegrations));
+  const needsPaymentGateway = Boolean(parseBoolFlag(params.needsPaymentGateway));
+  const complexity = String(params.businessComplexity || "simple").trim().toLowerCase();
+  const industry = String(params.industry || params.businessType || "Local Business").trim();
+
+  let recommendedPlanId: CanonicalPlanId = "single-page";
+  let headline = "";
+  const consultativeNotes: string[] = [];
+  const tailoredActionItems: string[] = [];
+  let domainSuggestions: string[] = [];
+  let websiteAudit: any = null;
+
+  if (targetLocationCount >= 10) {
+    recommendedPlanId = "custom";
+    headline = `Enterprise Custom Setup recommended for ${targetLocationCount} target locations.`;
+    consultativeNotes.push("High-location multi-market footprint requires a bespoke franchise rollout plan.");
+    tailoredActionItems.push("Prepare full branch address & phone list for multi-location schema rollout.");
+  } else if (hasMultiplePagesOrBlog || needsThirdPartyApiIntegrations || targetLocationCount > 2 || complexity === "enterprise") {
+    recommendedPlanId = "premium";
+    headline = "Premium Surge Plan ($1,999/mo) recommended for multi-page architecture, blog SEO, and 3rd-party API integrations.";
+    consultativeNotes.push(
+      "Because your scope requires multiple service/location pages, ongoing content/blog publishing, and/or 3rd-party API/CRM integrations, the Premium Surge Plan ($1,999/mo) covers full-stack custom components, 4 localized blog articles/mo, unlimited pages, and API wiring."
+    );
+    if (needsPaymentGateway) {
+      consultativeNotes.push(
+        "Tip: Even on Premium, validate core service leads first before layering complex checkout flows unless direct e-commerce transactions are essential."
+      );
+    }
+    tailoredActionItems.push("List all 3rd-party APIs, webhooks, CRM endpoints, and multi-page/blog topics needed at kickoff.");
+    if (hasExistingWebsite) {
+      websiteAudit = await inspectWebsiteForModernRevamp(websiteStr);
+    }
+  } else if (hasExistingWebsite || targetLocationCount > 1 || complexity === "multi-page") {
+    recommendedPlanId = "starter";
+    headline = "Starter Boost Plan ($999/mo) recommended to revamp your existing website to modern 2026 design standards and lock in your growth contract.";
+    websiteAudit = await inspectWebsiteForModernRevamp(websiteStr);
+    consultativeNotes.push(...websiteAudit.findings);
+    consultativeNotes.push(
+      "We recommend opting for the Starter Boost Plan ($999/mo) to modernize your website (up to 10 conversion-focused SEO pages), sync your Google Business Profile, build 20 citations, and lock in your onboarding contract for steady map-pack dominance."
+    );
+    if (needsPaymentGateway && !hasMultiplePagesOrBlog) {
+      consultativeNotes.push(
+        "Advisory: Keep your Stage-1 revamp focused on instant quote forms and calls before adding complex online payment checkout, or upgrade to Premium if custom billing APIs are required."
+      );
+    }
+    tailoredActionItems.push("Approve modern design revamp direction and lock in your Starter Boost onboarding contract.");
+    if (websiteStr) {
+      tailoredActionItems.push(`Share registrar/DNS/CMS access for ${websiteStr} so we can deploy the modernized revamp without downtime.`);
+    }
+  } else {
+    recommendedPlanId = "single-page";
+    headline = "Start with the $0 Free Trial Single-Page Website Plan ('single-page') — launch fast, skip payment gateways for now, and finalize a catchy domain name.";
+    domainSuggestions = generateCatchyDomainSuggestions(params.businessName, industry, params.location);
+    consultativeNotes.push(
+      "Since you do not have an existing website yet and run a straightforward business model, start risk-free with the $0 Free Trial Single-Page Website Plan."
+    );
+    consultativeNotes.push(
+      "Start Simple Advisory: Do NOT start with complex features like accepting online payments (payment gateways / checkout carts) or complex logins yet. Launch a fast, mobile-first conversion page for calls and quote requests first, prove demand, and upgrade later once revenue flows."
+    );
+    if (needsPaymentGateway) {
+      consultativeNotes.push(
+        "You mentioned online payments: we strongly advise holding off on payment gateway integration in Phase 1 so you can launch immediately for $0 and start capturing leads first."
+      );
+    }
+    consultativeNotes.push(
+      `Next Smart Move — Finalize a Catchy Domain Name: Pick a short, memorable .com without hyphens. Top ideas: ${domainSuggestions.join(", ")}.`
+    );
+    tailoredActionItems.push(`Choose and finalize your catchy .com domain name (for example: ${domainSuggestions.slice(0, 3).join(", ")}).`);
+    tailoredActionItems.push("Confirm business phone, service city, and primary service description so we launch your free single-page site within 48 hours.");
+  }
+
+  const plan = getPlanSummary(recommendedPlanId);
+  const combinedActionItems = [...tailoredActionItems, ...plan.nextActionItems];
+
+  return {
+    recommendedPlanId: plan.planId,
+    recommendedPlanName: plan.planName,
+    price: plan.price,
+    billingCycle: plan.billingCycle,
+    contractTerm: plan.contractTerm,
+    headline,
+    consultativeAdvice: consultativeNotes,
+    avoidComplexFeaturesAdvice: recommendedPlanId === "single-page"
+      ? "Avoid complex features such as online payment processing, checkout carts, or multi-step portals in Stage 1; start lean to convert calls and form leads first."
+      : undefined,
+    domainSuggestions: domainSuggestions.length > 0 ? domainSuggestions : undefined,
+    websiteAudit,
+    whatYouWillGetUponSubscribing: {
+      timeline: plan.timeline,
+      deliverables: plan.whatYouWillGet
+    },
+    nextActionItems: combinedActionItems,
+    claimUrlHint: "https://localsurgeseo.com/api/webmcp/claim"
+  };
+}
+
+async function processLeadSubmission(
+  rawInput: Record<string, any>,
+  options: {
+    sourceChannel?: string;
+    defaultToConsultative?: boolean;
+    runGeminiAudit?: boolean;
+  } = {}
+): Promise<{
+  ok: boolean;
+  status?: number;
+  error?: string;
+  lead?: any;
+  planSummary?: ReturnType<typeof getPlanSummary>;
+  consultativeRecommendation?: Awaited<ReturnType<typeof evaluateConsultativePlanRecommendation>>;
+  emailDispatched?: boolean;
+  pdfAttached?: boolean;
+  persistedSupabase?: boolean;
+}> {
   const {
     email,
     businessName,
@@ -1906,82 +2301,119 @@ app.post("/api/leads/submit", async (req, res) => {
     phone,
     website,
     hasWebsite,
+    hasExistingWebsite,
     industry,
+    niche,
+    businessType,
     location,
     keywords,
     hasGBP,
     gbpLink,
-    planId
-  } = req.body;
+    planId,
+    chosenDomain,
+    hasMultiplePagesOrBlog,
+    needsThirdPartyApiIntegrations,
+    needsPaymentGateway,
+    targetLocationCount,
+    businessComplexity
+  } = rawInput || {};
 
   if (!email || !businessName || !contactName) {
-    return res.status(400).json({ error: "Missing required fields (businessName, contactName, email)" });
+    return {
+      ok: false,
+      status: 400,
+      error: "Missing required fields (businessName, contactName, email)"
+    };
   }
 
-  // 2. Validate email structure
   const sanitizedEmail = String(email).trim().slice(0, 100);
   const emailRegex = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
   if (!emailRegex.test(sanitizedEmail)) {
-    return res.status(400).json({ error: "Invalid email address format." });
+    return {
+      ok: false,
+      status: 400,
+      error: "Invalid email address format."
+    };
   }
 
-  // 3. Validate planId
-  const VALID_PLAN_IDS = ["single-page", "starter", "premium", "custom", "custom-inquiry"];
-  const sanitizedPlanId = String(planId || "custom").trim().toLowerCase();
-  if (!VALID_PLAN_IDS.includes(sanitizedPlanId)) {
-    return res.status(400).json({ error: "Invalid plan selection." });
-  }
-
-  const PLAN_NAMES: Record<string, string> = {
-    "single-page": "Single-Page Blast (Free Plan)",
-    "starter": "Starter Boost Plan",
-    "premium": "Premium Surge Plan",
-    "custom": "Custom Configuration / Enterprise Setup",
-    "custom-inquiry": "Custom Configuration / Enterprise Setup"
-  };
-  const planName = PLAN_NAMES[sanitizedPlanId] || "Custom Configuration / Enterprise Setup";
-
-  // Truncate fields for database to standard safe lengths
   const sanitizedBusinessName = String(businessName).trim().slice(0, 100);
   const sanitizedContactName = String(contactName).trim().slice(0, 100);
   const sanitizedPhone = String(phone || "Not provided").trim().slice(0, 30);
-  const sanitizedWebsite = String(website || "").trim().slice(0, 200);
-  const sanitizedIndustry = String(industry || "Local SEO Dominance").trim().slice(0, 100);
+  const sanitizedWebsite = String(website || chosenDomain || "").trim().slice(0, 200);
+  const sanitizedIndustry = String(industry || niche || businessType || "Local SEO Dominance").trim().slice(0, 100);
   const sanitizedLocation = String(location || "Local Area").trim().slice(0, 100);
-  const sanitizedKeywords = String(keywords || "").trim().slice(0, 500);
+  const sanitizedKeywords = String(keywords || "Local SEO & Website Growth").trim().slice(0, 500);
   const sanitizedGbpLink = String(gbpLink || "").trim().slice(0, 500);
+  const effectiveHasWebsite =
+    parseBoolFlag(hasWebsite) ??
+    parseBoolFlag(hasExistingWebsite) ??
+    Boolean(String(website || "").trim());
+
+  const consultativeRecommendation = await evaluateConsultativePlanRecommendation({
+    businessName: sanitizedBusinessName,
+    industry: sanitizedIndustry,
+    businessType: sanitizedIndustry,
+    location: sanitizedLocation,
+    targetLocationCount: targetLocationCount !== undefined ? Number(targetLocationCount) : 1,
+    hasExistingWebsite: effectiveHasWebsite,
+    website: String(website || "").trim(),
+    businessComplexity: String(businessComplexity || "").trim() || undefined,
+    hasMultiplePagesOrBlog: parseBoolFlag(hasMultiplePagesOrBlog),
+    needsThirdPartyApiIntegrations: parseBoolFlag(needsThirdPartyApiIntegrations),
+    needsPaymentGateway: parseBoolFlag(needsPaymentGateway)
+  });
+
+  const normalizedPlan = normalizePlanId(planId);
+  let finalPlanId = normalizedPlan;
+
+  if (!finalPlanId) {
+    finalPlanId = options.defaultToConsultative ? consultativeRecommendation.recommendedPlanId : "custom";
+  } else if (!VALID_PLAN_IDS.includes(finalPlanId)) {
+    return { ok: false, status: 400, error: "Invalid plan selection." };
+  }
+
+  const planSummary = getPlanSummary(finalPlanId);
+  const planName = planSummary.planName;
 
   const cleanLeadInput = {
-    planId: sanitizedPlanId,
+    planId: finalPlanId,
     planName,
     businessName: sanitizedBusinessName,
     contactName: sanitizedContactName,
     email: sanitizedEmail,
     phone: sanitizedPhone,
     website: sanitizedWebsite,
-    hasWebsite: !!hasWebsite,
+    hasWebsite: effectiveHasWebsite,
     industry: sanitizedIndustry,
     location: sanitizedLocation,
     keywords: sanitizedKeywords,
-    hasGBP: !!hasGBP,
+    hasGBP: Boolean(parseBoolFlag(hasGBP)),
     gbpLink: sanitizedGbpLink
   };
 
-  const newLeadId = "lead_" + Math.random().toString(36).substr(2, 9);
+  const sourceTag = options.sourceChannel || "Website";
+  const prefix = sourceTag.toLowerCase().includes("mcp") ? "lead_mcp_" : "lead_";
+  const newLeadId = prefix + Math.random().toString(36).substr(2, 9);
+
+  const extraNote = chosenDomain
+    ? ` Chosen domain preference: ${String(chosenDomain).trim().slice(0, 80)}.`
+    : "";
 
   const newLead: any = {
     id: newLeadId,
     createdAt: new Date().toISOString(),
     status: "pending",
-    notes: `Lead submitted for plan: ${planName}.`,
+    sourceChannel: sourceTag,
+    notes: `Lead submitted via ${sourceTag} for plan: ${planName}.${extraNote}`,
     input: cleanLeadInput
   };
 
-  // Generate AI SEO Strategy Audit based on Lead Input if Gemini is configured!
-  const { ai, Type } = await getGemini();
-  if (ai) {
-    try {
-      const prompt = `
+  // Generate AI SEO Strategy Audit if Gemini is configured (skip heavy LLM wait only if explicitly disabled)
+  if (options.runGeminiAudit !== false) {
+    const { ai, Type } = await getGemini();
+    if (ai) {
+      try {
+        const prompt = `
         You are a highly premium Lead SEO Strategist for "Local Surge SEO".
         We have received an business inquiry/lead who chose the plan: "${planName}".
         Generate a highly actionable, personalized, and deep-dive Preliminary Local SEO Strategy Audit that we'll present to them instantly. Let's showcase massive value to increase conversions!
@@ -1997,61 +2429,64 @@ app.post("/api/leads/submit", async (req, res) => {
         Analyze their niche and geolocation. Produce a realistic and detailed review containing an overall score (0-100), an executive summary, direct reviews for 3 specialized SEO aspects, and 4 clear next actions.
       `;
 
-      const responseSchema = {
-        type: Type.OBJECT,
-        properties: {
-          overallScore: { type: Type.INTEGER, description: "Calculated SEO readiness/audit score out of 100" },
-          domainName: { type: Type.STRING, description: "The business Domain or placeholder" },
-          niche: { type: Type.STRING, description: "Double-confirmed industry classification" },
-          location: { type: Type.STRING, description: "Target cities analyzed" },
-          executiveSummary: { type: Type.STRING, description: "A conversational, expert paragraph highlighting the competition, organic potential, and immediate low-hanging fruit in their location." },
-          analysis: {
-            type: Type.ARRAY,
-            description: "List of exactly 3 core pillars (e.g. GBP, Content, Backlinks) audited custom to their inputs.",
-            items: {
-              type: Type.OBJECT,
-              properties: {
-                title: { type: Type.STRING, description: "Audit Category Name" },
-                score: { type: Type.INTEGER, description: "Score from 0-100 indicating current standing in this category" },
-                description: { type: Type.STRING, description: "Clear review of findings based on whether they have a website or profile" },
-                recommendations: {
-                  type: Type.ARRAY,
-                  items: { type: Type.STRING },
-                  description: "Exactly 2-3 specific, tactical action steps they should execute immediately."
-                }
-              },
-              required: ["title", "score", "description", "recommendations"]
+        const responseSchema = {
+          type: Type.OBJECT,
+          properties: {
+            overallScore: { type: Type.INTEGER, description: "Calculated SEO readiness/audit score out of 100" },
+            domainName: { type: Type.STRING, description: "The business Domain or placeholder" },
+            niche: { type: Type.STRING, description: "Double-confirmed industry classification" },
+            location: { type: Type.STRING, description: "Target cities analyzed" },
+            executiveSummary: { type: Type.STRING, description: "A conversational, expert paragraph highlighting the competition, organic potential, and immediate low-hanging fruit in their location." },
+            analysis: {
+              type: Type.ARRAY,
+              description: "List of exactly 3 core pillars (e.g. GBP, Content, Backlinks) audited custom to their inputs.",
+              items: {
+                type: Type.OBJECT,
+                properties: {
+                  title: { type: Type.STRING, description: "Audit Category Name" },
+                  score: { type: Type.INTEGER, description: "Score from 0-100 indicating current standing in this category" },
+                  description: { type: Type.STRING, description: "Clear review of findings based on whether they have a website or profile" },
+                  recommendations: {
+                    type: Type.ARRAY,
+                    items: { type: Type.STRING },
+                    description: "Exactly 2-3 specific, tactical action steps they should execute immediately."
+                  }
+                },
+                required: ["title", "score", "description", "recommendations"]
+              }
+            },
+            actionPlan: {
+              type: Type.ARRAY,
+              items: { type: Type.STRING },
+              description: "A bulleted roadmap checklist of exactly 4 items we will handle for them in our Local Surge onboarding."
             }
           },
-          actionPlan: {
-            type: Type.ARRAY,
-            items: { type: Type.STRING },
-            description: "A bulleted roadmap checklist of exactly 4 items we will handle for them in our Local Surge onboarding."
+          required: ["overallScore", "domainName", "niche", "location", "executiveSummary", "analysis", "actionPlan"]
+        };
+
+        const result = await ai.models.generateContent({
+          model: "gemini-3.5-flash",
+          contents: prompt,
+          config: {
+            responseMimeType: "application/json",
+            responseSchema,
+            systemInstruction: "You are the premium automated SEO intelligence bot for Local Surge SEO. Always provide deep local keyword insights, realistic site audit tips, and show immense expertise."
           }
-        },
-        required: ["overallScore", "domainName", "niche", "location", "executiveSummary", "analysis", "actionPlan"]
-      };
+        });
 
-      const result = await ai.models.generateContent({
-        model: "gemini-3.5-flash",
-        contents: prompt,
-        config: {
-          responseMimeType: "application/json",
-          responseSchema,
-          systemInstruction: "You are the premium automated SEO intelligence bot for Local Surge SEO. Always provide deep local keyword insights, realistic site audit tips, and show immense expertise."
+        const responseText = result.text;
+        if (responseText) {
+          const audit = JSON.parse(responseText.trim());
+          audit.timestamp = new Date().toISOString();
+          newLead.aiAudit = audit;
+          newLead.status = "pending";
+          newLead.notes += " Auto-generated AI SEO Strategy successfully attached.";
         }
-      });
-
-      const responseText = result.text;
-      if (responseText) {
-        const audit = JSON.parse(responseText.trim());
-        audit.timestamp = new Date().toISOString();
-        newLead.aiAudit = audit;
-        newLead.status = "pending";
-        newLead.notes += " Auto-generated AI SEO Strategy successfully attached.";
+      } catch (error) {
+        console.error("Error generating Gemini Local SEO Audit:", error);
+        newLead.aiAudit = createFallbackAudit(cleanLeadInput);
       }
-    } catch (error) {
-      console.error("Error generating Gemini Local SEO Audit:", error);
+    } else {
       newLead.aiAudit = createFallbackAudit(cleanLeadInput);
     }
   } else {
@@ -2064,6 +2499,7 @@ app.post("/api/leads/submit", async (req, res) => {
   writeLeads(leads);
 
   // 2. Persist directly to Supabase cloud SQL storage if configured
+  let persistedSupabase = false;
   const supabase = await getSupabase();
   if (supabase) {
     try {
@@ -2089,34 +2525,60 @@ app.post("/api/leads/submit", async (req, res) => {
           }
         ]);
       if (error) {
-        if (error.code === '42P01') {
+        if (error.code === "42P01") {
           console.info(`ℹ️ Supabase table 'leads' doesn't exist yet - lead ${newLead.id} is stored in persistent local JSON cache instead!`);
         } else {
           console.warn("⚠️ Supabase insertion warning:", error.message || error);
         }
       } else {
+        persistedSupabase = true;
         console.log(`🟢 Successfully saved lead ${newLead.id} to Supabase database!`);
       }
-    } catch (dbErr) {
+    } catch {
       console.info("ℹ️ Optional cloud sync write fallback triggered successfully.");
     }
   }
 
-  // 3. Dispatch auto-email with the PDF Strategy to the prospective customer using Resend
+  // 3. Dispatch auto-email with deliverables, action items, and Strategy Growth Brief PDF using Resend
+  let emailDispatched = false;
+  let pdfAttached = false;
   const resend = await getResend();
   if (resend) {
     try {
-      // Escape HTML entities to prevent HTML injection in the email body
       const escBusinessName = escapeHtml(cleanLeadInput.businessName);
       const escContactName = escapeHtml(cleanLeadInput.contactName);
       const escPlanName = escapeHtml(cleanLeadInput.planName);
       const escIndustry = escapeHtml(cleanLeadInput.industry);
       const escLocation = escapeHtml(cleanLeadInput.location);
+      const escTimeline = escapeHtml(planSummary.timeline);
+      const escPrice = escapeHtml(planSummary.price);
 
-      // Determine if a PDF attachment is requested (only for predefined plans, not 'custom-inquiry')
+      const deliverablesListHtml = planSummary.whatYouWillGet
+        .map((item) => `<li style="margin: 4px 0;">${escapeHtml(item)}</li>`)
+        .join("");
+      const combinedNextActions =
+        finalPlanId === consultativeRecommendation.recommendedPlanId
+          ? consultativeRecommendation.nextActionItems
+          : planSummary.nextActionItems;
+      const nextActionsListHtml = combinedNextActions
+        .map((item) => `<li style="margin: 4px 0;">${escapeHtml(item)}</li>`)
+        .join("");
+
+      const domainSectionHtml =
+        finalPlanId === "single-page" && consultativeRecommendation.domainSuggestions?.length
+          ? `
+            <div style="background-color: #fff8f3; border: 1px solid #ecc9b8; border-radius: 8px; padding: 14px; margin: 16px 0;">
+              <h3 style="margin: 0 0 6px 0; color: #bc5f40; font-size: 11px; font-weight: bold; text-transform: uppercase; font-family: monospace;">Recommended Starter Advice &amp; Domain Ideas</h3>
+              <p style="font-size: 12.5px; line-height: 1.45; color: #2d2f2d; margin: 0 0 6px 0;">
+                Start simple without online payment gateways first. Finalize a catchy domain name such as:
+                <strong>${consultativeRecommendation.domainSuggestions.map((d) => escapeHtml(d)).join(", ")}</strong>
+              </p>
+            </div>
+          `
+          : "";
+
       const isPlanWithPdf = ["single-page", "starter", "premium", "custom"].includes(cleanLeadInput.planId);
 
-      // Build strict payload
       type ResendAttachment = { filename: string; content: Buffer };
       type ResendPayload = {
         from: string;
@@ -2145,7 +2607,7 @@ app.post("/api/leads/submit", async (req, res) => {
                 Hello <strong>${escContactName}</strong>,
               </p>
               <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
-                Our setup engineers have received your inquiry for <strong>${escBusinessName}</strong> and have locked in your preferred <strong>${escPlanName}</strong> program. Your physical search grids are being analyzed.
+                Our setup engineers have received your inquiry for <strong>${escBusinessName}</strong> and have locked in your preferred <strong>${escPlanName}</strong> (${escPrice}) program. Your physical search grids are being analyzed.
               </p>
               
               <div style="background-color: #eff4f1; border: 1px solid #dfded4; border-radius: 8px; padding: 16px; margin: 20px 0;">
@@ -2160,6 +2622,10 @@ app.post("/api/leads/submit", async (req, res) => {
                     <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #bc5f40;">${escPlanName}</td>
                   </tr>
                   <tr>
+                    <td style="padding: 4px 0; color: #888b88;">Estimated Timeline:</td>
+                    <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${escTimeline}</td>
+                  </tr>
+                  <tr>
                     <td style="padding: 4px 0; color: #888b88;">Specialty Sector:</td>
                     <td style="padding: 4px 0; font-weight: bold; text-align: right; color: #151716;">${escIndustry}</td>
                   </tr>
@@ -2169,6 +2635,22 @@ app.post("/api/leads/submit", async (req, res) => {
                   </tr>
                 </table>
               </div>
+
+              <div style="background-color: #ffffff; border: 1px solid #dfded4; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                <h3 style="margin: 0 0 8px 0; color: #123e35; font-size: 11px; font-weight: bold; text-transform: uppercase; font-family: monospace; letter-spacing: 0.5px;">What You Will Get Upon Subscribing</h3>
+                <ul style="margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; color: #2d2f2d;">
+                  ${deliverablesListHtml}
+                </ul>
+              </div>
+
+              <div style="background-color: #ffffff; border: 1px solid #dfded4; border-radius: 8px; padding: 16px; margin: 16px 0;">
+                <h3 style="margin: 0 0 8px 0; color: #123e35; font-size: 11px; font-weight: bold; text-transform: uppercase; font-family: monospace; letter-spacing: 0.5px;">Your Next Set of Action Items</h3>
+                <ol style="margin: 0; padding-left: 18px; font-size: 12.5px; line-height: 1.5; color: #2d2f2d;">
+                  ${nextActionsListHtml}
+                </ol>
+              </div>
+
+              ${domainSectionHtml}
               
               ${isPlanWithPdf ? `
                 <p style="font-size: 13.5px; line-height: 1.5; color: #2d2f2d;">
@@ -2201,21 +2683,22 @@ app.post("/api/leads/submit", async (req, res) => {
       };
 
       if (isPlanWithPdf) {
-        // Generate PDF on the server side securely using verified templates
         const pdfBuffer = await generateServerPDF(cleanLeadInput.planId, cleanLeadInput.contactName, cleanLeadInput.email);
-        const safeBusinessName = cleanLeadInput.businessName.replace(/[^a-zA-Z0-9]/g, '_');
+        const safeBusinessName = cleanLeadInput.businessName.replace(/[^a-zA-Z0-9]/g, "_");
         emailPayload.attachments = [
           {
             filename: `Local_Surge_${safeBusinessName}_Strategy_Plan.pdf`,
             content: pdfBuffer
           }
         ];
+        pdfAttached = true;
       }
 
-      const { data, error } = await resend.emails.send(emailPayload);
+      const { error } = await resend.emails.send(emailPayload);
       if (error) {
         console.error("❌ Resend dispatch failed:", error);
       } else {
+        emailDispatched = true;
         console.log("🟢 Resend email successfully sent to customer:", cleanLeadInput.email);
       }
     } catch (resendError) {
@@ -2223,7 +2706,40 @@ app.post("/api/leads/submit", async (req, res) => {
     }
   }
 
-  res.json({ success: true, lead: newLead });
+  return {
+    ok: true,
+    lead: newLead,
+    planSummary,
+    consultativeRecommendation,
+    emailDispatched,
+    pdfAttached,
+    persistedSupabase
+  };
+}
+
+app.post("/api/leads/submit", async (req, res) => {
+  const clientIp = getClientIp(req);
+  if (isRateLimited(clientIp)) {
+    return res.status(429).json({ error: "Too many requests. Please try again in 15 minutes." });
+  }
+
+  const result = await processLeadSubmission(req.body, {
+    sourceChannel: "Website Onboarding",
+    defaultToConsultative: false,
+    runGeminiAudit: true
+  });
+
+  if (!result.ok) {
+    return res.status(result.status || 400).json({ error: result.error || "Invalid lead submission." });
+  }
+
+  res.json({
+    success: true,
+    lead: result.lead,
+    planDetails: result.planSummary,
+    consultativeAdvice: result.consultativeRecommendation.consultativeAdvice,
+    emailDispatched: result.emailDispatched
+  });
 });
 
 app.put("/api/leads/:id", requireAdmin, async (req, res) => {
@@ -3466,178 +3982,914 @@ app.get("/api/blogs/:slug", async (req, res) => {
 });
 
 // ==========================================
-// WebMCP (Web Model Context Protocol) Endpoints
+// WebMCP & Remote MCP Server Endpoints (JSON-RPC 2.0 + OpenAPI 3.1 + 1-Click Claim)
 // ==========================================
-app.get(["/.well-known/webmcp.json", "/api/webmcp/manifest"], (_req, res) => {
-  res.json({
-    name: "Local Surge SEO WebMCP Server",
-    version: "1.0.0",
-    protocol: "WebModelContextProtocol",
-    description: "WebMCP Protocol Endpoint for Local Surge SEO AI Agent Tools and Interactive Audit Services",
-    homepage: "https://localsurgeseo.com",
-    documentation: "https://localsurgeseo.com/blog/webmcp-ai-agent-ready-websites-guide",
-    tools: [
-      {
-        name: "audit_local_seo",
-        description: "Executes a comprehensive Local SEO audit evaluating Core Web Vitals, Google Business Profile signals, and local keyword ranking opportunities.",
-        endpoint: "/api/webmcp/invoke",
-        method: "POST",
-        requiresUserConsent: true,
-        riskLevel: "low",
-        parameters: {
-          url: { type: "string", description: "Business website URL to audit", required: true },
-          niche: { type: "string", description: "Business trade or niche category", required: true },
-          location: { type: "string", description: "Target city or region", required: true }
-        }
-      },
-      {
-        name: "scan_nap_citations",
-        description: "Audits local business directory listings (Google Maps, Yelp, Bing Places, YellowPages) for Name-Address-Phone (NAP) consistency.",
-        endpoint: "/api/webmcp/invoke",
-        method: "POST",
-        requiresUserConsent: true,
-        riskLevel: "low",
-        parameters: {
-          businessName: { type: "string", description: "Registered business name", required: true },
-          phone: { type: "string", description: "Primary business phone number", required: true },
-          zipCode: { type: "string", description: "Target postal zip code", required: true }
-        }
-      },
-      {
-        name: "calculate_seo_quote",
-        description: "Calculates custom monthly Local SEO pricing tier recommendations and deliverable scopes based on business goals.",
-        endpoint: "/api/webmcp/invoke",
-        method: "POST",
-        requiresUserConsent: true,
-        riskLevel: "low",
-        parameters: {
-          targetLocationCount: { type: "number", description: "Number of target cities to dominate in map pack", required: true },
-          hasExistingWebsite: { type: "boolean", description: "Whether business currently has a live website", required: true }
-        }
-      },
-      {
-        name: "submit_onboarding_lead",
-        description: "Submits a complete Local SEO strategy onboarding request to receive a custom ranking roadmap and domain allocation.",
-        endpoint: "/api/webmcp/invoke",
-        method: "POST",
-        requiresUserConsent: true,
-        riskLevel: "medium",
-        parameters: {
-          businessName: { type: "string", description: "Official business name", required: true },
-          contactName: { type: "string", description: "Contact person name", required: true },
-          email: { type: "string", description: "Business contact email address", required: true },
-          phone: { type: "string", description: "Primary phone number", required: true },
-          location: { type: "string", description: "Target city or region", required: true },
-          keywords: { type: "string", description: "Primary target keywords", required: true }
+const AI_AGENT_CORSMATCH_PATHS = [
+  "/.well-known/webmcp.json",
+  "/.well-known/mcp.json",
+  "/.well-known/openapi.json",
+  "/openapi.json",
+  "/api/webmcp/*",
+  "/api/webmcp",
+  "/api/mcp"
+];
+
+app.use(AI_AGENT_CORSMATCH_PATHS, (req, res, next) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "GET, POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type, Authorization, Accept, Mcp-Session-Id");
+  res.setHeader("Access-Control-Expose-Headers", "Mcp-Session-Id");
+  if (req.method === "OPTIONS") {
+    return res.status(204).end();
+  }
+  next();
+});
+
+const MCP_TOOL_SCHEMAS = [
+  {
+    name: "get_plans_and_benefits",
+    description:
+      "Lists all Local Surge SEO website & local SEO plans ($0 Free Single-Page Trial, $999/mo Starter Boost, $1,999/mo Premium Surge, Custom), including exact deliverables ('What You Will Get'), timelines, next action items, and consultative sales rules.",
+    riskLevel: "low",
+    requiresUserConsent: false,
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        planId: {
+          type: "string",
+          description: "Optional filter for a specific plan: single-page, starter, premium, or custom."
         }
       }
-    ]
-  });
-});
+    }
+  },
+  {
+    name: "calculate_seo_quote",
+    description:
+      "Evaluates the user's business, website status, and feature scope using Local Surge SEO consultative rules: proposes $0 Free Trial (starting simple without online payment gateways + suggesting catchy .com domain names) for simple businesses without a site; checks existing sites against 2026 design standards and proposes Starter Boost ($999/mo) revamp + contract lock-in; proposes Premium Surge ($1,999/mo) for multiple pages, blogs, or 3rd-party API integrations.",
+    riskLevel: "low",
+    requiresUserConsent: false,
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      properties: {
+        businessName: { type: "string", description: "Business name (used for tailored domain name suggestions)" },
+        industry: { type: "string", description: "Primary trade or niche (e.g. Plumber, Dentist, Roofing)" },
+        businessType: { type: "string", description: "Alias for industry or business model description" },
+        location: { type: "string", description: "Primary target city and state" },
+        targetLocationCount: { type: "number", description: "Number of target cities/locations (default 1)" },
+        hasExistingWebsite: { type: "boolean", description: "Whether the business currently has a live website" },
+        website: { type: "string", description: "Existing website URL to inspect against modern 2026 standards" },
+        businessComplexity: { type: "string", enum: ["simple", "multi-page", "enterprise"], description: "Complexity of website/business needs" },
+        hasMultiplePagesOrBlog: { type: "boolean", description: "Whether the user requires multiple pages or ongoing SEO blog articles" },
+        needsThirdPartyApiIntegrations: { type: "boolean", description: "Whether the site requires 3rd-party CRM, booking, webhook, or custom API integrations" },
+        needsPaymentGateway: { type: "boolean", description: "Whether the user asked about accepting online payments / checkout" }
+      }
+    }
+  },
+  {
+    name: "audit_local_seo",
+    description:
+      "Executes a Local SEO audit checking modern HTTPS/viewport/JSON-LD readiness (when URL provided) and Google Business Profile & local ranking opportunities.",
+    riskLevel: "low",
+    requiresUserConsent: false,
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["url", "niche", "location"],
+      properties: {
+        url: { type: "string", description: "Business website URL to audit" },
+        niche: { type: "string", description: "Business trade or niche category" },
+        location: { type: "string", description: "Target city or region" }
+      }
+    }
+  },
+  {
+    name: "scan_nap_citations",
+    description:
+      "Audits local business directory listings (Google Business Profile, Yelp, Bing Places, Apple Maps, YellowPages) for Name-Address-Phone (NAP) consistency.",
+    riskLevel: "low",
+    requiresUserConsent: false,
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["businessName", "phone", "zipCode"],
+      properties: {
+        businessName: { type: "string", description: "Registered business name" },
+        phone: { type: "string", description: "Primary business phone number" },
+        zipCode: { type: "string", description: "Target postal zip code" }
+      }
+    }
+  },
+  {
+    name: "submit_onboarding_lead",
+    description:
+      "Confirms and submits a client onboarding lead directly from AI chat (no webpage visit needed). Persists lead to Local Surge CRM & Supabase, emails the Strategy Growth Brief PDF, and returns exact plan deliverables ('What You Will Get Upon Subscribing'), next action items, and domain/revamp guidance.",
+    riskLevel: "medium",
+    requiresUserConsent: true,
+    inputSchema: {
+      type: "object",
+      additionalProperties: false,
+      required: ["businessName", "contactName", "email"],
+      properties: {
+        businessName: { type: "string", description: "Official business name" },
+        contactName: { type: "string", description: "Full name of the decision maker" },
+        email: { type: "string", description: "Contact email to receive the Strategy Growth Brief PDF and onboarding actions" },
+        phone: { type: "string", description: "Primary business phone number" },
+        location: { type: "string", description: "Target city or region" },
+        keywords: { type: "string", description: "Primary services or local SEO target keywords" },
+        planId: {
+          type: "string",
+          description: "Target plan ID: 'single-page' ($0 Free Trial), 'starter' ($999/mo), 'premium' ($1,999/mo), 'custom', or omit/'auto' for consultative selection"
+        },
+        website: { type: "string", description: "Existing website URL (if applicable)" },
+        hasWebsite: { type: "boolean", description: "Whether the business currently has a website" },
+        chosenDomain: { type: "string", description: "Preferred domain name finalized for a new site build" },
+        industry: { type: "string", description: "Business niche / trade" },
+        hasGBP: { type: "boolean", description: "Whether business already has a Google Business Profile" },
+        gbpLink: { type: "string", description: "Google Business Profile link if available" },
+        hasMultiplePagesOrBlog: { type: "boolean", description: "Needs multiple pages or ongoing blogs" },
+        needsThirdPartyApiIntegrations: { type: "boolean", description: "Needs 3rd-party API/CRM integrations" },
+        needsPaymentGateway: { type: "boolean", description: "User asked about online payments" },
+        targetLocationCount: { type: "number", description: "Number of target cities" }
+      }
+    }
+  }
+];
 
-app.get("/api/webmcp/tools", (_req, res) => {
-  res.redirect("/.well-known/webmcp.json");
-});
+function toLegacyWebMcpParams(schema: typeof MCP_TOOL_SCHEMAS[number]["inputSchema"]) {
+  const props = schema.properties as Record<string, any>;
+  const requiredSet = new Set<string>((schema as any).required || []);
+  const formatted: Record<string, any> = {};
+  for (const [key, def] of Object.entries(props)) {
+    formatted[key] = {
+      type: def.type,
+      description: def.description,
+      required: requiredSet.has(key),
+      ...(def.enum ? { enum: def.enum } : {})
+    };
+  }
+  return formatted;
+}
 
-app.post("/api/webmcp/invoke", async (req, res) => {
-  const { toolName, params } = req.body;
-  if (!toolName || !params) {
-    return res.status(400).json({ success: false, error: "Tool name and params payload required." });
+async function executeWebOrMcpTool(
+  toolName: string,
+  rawParams: Record<string, any> | undefined,
+  req: express.Request,
+  protocolLabel: "WebMCP" | "MCP"
+): Promise<{ status: number; body: Record<string, any> }> {
+  const params = rawParams && typeof rawParams === "object" ? rawParams : {};
+
+  if (toolName === "get_plans_and_benefits") {
+    const catalog = buildPlansCatalog();
+    const requestedPlan = normalizePlanId(params.planId);
+    const filteredPlans = requestedPlan
+      ? catalog.plans.filter((p) => p.planId === requestedPlan)
+      : catalog.plans;
+
+    return {
+      status: 200,
+      body: {
+        success: true,
+        protocol: protocolLabel,
+        action: "get_plans_and_benefits",
+        provider: catalog.provider,
+        homepage: catalog.homepage,
+        consultativeSelectionRules: catalog.consultativeSelectionRules,
+        plans: filteredPlans.length > 0 ? filteredPlans : catalog.plans
+      }
+    };
+  }
+
+  if (toolName === "calculate_seo_quote") {
+    const quote = await evaluateConsultativePlanRecommendation({
+      businessName: params.businessName,
+      industry: params.industry,
+      businessType: params.businessType,
+      location: params.location,
+      targetLocationCount: params.targetLocationCount,
+      hasExistingWebsite: params.hasExistingWebsite ?? params.hasWebsite,
+      website: params.website,
+      businessComplexity: params.businessComplexity,
+      hasMultiplePagesOrBlog: params.hasMultiplePagesOrBlog,
+      needsThirdPartyApiIntegrations: params.needsThirdPartyApiIntegrations,
+      needsPaymentGateway: params.needsPaymentGateway
+    });
+
+    return {
+      status: 200,
+      body: {
+        success: true,
+        protocol: protocolLabel,
+        action: "calculate_seo_quote",
+        ...quote
+      }
+    };
   }
 
   if (toolName === "audit_local_seo") {
     const { url, niche, location } = params;
-    const audit = createFallbackAudit({ website: url || "new-client-site.com", businessName: "WebMCP Client", industry: niche || "Local Business", location: location || "San Jose, CA" });
-    return res.json({
-      success: true,
-      protocol: "WebMCP",
-      action: "audit_local_seo",
-      result: audit
-    });
+    const [audit, websiteCheck] = await Promise.all([
+      Promise.resolve(
+        createFallbackAudit({
+          website: url || "new-client-site.com",
+          businessName: "AI Chat Client",
+          industry: niche || "Local Business",
+          location: location || "San Jose, CA"
+        })
+      ),
+      url ? inspectWebsiteForModernRevamp(String(url)) : Promise.resolve(null)
+    ]);
+
+    return {
+      status: 200,
+      body: {
+        success: true,
+        protocol: protocolLabel,
+        action: "audit_local_seo",
+        result: audit,
+        liveModernDesignCheck: websiteCheck
+      }
+    };
   }
 
   if (toolName === "scan_nap_citations") {
     const { businessName, phone, zipCode } = params;
-    const phoneClean = (phone || "").replace(/\D/g, "");
-    const altPhone = phoneClean.length === 10
-      ? `(${phoneClean.slice(0, 3)}) ${phoneClean.slice(3, 6)}-${(parseInt(phoneClean.slice(6)) + 11).toString().padStart(4, "0")}`
-      : "+1 (909) 707-5075";
+    const phoneClean = String(phone || "").replace(/\D/g, "");
+    const altPhone =
+      phoneClean.length === 10
+        ? `(${phoneClean.slice(0, 3)}) ${phoneClean.slice(3, 6)}-${(parseInt(phoneClean.slice(6), 10) + 11).toString().padStart(4, "0")}`
+        : "+1 (909) 707-5075";
 
-    const mockDirectories = [
+    const directories = [
       { name: "Google Business Profile", status: "match", details: "Verified profile found. Consistent NAP data." },
       { name: "Yelp Local Business", status: "mismatch", details: `Duplicate listing under alternate phone: ${altPhone}.` },
       { name: "Bing Places", status: "missing", details: "Listing unverified. Needs registration." },
       { name: "Apple Maps Connect", status: "match", details: "Active verified listing." },
-      { name: "YellowPages Group", status: "mismatch", details: `Registered under name variance: ${businessName || 'Business'} Co.` }
+      { name: "YellowPages Group", status: "mismatch", details: `Registered under name variance: ${businessName || "Business"} Co.` }
     ];
 
-    return res.json({
-      success: true,
-      protocol: "WebMCP",
-      action: "scan_nap_citations",
-      query: { businessName, phone, zipCode },
-      score: 72,
-      directories: mockDirectories
-    });
-  }
-
-  if (toolName === "calculate_seo_quote") {
-    const { targetLocationCount = 1, hasExistingWebsite = true } = params;
-    const recommendedPlan = targetLocationCount > 3 ? "Dominance Multi-City ($1,999/mo)" : targetLocationCount > 1 ? "Growth Accelerator ($999/mo)" : "Single-Page Blast ($0 Free)";
-    return res.json({
-      success: true,
-      protocol: "WebMCP",
-      action: "calculate_seo_quote",
-      recommendedPlan,
-      estimatedDeliverablesCount: hasExistingWebsite ? 12 : 18,
-      includedServices: ["Google Business Profile Optimization", "NAP Citation Sync", "Local JSON-LD Schema Markup", "Geotagged Photo Stacking"]
-    });
+    return {
+      status: 200,
+      body: {
+        success: true,
+        protocol: protocolLabel,
+        action: "scan_nap_citations",
+        query: { businessName, phone, zipCode },
+        score: 72,
+        directories
+      }
+    };
   }
 
   if (toolName === "submit_onboarding_lead") {
     if (isLeadRateLimited(getClientIp(req))) {
-      return res.status(429).json({ success: false, error: "Too many lead submissions. Please try again later." });
+      return {
+        status: 429,
+        body: { success: false, error: "Too many lead submissions. Please try again in 15 minutes." }
+      };
     }
-    const leadInput = {
-      planId: "webmcp-ai-agent-lead",
-      planName: "WebMCP AI Agent Lead Submission",
-      businessName: String(params.businessName || "WebMCP Client").trim().slice(0, 100),
-      contactName: String(params.contactName || "AI Agent Delegate").trim().slice(0, 100),
-      email: String(params.email || "").trim().slice(0, 100),
-      phone: String(params.phone || "+1 (909) 707-5075").trim().slice(0, 30),
-      website: String(params.website || "https://localsurgeseo.com").trim().slice(0, 200),
-      hasWebsite: true,
-      industry: String(params.niche || "Local Business").trim().slice(0, 100),
-      location: String(params.location || "United States").trim().slice(0, 100),
-      keywords: String(params.keywords || "Local SEO").trim().slice(0, 500),
-      hasGBP: true,
-      gbpLink: ""
+
+    const submission = await processLeadSubmission(params, {
+      sourceChannel: `${protocolLabel} AI Chat`,
+      defaultToConsultative: true,
+      runGeminiAudit: true
+    });
+
+    if (!submission.ok) {
+      return {
+        status: submission.status || 400,
+        body: { success: false, error: submission.error || "Invalid onboarding lead submission." }
+      };
+    }
+
+    const { lead, planSummary, consultativeRecommendation, emailDispatched, pdfAttached, persistedSupabase } = submission;
+    const nextActions =
+      planSummary.planId === consultativeRecommendation.recommendedPlanId
+        ? consultativeRecommendation.nextActionItems
+        : planSummary.nextActionItems;
+
+    return {
+      status: 200,
+      body: {
+        success: true,
+        protocol: protocolLabel,
+        action: "submit_onboarding_lead",
+        confirmationMessage: `Lead confirmed for ${lead.input.businessName} on ${planSummary.planName} (${planSummary.price}). Strategy Growth Brief PDF ${emailDispatched ? "dispatched via email" : "ready"}.`,
+        leadId: lead.id,
+        planSubscribed: {
+          planId: planSummary.planId,
+          planName: planSummary.planName,
+          price: planSummary.price,
+          billingCycle: planSummary.billingCycle,
+          contractTerm: planSummary.contractTerm,
+          timeline: planSummary.timeline
+        },
+        whatYouWillGetUponSubscribing: {
+          timeline: planSummary.timeline,
+          deliverables: planSummary.whatYouWillGet
+        },
+        nextActionItems: nextActions,
+        consultativeAdvice: consultativeRecommendation.consultativeAdvice,
+        domainSuggestions:
+          planSummary.planId === "single-page" ? consultativeRecommendation.domainSuggestions : undefined,
+        websiteAudit: consultativeRecommendation.websiteAudit || undefined,
+        aiAuditSummary: lead.aiAudit?.executiveSummary,
+        overallScore: lead.aiAudit?.overallScore,
+        emailDispatched,
+        strategyBriefPdfAttached: pdfAttached,
+        persistedToCloud: persistedSupabase
+      }
     };
+  }
 
-    const aiAudit = createFallbackAudit(leadInput);
-    const newLead = {
-      id: "webmcp-" + Date.now(),
-      createdAt: new Date().toISOString(),
-      status: "new",
-      input: leadInput,
-      aiAudit
-    };
+  return {
+    status: 404,
+    body: { success: false, error: `Unknown tool "${toolName}".` }
+  };
+}
 
-    const leads = readLeads();
-    leads.unshift(newLead);
-    writeLeads(leads);
+// 1. WebMCP Discovery Manifests
+app.get(["/.well-known/webmcp.json", "/api/webmcp/manifest", "/api/webmcp/tools"], (_req, res) => {
+  res.json({
+    name: "Local Surge SEO WebMCP & Remote MCP Server",
+    version: "2.0.0",
+    protocol: "WebModelContextProtocol",
+    description:
+      "Consultative Local SEO & Web Design Agent API: explore plan benefits, evaluate website revamps or $0 starter setups directly in chat, and submit onboarding leads without leaving the conversation.",
+    homepage: "https://localsurgeseo.com",
+    documentation: "https://localsurgeseo.com/llms.txt",
+    mcpEndpoint: "https://localsurgeseo.com/api/mcp",
+    openApiSpec: "https://localsurgeseo.com/openapi.json",
+    plansEndpoint: "https://localsurgeseo.com/api/webmcp/plans",
+    claimEndpoint: "https://localsurgeseo.com/api/webmcp/claim",
+    tools: MCP_TOOL_SCHEMAS.map((tool) => ({
+      name: tool.name,
+      description: tool.description,
+      endpoint: "/api/webmcp/invoke",
+      method: "POST",
+      requiresUserConsent: tool.requiresUserConsent,
+      riskLevel: tool.riskLevel,
+      parameters: toLegacyWebMcpParams(tool.inputSchema),
+      inputSchema: tool.inputSchema
+    }))
+  });
+});
 
-    return res.json({
-      success: true,
-      protocol: "WebMCP",
-      action: "submit_onboarding_lead",
-      confirmationMessage: "Lead details securely logged via WebMCP. Dedicated Local Strategy Roadmap generated.",
-      leadId: newLead.id,
-      aiAuditSummary: aiAudit.executiveSummary
+// 2. Plan Catalog & Benefits Endpoint
+app.get("/api/webmcp/plans", (_req, res) => {
+  res.json(buildPlansCatalog());
+});
+
+// 3. Direct WebMCP Tool Invocation
+app.post("/api/webmcp/invoke", async (req, res) => {
+  const { toolName, params } = req.body || {};
+  if (!toolName) {
+    return res.status(400).json({ success: false, error: "toolName is required." });
+  }
+  const result = await executeWebOrMcpTool(String(toolName), params, req, "WebMCP");
+  return res.status(result.status).json(result.body);
+});
+
+// 4. Remote MCP Server Discovery + Streamable HTTP JSON-RPC 2.0 (/api/mcp & /.well-known/mcp.json)
+app.get(["/.well-known/mcp.json", "/api/mcp"], (_req, res) => {
+  res.json({
+    name: "local-surge-seo-mcp",
+    title: "Local Surge SEO Remote MCP Server",
+    version: "2.0.0",
+    protocol: "ModelContextProtocol",
+    protocolVersion: "2024-11-05",
+    transport: "streamable-http",
+    endpoint: "https://localsurgeseo.com/api/mcp",
+    toolsCount: MCP_TOOL_SCHEMAS.length,
+    capabilities: { tools: { listChanged: false }, resources: { subscribe: false, listChanged: false } }
+  });
+});
+
+function formatMcpToolResultText(payload: Record<string, any>): string {
+  const lines: string[] = [];
+  if (payload.confirmationMessage) lines.push(payload.confirmationMessage);
+  if (payload.headline) lines.push(payload.headline);
+  if (payload.recommendedPlanName || payload.planSubscribed?.planName) {
+    const planLabel = payload.planSubscribed?.planName || payload.recommendedPlanName;
+    const priceLabel = payload.planSubscribed?.price || payload.price || "";
+    lines.push(`Plan: ${planLabel}${priceLabel ? ` (${priceLabel})` : ""}`);
+  }
+  const deliverables: string[] = payload.whatYouWillGetUponSubscribing?.deliverables || [];
+  if (deliverables.length > 0) {
+    lines.push("", "What You Will Get Upon Subscribing:", ...deliverables.map((d) => `- ${d}`));
+  }
+  const nextActions: string[] = payload.nextActionItems || [];
+  if (nextActions.length > 0) {
+    lines.push("", "Next Set of Action Items:", ...nextActions.map((a, idx) => `${idx + 1}. ${a}`));
+  }
+  if (Array.isArray(payload.domainSuggestions) && payload.domainSuggestions.length > 0) {
+    lines.push("", `Suggested Catchy Domain Names: ${payload.domainSuggestions.join(", ")}`);
+  }
+  if (Array.isArray(payload.consultativeAdvice) && payload.consultativeAdvice.length > 0) {
+    lines.push("", "Consultative Recommendations:", ...payload.consultativeAdvice.map((c: string) => `* ${c}`));
+  }
+  lines.push("", "--- Raw JSON ---", JSON.stringify(payload, null, 2));
+  return lines.join("\n");
+}
+
+app.post("/api/mcp", async (req, res) => {
+  const body = req.body;
+  if (!body || typeof body !== "object" || body.jsonrpc !== "2.0" || typeof body.method !== "string") {
+    return res.status(400).json({
+      jsonrpc: "2.0",
+      id: body?.id ?? null,
+      error: { code: -32600, message: "Invalid JSON-RPC 2.0 request." }
     });
   }
 
-  return res.status(404).json({ success: false, error: `Unknown WebMCP tool "${toolName}".` });
+  const { id, method, params } = body;
+
+  // Notifications without an id require no JSON-RPC response payload
+  if (method.startsWith("notifications/") || (id === undefined && method === "initialized")) {
+    return res.status(202).end();
+  }
+
+  if (method === "initialize") {
+    return res.json({
+      jsonrpc: "2.0",
+      id: id ?? null,
+      result: {
+        protocolVersion: "2024-11-05",
+        capabilities: {
+          tools: { listChanged: false },
+          resources: { subscribe: false, listChanged: false }
+        },
+        serverInfo: {
+          name: "local-surge-seo-mcp",
+          version: "2.0.0"
+        },
+        instructions:
+          "Use get_plans_and_benefits or calculate_seo_quote to recommend the right plan first: (1) No website + simple business -> recommend single-page ($0 Free Trial), advise against complex payment gateways in Stage 1, and share domainSuggestions; (2) Has an existing website -> inspect modern 2026 standards and recommend starter ($999/mo) revamp + contract lock-in; (3) Multi-page, blog SEO, or 3rd-party API integrations -> recommend premium ($1,999/mo). When confirmed with businessName, contactName, and email, call submit_onboarding_lead and present both whatYouWillGetUponSubscribing and nextActionItems."
+      }
+    });
+  }
+
+  if (method === "ping") {
+    return res.json({ jsonrpc: "2.0", id: id ?? null, result: {} });
+  }
+
+  if (method === "tools/list") {
+    return res.json({
+      jsonrpc: "2.0",
+      id: id ?? null,
+      result: {
+        tools: MCP_TOOL_SCHEMAS.map((t) => ({
+          name: t.name,
+          description: t.description,
+          inputSchema: t.inputSchema
+        }))
+      }
+    });
+  }
+
+  if (method === "tools/call") {
+    const toolName = String(params?.name || "");
+    const args = params?.arguments && typeof params.arguments === "object" ? params.arguments : {};
+    if (!toolName) {
+      return res.json({
+        jsonrpc: "2.0",
+        id: id ?? null,
+        error: { code: -32602, message: "Missing params.name for tools/call." }
+      });
+    }
+
+    const result = await executeWebOrMcpTool(toolName, args, req, "MCP");
+    const isError = result.status >= 400 || result.body.success === false;
+
+    return res.json({
+      jsonrpc: "2.0",
+      id: id ?? null,
+      result: {
+        content: [
+          {
+            type: "text",
+            text: formatMcpToolResultText(result.body)
+          }
+        ],
+        structuredContent: result.body,
+        isError
+      }
+    });
+  }
+
+  if (method === "resources/list") {
+    return res.json({
+      jsonrpc: "2.0",
+      id: id ?? null,
+      result: {
+        resources: [
+          {
+            uri: "localsurge://plans/catalog",
+            name: "Local Surge SEO Plans & Deliverables Catalog",
+            description: "All pricing tiers, timelines, included deliverables, and next action items.",
+            mimeType: "application/json"
+          },
+          {
+            uri: "localsurge://playbooks/consultative-sales",
+            name: "Local Surge Consultative Onboarding Playbook",
+            description: "Decision rules for recommending Free Trial ($0), Starter Revamp ($999/mo), or Premium ($1,999/mo).",
+            mimeType: "text/markdown"
+          }
+        ]
+      }
+    });
+  }
+
+  if (method === "resources/read") {
+    const uri = String(params?.uri || "");
+    if (uri === "localsurge://plans/catalog") {
+      return res.json({
+        jsonrpc: "2.0",
+        id: id ?? null,
+        result: {
+          contents: [
+            {
+              uri,
+              mimeType: "application/json",
+              text: JSON.stringify(buildPlansCatalog(), null, 2)
+            }
+          ]
+        }
+      });
+    }
+    if (uri === "localsurge://playbooks/consultative-sales") {
+      const playbook = [
+        "# Local Surge SEO Consultative Onboarding Playbook",
+        "",
+        "1. **No Existing Website + Simple Business (`single-page` — $0 Free Promotion)**:",
+        "   - Advise starting simple WITHOUT complex features like accepting online payments/payment gateways first.",
+        "   - Suggest 3-5 catchy, short `.com` domain names to finalize before launch.",
+        "2. **Has Existing Website (`starter` — $999/mo)**:",
+        "   - Evaluate whether the current website matches 2026 conversion/SEO design standards (HTTPS, mobile viewport, schema, speed).",
+        "   - Recommend a modern revamp via Starter Boost (up to 10 pages, GBP sync, 20 citations) and lock in the growth contract.",
+        "3. **Multiple Pages, Ongoing Blog, or 3rd-Party API Integrations (`premium` — $1,999/mo)**:",
+        "   - Recommend Premium Surge for unlimited pages, 4 monthly localized blog articles, custom calculators, and API/CRM integrations.",
+        "4. **After Lead Confirmation**:",
+        "   - Always share `whatYouWillGetUponSubscribing` and `nextActionItems` returned by `submit_onboarding_lead`."
+      ].join("\n");
+      return res.json({
+        jsonrpc: "2.0",
+        id: id ?? null,
+        result: {
+          contents: [{ uri, mimeType: "text/markdown", text: playbook }]
+        }
+      });
+    }
+    return res.json({
+      jsonrpc: "2.0",
+      id: id ?? null,
+      error: { code: -32602, message: `Unknown resource URI: ${uri}` }
+    });
+  }
+
+  return res.json({
+    jsonrpc: "2.0",
+    id: id ?? null,
+    error: { code: -32601, message: `Method not found: ${method}` }
+  });
+});
+
+// 5. OpenAPI 3.1.0 Specification for ChatGPT Custom GPT Actions & OpenAPI Agents
+app.get(["/openapi.json", "/.well-known/openapi.json"], (_req, res) => {
+  res.json({
+    openapi: "3.1.0",
+    info: {
+      title: "Local Surge SEO AI Chat Onboarding & WebMCP API",
+      version: "2.0.0",
+      description:
+        "Consultative API allowing AI assistants (ChatGPT, Claude, Gemini, Perplexity) to inspect plans, evaluate existing websites, recommend $0 Free Trial vs Starter ($999/mo) vs Premium ($1,999/mo), and submit confirmed leads directly from chat."
+    },
+    servers: [{ url: "https://localsurgeseo.com" }],
+    paths: {
+      "/api/webmcp/plans": {
+        get: {
+          operationId: "getPlansAndBenefits",
+          summary: "Get all Local Surge SEO plans, deliverables ('What You Will Get'), timelines, and next action items.",
+          responses: {
+            "200": {
+              description: "Full plan catalog and consultative rules",
+              content: { "application/json": { schema: { type: "object" } } }
+            }
+          }
+        }
+      },
+      "/api/webmcp/invoke": {
+        post: {
+          operationId: "invokeWebMcpTool",
+          summary: "Execute calculate_seo_quote, audit_local_seo, scan_nap_citations, get_plans_and_benefits, or submit_onboarding_lead directly from chat.",
+          requestBody: {
+            required: true,
+            content: {
+              "application/json": {
+                schema: {
+                  type: "object",
+                  required: ["toolName", "params"],
+                  properties: {
+                    toolName: {
+                      type: "string",
+                      enum: ["get_plans_and_benefits", "calculate_seo_quote", "audit_local_seo", "scan_nap_citations", "submit_onboarding_lead"]
+                    },
+                    params: {
+                      type: "object",
+                      additionalProperties: true
+                    }
+                  }
+                }
+              }
+            }
+          },
+          responses: {
+            "200": {
+              description: "Tool execution result with deliverables and action items",
+              content: { "application/json": { schema: { type: "object" } } }
+            }
+          }
+        }
+      }
+    }
+  });
+});
+
+// 6. Zero-Setup 1-Click Confirmation Card for AI Search Chats (GET & POST /api/webmcp/claim)
+function renderClaimHtmlPage(opts: {
+  title: string;
+  confirmed?: boolean;
+  error?: string;
+  formValues: Record<string, string>;
+  recommendation: Awaited<ReturnType<typeof evaluateConsultativePlanRecommendation>>;
+  selectedPlanSummary: ReturnType<typeof getPlanSummary>;
+  leadId?: string;
+  emailDispatched?: boolean;
+}) {
+  const { formValues, recommendation, selectedPlanSummary, confirmed, error, leadId, emailDispatched } = opts;
+  const activeDeliverables = selectedPlanSummary.whatYouWillGet;
+  const activeActions =
+    selectedPlanSummary.planId === recommendation.recommendedPlanId
+      ? recommendation.nextActionItems
+      : selectedPlanSummary.nextActionItems;
+
+  return `<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <meta name="robots" content="noindex, nofollow" />
+  <title>${escapeHtml(opts.title)} | Local Surge SEO</title>
+  <style>
+    body { margin: 0; font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, sans-serif; background: #faf9f6; color: #1a1c1a; line-height: 1.5; }
+    .wrap { max-width: 720px; margin: 32px auto; padding: 0 16px; }
+    .card { background: #ffffff; border: 1px solid #dfded4; border-radius: 14px; overflow: hidden; box-shadow: 0 10px 30px rgba(18,62,53,0.08); }
+    .header { background: #123e35; color: #ffffff; padding: 24px; border-bottom: 4px solid #bc5f40; }
+    .header h1 { margin: 0; font-size: 20px; }
+    .header p { margin: 6px 0 0; color: #dfded4; font-size: 13px; }
+    .body { padding: 24px; }
+    .badge { display: inline-block; background: #eff4f1; color: #123e35; border: 1px solid #c7dad0; padding: 4px 10px; border-radius: 999px; font-size: 12px; font-weight: 700; }
+    .box { background: #eff4f1; border: 1px solid #dfded4; border-radius: 10px; padding: 16px; margin: 16px 0; }
+    .warn { background: #fff8f3; border: 1px solid #ecc9b8; border-radius: 10px; padding: 14px; margin: 16px 0; font-size: 13.5px; }
+    .err { background: #fef2f2; border: 1px solid #fecaca; color: #991b1b; border-radius: 10px; padding: 12px 14px; margin-bottom: 16px; font-size: 14px; }
+    .ok { background: #ecfdf5; border: 1px solid #a7f3d0; color: #065f46; border-radius: 10px; padding: 16px; margin-bottom: 16px; }
+    h2 { font-size: 15px; color: #123e35; margin: 18px 0 8px; text-transform: uppercase; letter-spacing: 0.04em; }
+    ul, ol { margin: 0; padding-left: 20px; font-size: 14px; }
+    li { margin: 6px 0; }
+    .grid { display: grid; grid-template-columns: 1fr 1fr; gap: 12px; }
+    @media (max-width: 600px) { .grid { grid-template-columns: 1fr; } }
+    label { display: block; font-size: 12px; font-weight: 600; color: #475569; margin-bottom: 4px; }
+    input, select { width: 100%; box-sizing: border-box; padding: 10px 12px; border: 1px solid #cbd5e1; border-radius: 8px; font-size: 14px; }
+    .btn { display: inline-block; width: 100%; margin-top: 16px; padding: 14px 18px; border: none; border-radius: 10px; background: #bc5f40; color: #ffffff; font-size: 15px; font-weight: 700; cursor: pointer; }
+    .btn:hover { background: #a85033; }
+  </style>
+</head>
+<body>
+  <div class="wrap">
+    <div class="card">
+      <div class="header">
+        <h1>LOCAL SURGE SEO — AI Chat Onboarding Confirmation</h1>
+        <p>${escapeHtml(selectedPlanSummary.planName)} &bull; ${escapeHtml(selectedPlanSummary.price)} &bull; Timeline: ${escapeHtml(selectedPlanSummary.timeline)}</p>
+      </div>
+      <div class="body">
+        ${confirmed ? `
+          <div class="ok">
+            <strong>Confirmed!</strong> Reference ID: <code>${escapeHtml(leadId || "")}</code>.<br />
+            Your <strong>${escapeHtml(selectedPlanSummary.planName)}</strong> brief has been logged${emailDispatched ? " and your Strategy Growth Brief PDF was emailed to you" : ""}.
+          </div>
+        ` : ""}
+        ${error ? `<div class="err">${escapeHtml(error)}</div>` : ""}
+
+        <span class="badge">${escapeHtml(selectedPlanSummary.shortName)}</span>
+        <p style="margin-top: 10px; font-size: 14px;">${escapeHtml(recommendation.headline)}</p>
+
+        ${recommendation.consultativeAdvice.length > 0 ? `
+          <div class="warn">
+            <strong>Consultative Guidance:</strong>
+            <ul>
+              ${recommendation.consultativeAdvice.map((note) => `<li>${escapeHtml(note)}</li>`).join("")}
+            </ul>
+            ${recommendation.domainSuggestions?.length ? `
+              <p style="margin: 8px 0 0;"><strong>Catchy Domain Ideas:</strong> ${recommendation.domainSuggestions.map((d) => `<code>${escapeHtml(d)}</code>`).join(" &middot; ")}</p>
+            ` : ""}
+          </div>
+        ` : ""}
+
+        <div class="box">
+          <h2 style="margin-top:0;">What You Will Get Upon Subscribing</h2>
+          <ul>
+            ${activeDeliverables.map((d) => `<li>${escapeHtml(d)}</li>`).join("")}
+          </ul>
+          <h2>Next Set of Action Items</h2>
+          <ol>
+            ${activeActions.map((a) => `<li>${escapeHtml(a)}</li>`).join("")}
+          </ol>
+        </div>
+
+        ${!confirmed ? `
+          <form method="POST" action="/api/webmcp/claim">
+            <div class="grid">
+              <div>
+                <label for="businessName">Business Name *</label>
+                <input id="businessName" name="businessName" required value="${escapeHtml(formValues.businessName || "")}" placeholder="Acme Plumbing Co." />
+              </div>
+              <div>
+                <label for="contactName">Your Name *</label>
+                <input id="contactName" name="contactName" required value="${escapeHtml(formValues.contactName || "")}" placeholder="Alex Morgan" />
+              </div>
+              <div>
+                <label for="email">Work Email *</label>
+                <input id="email" name="email" type="email" required value="${escapeHtml(formValues.email || "")}" placeholder="owner@acmeplumbing.com" />
+              </div>
+              <div>
+                <label for="phone">Phone Number</label>
+                <input id="phone" name="phone" value="${escapeHtml(formValues.phone || "")}" placeholder="(555) 123-4567" />
+              </div>
+              <div>
+                <label for="location">Target City / Area</label>
+                <input id="location" name="location" value="${escapeHtml(formValues.location || "")}" placeholder="Austin, TX" />
+              </div>
+              <div>
+                <label for="planId">Selected Plan</label>
+                <select id="planId" name="planId">
+                  <option value="single-page" ${selectedPlanSummary.planId === "single-page" ? "selected" : ""}>Single-Page Blast ($0 Free Trial)</option>
+                  <option value="starter" ${selectedPlanSummary.planId === "starter" ? "selected" : ""}>Starter Boost Plan ($999/mo)</option>
+                  <option value="premium" ${selectedPlanSummary.planId === "premium" ? "selected" : ""}>Premium Surge Plan ($1,999/mo)</option>
+                  <option value="custom" ${selectedPlanSummary.planId === "custom" ? "selected" : ""}>Custom Enterprise Setup</option>
+                </select>
+              </div>
+              <div>
+                <label for="website">Existing Website (if any)</label>
+                <input id="website" name="website" value="${escapeHtml(formValues.website || "")}" placeholder="https://example.com" />
+              </div>
+              <div>
+                <label for="chosenDomain">Preferred Domain Name (for new build)</label>
+                <input id="chosenDomain" name="chosenDomain" value="${escapeHtml(formValues.chosenDomain || "")}" placeholder="${escapeHtml(recommendation.domainSuggestions?.[0] || "yourbusiness.com")}" />
+              </div>
+            </div>
+            <input type="hidden" name="industry" value="${escapeHtml(formValues.industry || "")}" />
+            <input type="hidden" name="keywords" value="${escapeHtml(formValues.keywords || "")}" />
+            <input type="hidden" name="hasWebsite" value="${escapeHtml(formValues.hasWebsite || "")}" />
+            <input type="hidden" name="hasMultiplePagesOrBlog" value="${escapeHtml(formValues.hasMultiplePagesOrBlog || "")}" />
+            <input type="hidden" name="needsThirdPartyApiIntegrations" value="${escapeHtml(formValues.needsThirdPartyApiIntegrations || "")}" />
+            <input type="hidden" name="needsPaymentGateway" value="${escapeHtml(formValues.needsPaymentGateway || "")}" />
+            <button class="btn" type="submit">Confirm Plan &amp; Email My Strategy Growth Brief</button>
+          </form>
+        ` : `<p style="font-size:13px;color:#475569;">Return to <a href="https://localsurgeseo.com" style="color:#123e35;">localsurgeseo.com</a></p>`}
+      </div>
+    </div>
+  </div>
+</body>
+</html>`;
+}
+
+app.get("/api/webmcp/claim", async (req, res) => {
+  const q = req.query as Record<string, any>;
+  const formValues: Record<string, string> = {
+    businessName: String(q.businessName || "").slice(0, 100),
+    contactName: String(q.contactName || "").slice(0, 100),
+    email: String(q.email || "").slice(0, 100),
+    phone: String(q.phone || "").slice(0, 30),
+    location: String(q.location || "").slice(0, 100),
+    industry: String(q.industry || q.niche || "").slice(0, 100),
+    keywords: String(q.keywords || "").slice(0, 300),
+    website: String(q.website || "").slice(0, 200),
+    chosenDomain: String(q.chosenDomain || "").slice(0, 100),
+    hasWebsite: String(q.hasWebsite || q.hasExistingWebsite || ""),
+    hasMultiplePagesOrBlog: String(q.hasMultiplePagesOrBlog || ""),
+    needsThirdPartyApiIntegrations: String(q.needsThirdPartyApiIntegrations || ""),
+    needsPaymentGateway: String(q.needsPaymentGateway || "")
+  };
+
+  const recommendation = await evaluateConsultativePlanRecommendation({
+    businessName: formValues.businessName,
+    industry: formValues.industry,
+    location: formValues.location,
+    website: formValues.website,
+    hasExistingWebsite: parseBoolFlag(formValues.hasWebsite),
+    hasMultiplePagesOrBlog: parseBoolFlag(formValues.hasMultiplePagesOrBlog),
+    needsThirdPartyApiIntegrations: parseBoolFlag(formValues.needsThirdPartyApiIntegrations),
+    needsPaymentGateway: parseBoolFlag(formValues.needsPaymentGateway)
+  });
+
+  const normalized = normalizePlanId(q.planId);
+  const chosenPlanId = VALID_PLAN_IDS.includes(normalized) ? normalized : recommendation.recommendedPlanId;
+  const selectedPlanSummary = getPlanSummary(chosenPlanId);
+
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  return res.send(
+    renderClaimHtmlPage({
+      title: "Confirm Your Plan",
+      formValues,
+      recommendation,
+      selectedPlanSummary
+    })
+  );
+});
+
+app.post("/api/webmcp/claim", async (req, res) => {
+  const body = req.body || {};
+  const wantsJson =
+    Boolean(req.is("application/json")) ||
+    String(req.headers.accept || "").includes("application/json") && !String(req.headers.accept || "").includes("text/html");
+
+  if (isLeadRateLimited(getClientIp(req))) {
+    if (wantsJson) {
+      return res.status(429).json({ success: false, error: "Too many lead submissions. Please try again in 15 minutes." });
+    }
+    return res.status(429).send("Too many submissions. Please try again in 15 minutes.");
+  }
+
+  const parsedBody = {
+    ...body,
+    hasWebsite: parseBoolFlag(body.hasWebsite) ?? parseBoolFlag(body.hasExistingWebsite),
+    hasMultiplePagesOrBlog: parseBoolFlag(body.hasMultiplePagesOrBlog),
+    needsThirdPartyApiIntegrations: parseBoolFlag(body.needsThirdPartyApiIntegrations),
+    needsPaymentGateway: parseBoolFlag(body.needsPaymentGateway)
+  };
+
+  const submission = await processLeadSubmission(parsedBody, {
+    sourceChannel: "WebMCP 1-Click Claim",
+    defaultToConsultative: true,
+    runGeminiAudit: true
+  });
+
+  if (!submission.ok) {
+    if (wantsJson) {
+      return res.status(submission.status || 400).json({ success: false, error: submission.error || "Invalid submission." });
+    }
+    const recommendation = await evaluateConsultativePlanRecommendation(parsedBody);
+    const chosenPlan = getPlanSummary(normalizePlanId(body.planId) || recommendation.recommendedPlanId);
+    res.setHeader("Content-Type", "text/html; charset=utf-8");
+    return res.status(submission.status || 400).send(
+      renderClaimHtmlPage({
+        title: "Confirm Your Plan",
+        error: submission.error || "Invalid submission.",
+        formValues: {
+          businessName: String(body.businessName || ""),
+          contactName: String(body.contactName || ""),
+          email: String(body.email || ""),
+          phone: String(body.phone || ""),
+          location: String(body.location || ""),
+          industry: String(body.industry || ""),
+          keywords: String(body.keywords || ""),
+          website: String(body.website || ""),
+          chosenDomain: String(body.chosenDomain || "")
+        },
+        recommendation,
+        selectedPlanSummary: chosenPlan
+      })
+    );
+  }
+
+  if (wantsJson) {
+    return res.json({
+      success: true,
+      leadId: submission.lead.id,
+      planSubscribed: submission.planSummary,
+      whatYouWillGetUponSubscribing: {
+        timeline: submission.planSummary.timeline,
+        deliverables: submission.planSummary.whatYouWillGet
+      },
+      nextActionItems: submission.consultativeRecommendation.nextActionItems,
+      consultativeAdvice: submission.consultativeRecommendation.consultativeAdvice,
+      emailDispatched: submission.emailDispatched
+    });
+  }
+
+  res.setHeader("Content-Type", "text/html; charset=utf-8");
+  return res.send(
+    renderClaimHtmlPage({
+      title: "Plan Confirmed",
+      confirmed: true,
+      leadId: submission.lead.id,
+      emailDispatched: submission.emailDispatched,
+      formValues: {},
+      recommendation: submission.consultativeRecommendation,
+      selectedPlanSummary: submission.planSummary
+    })
+  );
 });
 
 // =========================================================================

@@ -71,6 +71,22 @@
   ],
   "rewrites": [
     {
+      "source": "/.well-known/webmcp.json",
+      "destination": "/api"
+    },
+    {
+      "source": "/.well-known/mcp.json",
+      "destination": "/api"
+    },
+    {
+      "source": "/.well-known/openapi.json",
+      "destination": "/api"
+    },
+    {
+      "source": "/openapi.json",
+      "destination": "/api"
+    },
+    {
       "source": "/sitemap.xml",
       "destination": "/api"
     },
