@@ -5,7 +5,7 @@ const ClientMicroToolWidget = React.lazy(() => import('./ClientMicroToolWidget')
 import { 
   ArrowLeft, Search, Sparkles, Clock, Calendar, User, ArrowRight, Check, 
   Share2, BookOpen, ExternalLink, MapPin, CheckSquare, RefreshCw, ChevronDown,
-  ChevronLeft, ChevronRight
+  ChevronLeft, ChevronRight, X
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { 
@@ -36,6 +36,7 @@ export default function BlogView({
   const [copiedLink, setCopiedLink] = useState(false);
   const [copiedCitation, setCopiedCitation] = useState<'markdown' | 'apa' | null>(null);
   const [showAiSummarize, setShowAiSummarize] = useState(false);
+  const [showAllTopics, setShowAllTopics] = useState(false);
   const [currentPage, setCurrentPage] = useState(() => {
     if (typeof window !== 'undefined') {
       const params = new URLSearchParams(window.location.search);
@@ -46,30 +47,35 @@ export default function BlogView({
   });
   const [isGridLoading, setIsGridLoading] = useState(false);
   const summarizeMenuRef = useRef<HTMLDivElement>(null);
+  const topicsPanelRef = useRef<HTMLDivElement>(null);
   const gridSectionRef = useRef<HTMLDivElement>(null);
-  const POSTS_PER_PAGE = 8;
+  const POSTS_PER_PAGE = 9;
 
-  // Close AI summarize menu on outside click or Escape
+  // Close open dropdowns/panels (AI summarize menu, All Topics directory) on outside click or Escape
   useEffect(() => {
+    if (!showAiSummarize && !showAllTopics) return;
     const handleClickOutside = (event: MouseEvent) => {
-      if (summarizeMenuRef.current && !summarizeMenuRef.current.contains(event.target as Node)) {
+      const target = event.target as Node;
+      if (showAiSummarize && summarizeMenuRef.current && !summarizeMenuRef.current.contains(target)) {
         setShowAiSummarize(false);
+      }
+      if (showAllTopics && topicsPanelRef.current && !topicsPanelRef.current.contains(target)) {
+        setShowAllTopics(false);
       }
     };
     const handleKeyDown = (event: KeyboardEvent) => {
       if (event.key === 'Escape') {
         setShowAiSummarize(false);
+        setShowAllTopics(false);
       }
     };
-    if (showAiSummarize) {
-      document.addEventListener('mousedown', handleClickOutside);
-      document.addEventListener('keydown', handleKeyDown);
-    }
+    document.addEventListener('mousedown', handleClickOutside);
+    document.addEventListener('keydown', handleKeyDown);
     return () => {
       document.removeEventListener('mousedown', handleClickOutside);
       document.removeEventListener('keydown', handleKeyDown);
     };
-  }, [showAiSummarize]);
+  }, [showAiSummarize, showAllTopics]);
 
   // Fetch dynamic approved blog posts from backend API
   useEffect(() => {
@@ -114,16 +120,55 @@ export default function BlogView({
     }
   }, [initialSlug, dynamicPosts]);
 
-  // Extract unique categories dynamically based on all posts
-  const categories = ['All', ...Array.from(new Set(allPosts.map(post => post.category)))];
+  // Compute category post counts and sort by volume descending (then alphabetically)
+  const categoryCounts = allPosts.reduce<Record<string, number>>((acc, post) => {
+    if (post.category) {
+      acc[post.category] = (acc[post.category] || 0) + 1;
+    }
+    return acc;
+  }, {});
+
+  const sortedCategories = Object.keys(categoryCounts).sort((a, b) => {
+    const countDiff = categoryCounts[b] - categoryCounts[a];
+    return countDiff !== 0 ? countDiff : a.localeCompare(b);
+  });
+
+  // Keep the primary filter strip strictly single-row (max 4 top categories + All, pinning any active overflow topic inline)
+  const TOP_CHANNEL_LIMIT = 4;
+  const topCategories = sortedCategories.slice(0, TOP_CHANNEL_LIMIT);
+  const visibleRailCategories = [
+    'All',
+    ...(selectedCategory !== 'All' && !topCategories.includes(selectedCategory)
+      ? [selectedCategory, ...topCategories.slice(0, TOP_CHANNEL_LIMIT - 1)]
+      : topCategories),
+  ];
+
+  const handleSelectCategory = (category: string) => {
+    setSelectedCategory(category);
+    setSearchQuery('');
+    setShowAllTopics(false);
+  };
+
+  const getTopicChipClass = (isActive: boolean, isGridItem = false) =>
+    `${
+      isGridItem
+        ? 'min-h-[44px] md:min-h-[40px] w-full justify-between text-left'
+        : 'shrink-0 whitespace-nowrap min-h-[44px] md:min-h-[38px]'
+    } px-3.5 py-2 rounded-xl text-[13px] font-medium inline-flex items-center gap-2 border transition-colors duration-150 cursor-pointer active:scale-[0.985] focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123e35] ${
+      isActive
+        ? 'bg-[#123e35] text-white border-[#123e35]'
+        : 'bg-[#faf9f6] hover:bg-[#f2f0e9] border-[#dfded4] hover:border-[#123e35]/35 text-[#2d2f2d] hover:text-[#123e35]'
+    }`;
 
   // Filters posts according to active category and search matching
   const filteredPosts = allPosts.filter(post => {
     const matchesCategory = selectedCategory === 'All' || post.category === selectedCategory;
+    const normalizedQuery = searchQuery.toLowerCase();
     const matchesSearch = 
-      post.title.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.description.toLowerCase().includes(searchQuery.toLowerCase()) ||
-      post.sections.some((sec: any) => sec.content.toLowerCase().includes(searchQuery.toLowerCase()));
+      post.title.toLowerCase().includes(normalizedQuery) ||
+      post.description.toLowerCase().includes(normalizedQuery) ||
+      (post.category || '').toLowerCase().includes(normalizedQuery) ||
+      post.sections.some((sec: any) => (sec.content || '').toLowerCase().includes(normalizedQuery));
     return matchesCategory && matchesSearch;
   });
 
@@ -1031,50 +1076,149 @@ export default function BlogView({
               </div>
 
               {/* Filtering & Navigation Controls */}
-              <div className="bg-white border border-[#dfded4] p-4.5 rounded-3xl flex flex-col md:flex-row gap-4 items-center justify-between shadow-xs">
-                
-                {/* Search query input */}
-                <form
-                  onSubmit={(e) => e.preventDefault()}
-                  toolname="search_blog_articles"
-                  tooldescription="Search local marketing insights, AI SEO guides, and case studies on the Local Surge SEO blog"
-                  toolautosubmit="true"
-                  className="relative w-full md:max-w-xs"
-                >
-                  <Search className="w-4 h-4 absolute left-3.5 top-3.5 text-[#888b88]" aria-hidden="true" />
-                  <input
-                    type="text"
-                    aria-label="Search articles and guides"
-                    toolparamtitle="Search Keywords"
-                    toolparamdescription="Keywords or topics to search within blog posts"
-                    placeholder="Search articles & guides..."
-                    value={searchQuery}
-                    onChange={(e) => setSearchQuery(e.target.value)}
-                    className="bg-[#faf9f6] border border-[#dfded4] rounded-xl w-full pl-10 pr-4 py-2.5 text-xs text-[#1a1c1a] placeholder-[#888b88] focus:outline-none focus:border-[#bc5f40] transition-all font-semibold"
-                  />
-                </form>
+              <div
+                ref={topicsPanelRef}
+                className="bg-white border border-[#dfded4] p-4 sm:p-5 rounded-3xl space-y-3.5"
+              >
+                {/* Row 1: Search input + Directory Toggle */}
+                <div className="flex flex-col sm:flex-row gap-3 items-stretch sm:items-center justify-between">
+                  <form
+                    onSubmit={(e) => e.preventDefault()}
+                    toolname="search_blog_articles"
+                    tooldescription="Search local marketing insights, AI SEO guides, and case studies on the Local Surge SEO blog"
+                    toolautosubmit="true"
+                    className="relative w-full sm:max-w-sm lg:max-w-md"
+                  >
+                    <Search className="w-4 h-4 absolute left-3.5 top-1/2 -translate-y-1/2 text-[#5c605d]" aria-hidden="true" />
+                    <input
+                      type="text"
+                      aria-label="Search articles and guides"
+                      toolparamtitle="Search Keywords"
+                      toolparamdescription="Keywords or topics to search within blog posts"
+                      placeholder="Search articles & guides..."
+                      value={searchQuery}
+                      onChange={(e) => setSearchQuery(e.target.value)}
+                      className="bg-[#faf9f6] border border-[#dfded4] rounded-xl w-full min-h-[44px] h-11 pl-10 pr-10 text-sm text-[#1a1c1a] placeholder-[#5c605d] focus:outline-none focus:border-[#123e35] focus:bg-white transition-colors font-medium"
+                    />
+                    {searchQuery !== '' && (
+                      <button
+                        type="button"
+                        onClick={() => setSearchQuery('')}
+                        aria-label="Clear search query"
+                        className="absolute right-1.5 top-1/2 -translate-y-1/2 w-8 h-8 rounded-lg flex items-center justify-center text-[#5c605d] hover:text-[#151716] hover:bg-[#edeae1] transition-colors cursor-pointer"
+                      >
+                        <X className="w-4 h-4" aria-hidden="true" />
+                      </button>
+                    )}
+                  </form>
 
-                {/* Nav Category chips */}
-                <div className="flex gap-2 overflow-x-auto max-w-full pb-1 md:pb-0 scrollbar-none flex-wrap items-center">
-                  {categories.map((cat) => (
+                  <div className="flex items-center justify-between sm:justify-end gap-2.5 shrink-0">
+                    {(selectedCategory !== 'All' || searchQuery !== '') && (
+                      <button
+                        type="button"
+                        onClick={() => handleSelectCategory('All')}
+                        className="min-h-[44px] md:min-h-[40px] px-3 rounded-xl text-[13px] font-medium text-[#bc5f40] hover:bg-[#bc5f40]/8 transition-colors cursor-pointer whitespace-nowrap"
+                      >
+                        Reset filters
+                      </button>
+                    )}
                     <button
-                      id={`cat-chip-${cat.replace(/\s+/g, '-').toLowerCase()}`}
-                      key={cat}
-                      onClick={() => {
-                        setSelectedCategory(cat);
-                        // Reset search if they select category chips
-                        setSearchQuery('');
-                      }}
-                      className={`px-3.5 py-2 rounded-xl text-xs font-extrabold transition-all duration-200 cursor-pointer ${
-                        selectedCategory === cat
-                          ? 'bg-[#123e35] text-white shadow-xs scale-102'
-                          : 'bg-[#faf9f6] hover:bg-[#dfded4]/40 border border-[#dfded4] text-[#4e524f] hover:text-[#1a1c1a]'
+                      type="button"
+                      id="toggle-all-topics-btn"
+                      aria-expanded={showAllTopics}
+                      aria-controls="blog-all-topics-panel"
+                      onClick={() => setShowAllTopics((prev) => !prev)}
+                      className={`min-h-[44px] md:min-h-[40px] px-4 rounded-xl border text-[13px] font-medium inline-flex items-center justify-center gap-2 transition-colors duration-150 cursor-pointer whitespace-nowrap focus-visible:outline-2 focus-visible:outline-offset-2 focus-visible:outline-[#123e35] ${
+                        showAllTopics
+                          ? 'bg-[#123e35] text-white border-[#123e35]'
+                          : 'bg-[#faf9f6] text-[#1a1c1a] border-[#dfded4] hover:border-[#123e35]/40 hover:bg-[#f2f0e9]'
                       }`}
                     >
-                      {cat === 'All' ? 'All Channels' : cat}
+                      <span>{showAllTopics ? 'Hide Topics' : `All Topics (${sortedCategories.length})`}</span>
+                      <ChevronDown
+                        className={`w-4 h-4 transition-transform duration-150 ${showAllTopics ? 'rotate-180' : ''}`}
+                        aria-hidden="true"
+                      />
                     </button>
-                  ))}
+                  </div>
                 </div>
+
+                {/* Row 2: Single-row unstacked primary topic strip */}
+                <div className="pt-3 border-t border-[#dfded4]/70 flex items-center gap-3">
+                  <span className="hidden lg:inline-block text-[13px] font-medium text-[#5c605d] shrink-0">
+                    Topics
+                  </span>
+                  <div
+                    role="group"
+                    aria-label="Primary blog topics"
+                    className="flex-1 min-w-0 flex flex-nowrap items-center gap-2 overflow-x-auto [scrollbar-width:none] [&::-webkit-scrollbar]:hidden py-0.5"
+                  >
+                    {visibleRailCategories.map((cat) => {
+                      const isActive = selectedCategory === cat;
+                      const count = cat === 'All' ? allPosts.length : (categoryCounts[cat] || 0);
+                      return (
+                        <button
+                          key={cat}
+                          type="button"
+                          id={`cat-chip-${cat.replace(/\s+/g, '-').toLowerCase()}`}
+                          aria-pressed={isActive}
+                          onClick={() => handleSelectCategory(cat)}
+                          className={getTopicChipClass(isActive)}
+                        >
+                          <span>{cat === 'All' ? 'All Channels' : cat}</span>
+                          <span className={`text-[12px] font-mono tabular-nums ${isActive ? 'text-white/80' : 'text-[#5c605d]'}`}>
+                            {count}
+                          </span>
+                        </button>
+                      );
+                    })}
+                  </div>
+                </div>
+
+                {/* Expandable All Topics Multi-Column Directory */}
+                {showAllTopics && (
+                  <div
+                    id="blog-all-topics-panel"
+                    role="region"
+                    aria-label="All editorial topics directory"
+                    className="pt-3.5 border-t border-[#dfded4]/70 space-y-3"
+                  >
+                    <div className="flex items-center justify-between gap-2">
+                      <p className="text-[13px] font-medium text-[#4e524f]">
+                        Browse all {sortedCategories.length} editorial topics ({allPosts.length} guides)
+                      </p>
+                      <button
+                        type="button"
+                        onClick={() => setShowAllTopics(false)}
+                        className="min-h-[36px] px-2.5 rounded-lg text-[13px] font-medium text-[#5c605d] hover:text-[#151716] hover:bg-[#faf9f6] inline-flex items-center gap-1 cursor-pointer"
+                      >
+                        <X className="w-3.5 h-3.5" aria-hidden="true" />
+                        <span>Close</span>
+                      </button>
+                    </div>
+                    <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 xl:grid-cols-4 gap-2">
+                      {sortedCategories.map((cat) => {
+                        const isActive = selectedCategory === cat;
+                        const isInPrimaryRail = visibleRailCategories.includes(cat);
+                        return (
+                          <button
+                            key={cat}
+                            type="button"
+                            id={isInPrimaryRail ? undefined : `cat-chip-${cat.replace(/\s+/g, '-').toLowerCase()}`}
+                            aria-pressed={isActive}
+                            onClick={() => handleSelectCategory(cat)}
+                            className={getTopicChipClass(isActive, true)}
+                          >
+                            <span className="truncate">{cat}</span>
+                            <span className={`text-[12px] font-mono tabular-nums shrink-0 ${isActive ? 'text-white/80' : 'text-[#5c605d]'}`}>
+                              {categoryCounts[cat]}
+                            </span>
+                          </button>
+                        );
+                      })}
+                    </div>
+                  </div>
+                )}
               </div>
 
               {/* Free SEO Audit Banner Callout on Blog */}
@@ -1084,12 +1228,12 @@ export default function BlogView({
                     <Sparkles className="w-6 h-6 text-[#bc5f40]" />
                   </div>
                   <div className="space-y-1">
-                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-white/10 text-[10px] font-mono font-bold uppercase tracking-wider text-white/90">
+                    <div className="inline-flex items-center gap-2 px-2.5 py-0.5 rounded bg-white/10 text-xs font-mono font-bold tracking-wide text-white/90">
                       Free Live Diagnostic Scanner
                     </div>
-                    <h3 className="text-lg sm:text-xl font-black font-display tracking-tight text-white">
+                    <h2 className="text-lg sm:text-xl font-black font-display tracking-tight text-white">
                       Want to see where your business stands in Google Search?
-                    </h3>
+                    </h2>
                     <p className="text-xs sm:text-sm text-white/80 font-medium max-w-2xl leading-relaxed">
                       Benchmark your website's meta tags, Google Map Pack signals, schema markup, and speed against top-ranking local competitors in 60 seconds.
                     </p>
@@ -1119,7 +1263,7 @@ export default function BlogView({
                     handleArticleClick(featuredPost.slug);
                   }}
                   aria-label={`Read featured article: ${featuredPost.title}`}
-                  className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 grid grid-cols-1 lg:grid-cols-12 cursor-pointer group focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none block"
+                  className="bg-white border border-[#dfded4] hover:border-[#c8c6ba] rounded-3xl overflow-hidden hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-12px_rgba(21,23,22,0.12)] transition-[transform,box-shadow,border-color] duration-200 grid grid-cols-1 lg:grid-cols-12 cursor-pointer group focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
                 >
                   {/* Left Hero Image */}
                   <div className="lg:col-span-7 h-64 sm:h-80 lg:h-full relative overflow-hidden">
@@ -1139,18 +1283,18 @@ export default function BlogView({
                   {/* Right Hero content */}
                   <div className="lg:col-span-5 p-6 sm:p-8 lg:p-10 flex flex-col justify-between space-y-6">
                     <div className="space-y-4">
-                      <div className="flex items-center gap-2.5">
-                        <span className="px-2 py-0.5 text-[8px] font-black uppercase font-mono tracking-widest bg-[#bc5f40]/15 text-[#bc5f40] border border-[#bc5f40]/25 rounded">
+                      <div className="flex flex-wrap items-center gap-2.5">
+                        <span className="px-2.5 py-0.5 text-[12px] font-semibold bg-[#bc5f40]/12 text-[#a14d31] border border-[#bc5f40]/25 rounded-md">
                           Featured Insight
                         </span>
-                        <span className="text-[10px] text-[#888b88] font-bold font-mono uppercase">{featuredPost.category}</span>
+                        <span className="text-[13px] text-[#5c605d] font-medium">{featuredPost.category}</span>
                       </div>
 
-                      <h3 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight hover:text-[#bc5f40] transition-colors leading-tight">
+                      <h2 className="text-xl sm:text-2xl font-black font-display text-[#151716] tracking-tight group-hover:text-[#bc5f40] transition-colors leading-tight">
                         {featuredPost.title}
-                      </h3>
+                      </h2>
 
-                      <p className="text-xs text-[#4e524f] font-semibold leading-relaxed">
+                      <p className="text-sm text-[#4e524f] font-medium leading-relaxed">
                         {featuredPost.description}
                       </p>
                     </div>
@@ -1163,12 +1307,12 @@ export default function BlogView({
                             : (featuredPost.author.name ? featuredPost.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
                         </div>
                         <div>
-                          <p className="text-xs font-black text-[#1a1c1a]">{featuredPost.author.name}</p>
-                          <p className="text-[9px] text-[#4e524f] font-mono leading-none">{featuredPost.date}</p>
+                          <p className="text-xs font-bold text-[#1a1c1a]">{featuredPost.author.name}</p>
+                          <p className="text-[11px] text-[#5c605d] font-mono leading-tight">{featuredPost.date}</p>
                         </div>
                       </div>
 
-                      <div className="flex items-center gap-1.5 text-xs font-bold text-[#123e35] group-hover:translate-x-1.5 transition-transform duration-300">
+                      <div className="flex items-center gap-1.5 text-[13px] font-bold text-[#123e35] group-hover:translate-x-1 transition-transform duration-200">
                         Read Story
                         <ArrowRight className="w-4 h-4 text-[#bc5f40]" />
                       </div>
@@ -1180,26 +1324,35 @@ export default function BlogView({
               {/* POST RESULTS GRID */}
               <div ref={gridSectionRef} id="articles-grid" className="space-y-6 scroll-mt-24">
                 <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
-                  <h3 className="text-xs font-mono font-black text-[#888b88] uppercase tracking-widest">
+                  <h2 className="text-[13px] font-medium text-[#5c605d]">
                     {searchQuery !== '' 
                       ? `Found ${filteredPosts.length} results matching "${searchQuery}"` 
-                      : `All Available Articles ${listPosts.length > 0 ? `(Showing ${startIdx}–${endIdx} of ${listPosts.length})` : ''}`}
-                  </h3>
+                      : selectedCategory !== 'All'
+                        ? `${selectedCategory} ${listPosts.length > 0 ? `(${startIdx}–${endIdx} of ${listPosts.length} guides)` : '(0 guides)'}`
+                        : `All Available Articles ${listPosts.length > 0 ? `(Showing ${startIdx}–${endIdx} of ${listPosts.length})` : ''}`}
+                  </h2>
                   {totalPages > 1 && (
-                    <p className="text-[11px] font-mono text-[#888b88]">
+                    <p className="text-[13px] font-mono text-[#5c605d]">
                       Page <span className="font-bold text-[#123e35]">{currentPage}</span> of <span className="font-bold text-[#123e35]">{totalPages}</span>
                     </p>
                   )}
                 </div>
 
                 {filteredPosts.length === 0 ? (
-                  <div className="p-16 text-center bg-white border border-[#dfded4] rounded-3xl space-y-2">
-                    <Search className="w-8 h-8 text-[#888b88] mx-auto opacity-30" />
-                    <h4 className="text-sm font-bold text-[#151716]">No matching insights identified</h4>
-                    <p className="text-xs text-[#4e524f] font-semibold">Try typing a different keyword or choosing other channel directories.</p>
+                  <div className="p-12 sm:p-16 text-center bg-white border border-[#dfded4] rounded-3xl space-y-3">
+                    <Search className="w-8 h-8 text-[#5c605d] mx-auto opacity-40" />
+                    <h3 className="text-base font-bold text-[#151716]">No matching insights identified</h3>
+                    <p className="text-sm text-[#4e524f] font-medium">Try typing a different keyword or choosing another topic directory.</p>
+                    <button
+                      type="button"
+                      onClick={() => handleSelectCategory('All')}
+                      className="mt-2 inline-flex items-center justify-center min-h-[44px] px-5 rounded-xl bg-[#123e35] text-white text-[13px] font-semibold hover:bg-[#185246] transition-colors cursor-pointer"
+                    >
+                      View all channels
+                    </button>
                   </div>
                 ) : isGridLoading ? (
-                  <BlogGridSkeleton count={Math.min(POSTS_PER_PAGE, paginatedPosts.length || 8)} />
+                  <BlogGridSkeleton count={Math.min(POSTS_PER_PAGE, paginatedPosts.length || POSTS_PER_PAGE)} />
                 ) : (
                   <>
                     <div className="grid grid-cols-1 sm:grid-cols-2 lg:grid-cols-3 gap-6 sm:gap-8">
@@ -1212,7 +1365,7 @@ export default function BlogView({
                             handleArticleClick(post.slug);
                           }}
                           aria-label={`Read article: ${post.title}`}
-                          className="bg-white border border-[#dfded4] rounded-3xl overflow-hidden shadow-xs hover:shadow-md transition-all duration-300 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none block"
+                          className="bg-white border border-[#dfded4] hover:border-[#c8c6ba] rounded-3xl overflow-hidden hover:-translate-y-0.5 hover:shadow-[0_12px_28px_-12px_rgba(21,23,22,0.12)] transition-[transform,box-shadow,border-color] duration-200 flex flex-col justify-between group cursor-pointer relative focus-visible:ring-2 focus-visible:ring-[#123e35] focus-visible:outline-none"
                         >
                           <div>
                             {/* Image box */}
@@ -1225,32 +1378,34 @@ export default function BlogView({
                                 width={600}
                                 height={340}
                                 referrerPolicy="no-referrer"
-                                className="w-full h-full object-cover group-hover:scale-102 transition-transform duration-500"
+                                className="w-full h-full object-cover group-hover:scale-103 transition-transform duration-500"
                               />
-                              <span className="absolute top-3.5 left-3.5 px-2 py-0.5 text-[8px] font-black uppercase font-mono tracking-wider bg-white/95 text-[#1a1c1a] border border-[#dfded4] rounded shadow-xs z-10">
-                                {post.category}
-                              </span>
                             </div>
 
                             {/* Content */}
-                            <div className="p-5.5 space-y-3">
-                              <div className="flex items-center gap-1 text-[10px] text-[#bc5f40] font-bold font-mono">
-                                <Clock className="w-3.5 h-3.5" />
-                                <span>{post.readTime}</span>
+                            <div className="p-6 space-y-3">
+                              <div className="flex items-center justify-between gap-3 text-[13px] font-medium">
+                                <span className="text-[#123e35] font-semibold truncate">
+                                  {post.category}
+                                </span>
+                                <span className="inline-flex items-center gap-1 text-[#bc5f40] shrink-0 font-mono text-[12px]">
+                                  <Clock className="w-3.5 h-3.5" aria-hidden="true" />
+                                  <span>{post.readTime}</span>
+                                </span>
                               </div>
 
-                              <h4 className="font-extrabold text-sm sm:text-base text-[#151716] group-hover:text-[#bc5f40] transition-colors leading-snug">
+                              <h3 className="font-extrabold text-base text-[#151716] group-hover:text-[#bc5f40] transition-colors leading-snug">
                                 {post.title}
-                              </h4>
+                              </h3>
 
-                              <p className="text-xs text-[#4e524f] leading-relaxed line-clamp-3 font-semibold">
+                              <p className="text-sm text-[#4e524f] leading-relaxed line-clamp-3 font-normal">
                                 {post.description}
                               </p>
                             </div>
                           </div>
 
                           {/* Footer details */}
-                          <div className="p-5.5 pt-0 border-t border-[#dfded4]/60 mt-4 flex items-center justify-between">
+                          <div className="p-6 pt-4 border-t border-[#dfded4]/60 flex items-center justify-between">
                             <div className="flex items-center gap-2.5">
                               <div className="w-7 h-7 rounded-full bg-[#123e35]/10 text-[#123e35] flex items-center justify-center font-black text-[10px] font-display overflow-hidden">
                                 {typeof post.author.avatar === 'string' && post.author.avatar.length <= 3
@@ -1258,12 +1413,12 @@ export default function BlogView({
                                   : (post.author.name ? post.author.name.split(' ').map((n: string) => n[0]).join('').substring(0, 2) : 'LS')}
                               </div>
                               <div>
-                                <p className="text-[10px] font-black text-[#1a1c1a]">{post.author.name}</p>
-                                <p className="text-[9px] text-[#888b88] font-mono leading-none">{post.date}</p>
+                                <p className="text-xs font-bold text-[#1a1c1a]">{post.author.name}</p>
+                                <p className="text-[11px] text-[#5c605d] font-mono leading-tight">{post.date}</p>
                               </div>
                             </div>
 
-                            <div className="w-7 h-7 rounded-full border border-[#dfded4] hover:border-[#bc5f40] flex items-center justify-center text-[#888b88] hover:text-[#bc5f40] hover:bg-[#bc5f40]/5 transition-colors cursor-pointer">
+                            <div className="w-8 h-8 rounded-full border border-[#dfded4] group-hover:border-[#bc5f40] flex items-center justify-center text-[#5c605d] group-hover:text-[#bc5f40] group-hover:bg-[#bc5f40]/5 transition-colors">
                               <ArrowRight className="w-3.5 h-3.5" />
                             </div>
                           </div>
