@@ -15,40 +15,24 @@ declare global {
 // Global GA4 Measurement ID configured in index.html
 export const GA_MEASUREMENT_ID = 'G-FDD0ZMHBQ7';
 
-// In-memory event buffer in case events are triggered before gtag.js finishes loading
-const eventBuffer: Array<{ name: string; params: Record<string, any> }> = [];
-let isGtagReady = false;
+let lastTrackedPath: string | null = null;
 
-// Poll or listen for gtag availability to flush any buffered events
-if (typeof window !== 'undefined') {
-  const checkGtagInterval = setInterval(() => {
-    if (typeof window.gtag === 'function') {
-      isGtagReady = true;
-      clearInterval(checkGtagInterval);
-      flushBuffer();
-    }
-  }, 300);
-
-  // Stop polling after 15 seconds to conserve CPU
-  setTimeout(() => clearInterval(checkGtagInterval), 15000);
-}
-
-function flushBuffer() {
-  if (!isGtagReady || typeof window.gtag !== 'function') return;
-  while (eventBuffer.length > 0) {
-    const item = eventBuffer.shift();
-    if (item) {
-      try {
-        window.gtag('event', item.name, item.params);
-      } catch (e) {
-        console.warn('Failed to flush buffered analytics event:', e);
-      }
-    }
+/**
+ * Ensures window.gtag exists even if gtag.js is still deferred so events queue cleanly into dataLayer.
+ */
+function ensureGtag(): (...args: any[]) => void {
+  window.dataLayer = window.dataLayer || [];
+  if (typeof window.gtag !== 'function') {
+    window.gtag = function () {
+      // eslint-disable-next-line prefer-rest-params
+      window.dataLayer!.push(arguments);
+    };
   }
+  return window.gtag;
 }
 
 /**
- * Low-level safe dispatcher that pushes to both window.gtag and window.dataLayer
+ * Low-level safe dispatcher that pushes to both GTM dataLayer and window.gtag (GA4)
  */
 export function sendEvent(eventName: string, params: Record<string, any> = {}) {
   if (typeof window === 'undefined') return;
@@ -61,37 +45,30 @@ export function sendEvent(eventName: string, params: Record<string, any> = {}) {
     eventTimestamp: Date.now()
   });
 
-  // 2. Dispatch to GA4 via gtag
-  if (typeof window.gtag === 'function') {
-    try {
-      window.gtag('event', eventName, params);
-    } catch (err) {
-      console.warn(`Error dispatching GA4 event '${eventName}':`, err);
-    }
-  } else {
-    // Buffer for when gtag finishes loading via requestIdleCallback
-    eventBuffer.push({ name: eventName, params });
+  // 2. Dispatch to GA4 via gtag (safe before or after gtag.js loads)
+  try {
+    const gtagFn = ensureGtag();
+    gtagFn('event', eventName, {
+      send_to: GA_MEASUREMENT_ID,
+      ...params
+    });
+  } catch (err) {
+    console.warn(`Error dispatching GA4 event '${eventName}':`, err);
   }
 }
 
 /**
- * Dispatches a virtual pageview on SPA route changes
+ * Dispatches a single deduplicated virtual pageview on initial load and SPA route changes
  */
 export function trackPageView(pagePath: string, pageTitle?: string) {
   if (typeof window === 'undefined') return;
 
   const path = pagePath.startsWith('/') ? pagePath : `/${pagePath}`;
+  if (lastTrackedPath === path) return;
+  lastTrackedPath = path;
+
   const title = pageTitle || document.title || 'Local Surge SEO';
   const location = window.location.origin + path;
-
-  // Standard GA4 page_view configuration update
-  if (typeof window.gtag === 'function') {
-    window.gtag('config', GA_MEASUREMENT_ID, {
-      page_path: path,
-      page_title: title,
-      page_location: location
-    });
-  }
 
   sendEvent('page_view', {
     page_path: path,

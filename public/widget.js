@@ -1048,12 +1048,24 @@
     });
   }
 
+  function trackWidgetEvent(eventName, params) {
+    try {
+      if (typeof window.gtag === "function") {
+        window.gtag("event", eventName, Object.assign({ site_id: siteConfig?.id || siteId }, params || {}));
+      } else {
+        window.dataLayer = window.dataLayer || [];
+        window.dataLayer.push(Object.assign({ event: eventName, site_id: siteConfig?.id || siteId }, params || {}));
+      }
+    } catch {}
+  }
+
   // 7. Drawer Toggle
   function openDrawer() {
     drawer.classList.add("active");
     iconOpen.style.display = "none";
     iconClose.style.display = "block";
     teaser.style.display = "none";
+    trackWidgetEvent("frontdesk_chat_open");
     setTimeout(() => inputEl.focus(), 100);
   }
 
@@ -1199,6 +1211,7 @@
       imageUrl: attachedImage || undefined,
       timestamp: new Date().toISOString()
     });
+    trackWidgetEvent("frontdesk_message_sent", { has_image: Boolean(attachedImage) });
 
     isStreaming = true;
 
@@ -1274,6 +1287,12 @@
     if (!lead || !lead.customerPhone) return;
     const existingCard = shadow.getElementById("lsLeadConfirmation");
     if (existingCard) return;
+
+    trackWidgetEvent("generate_lead", {
+      lead_source: "ai_frontdesk_widget",
+      currency: "USD",
+      value: 99
+    });
 
     const card = document.createElement("div");
     card.id = "lsLeadConfirmation";

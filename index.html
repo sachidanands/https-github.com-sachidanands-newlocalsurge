@@ -259,6 +259,15 @@
     <!-- Defer all tracking & analytics (GTM, GA4, Clarity, Meta Pixel) to requestIdleCallback / post-load to protect Mobile FCP/LCP -->
     <script>
       (function() {
+        // Expose window.gtag immediately so SPA route changes and early events queue into dataLayer cleanly
+        window.dataLayer = window.dataLayer || [];
+        if (typeof window.gtag !== 'function') {
+          window.gtag = function() { window.dataLayer.push(arguments); };
+        }
+        window.gtag('js', new Date());
+        // Disable automatic config page_view because App.tsx dispatches canonical virtual pageviews via trackPageView()
+        window.gtag('config', 'G-FDD0ZMHBQ7', { send_page_view: false });
+
         var loaded = false;
         function loadAnalytics() {
           if (loaded) return;
@@ -276,11 +285,6 @@
           gtagScript.async = true;
           gtagScript.src = 'https://www.googletagmanager.com/gtag/js?id=G-FDD0ZMHBQ7';
           document.head.appendChild(gtagScript);
-
-          window.dataLayer = window.dataLayer || [];
-          function gtag(){dataLayer.push(arguments);}
-          gtag('js', new Date());
-          gtag('config', 'G-FDD0ZMHBQ7');
 
           // Microsoft Clarity
           (function(c,l,a,r,i,t,y){
