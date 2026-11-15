@@ -18,6 +18,15 @@ import {
   sendTrialExpiryReportEmail,
   sendGracePeriodEndedEmail
 } from "./services/frontdesk-dispatch.js";
+import {
+  registerFrontdeskSaasRoutes,
+  evaluateSubscriptionLifecycle,
+  checkSiteOriginLock,
+  getSiteByIdUnified,
+  type FrontdeskSaasDeps
+} from "./services/frontdesk-saas.js";
+import { recordFrontdeskEvent } from "./services/frontdesk-analytics.js";
+import { deliverLeadToConfiguredChannels } from "./services/frontdesk-lead-delivery.js";
 import { BLOG_POSTS } from "../src/data/blogData.js";
 
 dotenv.config();
@@ -72,6 +81,19 @@ app.use((req, res, next) => {
   const originSecret = process.env.CLOUDFLARE_ORIGIN_SECRET;
   // Enforce origin verification in production if secret is configured
   if (originSecret && process.env.NODE_ENV === "production") {
+    // Allow Vercel Cron with valid CRON_SECRET bearer & PayPal webhook (verified cryptographically inside handler)
+    if (req.path === "/api/frontdesk/cron/lifecycle") {
+      const cronSecret = process.env.CRON_SECRET;
+      const auth = String(req.headers.authorization || "");
+      const bearer = auth.startsWith("Bearer ") ? auth.slice(7).trim() : "";
+      if (cronSecret && bearer && safeEqualStrings(bearer, cronSecret)) {
+        return next();
+      }
+    }
+    if (req.path === "/api/frontdesk/webhook/paypal") {
+      return next();
+    }
+
     const incomingSecret = req.headers["x-origin-secret"];
     if (typeof incomingSecret !== "string" || !safeEqualStrings(incomingSecret, originSecret)) {
       console.warn(`[Security] Direct origin bypass blocked: ${getClientIp(req)} -> ${req.originalUrl}`);
@@ -100,7 +122,7 @@ app.use((req, res, next) => {
   res.setHeader("X-Frame-Options", "SAMEORIGIN");
   res.setHeader(
     "Content-Security-Policy",
-    "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://*.clarity.ms https://static.cloudflareinsights.com https://www.googletagmanager.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https://images.unsplash.com https://localsurgeseo.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://www.facebook.com https://www.google-analytics.com https://shield.sitelock.com https://*.sitelock.com https://c.bing.com; connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://api.allorigins.win; frame-src 'self' https://www.googletagmanager.com;"
+    "default-src 'self'; script-src 'self' 'unsafe-inline' https://www.clarity.ms https://scripts.clarity.ms https://*.clarity.ms https://static.cloudflareinsights.com https://www.googletagmanager.com https://connect.facebook.net; style-src 'self' 'unsafe-inline' https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com data:; img-src 'self' data: blob: https: https://images.unsplash.com https://localsurgeseo.com https://*.tile.openstreetmap.org https://tile.openstreetmap.org https://www.facebook.com https://www.google-analytics.com https://shield.sitelock.com https://*.sitelock.com https://c.bing.com; connect-src 'self' https://www.clarity.ms https://*.clarity.ms https://c.bing.com https://cloudflareinsights.com https://static.cloudflareinsights.com https://www.google-analytics.com https://*.google-analytics.com https://region1.google-analytics.com https://api.allorigins.win; frame-src 'self' https://www.googletagmanager.com;"
   );
   res.setHeader("Referrer-Policy", "strict-origin-when-cross-origin");
   next();
@@ -282,6 +304,52 @@ function requireAdmin(req: express.Request, res: express.Response, next: express
   }
   res.status(401).json({ error: "Unauthorized access: Invalid or missing token" });
 }
+
+// Standalone AI FrontDesk SaaS ($5/mo PayPal + Portal + Analytics + Lifecycle Cron)
+// Registered before legacy /api/frontdesk/* handlers so /trial, /sites/:id, and /checkout-url
+// enforce domain locks, widgetVisible visibility, and $5/mo subscription states.
+const frontdeskSaasDeps: FrontdeskSaasDeps = {
+  getSupabase,
+  getResend,
+  getGemini,
+  readFrontdeskSites,
+  writeFrontdeskSites,
+  readFrontdeskLeads,
+  writeFrontdeskLeads,
+  serializeSiteForSupabase: (site: any) => {
+    const base = serializeSiteForSupabase(site);
+    const wc = { ...(base?.widget_config || {}) };
+    wc._saas_meta = {
+      enabled: site.enabled,
+      is_internal: site.is_internal,
+      is_comped: site.is_comped,
+      installed_at: site.installed_at ?? null,
+      last_seen_at: site.last_seen_at ?? null,
+      last_seen_origin: site.last_seen_origin ?? null,
+      last_crawled_at: site.last_crawled_at ?? null,
+      emails_sent: site.emails_sent || {},
+      subscription: site.subscription || null,
+      lead_delivery: site.lead_delivery || null
+    };
+    return { ...base, widget_config: wc };
+  },
+  hydrateFrontdeskSite: (row: any) => {
+    const base = hydrateFrontdeskSite(row);
+    const saasMeta = row?.widget_config?._saas_meta;
+    const wc = { ...(base?.widget_config || {}) };
+    delete wc._saas_meta;
+    if (saasMeta && typeof saasMeta === "object") {
+      return { ...base, ...saasMeta, widget_config: wc };
+    }
+    return { ...base, widget_config: wc };
+  },
+  requireAdmin,
+  isAdminRequest,
+  processLeadSubmission,
+  isRateLimited: (ip: string) => isLeadRateLimited(ip),
+  getClientIp
+};
+registerFrontdeskSaasRoutes(app, frontdeskSaasDeps);
 
 // Lazy initializers for premium integrations to prevent app crashes if keys are not set up yet
 let supabaseClient: any = null;
@@ -5667,13 +5735,22 @@ async function syncFrontdeskLeadToMainPipeline(lead: any, site: any) {
 }
 
 // 7. POST /api/frontdesk/leads/create - Capture qualified lead from chat widget
+app.options("/api/frontdesk/leads/create", (_req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
+  res.setHeader("Access-Control-Allow-Methods", "POST, OPTIONS");
+  res.setHeader("Access-Control-Allow-Headers", "Content-Type");
+  return res.sendStatus(204);
+});
+
 app.post("/api/frontdesk/leads/create", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   if (isLeadRateLimited(getClientIp(req))) {
     return res.status(429).json({ success: false, error: "Too many lead requests from this IP. Please try again in 15 minutes." });
   }
 
   const {
     siteId,
+    sessionId,
     customerName,
     customerPhone,
     customerEmail,
@@ -5694,7 +5771,9 @@ app.post("/api/frontdesk/leads/create", async (req, res) => {
     ? photoUrls.filter((u: unknown) => typeof u === "string").slice(0, 3)
     : [];
 
+  const site = await getSiteByIdUnified(String(siteId).trim().slice(0, 100), frontdeskSaasDeps);
   const newLeadId = `flead_${Date.now().toString(36)}_${Math.random().toString(36).substring(2, 6)}`;
+  const resolvedChannel = site?.lead_delivery?.mode || dispatchChannel;
   const newLead: FrontdeskLead = {
     id: newLeadId,
     site_id: String(siteId).trim().slice(0, 100),
@@ -5710,41 +5789,18 @@ app.post("/api/frontdesk/leads/create", async (req, res) => {
     transcript: Array.isArray(transcript) ? transcript.slice(0, 50) : [],
     qualification_summary: qualificationSummary || {},
     dispatched_at: new Date().toISOString(),
-    dispatch_channel: dispatchChannel
+    dispatch_channel: resolvedChannel
   };
 
-  // 1. Local JSON persistence
-  const leads = readFrontdeskLeads();
-  leads.unshift(newLead);
-  writeFrontdeskLeads(leads);
-
-  // 2. Supabase persistence
   const supabase = await getSupabase();
-  if (supabase) {
-    try {
-      const { error } = await supabase.from("frontdesk_leads").insert([newLead]);
-      if (error) {
-        if (error.code === "42P01") {
-          console.info(`ℹ️ Supabase table 'frontdesk_leads' pending creation - stored in local JSON!`);
-        } else {
-          console.warn("⚠️ Supabase frontdesk lead insert warning:", error.message || error);
-        }
-      } else {
-        console.log(`🟢 Successfully saved FrontDesk lead ${newLead.id} to Supabase!`);
-      }
-    } catch {
-      // Fallback caught
-    }
-  }
 
-  // 3. Trigger instant email dispatch via Resend (respects feature flags)
-  const sites = readFrontdeskSites();
-  const site = sites.find((s: any) => s.id === newLead.site_id);
+  // Trigger configured delivery channels (Email + optional Endpoint webhook)
   if (site) {
-    dispatchLeadEmail(newLead, site, getResend).catch((err) => {
-      console.warn("⚠️ Lead email alert dispatch error:", err);
-    });
-
+    try {
+      newLead.delivery_status = (await deliverLeadToConfiguredChannels(newLead, site, getResend)) as any;
+    } catch (err) {
+      console.warn("⚠️ Lead channel delivery error:", err);
+    }
     if (site.id === "site_localsurge") {
       syncFrontdeskLeadToMainPipeline(newLead, site).catch((err) => {
         console.warn("⚠️ Dual lead sync error:", err);
@@ -5752,12 +5808,41 @@ app.post("/api/frontdesk/leads/create", async (req, res) => {
     }
   }
 
+  // 1. Local JSON persistence
+  const leads = readFrontdeskLeads();
+  leads.unshift(newLead);
+  writeFrontdeskLeads(leads);
+
+  // 2. Supabase persistence (strip delivery_status so PGRST204 cannot fail)
+  if (supabase) {
+    try {
+      const { delivery_status: _ds, ...dbLead } = newLead as any;
+      const { error } = await supabase.from("frontdesk_leads").insert([dbLead]);
+      if (error && error.code !== "42P01") {
+        console.warn("⚠️ Supabase frontdesk lead insert warning:", error.message || error);
+      }
+    } catch {
+      // Fallback caught
+    }
+  }
+
+  recordFrontdeskEvent(
+    {
+      siteId: newLead.site_id,
+      sessionId: sessionId ? String(sessionId) : null,
+      type: "lead",
+      meta: { channel: resolvedChannel }
+    },
+    supabase
+  ).catch(() => {});
+
   return res.json({
     success: true,
     leadId: newLead.id,
     status: newLead.status,
     urgency: newLead.urgency,
-    dispatchedAt: newLead.dispatched_at
+    dispatchedAt: newLead.dispatched_at,
+    deliveryStatus: newLead.delivery_status
   });
 });
 
@@ -5788,6 +5873,7 @@ app.get("/api/frontdesk/leads/:siteId", requireAdmin, async (req, res) => {
 
 // 9. POST /api/frontdesk/chat - Real-time SSE Chat Stream with Multi-Provider Cascade & Triage
 app.post("/api/frontdesk/chat", async (req, res) => {
+  res.setHeader("Access-Control-Allow-Origin", "*");
   const clientIp = getClientIp(req);
   if (isChatRateLimited(clientIp)) {
     return res.status(429).json({
@@ -5796,42 +5882,48 @@ app.post("/api/frontdesk/chat", async (req, res) => {
     });
   }
 
-  const { siteId, messages = [] } = req.body;
+  const { siteId, sessionId, messages = [] } = req.body || {};
 
   if (!siteId) {
     return res.status(400).json({ success: false, error: "siteId is required." });
   }
 
-  // Find site
-  let site: any = null;
-  const supabase = await getSupabase();
-  if (supabase) {
-    try {
-      const { data } = await supabase.from("frontdesk_sites").select("*").eq("id", siteId).single();
-      if (data) site = hydrateFrontdeskSite(data);
-    } catch {
-      // Fallback
-    }
-  }
-  if (!site) {
-    const sites = readFrontdeskSites();
-    site = sites.find((s: any) => s.id === siteId);
-  }
-
+  const site = await getSiteByIdUnified(String(siteId), frontdeskSaasDeps);
   if (!site) {
     return res.status(404).json({ success: false, error: `FrontDesk site "${siteId}" not found.` });
   }
 
-  // Check trial & grace period expiration
-  const evaluation = await evaluateSiteTrialStatus(site, supabase);
-  if (evaluation.status === "soft_locked" || site.status === "expired") {
+  const originCheck = checkSiteOriginLock(req, site);
+  if (!originCheck.allowed) {
+    return res.status(403).json({ success: false, error: "This chatbot is locked to its registered domain." });
+  }
+
+  const supabase = await getSupabase();
+  const evalResult = await evaluateSubscriptionLifecycle(site, frontdeskSaasDeps, { sendEmails: false });
+  if (!evalResult.widgetVisible || evalResult.subscriptionStatus === "paused") {
     res.setHeader("Content-Type", "text/event-stream");
     res.setHeader("Cache-Control", "no-cache, no-transform");
     res.setHeader("Connection", "keep-alive");
-    const phone = site.emergency_phone || site.phone || "our dispatch line";
-    res.write(`data: ${JSON.stringify({ token: `⚠️ 24/7 AI chat answering is paused as the trial period has concluded. Please contact ${phone} directly for assistance, or reactivate SurgeBot at ${evaluation.checkoutUrl}.` })}\n\n`);
+    const phone = site.phone || "our office";
+    res.write(`data: ${JSON.stringify({ type: "token", token: `This chat assistant is currently paused. Please contact ${phone} directly for assistance.` })}\n\n`);
     res.write(`data: [DONE]\n\n`);
     return res.end();
+  }
+
+  // Record incoming user message event for Analytics
+  const lastUserMsg = [...(Array.isArray(messages) ? messages : [])]
+    .reverse()
+    .find((m: any) => m && m.role === "user" && typeof m.content === "string");
+  if (lastUserMsg) {
+    recordFrontdeskEvent(
+      {
+        siteId: site.id,
+        sessionId: sessionId ? String(sessionId) : null,
+        type: "message",
+        meta: { question: lastUserMsg.content.slice(0, 140) }
+      },
+      supabase
+    ).catch(() => {});
   }
 
   // Filter messages based on feature flags
@@ -5919,9 +6011,10 @@ app.post("/api/frontdesk/chat", async (req, res) => {
           actionRequired: extracted.urgency === "emergency" ? "Immediate Dispatch Required" : "Standard Callback"
         },
         dispatched_at: new Date().toISOString(),
-        dispatch_channel: flags.enableEmailDispatch ? "email" : "none"
+        dispatch_channel: site.lead_delivery?.mode || "email"
       };
 
+      const isNewLead = existingLeadIdx < 0;
       if (existingLeadIdx >= 0) {
         leads[existingLeadIdx] = leadPayload;
       } else {
@@ -5939,12 +6032,22 @@ app.post("/api/frontdesk/chat", async (req, res) => {
         }
       }
 
-      // Trigger Resend email dispatch if enabled
-      if (flags.enableEmailDispatch !== false) {
-        dispatchLeadEmail(leadPayload, site, getResend).catch((err) => {
-          console.warn("⚠️ Lead email alert background dispatch error:", err);
-        });
+      if (isNewLead) {
+        recordFrontdeskEvent(
+          {
+            siteId: site.id,
+            sessionId: sessionId ? String(sessionId) : null,
+            type: "lead",
+            meta: { channel: site.lead_delivery?.mode || "email" }
+          },
+          supabase
+        ).catch(() => {});
       }
+
+      // Trigger configured Email + optional Webhook Endpoint delivery
+      deliverLeadToConfiguredChannels(leadPayload, site, getResend).catch((err) => {
+        console.warn("⚠️ Lead delivery error:", err);
+      });
 
       // Dual Sync: If lead is for LocalSurge, sync into main leads pipeline
       if (site.id === "site_localsurge") {

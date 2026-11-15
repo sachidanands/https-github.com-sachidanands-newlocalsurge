@@ -506,6 +506,21 @@
         </div>
       </div>
 
+      <!-- Sample Host Contact Form + Live Appearance Tester -->
+      <div class="card">
+        <div class="card-title">
+          <span>4. Host Contact Form (Auto-Fill Target) &amp; Appearance Preview</span>
+          <span style="font-size: 11px; color: var(--text-muted);">Tests Form Auto-Fill + Custom Icon/Color</span>
+        </div>
+        <form id="sampleContactForm" onsubmit="event.preventDefault(); document.getElementById('formFillStatus').textContent = 'Form submitted with: ' + document.getElementById('cfName').value;" style="display:grid;grid-template-columns:1fr 1fr;gap:10px;margin-bottom:12px;">
+          <input id="cfName" name="name" placeholder="Full Name" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f8fafc;" />
+          <input id="cfEmail" name="email" type="email" placeholder="Email Address" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f8fafc;" />
+          <input id="cfPhone" name="phone" type="tel" placeholder="Phone Number" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f8fafc;" />
+          <input id="cfMsg" name="message" placeholder="How can we help?" style="padding:8px;border-radius:6px;border:1px solid #334155;background:#0f172a;color:#f8fafc;" />
+        </form>
+        <div id="formFillStatus" style="font-size:12px;color:#38bdf8;"></div>
+      </div>
+
     </div>
 
     <!-- Right Sidebar: Live State & Captured Leads -->

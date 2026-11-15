@@ -64,7 +64,12 @@ export async function dispatchLeadEmail(
     return { success: false, error: "Resend client not configured" };
   }
 
-  const targetEmail = process.env.CONTRACTOR_ALERT_EMAIL || process.env.ADMIN_EMAIL || "leads@localsurgeseo.com";
+  const targetEmail =
+    site.lead_delivery?.notify_email ||
+    site.contact_email ||
+    process.env.CONTRACTOR_ALERT_EMAIL ||
+    process.env.ADMIN_EMAIL ||
+    "leads@localsurgeseo.com";
   const isEmergency = lead.urgency === "emergency";
   const isUrgent = lead.urgency === "urgent";
 
@@ -231,7 +236,7 @@ export async function dispatchTrialWelcomeEmail(
     return { success: false, error: "Resend client not configured" };
   }
 
-  const scriptTag = `<script src="https://localsurge.com/widget.js" data-site-id="${site.id}" defer></script>`;
+  const scriptTag = `<script src="https://localsurgeseo.com/widget.js" data-site-id="${site.id}" defer></script>`;
   const expiryDate = site.trial_ends_at
     ? new Date(site.trial_ends_at).toLocaleDateString("en-US", { month: "short", day: "numeric", year: "numeric" })
     : "30 days from today";
@@ -372,7 +377,7 @@ export async function dispatchTrialWelcomeEmail(
 }
 
 /**
- * Dispatches Day 30 Performance & ROI Report Email + 3-day grace period notice with $10/mo renewal link.
+ * Dispatches Day 30 Performance & ROI Report Email + 3-day grace period notice with $5/mo renewal link.
  */
 export async function sendTrialExpiryReportEmail(
   site: any,
@@ -466,10 +471,10 @@ export async function sendTrialExpiryReportEmail(
               Keep 24/7 AI answering, emergency triage, and instant lead dispatches rolling for just:
             </p>
             <div style="font-size: 32px; font-weight: 900; color: #0f172a; margin-bottom: 16px;">
-              $10 <span style="font-size: 14px; color: #64748b; font-weight: 500;">/ month (only 33¢ a day)</span>
+              $5 <span style="font-size: 14px; color: #64748b; font-weight: 500;">/ month (less than 17¢ a day)</span>
             </div>
             <a href="${sanitizeEmailHref(checkoutUrl)}" style="display: inline-block; background: #bc5f40; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px; box-shadow: 0 4px 6px -1px rgba(188,95,64,0.3);">
-              ⚡ Keep SurgeBot Active for $10/mo &rarr;
+              ⚡ Keep SurgeBot Active for $5/mo &rarr;
             </a>
             <p style="font-size: 11px; color: #94a3b8; margin-top: 10px;">
               Cancel anytime in 1 click. Zero contracts or hidden fees.
@@ -572,7 +577,7 @@ export async function sendGracePeriodEndedEmail(
               Reactivate full 24/7 AI answering & emergency dispatch in under 30 seconds:
             </p>
             <a href="${sanitizeEmailHref(checkoutUrl)}" style="display: inline-block; background: #123e35; color: #ffffff; padding: 14px 32px; border-radius: 8px; text-decoration: none; font-weight: 800; font-size: 15px;">
-              ⚡ Reactivate SurgeBot for $10/mo &rarr;
+              ⚡ Reactivate SurgeBot for $5/mo &rarr;
             </a>
             <p style="font-size: 11px; color: #94a3b8; margin-top: 8px;">
               Instantly restores full AI chat triage with zero code changes required.

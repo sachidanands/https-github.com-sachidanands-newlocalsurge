@@ -1,6 +1,6 @@
 import dns from "dns";
 import net from "net";
-import type { ScrapedKnowledge, CrawlResult } from "../../src/types/frontdesk";
+import type { ScrapedKnowledge, CrawlResult, DetectedForm, DetectedFormField } from "../../src/types/frontdesk";
 
 function isPrivateOrReservedIp(rawIp: string): boolean {
   const ip = String(rawIp || "")
@@ -376,6 +376,137 @@ export function extractHeuristicKnowledge(text: string, businessNameHint?: strin
   };
 }
 
+function parseHtmlAttr(attrs: string, attrName: string): string | undefined {
+  if (!attrs) return undefined;
+  const re = new RegExp(`(?:^|\\s)${attrName}\\s*=\\s*(?:"([^"]*)"|'([^']*)'|([^\\s"'>]+))`, "i");
+  const match = attrs.match(re);
+  const val = match ? (match[1] ?? match[2] ?? match[3] ?? "") : "";
+  const cleaned = val.replace(/[\x00-\x1F\x7F]/g, "").trim();
+  return cleaned || undefined;
+}
+
+function escapeCssAttr(val: string): string {
+  return val.replace(/\\/g, "\\\\").replace(/"/g, '\\"');
+}
+
+export function extractDetectedForms(html: string, pageUrl: string): DetectedForm[] {
+  if (!html) return [];
+  const results: DetectedForm[] = [];
+  const formRegex = /<form\b([^>]*)>([\s\S]*?)<\/form>/gi;
+  let formMatch: RegExpExecArray | null;
+  let formIdx = 0;
+
+  while ((formMatch = formRegex.exec(html)) !== null && results.length < 6) {
+    formIdx++;
+    const formAttrs = formMatch[1] || "";
+    const formBody = formMatch[2] || "";
+    const action = parseHtmlAttr(formAttrs, "action");
+    const method = (parseHtmlAttr(formAttrs, "method") || "POST").toUpperCase();
+    const formId = parseHtmlAttr(formAttrs, "id");
+    const formClass = parseHtmlAttr(formAttrs, "class");
+
+    if (action && /search/i.test(action) && !/contact|quote|lead/i.test(action)) {
+      continue;
+    }
+
+    let formSelector = `form:nth-of-type(${formIdx})`;
+    if (formId && /^[a-zA-Z0-9_-]+$/.test(formId)) {
+      formSelector = `form#${formId}`;
+    } else if (action && action.length <= 140 && !action.startsWith("javascript:")) {
+      formSelector = `form[action="${escapeCssAttr(action)}"]`;
+    } else if (formClass) {
+      const firstClass = formClass.split(/\s+/).find((c) => /^[a-zA-Z0-9_-]{2,50}$/.test(c));
+      if (firstClass) formSelector = `form.${firstClass}`;
+    }
+
+    const hasCaptcha = /g-recaptcha|h-captcha|cf-turnstile|turnstile|recaptcha|altcha|data-sitekey/i.test(formBody);
+
+    const fields: DetectedFormField[] = [];
+    const seenKeys = new Set<string>();
+    const fieldRegex = /<(input|textarea|select)\b([^>]*)>/gi;
+    let fieldMatch: RegExpExecArray | null;
+
+    while ((fieldMatch = fieldRegex.exec(formBody)) !== null && fields.length < 15) {
+      const tag = fieldMatch[1].toLowerCase();
+      const attrs = fieldMatch[2] || "";
+      const type = (parseHtmlAttr(attrs, "type") || (tag === "textarea" ? "textarea" : tag === "select" ? "select" : "text")).toLowerCase();
+      if (["hidden", "submit", "button", "reset", "image", "file", "search", "password"].includes(type)) {
+        continue;
+      }
+
+      const name = parseHtmlAttr(attrs, "name");
+      const id = parseHtmlAttr(attrs, "id");
+      const placeholder = parseHtmlAttr(attrs, "placeholder") || "";
+      const ariaLabel = parseHtmlAttr(attrs, "aria-label") || "";
+      const hint = `${name || ""} ${id || ""} ${placeholder} ${ariaLabel}`.toLowerCase();
+
+      if (/honeypot|bot-field|hp_|spam/i.test(hint)) continue;
+      if (tag === "input" && name === "s" && fields.length === 0) continue;
+
+      let selector = "";
+      if (name && name.length <= 80) {
+        selector = `${tag}[name="${escapeCssAttr(name)}"]`;
+      } else if (id && /^[a-zA-Z0-9_-]+$/.test(id)) {
+        selector = `#${id}`;
+      } else if (tag === "textarea") {
+        selector = "textarea";
+      } else {
+        selector = `${tag}[type="${escapeCssAttr(type)}"]`;
+      }
+
+      let key = name || id || tag;
+      if (type === "email" || /email|e-mail/.test(hint)) {
+        key = "email";
+      } else if (type === "tel" || /phone|tel|mobile|cell/.test(hint)) {
+        key = "phone";
+      } else if (tag === "textarea" || /message|comment|detail|inquiry|issue|note|desc|how can we help/.test(hint)) {
+        key = "message";
+      } else if (/full.?name|your.?name|first.?name|\bname\b|fname|cname/.test(hint) && !/company|business|domain|user/.test(hint)) {
+        key = "name";
+      }
+
+      if (["name", "email", "phone", "message"].includes(key) && seenKeys.has(key)) {
+        continue;
+      }
+      seenKeys.add(key);
+
+      fields.push({
+        key,
+        selector,
+        name,
+        type,
+        label: placeholder || ariaLabel || name || key
+      });
+    }
+
+    const coreCount = fields.filter((f) => ["name", "email", "phone", "message"].includes(f.key)).length;
+    if (coreCount === 0 || (fields.length < 2 && !seenKeys.has("email") && !seenKeys.has("phone"))) {
+      continue;
+    }
+
+    let submitSelector = 'button[type="submit"], input[type="submit"]';
+    if (/<button\b[^>]*type=["']?submit/i.test(formBody)) {
+      submitSelector = 'button[type="submit"]';
+    } else if (/<input\b[^>]*type=["']?submit/i.test(formBody)) {
+      submitSelector = 'input[type="submit"]';
+    } else if (/<button\b/i.test(formBody)) {
+      submitSelector = "button";
+    }
+
+    results.push({
+      page_url: pageUrl,
+      form_selector: formSelector,
+      action,
+      method,
+      has_captcha: hasCaptcha,
+      submit_selector: submitSelector,
+      fields
+    });
+  }
+
+  return results;
+}
+
 /**
  * Main Crawler & Knowledge Ingestion Engine
  */
@@ -399,6 +530,7 @@ export async function crawlSiteKnowledge(
 
   const scrapedPages: string[] = [];
   const textCorpus: string[] = [];
+  const detectedForms: DetectedForm[] = [];
 
   try {
     // 1. Fetch Homepage safely (manual redirect validation + private IP check + 1MB limit)
@@ -415,6 +547,7 @@ export async function crawlSiteKnowledge(
     const homeHtml = homeResult.html;
     scrapedPages.push(homeResult.finalUrl);
     textCorpus.push(`=== HOMEPAGE (${homeResult.finalUrl}) ===\n` + cleanHtmlToText(homeHtml));
+    detectedForms.push(...extractDetectedForms(homeHtml, homeResult.finalUrl));
 
     // 2. Discover and fetch top 2 sublinks if requested
     if (options.deepCrawl !== false) {
@@ -425,6 +558,7 @@ export async function crawlSiteKnowledge(
           if (subResult) {
             scrapedPages.push(subResult.finalUrl);
             textCorpus.push(`=== PAGE: ${subResult.finalUrl} ===\n` + cleanHtmlToText(subResult.html));
+            detectedForms.push(...extractDetectedForms(subResult.html, subResult.finalUrl));
           }
         } catch {
           // Continue if sublink times out
@@ -529,11 +663,22 @@ The chatbot must know exact services, emergency availability, service areas, est
       knowledge.rawPageCount = scrapedPages.length;
     }
 
+    const dedupedForms: DetectedForm[] = [];
+    const seenFormKeys = new Set<string>();
+    for (const df of detectedForms) {
+      const k = `${df.page_url}::${df.form_selector}`;
+      if (!seenFormKeys.has(k)) {
+        seenFormKeys.add(k);
+        dedupedForms.push(df);
+      }
+    }
+
     return {
       success: true,
       url: sanitizedUrl,
       pagesScraped: scrapedPages,
-      knowledge: sanitizeScrapedKnowledge(knowledge)
+      knowledge: sanitizeScrapedKnowledge(knowledge),
+      detectedForms: dedupedForms.slice(0, 6)
     };
   } catch (err: any) {
     console.error("❌ Crawler execution error:", err);

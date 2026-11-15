@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from 'react';
 import { Lead } from '../types';
 import BlogStudioDashboard from './BlogStudioDashboard';
+import AdminAccountsTab from './frontdesk/AdminAccountsTab';
 import { 
   Users, Calendar, BarChart3, TrendingUp, Sliders, CheckSquare, Trash2, Save, 
   MessageSquare, FileText, ExternalLink, RefreshCw, Eye, Sparkles, Phone, Mail, Globe, MapPin,
@@ -31,7 +32,7 @@ export default function LeadDashboard({
   const [search, setSearch] = useState<string>('');
   
   // Tab control
-  const [activeTab, setActiveTab] = useState<'leads' | 'blog-studio' | 'pdf-customizer' | 'indexnow'>('leads');
+  const [activeTab, setActiveTab] = useState<'leads' | 'blog-studio' | 'pdf-customizer' | 'indexnow' | 'frontdesk'>('leads');
 
   // IndexNow integration states
   const [indexNowStatus, setIndexNowStatus] = useState<{
@@ -732,9 +733,21 @@ NOTIFY pgrst, 'reload schema';`}
           >
             ⚙️ PDF Template Editor
           </button>
+          <button
+            onClick={() => setActiveTab('frontdesk')}
+            className={`pb-3 px-1 text-sm font-bold border-b-2 cursor-pointer transition-all whitespace-nowrap ${
+              activeTab === 'frontdesk'
+                ? 'border-[#123e35] text-[#123e35]'
+                : 'border-transparent text-[#888b88] hover:text-[#1a1c1a]'
+            }`}
+          >
+            🤖 AI FrontDesk ($5/mo)
+          </button>
         </div>
 
-        {activeTab === 'blog-studio' ? (
+        {activeTab === 'frontdesk' ? (
+          <AdminAccountsTab />
+        ) : activeTab === 'blog-studio' ? (
           <BlogStudioDashboard />
         ) : activeTab === 'leads' ? (
 

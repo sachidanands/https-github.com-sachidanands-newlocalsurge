@@ -3,7 +3,7 @@ import {
   Bot, Sparkles, Zap, ShieldCheck, Camera, Phone, Mail, MapPin,
   CheckCircle2, ArrowRight, Clock, AlertTriangle, Cpu, Copy, Check,
   ChevronDown, HelpCircle, Star, Sliders, RefreshCw, MessageSquare,
-  Globe, Building2, User, Code2, Calendar, Loader2
+  Globe, Building2, User, Code2, Calendar, Loader2, BarChart3, ExternalLink, Palette, Webhook
 } from 'lucide-react';
 import { motion, AnimatePresence } from 'motion/react';
 import { MagneticButton } from './MagneticButton';
@@ -27,6 +27,44 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
   const [trialCopied, setTrialCopied] = useState(false);
   const [activeTab, setActiveTab] = useState<'wordpress' | 'gtm' | 'wix' | 'squarespace' | 'html'>('wordpress');
 
+  // Magic-link account recovery state ("Already have a chatbot? Log in")
+  const [recoveryOpen, setRecoveryOpen] = useState(false);
+  const [recoveryEmail, setRecoveryEmail] = useState('');
+  const [recoveryLoading, setRecoveryLoading] = useState(false);
+  const [recoveryFeedback, setRecoveryFeedback] = useState<{
+    found?: boolean;
+    message?: string;
+    error?: string;
+  } | null>(null);
+
+  const handleRequestRecoveryLink = async (e: React.FormEvent) => {
+    e.preventDefault();
+    const email = recoveryEmail.trim();
+    if (!email) return;
+    setRecoveryLoading(true);
+    setRecoveryFeedback(null);
+    try {
+      const resp = await fetch('/api/frontdesk/portal/auth/request-link', {
+        method: 'POST',
+        headers: { 'Content-Type': 'application/json' },
+        body: JSON.stringify({ email })
+      });
+      const data = await resp.json();
+      if (!resp.ok || !data?.ok) {
+        setRecoveryFeedback({ error: data?.error || 'Could not look up that email address.' });
+      } else {
+        setRecoveryFeedback({
+          found: data.found,
+          message: data.message
+        });
+      }
+    } catch {
+      setRecoveryFeedback({ error: 'Network error sending login link. Please try again.' });
+    } finally {
+      setRecoveryLoading(false);
+    }
+  };
+
   const handleGenerateTrial = async (e: React.FormEvent) => {
     e.preventDefault();
     setTrialError(null);
@@ -43,9 +81,9 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
         method: 'POST',
         headers: { 'Content-Type': 'application/json' },
         body: JSON.stringify({
-          domain: trialDomain.trim(),
-          email: trialEmail.trim(),
-          name: trialName.trim(),
+          websiteUrl: trialDomain.trim(),
+          contactEmail: trialEmail.trim(),
+          contactName: trialName.trim(),
           businessName: trialBusinessName.trim(),
           phone: trialPhone.trim() || undefined
         })
@@ -57,6 +95,22 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
         data = JSON.parse(text);
       } catch {
         // Response was not JSON (e.g. serverless HTML/text error)
+      }
+
+      if (resp.status === 409 && data?.existingAccount) {
+        setRecoveryOpen(true);
+        setRecoveryEmail(trialEmail.trim());
+        setRecoveryFeedback({
+          found: true,
+          message:
+            data.error ||
+            'An AI FrontDesk account already exists for that email or domain. Request a fresh login link below.'
+        });
+        setTrialError(
+          data.error ||
+            'An AI FrontDesk account already exists for that email or website. Use the login recovery box below to open your dashboard.'
+        );
+        return;
       }
 
       if (!resp.ok || !data?.success) {
@@ -154,24 +208,24 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
 
   const faqs = [
     {
-      q: 'How is LocalSurge AI FrontDesk different from generic chatbots like Intercom or Drift?',
-      a: 'Generic chatbots are built for SaaS software companies. They fail miserably for local contractors because they don\'t understand emergency shutoff protocols, service area zip codes, diagnostic trip fees, or trade terminology. LocalSurge AI FrontDesk (SurgeBot) is purpose-built for trade businesses (Plumbing, HVAC, Roofing, Electricians) with 1-tap mobile chips, live speed-to-lead status banners, multimodal damage photo analysis, and instant Resend email + SMS dispatch straight to the contractor\'s pocket.'
+      q: 'How is AI FrontDesk different from complex live-chat software?',
+      a: 'Most chat tools pack in bloated agent seats, ticketing queues, and complex flow builders you never use. AI FrontDesk stays intentionally simple: enter your URL, let it scan your pages, answer customer questions 24/7, capture visitor leads, and route them where you want.'
     },
     {
-      q: 'Will the AI hallucinate fake prices or promise services my crew cannot perform?',
-      a: 'Never. SurgeBot operates under strict deterministic contractor guardrails. It ingests your exact estimate policies, service boundaries, and diagnostic fees. If a customer asks for a service you do not offer or is outside your service territory, SurgeBot politely deflects and offers to record a note for manual review without making false promises.'
+      q: 'Will the AI hallucinate fake prices or promise services my business cannot perform?',
+      a: 'Never. Your chatbot only answers from your scanned website pages plus any extra notes or FAQs you add in your dashboard. If a visitor asks about something unverified, it answers carefully and captures their contact info for a callback.'
     },
     {
-      q: 'How long does it take to install on my WordPress, Wix, or Webflow site?',
-      a: 'Under 60 seconds. Our web crawler reads your existing website in 60 seconds and builds your customized knowledge base. You simply paste a 1-line <script> tag before the closing </body> tag. It runs in an isolated Shadow DOM, so it will never conflict with your WordPress themes or CSS.'
+      q: 'How fast is installation on WordPress, Wix, Shopify, Squarespace, or custom HTML?',
+      a: 'Under 60 seconds. Paste our 1-line <script> tag into your site footer or Google Tag Manager. It runs inside an isolated Shadow DOM container so it never breaks your theme fonts or layout CSS.'
     },
     {
-      q: 'What happens when a customer uploads a photo of a burst pipe or damaged roof?',
-      a: 'SurgeBot utilizes multimodal visual AI to analyze the photo in real-time, triage the severity of the damage, and embed the high-resolution photo directly into your email and SMS dispatch alerts with 1-click "Call Customer" and "Open in Maps" buttons.'
+      q: 'How do captured leads get submitted to my business?',
+      a: 'You choose inside your dashboard: (1) Instant Email alerts + CSV export, (2) Custom Endpoint webhook POST (JSON or form-encoded) to your API, Zapier, or Make, or (3) In-Browser Contact Form Auto-Fill on your existing website form.'
     },
     {
-      q: 'Is AI FrontDesk included for free in LocalSurge SEO Retainers?',
-      a: 'Yes! All clients on our Starter Boost ($999/mo) and Premium Surge ($1999/mo) local SEO retainers receive the full AI FrontDesk Pro Tier ($89/mo value) included 100% free with custom branding removal.'
+      q: 'Is AI FrontDesk separate from Local Surge SEO plans, and what happens after the 30-day trial?',
+      a: 'Yes — AI FrontDesk is completely standalone from our monthly SEO retainers. You get 30 days completely free with no credit card upfront. Keep it live afterward for $5/month via PayPal, or let the chat widget pause cleanly when the trial expires.'
     }
   ];
 
@@ -209,19 +263,16 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
               className="bg-[#bc5f40] hover:bg-[#a34f34] text-white text-sm font-black px-7 py-4 rounded-xl shadow-lg flex items-center gap-2 cursor-pointer transition-transform hover:scale-105 duration-200"
             >
               <Sparkles className="w-4 h-4 text-amber-200" />
-              <span>Start 30-Day Free Trial ($10/mo)</span>
+              <span>Start 30-Day Free Trial ($5/mo after)</span>
             </MagneticButton>
 
             <MagneticButton
-              id="hero-see-features"
-              onClick={() => {
-                const el = document.getElementById('contractor-features');
-                el?.scrollIntoView({ behavior: 'smooth' });
-              }}
+              id="hero-login-dashboard"
+              onClick={() => setCurrentPage('ai-frontdesk-dashboard')}
               className="bg-white text-[#123e35] hover:bg-[#f7f6f2] text-sm font-black px-7 py-4 rounded-xl shadow-lg flex items-center gap-2 cursor-pointer transition-transform hover:scale-105 duration-200"
             >
-              <Zap className="w-4 h-4 text-[#123e35]" />
-              <span>Explore Trade Features</span>
+              <Mail className="w-4 h-4 text-[#123e35]" />
+              <span>Customer Dashboard Login</span>
               <ArrowRight className="w-4 h-4 text-[#bc5f40]" />
             </MagneticButton>
           </div>
@@ -229,9 +280,9 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
           {/* Social Proof Trust Badges */}
           <div className="pt-8 border-t border-white/15 flex flex-wrap items-center justify-center gap-6 sm:gap-10 text-xs text-slate-300 font-semibold">
             <span className="flex items-center gap-1.5"><ShieldCheck className="w-4 h-4 text-emerald-400" /> 100% Shadow DOM Isolation</span>
-            <span className="flex items-center gap-1.5"><Camera className="w-4 h-4 text-sky-400" /> Multimodal Photo Triage</span>
-            <span className="flex items-center gap-1.5"><Phone className="w-4 h-4 text-amber-400" /> 5-Min Phone & Email Dispatch</span>
-            <span className="flex items-center gap-1.5"><Cpu className="w-4 h-4 text-purple-400" /> Zero Code Install</span>
+            <span className="flex items-center gap-1.5"><Webhook className="w-4 h-4 text-sky-400" /> Email, Webhook &amp; Form Auto-Fill</span>
+            <span className="flex items-center gap-1.5"><BarChart3 className="w-4 h-4 text-amber-400" /> Live Engagement Analytics</span>
+            <span className="flex items-center gap-1.5"><Cpu className="w-4 h-4 text-purple-400" /> 30 Days Free · Then $5/mo</span>
           </div>
         </div>
       </section>
@@ -264,41 +315,41 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
 
           <div className="bg-white border border-[#dfded4] p-7 rounded-2xl shadow-xs space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 rounded-xl bg-sky-50 border border-sky-200 text-sky-700 flex items-center justify-center font-bold">
-              <Camera className="w-6 h-6 text-sky-600" />
+              <Globe className="w-6 h-6 text-sky-600" />
             </div>
-            <h3 className="text-lg font-black text-[#151716]">Multimodal Damage Vision</h3>
+            <h3 className="text-lg font-black text-[#151716]">Website Scan &amp; Extra Business Notes</h3>
             <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed">
-              Customers snap a photo of their leaking water heater, furnace error code LED, or dented roof shingles. SurgeBot inspects the image and embeds it into your dispatch alert.
+              Automatically crawls your pages to learn your services, areas, and FAQs. Need extra details like pricing cues or holiday hours? Add custom notes or re-scan daily in your portal.
             </p>
           </div>
 
           <div className="bg-white border border-[#dfded4] p-7 rounded-2xl shadow-xs space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 rounded-xl bg-amber-50 border border-amber-200 text-amber-700 flex items-center justify-center font-bold">
-              <Clock className="w-6 h-6 text-amber-600" />
+              <BarChart3 className="w-6 h-6 text-amber-600" />
             </div>
-            <h3 className="text-lg font-black text-[#151716]">Speed-to-Lead Status Banner</h3>
+            <h3 className="text-lg font-black text-[#151716]">Real-Time Analytics &amp; Top Questions</h3>
             <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed">
-              Displays live on-duty technician indicators: <code className="bg-amber-100/60 px-1 py-0.5 rounded text-[11px]">🟢 Response in &lt;5 min</code>. Prevents frantic homeowners from hitting the back button to call your competitors.
+              Watch daily conversations, captured leads, average chat time, and peak hours on interactive 7, 30, and 90-day charts so you see ROI clearly.
             </p>
           </div>
 
           <div className="bg-white border border-[#dfded4] p-7 rounded-2xl shadow-xs space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 rounded-xl bg-red-50 border border-red-200 text-red-700 flex items-center justify-center font-bold">
-              <AlertTriangle className="w-6 h-6 text-red-600" />
+              <Palette className="w-6 h-6 text-red-600" />
             </div>
-            <h3 className="text-lg font-black text-[#151716]">Emergency Shutoff Safety Directives</h3>
+            <h3 className="text-lg font-black text-[#151716]">Brand Color, 8 Icons &amp; On/Off Switch</h3>
             <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed">
-              If active flooding, gas smells, or electrical sparking is detected, SurgeBot immediately instructs the homeowner to shut off their main water/gas valve while dispatch is contacted.
+              Match your brand palette, pick from 8 vector launcher icons or upload your logo URL, choose bottom-left or bottom-right placement, and pause or resume the widget anytime.
             </p>
           </div>
 
           <div className="bg-white border border-[#dfded4] p-7 rounded-2xl shadow-xs space-y-4 hover:shadow-md transition-shadow">
             <div className="w-12 h-12 rounded-xl bg-purple-50 border border-purple-200 text-purple-700 flex items-center justify-center font-bold">
-              <Phone className="w-6 h-6 text-purple-600" />
+              <Webhook className="w-6 h-6 text-purple-600" />
             </div>
-            <h3 className="text-lg font-black text-[#151716]">Instant 1-Click Call & Map Dispatches</h3>
+            <h3 className="text-lg font-black text-[#151716]">Email, Webhook, or Site Form Auto-Fill</h3>
             <p className="text-xs sm:text-sm text-[#4e524f] leading-relaxed">
-              Leads hit your email & SMS inbox with 1-click <strong className="text-purple-800">"Call Customer"</strong> and <strong className="text-purple-800">"Open in Google Maps"</strong> buttons. Zero manual CRM logging required.
+              Get instant lead emails with CSV export, POST JSON/form payloads straight to your webhook endpoint, or auto-fill your existing website contact form in the visitor&apos;s browser.
             </p>
           </div>
 
@@ -345,16 +396,16 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                   <td className="py-3.5 px-4 text-[#64748b]">3 - 8 rings hold time</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-bold text-[#151716]">Damage Photo Inspection</td>
-                  <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/50">✅ Multimodal AI Vision</td>
-                  <td className="py-3.5 px-4 text-red-600">❌ Text Only</td>
-                  <td className="py-3.5 px-4 text-red-600">❌ Voice Only</td>
+                  <td className="py-3.5 px-4 font-bold text-[#151716]">Lead Routing &amp; Form Auto-Fill</td>
+                  <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/50">✅ Email, Webhook, or Site Form Auto-Fill</td>
+                  <td className="py-3.5 px-4 text-red-600">❌ Basic Inbox Only</td>
+                  <td className="py-3.5 px-4 text-red-600">❌ Manual Email Notes</td>
                 </tr>
                 <tr>
-                  <td className="py-3.5 px-4 font-bold text-[#151716]">Emergency Shutoff Protocols</td>
-                  <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/50">✅ Built-in Trade Safety</td>
-                  <td className="py-3.5 px-4 text-red-600">❌ No Trade Context</td>
-                  <td className="py-3.5 px-4 text-[#64748b]">⚠️ Script Dependent</td>
+                  <td className="py-3.5 px-4 font-bold text-[#151716]">Brand Color &amp; Icon Controls</td>
+                  <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/50">✅ Hex Color, 8 Icons, Custom URL &amp; Position</td>
+                  <td className="py-3.5 px-4 text-[#64748b]">⚠️ Paid Add-On Tier</td>
+                  <td className="py-3.5 px-4 text-red-600">❌ N/A</td>
                 </tr>
                 <tr>
                   <td className="py-3.5 px-4 font-bold text-[#151716]">Service Radius / Zip Boundaries</td>
@@ -370,7 +421,7 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                 </tr>
                 <tr>
                   <td className="py-3.5 px-4 font-bold text-[#151716]">Monthly Price</td>
-                  <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/50">$10/mo (or Custom Enterprise)</td>
+                  <td className="py-3.5 px-4 font-bold text-emerald-800 bg-emerald-50/50">$5/mo after 30-day free trial</td>
                   <td className="py-3.5 px-4 text-[#64748b]">$150 - $450/mo + seat fees</td>
                   <td className="py-3.5 px-4 text-[#64748b]">$350 - $800/mo + per-minute fees</td>
                 </tr>
@@ -390,13 +441,13 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
             Two Simple Options. Zero Lead Leakage.
           </h2>
           <p className="text-sm sm:text-base text-[#4e524f]">
-            Start with our $10/mo core AI frontdesk dispatcher or work with our engineering team on a bespoke fleet plan with damage photo vision, instant email dispatches, and phone/SMS alerts.
+            Start completely free for 30 days, continue for $5/mo via PayPal with zero bloat, or request a custom enterprise build if you need advanced workflows.
           </p>
         </div>
 
         <div className="grid grid-cols-1 md:grid-cols-2 gap-8 max-w-5xl mx-auto items-stretch">
           
-          {/* OPTION 1: $10/MO STANDARD PLAN */}
+          {/* OPTION 1: $5/MO STANDARD PLAN */}
           <div className="bg-white border-2 border-[#123e35]/20 rounded-3xl p-8 flex flex-col justify-between shadow-md hover:shadow-xl transition-shadow relative">
             <div className="space-y-5">
               <div className="flex items-center justify-between">
@@ -404,62 +455,56 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                   Standard Plan
                 </span>
                 <span className="text-xs font-bold text-emerald-700 bg-emerald-100/60 px-2.5 py-0.5 rounded-md">
-                  30-Day Free Trial Available
+                  30 Days Free · No Card Upfront
                 </span>
               </div>
 
               <div>
-                <h3 className="text-2xl font-black text-[#151716]">AI FrontDesk Core</h3>
+                <h3 className="text-2xl font-black text-[#151716]">AI FrontDesk</h3>
                 <p className="text-xs text-[#4e524f] mt-1">
-                  Complete 24/7 AI chat triage, lead capture, and instant customer answering for solo contractors & local businesses.
+                  Simple website scanning, instant Q&amp;A, lead capture, analytics dashboard, and custom branding — built cleanly for any website.
                 </p>
               </div>
 
               <div className="flex items-baseline gap-1.5 pt-2 border-t border-[#e2e8f0]">
-                <span className="text-4xl font-black text-[#151716]">$10</span>
-                <span className="text-sm font-semibold text-[#64748b]">/ month</span>
+                <span className="text-4xl font-black text-[#151716]">$5</span>
+                <span className="text-sm font-semibold text-[#64748b]">/ month via PayPal (after 30-day trial)</span>
               </div>
 
               <ul className="space-y-3 text-xs sm:text-sm text-[#151716] pt-3">
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <span>
-                    <strong className="text-[#123e35]">WebMCP Conversational Lead Collector:</strong> Proactively collects customer name, phone, email & address during chat and automatically submits the lead on the customer's behalf without static forms.
+                    <strong className="text-[#123e35]">Auto Website Scan &amp; Extra Notes:</strong> Crawls your pages in 60 seconds and answers customer questions accurately 24/7.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <span>
-                    <strong>24/7 Instant AI Answering:</strong> Responds in &lt;2 seconds to quote requests, operating hours, and emergency protocols.
+                    <strong>3 Flexible Lead Delivery Modes:</strong> Instant Email + CSV export, Custom Endpoint Webhook POST, or In-Browser Website Form Auto-Fill.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <span>
-                    <strong>60-Second Auto Website Sync:</strong> Automatically crawls your site to learn your services, service areas, and estimate policies.
+                    <strong>Engagement &amp; Lead Analytics:</strong> 7/30/90-day interactive charts for chats, leads, time spent, top questions, plus 1-click On/Off switch.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <span>
-                    <strong>1-Tap Mobile Service Chips:</strong> 1-click buttons for pipe bursts, AC outages, or quick quotes on mobile.
+                    <strong>Brand Color, 8 Icons &amp; Placement:</strong> Match your hex color, pick from 8 launcher icons or use your logo URL, place left or right.
                   </span>
                 </li>
                 <li className="flex items-start gap-2.5">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
                   <span>
-                    <strong>Speed-to-Lead Status Banner:</strong> Displays live on-duty technician indicators to stop homeowners bouncing to competitors.
+                    <strong>Zero-CSS Conflict Shadow DOM:</strong> Works cleanly on WordPress, Wix, Squarespace, Webflow, Shopify, or plain HTML.
                   </span>
                 </li>
-                <li className="flex items-start gap-2.5">
+                <li className="flex items-start gap-2.5 text-[#64748b]">
                   <CheckCircle2 className="w-4 h-4 text-emerald-600 shrink-0 mt-0.5" />
-                  <span>
-                    <strong>Zero-CSS Conflict Shadow DOM:</strong> 100% isolated inside Shadow Root; works seamlessly on WordPress, Wix, Squarespace, and Shopify.
-                  </span>
-                </li>
-                <li className="flex items-start gap-2.5 text-[#94a3b8]">
-                  <span className="text-xs font-bold text-slate-400 mt-0.5">✕</span>
-                  <span>Photo Uploads & SMS Alerts disabled (available in Custom Plan)</span>
+                  <span>Full feature parity during your 30-day free trial — widget auto-pauses cleanly if unsubscribed.</span>
                 </li>
               </ul>
             </div>
@@ -476,7 +521,7 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                 <ArrowRight className="w-4 h-4 text-amber-300" />
               </button>
               <p className="text-[11px] text-center text-[#64748b] mt-2">
-                No credit card required. Free for 30 days, then $10/mo.
+                No credit card required. Free for 30 days, then $5/mo via PayPal.
               </p>
             </div>
           </div>
@@ -599,15 +644,16 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
           </div>
 
           {/* Form / Output Container */}
-          <div className="relative z-10 max-w-3xl mx-auto">
+          <div className="relative z-10 max-w-3xl mx-auto space-y-5">
             {!trialResult ? (
-              <form onSubmit={handleGenerateTrial} className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-6 sm:p-8 space-y-5">
-                {trialError && (
-                  <div className="p-3.5 rounded-xl bg-red-500/20 border border-red-400/40 text-red-200 text-xs flex items-center gap-2">
-                    <AlertTriangle className="w-4 h-4 text-red-300 shrink-0" />
-                    <span>{trialError}</span>
-                  </div>
-                )}
+              <>
+                <form onSubmit={handleGenerateTrial} className="bg-white/10 backdrop-blur-md border border-white/15 rounded-2xl p-6 sm:p-8 space-y-5">
+                  {trialError && (
+                    <div className="p-3.5 rounded-xl bg-red-500/20 border border-red-400/40 text-red-200 text-xs flex items-center gap-2">
+                      <AlertTriangle className="w-4 h-4 text-red-300 shrink-0" />
+                      <span>{trialError}</span>
+                    </div>
+                  )}
 
                 <div className="grid grid-cols-1 sm:grid-cols-2 gap-4">
                   {/* Website Domain */}
@@ -715,6 +761,60 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                   <span className="flex items-center gap-1"><CheckCircle2 className="w-3.5 h-3.5 text-emerald-400" /> Step-by-Step Instructions Emailed</span>
                 </div>
               </form>
+                <div className="bg-white/5 border border-white/15 rounded-2xl p-5 sm:p-6 space-y-3">
+                  <div className="flex flex-col sm:flex-row sm:items-center justify-between gap-2">
+                    <div>
+                      <p className="text-xs font-extrabold text-emerald-200">
+                        Already have an AI FrontDesk chatbot or lost your welcome email?
+                      </p>
+                      <p className="text-[11px] text-slate-300">
+                        Enter your email and we&apos;ll check your subscription and send a fresh magic login link.
+                      </p>
+                    </div>
+                    <button
+                      type="button"
+                      onClick={() => setRecoveryOpen((v) => !v)}
+                      className="text-xs font-bold text-white bg-white/15 hover:bg-white/25 px-3.5 py-2 rounded-xl cursor-pointer shrink-0 self-start sm:self-auto"
+                    >
+                      {recoveryOpen ? 'Hide Login Recovery' : 'Already subscribed? Log in'}
+                    </button>
+                  </div>
+
+                  {recoveryOpen && (
+                    <form onSubmit={handleRequestRecoveryLink} className="space-y-3 pt-2 border-t border-white/10">
+                      <div className="flex flex-col sm:flex-row gap-2.5">
+                        <input
+                          type="email"
+                          required
+                          value={recoveryEmail}
+                          onChange={(e) => setRecoveryEmail(e.target.value)}
+                          placeholder="Enter the email on your AI FrontDesk account"
+                          className="flex-1 px-3.5 py-2.5 rounded-xl bg-black/40 border border-white/20 text-white placeholder-slate-400 text-xs sm:text-sm focus:outline-none focus:border-emerald-400"
+                        />
+                        <button
+                          type="submit"
+                          disabled={recoveryLoading}
+                          className="px-5 py-2.5 rounded-xl bg-emerald-500 hover:bg-emerald-400 text-[#0a231f] font-extrabold text-xs sm:text-sm cursor-pointer disabled:opacity-60 inline-flex items-center justify-center gap-1.5"
+                        >
+                          <Mail className="w-4 h-4" />
+                          {recoveryLoading ? 'Checking...' : 'Send Magic Login Link'}
+                        </button>
+                      </div>
+                      {recoveryFeedback && (
+                        <div
+                          className={`p-3 rounded-xl text-xs font-semibold border ${
+                            recoveryFeedback.error || recoveryFeedback.found === false
+                              ? 'bg-amber-500/20 border-amber-400/40 text-amber-200'
+                              : 'bg-emerald-500/20 border-emerald-400/40 text-emerald-100'
+                          }`}
+                        >
+                          {recoveryFeedback.error || recoveryFeedback.message}
+                        </div>
+                      )}
+                    </form>
+                  )}
+                </div>
+              </>
             ) : (
               /* TRIAL GENERATED SUCCESS VIEW */
               <div id="trial-embed-result" className="bg-white/10 backdrop-blur-md border border-emerald-400/40 rounded-2xl p-6 sm:p-8 space-y-6">
@@ -937,7 +1037,16 @@ export default function AiFrontdeskView({ onOpenOnboarding, onGetFreeStrategy, s
                     )}
                   </div>
 
-                  <div className="flex items-center gap-3 w-full sm:w-auto">
+                  <div className="flex flex-wrap items-center gap-3 w-full sm:w-auto">
+                    {trialResult.dashboardUrl && (
+                      <a
+                        href={trialResult.dashboardUrl}
+                        className="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-[#bc5f40] hover:bg-[#a34f34] text-white text-xs font-extrabold transition-colors inline-flex items-center justify-center gap-1.5 shadow-md"
+                      >
+                        <span>Open AI FrontDesk Dashboard</span>
+                        <ExternalLink className="w-3.5 h-3.5" />
+                      </a>
+                    )}
                     <button
                       onClick={() => setTrialResult(null)}
                       className="w-full sm:w-auto py-2.5 px-5 rounded-xl bg-white/10 hover:bg-white/20 text-white text-xs font-bold transition-colors cursor-pointer"

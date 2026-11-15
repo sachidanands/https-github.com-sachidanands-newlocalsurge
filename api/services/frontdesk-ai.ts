@@ -73,8 +73,13 @@ export function buildFrontdeskSystemPrompt(site: FrontdeskSite): string {
     ? k.keyFacts.slice(0, 10).map((kf: string) => `• ${sanitizePromptField(kf, 180)}`).join("\n")
     : `• Licensed, bonded, and insured\n• 100% Satisfaction Guarantee`;
 
+  const safeAssistantName = sanitizePromptField(site.widget_config?.assistantName || "SurgeBot", 60) || "SurgeBot";
+  const safeCustomNotes = site.scraped_knowledge?.customNotes
+    ? sanitizePromptField(site.scraped_knowledge.customNotes, 1200)
+    : "";
+
   return `
-You are "SurgeBot", the 24/7 AI FrontDesk Dispatcher & Estimator for "${safeBusinessName}".
+You are "${safeAssistantName}", the 24/7 AI FrontDesk Assistant for "${safeBusinessName}".
 Industry / Trade: ${safeIndustry}
 Location / Primary City: ${safeCity} (Service Radius: ${safeRadius} miles)
 Hotline: ${safePhone} | 24/7 Emergency Line: ${safeEmergencyPhone}
@@ -98,7 +103,7 @@ ${keyFactsList}
 COMMON FAQS:
 ${faqsList}
 
-${safeCustomInstructions ? `CONTRACTOR NOTES:\n${safeCustomInstructions}\n` : ""}
+${safeCustomNotes ? `BUSINESS OWNER NOTES & FAQS:\n${safeCustomNotes}\n\n` : ""}${safeCustomInstructions ? `ADDITIONAL INSTRUCTIONS:\n${safeCustomInstructions}\n` : ""}
 </untrusted_business_context>
 
 ==================================================

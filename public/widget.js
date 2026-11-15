@@ -619,6 +619,33 @@
         border-radius: 0;
       }
     }
+
+    :host(.ls-pos-left) {
+      left: 20px;
+      right: auto;
+    }
+    :host(.ls-pos-left) .ls-teaser,
+    :host(.ls-pos-left) .ls-drawer {
+      left: 0;
+      right: auto;
+    }
+    :host(.ls-pos-left) .ls-teaser::after {
+      left: 24px;
+      right: auto;
+    }
+    :host(.ls-pos-right) {
+      right: 20px;
+      left: auto;
+    }
+    :host(.ls-pos-right) .ls-teaser,
+    :host(.ls-pos-right) .ls-drawer {
+      right: 0;
+      left: auto;
+    }
+    :host(.ls-pos-right) .ls-teaser::after {
+      right: 24px;
+      left: auto;
+    }
   `;
 
   // 4. HTML Structure inside Shadow DOM
@@ -646,12 +673,12 @@
       <div class="ls-header">
         <div class="ls-header-top">
           <div class="ls-header-title">
-            <div class="ls-avatar">⚡</div>
+            <div class="ls-avatar" id="lsAvatar">💬</div>
             <div>
               <div class="ls-business-name" id="lsBusinessName">Local Service FrontDesk</div>
               <div class="ls-status-sub">
                 <span class="ls-status-dot"></span>
-                <span>AI Dispatcher Online</span>
+                <span id="lsAssistantSubtitle">AI Assistant Online</span>
               </div>
             </div>
           </div>
@@ -699,7 +726,7 @@
       </div>
 
       <!-- Viral Agency Branding -->
-      <a class="ls-branding" id="lsBranding" href="https://localsurgeseo.com" target="_blank" rel="noopener">
+      <a class="ls-branding" id="lsBranding" href="https://localsurgeseo.com/ai-frontdesk" target="_blank" rel="noopener">
         ⚡ Powered by <span>LocalSurge AI FrontDesk</span>
       </a>
     </div>
@@ -722,6 +749,8 @@
   const thumbImg = shadow.getElementById("lsThumbImg");
   const thumbRemove = shadow.getElementById("lsThumbRemove");
   const businessNameEl = shadow.getElementById("lsBusinessName");
+  const avatarEl = shadow.getElementById("lsAvatar");
+  const assistantSubtitleEl = shadow.getElementById("lsAssistantSubtitle");
   const speedTextEl = shadow.getElementById("lsSpeedText");
   const speedBannerEl = shadow.getElementById("lsSpeedBanner");
   const brandingEl = shadow.getElementById("lsBranding");
@@ -731,6 +760,117 @@
   let stagedImageBase64 = null;
   let chatHistory = [];
   let isStreaming = false;
+  let hasTrackedLoad = false;
+  let openTimestampMs = null;
+  let sessionSent = false;
+  const autoFilledLeadIds = new Set();
+
+  function getOrCreateSessionId(targetSiteId) {
+    const key = `ls_fd_sid_${targetSiteId}`;
+    try {
+      let existing = sessionStorage.getItem(key);
+      if (!existing) {
+        existing = `sid_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+        sessionStorage.setItem(key, existing);
+      }
+      return existing;
+    } catch {
+      return `sid_${Date.now().toString(36)}_${Math.random().toString(36).slice(2, 8)}`;
+    }
+  }
+
+  let sessionId = getOrCreateSessionId(siteId);
+
+  function sendSaasTrack(type, value, meta, useBeacon = false) {
+    try {
+      const payload = JSON.stringify({
+        siteId: siteConfig?.id || siteId,
+        sessionId,
+        type,
+        value: typeof value === "number" ? value : undefined,
+        meta: meta || undefined
+      });
+      const url = `${baseUrl}/api/frontdesk/track`;
+      if (useBeacon && navigator.sendBeacon) {
+        navigator.sendBeacon(url, new Blob([payload], { type: "text/plain" }));
+        return;
+      }
+      fetch(url, {
+        method: "POST",
+        headers: { "Content-Type": "application/json" },
+        body: payload,
+        keepalive: true
+      }).catch(() => {});
+    } catch {}
+  }
+
+  const ICON_PATHS = {
+    chat: "M20 2H4c-1.1 0-2 .9-2 2v18l4-4h14c1.1 0 2-.9 2-2V4c0-1.1-.9-2-2-2zm0 14H6l-2 2V4h16v12z",
+    headset: "M12 1a9 9 0 0 0-9 9v7c0 1.66 1.34 3 3 3h3v-8H5v-2c0-3.87 3.13-7 7-7s7 3.13 7 7v2h-4v8h3c1.66 0 3-1.34 3-3v-7a9 9 0 0 0-9-9z",
+    sparkles: "M19 9l1.25-2.75L23 5l-2.75-1.25L19 1l-1.25 2.75L15 5l2.75 1.25L19 9zm-7.5.5L9 4 6.5 9.5 1 12l5.5 2.5L9 20l2.5-5.5L17 12l-5.5-2.5zM19 15l-1.25 2.75L15 19l2.75 1.25L19 23l1.25-2.75L23 19l-2.75-1.25L19 15z",
+    message: "M21 6h-2v9H6v2c0 .55.45 1 1 1h11l4 4V7c0-.55-.45-1-1-1zm-4 6V3c0-.55-.45-1-1-1H3c-.55 0-1 .45-1 1v14l4-4h10c.55 0 1-.45 1-1z",
+    wrench: "M22.7 19l-9.1-9.1c.9-2.3.4-5-1.5-6.9-2-2-5-2.4-7.4-1.3L9 6 6 9 1.6 4.7C.4 7.1.9 10.1 2.9 12.1c1.9 1.9 4.6 2.4 6.9 1.5l9.1 9.1c.4.4 1 .4 1.4 0l2.3-2.3c.5-.4.5-1.1.1-1.4z",
+    heart: "M12 21.35l-1.45-1.32C5.4 15.36 2 12.28 2 8.5 2 5.42 4.42 3 7.5 3c1.74 0 3.41.81 4.5 2.09C13.09 3.81 14.76 3 16.5 3 19.58 3 22 5.42 22 8.5c0 3.78-3.4 6.86-8.55 11.54L12 21.35z",
+    shield: "M12 1L3 5v6c0 5.55 3.84 10.74 9 12 5.16-1.26 9-6.45 9-12V5l-9-4z",
+    bolt: "M7 2v11h3v9l7-12h-4l4-8z"
+  };
+
+  function applyCustomIcon(iconPreset, iconUrl) {
+    if (!iconOpen) return;
+    // Remove previous custom img inside launcher or avatar
+    const prevImg = launcher.querySelector(".ls-custom-icon-img");
+    if (prevImg) prevImg.remove();
+    const prevAvatarImg = avatarEl?.querySelector("img");
+    if (prevAvatarImg) prevAvatarImg.remove();
+
+    const presetKey = ICON_PATHS[iconPreset] ? iconPreset : "chat";
+    const pathEl = iconOpen.querySelector("path");
+    if (pathEl) {
+      pathEl.setAttribute("d", ICON_PATHS[presetKey]);
+    }
+    iconOpen.style.display = drawer.classList.contains("active") ? "none" : "block";
+
+    if (iconUrl && /^https:\/\//i.test(iconUrl)) {
+      const img = document.createElement("img");
+      img.className = "ls-custom-icon-img";
+      img.src = iconUrl;
+      img.alt = "Chat";
+      img.style.cssText = "width:32px;height:32px;border-radius:16px;object-fit:cover;";
+      img.onerror = () => {
+        img.remove();
+        if (!drawer.classList.contains("active")) iconOpen.style.display = "block";
+      };
+      iconOpen.style.display = "none";
+      launcher.appendChild(img);
+
+      if (avatarEl) {
+        avatarEl.textContent = "";
+        const aImg = document.createElement("img");
+        aImg.src = iconUrl;
+        aImg.alt = "";
+        aImg.style.cssText = "width:28px;height:28px;border-radius:14px;object-fit:cover;";
+        aImg.onerror = () => {
+          aImg.remove();
+          avatarEl.textContent = "💬";
+        };
+        avatarEl.appendChild(aImg);
+      }
+      return;
+    }
+
+    if (avatarEl) {
+      avatarEl.textContent = "";
+      const svg = document.createElementNS("http://www.w3.org/2000/svg", "svg");
+      svg.setAttribute("viewBox", "0 0 24 24");
+      svg.setAttribute("fill", "currentColor");
+      svg.style.width = "18px";
+      svg.style.height = "18px";
+      const p = document.createElementNS("http://www.w3.org/2000/svg", "path");
+      p.setAttribute("d", ICON_PATHS[presetKey]);
+      svg.appendChild(p);
+      avatarEl.appendChild(svg);
+    }
+  }
 
   // 6. Grace Period & Fallback Contact Card Handlers
   function escapeHtml(str) {
@@ -764,7 +904,7 @@
     }
     graceBanner.innerHTML = `
       <span>⚠️ 3-day courtesy grace period active.</span>
-      <a href="${sanitizeHref(checkoutUrl)}" target="_blank" rel="noopener">Renew for $10/mo &rarr;</a>
+      <a href="${sanitizeHref(checkoutUrl)}" target="_blank" rel="noopener">Renew for $5/mo &rarr;</a>
     `;
   }
 
@@ -817,7 +957,7 @@
         <div class="ls-fallback-owner-tag">Site Owner Notice</div>
         <p>SurgeBot 24/7 AI Receptionist is paused.</p>
         <a href="${sanitizeHref(checkoutUrl)}" target="_blank" rel="noopener" class="ls-fallback-renew-btn">
-          ⚡ Reactivate SurgeBot for $10/mo &rarr;
+          ⚡ Reactivate SurgeBot for $5/mo &rarr;
         </a>
       </div>
     `;
@@ -925,45 +1065,54 @@
     try {
       const resp = await fetch(`${baseUrl}/api/frontdesk/sites/${encodeURIComponent(siteId)}`);
       const data = await resp.json();
+      if (!data || data.widgetVisible === false) {
+        container.style.display = "none";
+        teaser.style.display = "none";
+        return;
+      }
       if (data && data.site) {
         siteConfig = data.site;
+        sessionId = getOrCreateSessionId(siteConfig.id || siteId);
 
         if (!isPathAllowed()) {
-          console.info(`[LocalSurge FrontDesk] Current page "${window.location.pathname}" is outside the authorized paths for site "${siteId}". Widget inactive.`);
           container.style.display = "none";
           return;
         }
 
-        // 1. Soft-Locked Mode (Day 33+): Render Fallback Direct Contact Card
+        // 1. Soft-Locked Mode (Day 33+): Render Fallback Direct Contact Card if explicitly flagged
         if (data.isSoftLocked || data.status === "soft_locked" || siteConfig.status === "soft_locked") {
-          console.info(`[LocalSurge FrontDesk] Trial grace period concluded for site "${siteId}". Switched to Fallback Direct Contact Mode.`);
           applyConfig(siteConfig, true);
           renderFallbackContactCard(siteConfig, data.checkoutUrl, data.contactPhone);
           return;
         }
 
-        // 2. Grace Period Mode (Day 30 to Day 33): Keep chat active + show top renewal banner
+        // 2. Grace Period Mode (Day 30 to Day 33)
         if (data.isGracePeriod || data.status === "grace_period" || siteConfig.status === "grace_period") {
-          console.info(`[LocalSurge FrontDesk] Site "${siteId}" is currently in 3-day courtesy grace period.`);
           renderGracePeriodBanner(data.checkoutUrl);
         }
 
         applyConfig(siteConfig, false);
+        if (!hasTrackedLoad) {
+          hasTrackedLoad = true;
+          sendSaasTrack("load");
+        }
       }
     } catch (err) {
       console.warn("⚠️ FrontDesk config load error, applying fallback defaults:", err);
       applyConfig({
         business_name: "Local Service FrontDesk",
         widget_config: {
-          themeColor: "#10b981",
-          greeting: "👋 Hi! Need urgent service or a fast estimate? Let me know how we can help!",
+          themeColor: "#123e35",
+          assistantName: "AI Assistant",
+          iconPreset: "chat",
+          greeting: "Hi! How can we help you today?",
           speedToLeadCity: "Local Area",
-          quickChips: ["🚨 24/7 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]
+          quickChips: ["Our services", "Get an estimate", "Contact us"]
         },
         feature_flags: {
-          enablePhotoUpload: true,
-          enableEmergencyBanner: true,
-          enableCustomBranding: false
+          enablePhotoUpload: false,
+          enableEmergencyBanner: false,
+          enableCustomBranding: true
         }
       }, false);
     }
@@ -979,7 +1128,12 @@
     const w = site.widget_config || {};
     const flags = site.feature_flags || {};
 
-    // Apply Theme Color (Deep Emerald Gradient for #10b981 / site_localsurge)
+    // Apply position
+    const isLeft = w.position === "left" || w.position === "bottom-left" || position === "bottom-left" || position === "left";
+    container.classList.toggle("ls-pos-left", isLeft);
+    container.classList.toggle("ls-pos-right", !isLeft);
+
+    // Apply Theme Color
     if (w.themeColor) {
       if (w.themeColor === "#10b981" || site.id === "site_localsurge") {
         container.style.setProperty("--primary", "#10b981");
@@ -990,13 +1144,21 @@
       }
     }
 
+    // Apply Assistant Icon (preset or safe https URL)
+    applyCustomIcon(w.iconPreset || "chat", w.iconUrl);
+
     if (site.business_name) {
       businessNameEl.textContent = site.business_name;
     }
+    if (assistantSubtitleEl) {
+      assistantSubtitleEl.textContent = `${w.assistantName || "AI Assistant"} Online`;
+    }
 
-    // Custom Branding (White-label)
-    if (flags.enableCustomBranding === true) {
+    // Powered by branding
+    if (w.showPoweredBy === false && flags.enableCustomBranding === true) {
       brandingEl.style.display = "none";
+    } else {
+      brandingEl.style.display = "block";
     }
 
     if (isSoftLocked) {
@@ -1004,23 +1166,26 @@
     }
 
     // Speed-to-lead status banner
-    if (flags.enableEmergencyBanner === false) {
+    if (flags.enableEmergencyBanner !== true) {
       speedBannerEl.style.display = "none";
     } else {
+      speedBannerEl.style.display = "flex";
       speedTextEl.textContent = `Technicians On-Duty in ${w.speedToLeadCity || site.service_radius?.city || 'your area'} — Live Response in <5 min`;
     }
 
     // Camera Button visibility
-    if (flags.enablePhotoUpload === false) {
+    if (flags.enablePhotoUpload !== true) {
       cameraBtn.style.display = "none";
+    } else {
+      cameraBtn.style.display = "flex";
     }
 
     // Render Quick Action Chips
-    renderChips(w.quickChips || ["🚨 24/7 Emergency Service", "📍 Check My Zip Code", "💰 Get Free Estimate", "📞 Request 5-Min Callback"]);
+    renderChips(w.quickChips || ["What services do you offer?", "Request an estimate", "Contact us"]);
 
     // Initial greeting if history is empty
     if (chatHistory.length === 0) {
-      const greetingText = w.greeting || `👋 Hi! Need fast assistance or a free estimate for ${site.business_name}?`;
+      const greetingText = w.greeting || `Hi! Thanks for visiting ${site.business_name}. How can we help?`;
       appendMessage("assistant", greetingText);
       chatHistory.push({ role: "assistant", content: greetingText, timestamp: new Date().toISOString() });
     }
@@ -1063,17 +1228,46 @@
   function openDrawer() {
     drawer.classList.add("active");
     iconOpen.style.display = "none";
+    const customImg = launcher.querySelector(".ls-custom-icon-img");
+    if (customImg) customImg.style.display = "none";
     iconClose.style.display = "block";
     teaser.style.display = "none";
+    if (!openTimestampMs) {
+      openTimestampMs = Date.now();
+      sessionSent = false;
+    }
+    sendSaasTrack("open");
     trackWidgetEvent("frontdesk_chat_open");
     setTimeout(() => inputEl.focus(), 100);
   }
 
   function closeDrawer() {
     drawer.classList.remove("active");
-    iconOpen.style.display = "block";
+    const customImg = launcher.querySelector(".ls-custom-icon-img");
+    if (customImg) {
+      customImg.style.display = "block";
+      iconOpen.style.display = "none";
+    } else {
+      iconOpen.style.display = "block";
+    }
     iconClose.style.display = "none";
   }
+
+  function flushSessionDuration(useBeacon) {
+    if (!openTimestampMs || sessionSent) return;
+    const elapsedSec = Math.round((Date.now() - openTimestampMs) / 1000);
+    if (elapsedSec >= 1) {
+      sessionSent = true;
+      sendSaasTrack("session_end", Math.min(3600, elapsedSec), undefined, useBeacon);
+    }
+  }
+
+  window.addEventListener("pagehide", () => flushSessionDuration(true));
+  document.addEventListener("visibilitychange", () => {
+    if (document.visibilityState === "hidden") {
+      flushSessionDuration(true);
+    }
+  });
 
   launcher.addEventListener("click", () => {
     if (drawer.classList.contains("active")) {
@@ -1226,6 +1420,7 @@
         headers: { "Content-Type": "application/json" },
         body: JSON.stringify({
           siteId: activeSiteId,
+          sessionId,
           messages: chatHistory
         })
       });
@@ -1260,6 +1455,10 @@
                 messagesEl.scrollTop = messagesEl.scrollHeight;
               } else if (event.type === "lead_update" && event.leadId) {
                 renderLeadConfirmation(event.lead);
+                if (siteConfig?.widget_config?.formDelivery && !autoFilledLeadIds.has(event.leadId)) {
+                  autoFilledLeadIds.add(event.leadId);
+                  tryAutoFillHostForm(siteConfig.widget_config.formDelivery, event.lead);
+                }
               }
             } catch {
               // Non-JSON frame ignored
@@ -1307,6 +1506,96 @@
     messagesEl.scrollTop = messagesEl.scrollHeight;
   }
 
+  function setNativeFieldValue(el, value) {
+    if (!el || value === undefined || value === null) return;
+    const proto = el.tagName === "TEXTAREA" ? window.HTMLTextAreaElement.prototype : window.HTMLInputElement.prototype;
+    const descriptor = Object.getOwnPropertyDescriptor(proto, "value");
+    if (descriptor && descriptor.set) {
+      descriptor.set.call(el, String(value));
+    } else {
+      el.value = String(value);
+    }
+    el.dispatchEvent(new Event("input", { bubbles: true }));
+    el.dispatchEvent(new Event("change", { bubbles: true }));
+  }
+
+  function hasCaptchaInForm(formEl) {
+    if (!formEl) return false;
+    return Boolean(
+      formEl.querySelector(
+        '.g-recaptcha, .h-captcha, .cf-turnstile, [data-sitekey], iframe[src*="recaptcha"], iframe[src*="turnstile"]'
+      )
+    );
+  }
+
+  function fillAndMaybeSubmitForm(doc, formCfg, leadData, allowDirectSubmit) {
+    if (!doc || !formCfg?.form_selector) return false;
+    const formEl = doc.querySelector(formCfg.form_selector);
+    if (!formEl || hasCaptchaInForm(formEl)) return false;
+
+    const values = {
+      name: leadData?.customerName || "",
+      email: leadData?.customerEmail || "",
+      phone: leadData?.customerPhone || "",
+      message: leadData?.issueDescription || ""
+    };
+
+    const map = formCfg.field_map || {};
+    let filledAny = false;
+    ["name", "email", "phone", "message"].forEach((key) => {
+      const sel = map[key];
+      const val = values[key];
+      if (!sel || !val) return;
+      const el = formEl.querySelector(sel) || doc.querySelector(sel);
+      if (el) {
+        setNativeFieldValue(el, val);
+        filledAny = true;
+      }
+    });
+
+    if (filledAny && formCfg.auto_submit && allowDirectSubmit) {
+      const submitEl = formCfg.submit_selector ? formEl.querySelector(formCfg.submit_selector) : null;
+      if (submitEl) {
+        submitEl.click();
+      } else if (typeof formEl.requestSubmit === "function") {
+        formEl.requestSubmit();
+      } else {
+        formEl.submit();
+      }
+      sendSaasTrack("form_submit", undefined, { method: "iframe_or_dom" });
+    }
+    return filledAny;
+  }
+
+  function tryAutoFillHostForm(formCfg, leadData) {
+    try {
+      if (!formCfg?.form_selector) return;
+      const onSamePage = Boolean(document.querySelector(formCfg.form_selector));
+      if (onSamePage) {
+        const filled = fillAndMaybeSubmitForm(document, formCfg, leadData, false);
+        if (filled && formCfg.auto_submit) {
+          sendSaasTrack("form_submit", undefined, { method: "dom_prefill" });
+        }
+        return;
+      }
+
+      if (!formCfg.page_url) return;
+      const targetUrl = new URL(formCfg.page_url, window.location.href);
+      if (targetUrl.origin !== window.location.origin) return;
+
+      const iframe = document.createElement("iframe");
+      iframe.style.cssText = "position:fixed;width:1px;height:1px;opacity:0;pointer-events:none;border:0;left:-9999px;";
+      iframe.src = targetUrl.toString();
+      iframe.addEventListener("load", () => {
+        try {
+          fillAndMaybeSubmitForm(iframe.contentDocument, formCfg, leadData, true);
+        } catch {}
+        setTimeout(() => iframe.remove(), 4000);
+      });
+      document.body.appendChild(iframe);
+    } catch {}
+  }
+
   sendBtn.addEventListener("click", () => handleSendMessage());
   inputEl.addEventListener("keydown", (e) => {
     if (e.key === "Enter") handleSendMessage();
@@ -1328,6 +1617,10 @@
       try {
         const resp = await fetch(`${baseUrl}/api/frontdesk/sites/${encodeURIComponent(newSiteId)}`);
         const data = await resp.json();
+        if (!data || data.widgetVisible === false) {
+          container.style.display = "none";
+          return;
+        }
         if (data && data.site) {
           siteConfig = data.site;
           applyConfig(siteConfig);

@@ -43,6 +43,7 @@ const CompetitorIndexView = React.lazy(() => import('./components/CompetitorInde
 const CompetitorComparisonView = React.lazy(() => import('./components/CompetitorComparisonView'));
 const ExploreOtherTools = React.lazy(() => import('./components/ExploreOtherTools'));
 const AiFrontdeskView = React.lazy(() => import('./components/AiFrontdeskView'));
+const FrontdeskDashboard = React.lazy(() => import('./components/frontdesk/FrontdeskDashboard'));
 
 // Toggle flag to enable or disable the AI Citation Readiness Scanner component
 const ENABLE_AI_CITATION_WIDGET = true;
@@ -121,6 +122,7 @@ function getPageFromPath(pathname: string): {
   if (cleanPath === '/local-seo') return { page: 'local-seo', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/pricing') return { page: 'pricing', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/ai-frontdesk') return { page: 'ai-frontdesk', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
+  if (cleanPath === '/ai-frontdesk/dashboard') return { page: 'ai-frontdesk-dashboard', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/seo-tool') return { page: 'seo-tool', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/contact') return { page: 'contact', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
   if (cleanPath === '/admin' || cleanPath === '/admin/dashboard') return { page: 'admin', stateSlug: null, citySlug: null, blogSlug: null, demoSlug: null, compareSlug: null };
@@ -229,6 +231,7 @@ export default function App() {
     else if (currentPage === 'local-seo') path = '/local-seo';
     else if (currentPage === 'pricing') path = '/pricing';
     else if (currentPage === 'ai-frontdesk') path = '/ai-frontdesk';
+    else if (currentPage === 'ai-frontdesk-dashboard') path = '/ai-frontdesk/dashboard';
     else if (currentPage === 'seo-tool') path = '/seo-tool';
     else if (currentPage === 'contact') path = '/contact';
     else if (currentPage === 'admin') path = '/admin/dashboard';
@@ -275,13 +278,18 @@ export default function App() {
   // Dynamic Noindex Metadata to deny robots crawl indexing on /admin/dashboard and 404 pages
   useEffect(() => {
     let robotsMeta = document.querySelector('meta[name="robots"]');
-    if (currentPage === 'admin' || currentPage === '404') {
+    if (currentPage === 'admin' || currentPage === 'ai-frontdesk-dashboard' || currentPage === '404') {
       if (!robotsMeta) {
         robotsMeta = document.createElement('meta');
         robotsMeta.setAttribute('name', 'robots');
         document.head.appendChild(robotsMeta);
       }
-      robotsMeta.setAttribute('content', currentPage === 'admin' ? 'noindex, nofollow' : 'noindex, follow');
+      robotsMeta.setAttribute(
+        'content',
+        currentPage === 'admin' || currentPage === 'ai-frontdesk-dashboard'
+          ? 'noindex, nofollow'
+          : 'noindex, follow'
+      );
     } else {
       if (robotsMeta) {
         robotsMeta.remove();
@@ -333,6 +341,9 @@ export default function App() {
     } else if (currentPage === 'admin') {
       title = 'Admin Lead Dashboard - Local Surge SEO';
       description = 'Secure lead management and administrative tools for Local Surge campaigns.';
+    } else if (currentPage === 'ai-frontdesk-dashboard') {
+      title = 'AI FrontDesk Dashboard - Local Surge SEO';
+      description = 'Manage your AI FrontDesk chatbot appearance, lead delivery, analytics, and $5/month subscription.';
     } else if (currentPage === 'site-map') {
       title = 'Directory Sitemap - Local Surge SEO';
       description = 'Browse our directory of state and city-specific local SEO analysis maps.';
@@ -2589,6 +2600,21 @@ export default function App() {
                 onGetFreeStrategy={handleGetFreeStrategy}
                 setActiveStateSlug={setActiveStateSlug}
                 setActiveCitySlug={setActiveCitySlug}
+              />
+              </motion.div>
+          )}
+
+          {/* AI FRONTDESK CUSTOMER PORTAL */}
+          {currentPage === 'ai-frontdesk-dashboard' && (
+            <motion.div
+              key="ai-frontdesk-dashboard"
+              initial={{ opacity: 0, y: 12 }}
+              animate={{ opacity: 1, y: 0 }}
+              exit={{ opacity: 0, y: -12 }}
+              transition={{ duration: 0.25 }}
+            >
+              <FrontdeskDashboard
+                onBackToLanding={() => setCurrentPage('ai-frontdesk')}
               />
             </motion.div>
           )}
